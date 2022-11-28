@@ -13,6 +13,21 @@ namespace Persistence
         {
 
         }
-        public DbSet<HigherEducationalInstitution> Institutions { get; set; }
+        public DbSet<Institution> Institutions { get; set; }
+        public DbSet<Specialty> Specialties { get; set; }
+        public DbSet<SpecialtyComponent> Components { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Specialty>()
+                .HasOne(i => i.Institution)
+                .WithMany(s => s.Specialties)
+                .OnDelete(DeleteBehavior.Cascade);    
+            builder.Entity<SpecialtyComponent>()
+                .HasOne(s => s.Specialty)
+                .WithMany(c => c.Components)
+                .OnDelete(DeleteBehavior.Cascade);    
+        }
     }
 }

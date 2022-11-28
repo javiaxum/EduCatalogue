@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class HigherEducationalInstitution
+    public class Institution
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -13,5 +13,6 @@ namespace Domain
         public string Address { get; set; }
         public string SiteURL { get; set; }
         public string TitleImage { get; set; }
+        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }
