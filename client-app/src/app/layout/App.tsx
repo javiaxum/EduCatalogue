@@ -4,16 +4,21 @@ import { Container, Header, List } from 'semantic-ui-react';
 import { Institution } from '../models/institution';
 import NavBar from './NavBar';
 import InstitutionDashboard from '../../features/Institutions/dashboard/InstitutionDashboard';
-import {v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
+import agent from '../api/agent';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const [institutions, setInstitutions] = useState<Institution[]>([]);
   const [selectedInstitution, setSelectedInstitution] = useState<Institution | undefined>(undefined);
   const [editMode, setEditMode] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [submitting, setSubmitting] = useState<boolean>(false);
 
   useEffect(() => {
-    axios.get<Institution[]>('http://localhost:5172/api/institutions').then(response => {
-      setInstitutions(response.data);
+    agent.Institutions.list().then(response => {
+      setInstitutions(response);
+      setLoading(false);
     })
   }, [])
 
@@ -32,16 +37,30 @@ function App() {
   }
 
   function handleInstitutionEditOrCreate(institution: Institution) {
-    institution.id
-      ? setInstitutions([...institutions.filter(i => i.id !== institution.id), institution])
-      : setInstitutions([...institutions, {...institution, id: uuid()}]);
-    setEditMode(false);
-    setSelectedInstitution(institution);
+    setSubmitting(true);
+    if (institution.id) {
+      agent.Institutions.update(institution).then(() => {
+        setInstitutions([...institutions.filter(i => i.id !== institution.id), institution]);
+        setSubmitting(false);
+        setEditMode(false);
+        setSelectedInstitution(institution);
+      })
+    } else {
+      institution.id = uuid();
+      agent.Institutions.create(institution).then(() => {
+        setInstitutions([...institutions, institution]);
+        setSubmitting(false);
+        setEditMode(false);
+        setSelectedInstitution(institution);
+      })
+    }
   }
 
   function handleDeleteInstitution(id: string) {
     setInstitutions([...institutions.filter(i => i.id !== id)]);
   }
+
+  if (loading) return <LoadingComponent />
 
   return (
     <>
@@ -54,8 +73,9 @@ function App() {
           cancelSelectInstitution={handleCancelSelectInstitution}
           openForm={handleFormOpen}
           closeForm={handleFormClose}
-          editMode={editMode} 
-          handleInstitutionFormSubmit={handleInstitutionEditOrCreate}/>
+          editMode={editMode}
+          handleInstitutionFormSubmit={handleInstitutionEditOrCreate}
+          submitting={submitting} />
       </Container>
     </>
   );

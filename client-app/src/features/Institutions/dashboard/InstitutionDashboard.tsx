@@ -14,9 +14,11 @@ export interface Props {
     closeForm: () => void;
     editMode: boolean;
     handleInstitutionFormSubmit: (institution: Institution) => void;
+    submitting: boolean
 }
 
-export default function InstitutionDashboard({ institutions, selectedInstitution, selectInstitution, cancelSelectInstitution, openForm, closeForm, editMode, handleInstitutionFormSubmit }: Props) {
+export default function InstitutionDashboard({ institutions, selectedInstitution, selectInstitution, cancelSelectInstitution,
+    openForm, closeForm, editMode, handleInstitutionFormSubmit, submitting }: Props) {
     return (
         <Grid>
             <Grid.Column width={10}>
@@ -33,7 +35,8 @@ export default function InstitutionDashboard({ institutions, selectedInstitution
                     <InstitutionForm
                         closeForm={closeForm}
                         selectedInstitution={selectedInstitution}
-                        handleInstitutionFormSubmit={handleInstitutionFormSubmit} />}
+                        handleInstitutionFormSubmit={handleInstitutionFormSubmit}
+                        submitting={submitting} />}
             </Grid.Column>
         </Grid>
     )

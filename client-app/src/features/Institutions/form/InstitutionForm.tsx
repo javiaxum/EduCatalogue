@@ -6,9 +6,10 @@ interface Props {
     selectedInstitution: Institution | undefined;
     closeForm: () => void;
     handleInstitutionFormSubmit: (institution: Institution) => void;
+    submitting: boolean;
 }
 
-export default function InstitutionForm({ closeForm, selectedInstitution, handleInstitutionFormSubmit }: Props) {
+export default function InstitutionForm({ closeForm, selectedInstitution, handleInstitutionFormSubmit, submitting }: Props) {
 
     const initialState = selectedInstitution ?? {
         id: '',
@@ -33,8 +34,8 @@ export default function InstitutionForm({ closeForm, selectedInstitution, handle
                 <Form.TextArea placeholder='Description' name='description' value={institution.description} onChange={handleInputChange} />
                 <Form.Input placeholder='Address' name='address' value={institution.address} onChange={handleInputChange} />
                 <Form.Input placeholder='SiteURL' name='siteURL' value={institution.siteURL} onChange={handleInputChange} />
-                <Button floated='right' positive type='submit' content='Submit' />
-                <Button onClick={() => closeForm()} floated='right' type='button' content='Cancel' />
+                <Button floated='right' positive type='submit' content='Submit' loading={submitting} />
+                <Button onClick={() => closeForm()} floated='right' type='button' content='Cancel' disabled={submitting} />
             </Form>
         </Segment>
     )
