@@ -1,23 +1,23 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Button, Item, Segment } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    institutions: Institution[];
-    selectInstitution: (id: string) => void;
-}
+export default observer(function InstitutionsList() {
 
-export default function InstitutionsList({ institutions, selectInstitution }: Props) {
+    const {institutionStore} = useStore();
+
     return (
         <Segment>
             <Item.Group divided>
-                {institutions.map((institution) => (
+                {institutionStore.instititutionsByName.map((institution) => (
                     <Item key={institution.id}>
                         <Item.Content>
                             <Item.Header as='a'>{institution.name}</Item.Header>
                             <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>
                             <Item.Extra>
-                                <Button onClick={() => selectInstitution(institution.id)} floated='right' content='View' />
+                                <Button onClick={() => institutionStore.selectInstitution(institution.id)} floated='right' content='View' />
                             </Item.Extra>
                         </Item.Content>
                     </Item>
@@ -26,4 +26,4 @@ export default function InstitutionsList({ institutions, selectInstitution }: Pr
             </Item.Group>
         </Segment>
     )
-}
+})

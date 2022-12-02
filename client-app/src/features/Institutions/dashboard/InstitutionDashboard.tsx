@@ -1,43 +1,25 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Grid, List } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 import InstitutionDetails from '../details/InstitutionDetails';
 import InstitutionForm from '../form/InstitutionForm';
 import InstitutionsList from './InstitutionsList';
 
-export interface Props {
-    institutions: Institution[];
-    selectedInstitution: Institution | undefined;
-    selectInstitution: (id: string) => void;
-    cancelSelectInstitution: () => void;
-    openForm: (id: string) => void;
-    closeForm: () => void;
-    editMode: boolean;
-    handleInstitutionFormSubmit: (institution: Institution) => void;
-    submitting: boolean
-}
-
-export default function InstitutionDashboard({ institutions, selectedInstitution, selectInstitution, cancelSelectInstitution,
-    openForm, closeForm, editMode, handleInstitutionFormSubmit, submitting }: Props) {
+export default observer(function InstitutionDashboard() {
+    const {institutionStore} = useStore();
     return (
         <Grid>
             <Grid.Column width={10}>
-                <InstitutionsList institutions={institutions} selectInstitution={selectInstitution} />
+                <InstitutionsList />
             </Grid.Column>
             <Grid.Column width={6}>
-                {selectedInstitution && !editMode &&
-                    <InstitutionDetails
-                        institution={selectedInstitution}
-                        cancelSelectInstitution={cancelSelectInstitution}
-                        openForm={openForm}
-                    />}
-                {editMode &&
-                    <InstitutionForm
-                        closeForm={closeForm}
-                        selectedInstitution={selectedInstitution}
-                        handleInstitutionFormSubmit={handleInstitutionFormSubmit}
-                        submitting={submitting} />}
+                {institutionStore.selectedInstitution && !institutionStore.editMode &&
+                    <InstitutionDetails />}
+                {institutionStore.editMode &&
+                    <InstitutionForm />}
             </Grid.Column>
         </Grid>
     )
-}
+})

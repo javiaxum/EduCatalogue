@@ -1,14 +1,13 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Button, Card, Image } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    institution: Institution
-    cancelSelectInstitution: () => void;
-    openForm: (id: string) => void;
-}
-
-export default function InstitutionDetails({ institution, cancelSelectInstitution, openForm }: Props) {
+export default observer(function InstitutionDetails() {
+    const { institutionStore } = useStore();
+    const { selectedInstitution: institution, openForm, cancelSelectInstitution } = institutionStore;
+    if (!institution) return (<></>);
     return (
         <Card fluid>
             <Image src={`/assets/institutionTitleImagePlaceholder.png`} />
@@ -29,4 +28,4 @@ export default function InstitutionDetails({ institution, cancelSelectInstitutio
             </Card.Content>
         </Card>
     )
-}
+})

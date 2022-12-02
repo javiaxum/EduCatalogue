@@ -1,17 +1,23 @@
+import { observer } from 'mobx-react-lite';
 import React, { ChangeEvent, useState } from 'react';
 import { Button, Form, Segment } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    selectedInstitution: Institution | undefined;
-    closeForm: () => void;
-    handleInstitutionFormSubmit: (institution: Institution) => void;
-    submitting: boolean;
-}
+// interface Props {
+//     selectedInstitution: Institution | undefined;
+//     closeForm: () => void;
+//     handleInstitutionFormSubmit: (institution: Institution) => void;
+//     submitting: boolean;
+// }
 
-export default function InstitutionForm({ closeForm, selectedInstitution, handleInstitutionFormSubmit, submitting }: Props) {
+export default observer(function InstitutionForm() {
 
-    const initialState = selectedInstitution ?? {
+    const {institutionStore} = useStore();
+    
+    const {closeForm, loading} = institutionStore;
+
+    const initialState = institutionStore.selectedInstitution ?? {
         id: '',
         name: '',
         description: '',
@@ -27,6 +33,14 @@ export default function InstitutionForm({ closeForm, selectedInstitution, handle
         setInstitution({ ...institution, [name]: value });
     }
 
+    function handleInstitutionFormSubmit(i: Institution) {
+        if(!i.id) {
+            institutionStore.createInstitution(i);
+        } else {
+            institutionStore.editInstitution(i);
+        }
+    }
+
     return (
         <Segment clearing>
             <Form onSubmit={() => handleInstitutionFormSubmit(institution)} autoComplete='off'>
@@ -34,9 +48,9 @@ export default function InstitutionForm({ closeForm, selectedInstitution, handle
                 <Form.TextArea placeholder='Description' name='description' value={institution.description} onChange={handleInputChange} />
                 <Form.Input placeholder='Address' name='address' value={institution.address} onChange={handleInputChange} />
                 <Form.Input placeholder='SiteURL' name='siteURL' value={institution.siteURL} onChange={handleInputChange} />
-                <Button floated='right' positive type='submit' content='Submit' loading={submitting} />
-                <Button onClick={() => closeForm()} floated='right' type='button' content='Cancel' disabled={submitting} />
+                <Button floated='right' positive type='submit' content='Submit' loading={loading} />
+                <Button onClick={() => closeForm()} floated='right' type='button' content='Cancel' disabled={loading} />
             </Form>
         </Segment>
     )
-}
+})
