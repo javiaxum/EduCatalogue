@@ -11,14 +11,34 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221127141412_Specialties")]
-    partial class Specialties
+    [Migration("20221203075029_UniversitySpecialtyComponent")]
+    partial class UniversitySpecialtyComponent
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
+
+            modelBuilder.Entity("Domain.Component", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("isOptional")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Components");
+                });
 
             modelBuilder.Entity("Domain.Institution", b =>
                 {
@@ -46,6 +66,21 @@ namespace Persistence.Migrations
                     b.ToTable("Institutions");
                 });
 
+            modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
+                {
+                    b.Property<Guid>("InstitutionId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("SpecialtyId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("InstitutionId", "SpecialtyId");
+
+                    b.HasIndex("SpecialtyId");
+
+                    b.ToTable("InstitutionSpecialties");
+                });
+
             modelBuilder.Entity("Domain.Specialty", b =>
                 {
                     b.Property<Guid>("Id")
@@ -61,9 +96,6 @@ namespace Persistence.Migrations
                     b.Property<int>("EctsCredits")
                         .HasColumnType("INTEGER");
 
-                    b.Property<Guid?>("InstitutionId")
-                        .HasColumnType("TEXT");
-
                     b.Property<string>("IscedCode")
                         .HasColumnType("TEXT");
 
@@ -75,54 +107,65 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InstitutionId");
-
                     b.ToTable("Specialties");
                 });
 
             modelBuilder.Entity("Domain.SpecialtyComponent", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("SpecialtyId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ComponentId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("TEXT");
+                    b.HasKey("SpecialtyId", "ComponentId");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                    b.HasIndex("ComponentId");
 
-                    b.Property<Guid?>("SpecialtyId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("isOptional")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SpecialtyId");
-
-                    b.ToTable("Components");
+                    b.ToTable("SpecialtyComponents");
                 });
 
-            modelBuilder.Entity("Domain.Specialty", b =>
+            modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
                 {
                     b.HasOne("Domain.Institution", "Institution")
                         .WithMany("Specialties")
                         .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Specialty", "Specialty")
+                        .WithMany("Institutions")
+                        .HasForeignKey("SpecialtyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Institution");
+
+                    b.Navigation("Specialty");
                 });
 
             modelBuilder.Entity("Domain.SpecialtyComponent", b =>
                 {
+                    b.HasOne("Domain.Component", "Component")
+                        .WithMany("Specialties")
+                        .HasForeignKey("ComponentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Specialty", "Specialty")
                         .WithMany("Components")
                         .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Component");
 
                     b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("Domain.Component", b =>
+                {
+                    b.Navigation("Specialties");
                 });
 
             modelBuilder.Entity("Domain.Institution", b =>
@@ -133,6 +176,8 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Specialty", b =>
                 {
                     b.Navigation("Components");
+
+                    b.Navigation("Institutions");
                 });
 #pragma warning restore 612, 618
         }

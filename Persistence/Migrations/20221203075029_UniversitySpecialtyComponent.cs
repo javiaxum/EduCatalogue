@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class Specialties : Migration
+    public partial class UniversitySpecialtyComponent : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,21 @@ namespace Persistence.Migrations
                 oldType: "TEXT");
 
             migrationBuilder.CreateTable(
+                name: "Components",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    isOptional = table.Column<bool>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Components", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Specialties",
                 columns: table => new
                 {
@@ -45,36 +60,55 @@ namespace Persistence.Migrations
                     IscedCode = table.Column<string>(type: "TEXT", nullable: true),
                     Description = table.Column<string>(type: "TEXT", nullable: true),
                     EctsCredits = table.Column<int>(type: "INTEGER", nullable: false),
-                    Degree = table.Column<string>(type: "TEXT", nullable: true),
-                    InstitutionId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    Degree = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Specialties", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InstitutionSpecialties",
+                columns: table => new
+                {
+                    InstitutionId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    SpecialtyId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InstitutionSpecialties", x => new { x.InstitutionId, x.SpecialtyId });
                     table.ForeignKey(
-                        name: "FK_Specialties_Institutions_InstitutionId",
+                        name: "FK_InstitutionSpecialties_Institutions_InstitutionId",
                         column: x => x.InstitutionId,
                         principalTable: "Institutions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_InstitutionSpecialties_Specialties_SpecialtyId",
+                        column: x => x.SpecialtyId,
+                        principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Components",
+                name: "SpecialtyComponents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "INTEGER", nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(type: "TEXT", nullable: true),
-                    Description = table.Column<string>(type: "TEXT", nullable: true),
-                    isOptional = table.Column<bool>(type: "INTEGER", nullable: false),
-                    SpecialtyId = table.Column<Guid>(type: "TEXT", nullable: true)
+                    SpecialtyId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    ComponentId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Components", x => x.Id);
+                    table.PrimaryKey("PK_SpecialtyComponents", x => new { x.SpecialtyId, x.ComponentId });
                     table.ForeignKey(
-                        name: "FK_Components_Specialties_SpecialtyId",
+                        name: "FK_SpecialtyComponents_Components_ComponentId",
+                        column: x => x.ComponentId,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SpecialtyComponents_Specialties_SpecialtyId",
                         column: x => x.SpecialtyId,
                         principalTable: "Specialties",
                         principalColumn: "Id",
@@ -82,19 +116,25 @@ namespace Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Components_SpecialtyId",
-                table: "Components",
+                name: "IX_InstitutionSpecialties_SpecialtyId",
+                table: "InstitutionSpecialties",
                 column: "SpecialtyId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Specialties_InstitutionId",
-                table: "Specialties",
-                column: "InstitutionId");
+                name: "IX_SpecialtyComponents_ComponentId",
+                table: "SpecialtyComponents",
+                column: "ComponentId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "InstitutionSpecialties");
+
+            migrationBuilder.DropTable(
+                name: "SpecialtyComponents");
+
             migrationBuilder.DropTable(
                 name: "Components");
 

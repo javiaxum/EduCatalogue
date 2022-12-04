@@ -13,6 +13,6 @@ namespace Domain
         public string Address { get; set; }
         public string SiteURL { get; set; }
         public string TitleImage { get; set; }
-        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
+        public ICollection<InstitutionSpecialty> Specialties { get; set; }
     }
 }

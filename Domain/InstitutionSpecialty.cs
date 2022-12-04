@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class SpecialtyComponent
+    public class InstitutionSpecialty
     {
+        public Guid InstitutionId { get; set; }
+        public Institution Institution { get; set; }
         public Guid SpecialtyId { get; set; }
         public Specialty Specialty { get; set; }
-        public int ComponentId { get; set; }
-        public Component Component { get; set; }
     }
 }

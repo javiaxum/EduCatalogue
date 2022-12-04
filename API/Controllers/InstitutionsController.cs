@@ -8,17 +8,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Application.Institutions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     public class InstitutionsController : BaseAPIController
     {
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<List<Institution>>> GetInstitutions()
         {
             return await Mediator.Send(new List.Query());
         }
-
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<ActionResult<Institution>> GetInstitution(Guid id)
         {
