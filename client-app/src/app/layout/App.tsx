@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Container, Header, List } from 'semantic-ui-react';
-import { Institution } from '../models/institution';
+import React from 'react';
+import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import InstitutionDashboard from '../../features/Institutions/dashboard/InstitutionDashboard';
-
-import agent from '../api/agent';
-import LoadingComponent from './LoadingComponent';
-import { useStore } from '../stores/store';
-import { observer } from 'mobx-react-lite';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from '../../features/home/HomePage';
+import InstitutionForm from '../../features/Institutions/form/InstitutionForm';
+import InstitutionDetails from '../../features/Institutions/details/InstitutionDetails';
 
 function App() {
-  const { institutionStore } = useStore();
-
-  useEffect(() => {
-    institutionStore.loadInstitutions();
-  }, [institutionStore])
-
-  if (institutionStore.loadingInitial) return <LoadingComponent />
-
   return (
     <>
-      <NavBar />
-      <Container style={{ marginTop: "7em" }}>
-        <InstitutionDashboard />
-      </Container>
+      <Routes>
+        <Route path='/' element={<HomePage />} />
+        <Route path='/*' element={
+          <>
+            <NavBar />
+            <Container style={{ marginTop: "7em" }}>
+              <Routes>
+                <Route path='Institutions' element={<InstitutionDashboard />} />
+                <Route path='Institutions/:id' element={<InstitutionDetails />} />
+                <Route path={'createInstitution'} element={<InstitutionForm />} />
+                <Route path={'manage/:id'} element={<InstitutionForm />} />
+              </Routes>
+            </Container>
+          </>
+        } />
+      </Routes>
     </>
   );
 }
 
-export default observer(App);
+export default App;
