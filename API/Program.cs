@@ -1,9 +1,12 @@
 using System.Text;
+using API.Middleware;
 using API.Services;
 using Application.Core;
 using Application.Institutions;
 using AutoMapper;
 using Domain;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +34,9 @@ internal class Program
             var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
             opt.Filters.Add(new AuthorizeFilter(policy));
         });
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddFluentValidationClientsideAdapters();
+        builder.Services.AddValidatorsFromAssemblyContaining<Create>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -54,6 +60,7 @@ internal class Program
         })
         .AddEntityFrameworkStores<DataContext>()
         .AddSignInManager<SignInManager<AppUser>>();
+
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]));
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         .AddJwtBearer(opt =>
@@ -87,6 +94,7 @@ internal class Program
         }
 
         // Configure the HTTP request pipeline.
+        app.UseMiddleware<ExceptionMiddleware>();
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -99,7 +107,7 @@ internal class Program
         app.UseCors("CorsPolicy");
 
         app.UseAuthentication();
-        app.UseAuthorization();
+    app.UseAuthorization();
 
         app.MapControllers();
 

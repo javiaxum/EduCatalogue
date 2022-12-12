@@ -29,7 +29,7 @@ export default observer(function InstitutionDetails() {
             <Card.Content extra>
                 <Button.Group widths={2}>
                     <Button as={Link} to={`/manage/${id}`}type='button' content='Edit' />
-                    <Button as={Link} to='/Institutions' type='button' content='Cancel' />
+                    <Button as={Link} to='/institutions' type='button' content='Cancel' />
                 </Button.Group>
             </Card.Content>
         </Card>
