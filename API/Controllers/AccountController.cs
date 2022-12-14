@@ -34,7 +34,7 @@ namespace API.Controllers
         {
             var user = await _userManager.FindByEmailAsync(loginDTO.Email);
 
-            if (user == null) return Unauthorized();
+            if (user == null) return Unauthorized("An error occured while authorizing user");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
@@ -42,16 +42,24 @@ namespace API.Controllers
             {
                 return CreateUserDTO(user);
             }
-            
-            return Unauthorized();
+
+            return Unauthorized("An error occured while authorizing user");
         }
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult<AppUserDTO>> Register(RegisterDTO registerDTO)
         {
 
-            if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email)) return BadRequest("Email is already taken");
-            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDTO.Username)) return BadRequest("Username is already taken");
+            if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
+            {
+                ModelState.AddModelError("email", "Email is already taken");
+                return ValidationProblem();
+            }
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDTO.Username))
+            {
+                ModelState.AddModelError("username", "Username is already taken");
+                return ValidationProblem();
+            }
 
             var user = new AppUser
             {

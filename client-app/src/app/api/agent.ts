@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { createBrowserRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
 import { Institution } from "../models/institution";
+import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
 axios.defaults.baseURL = 'http://localhost:5172/api';
@@ -15,9 +15,15 @@ const sleep = (delay: number) => {
 
 const responseData = <T>(response: AxiosResponse<T>) => response.data; // or response data
 
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if(token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+    return config;
+})
+
 axios.interceptors.response.use(async response => {
     await sleep(1000);
-    return response
+    return response;
 }, (error: AxiosError) => {
     const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
@@ -61,7 +67,7 @@ const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseData),
     post: <T>(url: string, data: {}) => axios.post<T>(url, data).then(responseData),
     put: <T>(url: string, data: {}) => axios.put<T>(url, data).then(responseData),
-    delete: <T>(url: string) => axios.delete<T>(url).then(responseData),
+    delete: <T>(url: string) => axios.delete<T>(url).then(responseData)
 }
 
 const Institutions = {
@@ -69,11 +75,18 @@ const Institutions = {
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: Institution) => requests.post<void>("/institutions", institution),
     update: (institution: Institution) => requests.put<void>(`/institutions/${institution.id}`, institution),
-    delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
+    delete: (id: string) => requests.delete<void>(`/institutions/${id}`)
+}
+
+const Account = {
+    current: () => requests.get<User>("/account"),
+    login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+    register: (user: UserFormValues) => requests.post<User>("/account/register", user)
 }
 
 const agent = {
-    Institutions
+    Institutions,
+    Account
 }
 
 export default agent;

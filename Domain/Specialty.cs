@@ -8,10 +8,8 @@ namespace Domain
     public class Specialty
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string UaCode { get; set; }
-        public string IscedCode { get; set; }
-        public string UaBranchCode { get => UaCode.Take(2).ToString(); }
+        public SpecialtyCore SpecialtyCore { get; set; }
+        public string UaBranchCode { get => SpecialtyCore.UaCode.Take(2).ToString(); }
         public string Description { get; set; }
         public int EctsCredits { get; set; }
         public string Degree { get; set; }

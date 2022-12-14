@@ -6,7 +6,6 @@ export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
     selectedInstitution: Institution | undefined = undefined;
-    editMode: boolean = false;
     loading: boolean = false;
     loadingInitial: boolean = true;
 

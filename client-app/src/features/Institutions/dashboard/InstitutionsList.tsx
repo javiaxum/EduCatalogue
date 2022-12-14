@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Button, Item } from 'semantic-ui-react';
+import { Item } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 
