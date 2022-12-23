@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20221214114255_Specialties_IdentityUpdate")]
+    partial class SpecialtiesIdentityUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -40,6 +43,9 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("InstitutionId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -77,6 +83,8 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InstitutionId");
+
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -85,21 +93,6 @@ namespace Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.AppUserInstitution", b =>
-                {
-                    b.Property<string>("ManagerId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("InstitutionId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ManagerId", "InstitutionId");
-
-                    b.HasIndex("InstitutionId");
-
-                    b.ToTable("AppUserInstitution");
                 });
 
             modelBuilder.Entity("Domain.Component", b =>
@@ -351,23 +344,11 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Domain.AppUserInstitution", b =>
+            modelBuilder.Entity("Domain.AppUser", b =>
                 {
-                    b.HasOne("Domain.Institution", "Institution")
+                    b.HasOne("Domain.Institution", null)
                         .WithMany("Managers")
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.AppUser", "Manager")
-                        .WithMany("Institutions")
-                        .HasForeignKey("ManagerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Institution");
-
-                    b.Navigation("Manager");
+                        .HasForeignKey("InstitutionId");
                 });
 
             modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
@@ -466,11 +447,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Domain.AppUser", b =>
-                {
-                    b.Navigation("Institutions");
                 });
 
             modelBuilder.Entity("Domain.Component", b =>

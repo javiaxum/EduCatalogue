@@ -11,6 +11,7 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            // in case of an empty DB seed users
             if (!userManager.Users.Any())
             {
                 var users = new List<AppUser> {
@@ -35,7 +36,22 @@ namespace Persistence
                     await userManager.CreateAsync(user, "2dS92jD72jsdLsS");
                 }
             }
+
+            var powerUser = new AppUser
+            {
+                UserName = "CatalogueOperator",
+                Email = "EduCatalogue@service.com",
+            };
+
+            string userPassword = "2dS92jD72jsdLsS";
+            var _user = await userManager.FindByEmailAsync("EduCatalogue@service.com");
             
+            if (_user == null)
+            {
+                var createPowerUser = await userManager.CreateAsync(powerUser, userPassword);
+            }
+
+            // check for institutions and seed if none was found
             if (context.Institutions.Any()) return;
 
             var Institutions = new List<Institution>

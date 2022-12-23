@@ -6,6 +6,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace API.Services
@@ -13,8 +14,10 @@ namespace API.Services
     public class TokenService
     {
         private readonly IConfiguration _config;
-        public TokenService(IConfiguration config)
+        private readonly UserManager<AppUser> _userManager;
+        public TokenService(IConfiguration config, UserManager<AppUser> userManager)
         {
+            _userManager = userManager;
             _config = config;
         }
 

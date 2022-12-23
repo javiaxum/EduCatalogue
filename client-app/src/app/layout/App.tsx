@@ -5,25 +5,24 @@ import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 import NavBar from './NavBar';
 import { useStore } from '../stores/store';
-import LoginForm from '../../features/identity/LoginForm';
 import { observer } from 'mobx-react-lite';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 
-function App() {
+export default observer(function App() {
   const location = useLocation();
   const { commonStore, userStore } = useStore();
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().finally(() => {
-        commonStore.setAppLoaded();
+        commonStore.setAppLoaded()
       })
     } else {
       commonStore.setAppLoaded();
     }
   }, [commonStore, userStore])
 
-  if (commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
+  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (
     <>
@@ -41,6 +40,4 @@ function App() {
       )}
     </>
   );
-}
-
-export default observer(App);
+})

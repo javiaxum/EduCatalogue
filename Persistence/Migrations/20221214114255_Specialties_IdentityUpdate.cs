@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class SpecialtyCore : Migration
+    public partial class SpecialtiesIdentityUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,8 +24,14 @@ namespace Persistence.Migrations
                 table: "Specialties",
                 newName: "SpecialtyCoreId");
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "InstitutionId",
+                table: "AspNetUsers",
+                type: "TEXT",
+                nullable: true);
+
             migrationBuilder.CreateTable(
-                name: "SpecialtyCore",
+                name: "SpecialtyCores",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
@@ -35,7 +41,7 @@ namespace Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpecialtyCore", x => x.Id);
+                    table.PrimaryKey("PK_SpecialtyCores", x => x.Id);
                 });
 
             migrationBuilder.CreateIndex(
@@ -43,11 +49,23 @@ namespace Persistence.Migrations
                 table: "Specialties",
                 column: "SpecialtyCoreId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_InstitutionId",
+                table: "AspNetUsers",
+                column: "InstitutionId");
+
             migrationBuilder.AddForeignKey(
-                name: "FK_Specialties_SpecialtyCore_SpecialtyCoreId",
+                name: "FK_AspNetUsers_Institutions_InstitutionId",
+                table: "AspNetUsers",
+                column: "InstitutionId",
+                principalTable: "Institutions",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Specialties_SpecialtyCores_SpecialtyCoreId",
                 table: "Specialties",
                 column: "SpecialtyCoreId",
-                principalTable: "SpecialtyCore",
+                principalTable: "SpecialtyCores",
                 principalColumn: "Id");
         }
 
@@ -55,15 +73,27 @@ namespace Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Specialties_SpecialtyCore_SpecialtyCoreId",
+                name: "FK_AspNetUsers_Institutions_InstitutionId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Specialties_SpecialtyCores_SpecialtyCoreId",
                 table: "Specialties");
 
             migrationBuilder.DropTable(
-                name: "SpecialtyCore");
+                name: "SpecialtyCores");
 
             migrationBuilder.DropIndex(
                 name: "IX_Specialties_SpecialtyCoreId",
                 table: "Specialties");
+
+            migrationBuilder.DropIndex(
+                name: "IX_AspNetUsers_InstitutionId",
+                table: "AspNetUsers");
+
+            migrationBuilder.DropColumn(
+                name: "InstitutionId",
+                table: "AspNetUsers");
 
             migrationBuilder.RenameColumn(
                 name: "SpecialtyCoreId",

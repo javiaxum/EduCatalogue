@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,21 +14,27 @@ namespace Application.Institutions
 {
     public class List
     {
-        public class Query : IRequest<Result<List<Institution>>>
+        public class Query : IRequest<Result<List<InstitutionDTO>>>
         {
         }
-        public class Handler : IRequestHandler<Query, Result<List<Institution>>>
+        public class Handler : IRequestHandler<Query, Result<List<InstitutionDTO>>>
         {
             private readonly DataContext _context;
+            private readonly IMapper _mapper;
 
-            public Handler(DataContext context)
+            public Handler(DataContext context, IMapper mapper)
             {
+                _mapper = mapper;
                 _context = context;
             }
 
-            public async Task<Result<List<Institution>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<List<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                return Result<List<Institution>>.Success(await _context.Institutions.ToListAsync(cancellationToken));
+                var institutions = await _context.Institutions
+                .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync(cancellationToken);
+                
+                return Result<List<InstitutionDTO>>.Success(institutions);
             }
         }
     }

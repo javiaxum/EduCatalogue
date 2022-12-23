@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221214100144_SpecialtyCore")]
-    partial class SpecialtyCore
+    [Migration("20221214121956_Specialties_FIX")]
+    partial class SpecialtiesFIX
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,6 +43,9 @@ namespace Persistence.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Image")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("InstitutionId")
                         .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
@@ -79,6 +82,8 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstitutionId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -208,7 +213,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SpecialtyCore");
+                    b.ToTable("SpecialtyCores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -339,6 +344,13 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.AppUser", b =>
+                {
+                    b.HasOne("Domain.Institution", null)
+                        .WithMany("Managers")
+                        .HasForeignKey("InstitutionId");
+                });
+
             modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
                 {
                     b.HasOne("Domain.Institution", "Institution")
@@ -444,6 +456,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Institution", b =>
                 {
+                    b.Navigation("Managers");
+
                     b.Navigation("Specialties");
                 });
 

@@ -26,11 +26,13 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> CreateInstitution(Institution institution)
         {
             return HandleResult(await Mediator.Send(new Create.Command { Institution = institution }));
         }
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditInstitution(Guid id, Institution institution)
         {

@@ -3,16 +3,19 @@ using API.Middleware;
 using API.Services;
 using Application.Core;
 using Application.Institutions;
+using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -37,6 +40,8 @@ internal class Program
         builder.Services.AddFluentValidationAutoValidation();
         builder.Services.AddFluentValidationClientsideAdapters();
         builder.Services.AddValidatorsFromAssemblyContaining<Create>();
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.AddScoped<IUsernameAccessor, UsernameAccessor>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -73,6 +78,14 @@ internal class Program
                 ValidateAudience = false
             };
         });
+        builder.Services.AddAuthorization(opt =>
+        {
+            opt.AddPolicy("IsInstitutionManager", policy =>
+            {
+                policy.Requirements.Add(new IsManagerRequirement());
+            });
+        });
+        builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
 
         var app = builder.Build();
@@ -107,7 +120,7 @@ internal class Program
         app.UseCors("CorsPolicy");
 
         app.UseAuthentication();
-    app.UseAuthorization();
+        app.UseAuthorization();
 
         app.MapControllers();
 
