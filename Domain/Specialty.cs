@@ -12,7 +12,7 @@ namespace Domain
         public string Description { get; set; }
         public int EctsCredits { get; set; }
         public string Degree { get; set; }
-        public ICollection<InstitutionSpecialty> Institutions { get; set; }
-        public ICollection<SpecialtyComponent> Components { get; set; }
+        public ICollection<InstitutionSpecialty> Institutions { get; set; } = new List<InstitutionSpecialty>();
+        public ICollection<SpecialtyComponent> Components { get; set; } = new List<SpecialtyComponent>();
     }
 }

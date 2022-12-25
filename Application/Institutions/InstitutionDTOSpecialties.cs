@@ -8,7 +8,7 @@ using Application.Specialties;
 
 namespace Domain
 {
-    public class InstitutionDTO
+    public class InstitutionDTOSpecialties
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -17,6 +17,5 @@ namespace Domain
         public string SiteURL { get; set; }
         public string TitleImage { get; set; }
         public ICollection<SpecialtyDTO> Specialties { get; set; } = new List<SpecialtyDTO>();
-
     }
 }

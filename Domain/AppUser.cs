@@ -10,7 +10,7 @@ namespace Domain
     {
         public string DisplayName { get; set; }
         public string Image { get; set; }
-        public ICollection<AppUserInstitution> Institutions { get; set; }
+        public ICollection<AppUserInstitution> Institutions { get; set; } = new List<AppUserInstitution>();
 
     }
 }

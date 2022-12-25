@@ -9,22 +9,15 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
-import { Institution } from '../../../app/models/institution';
+import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 import { router } from '../../routers/Routes';
 
 export default observer(function InstitutionForm() {
     const { institutionStore } = useStore();
-    const { loading, loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial } = institutionStore;
+    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial } = institutionStore;
     const { id } = useParams();
 
-    const [institution, setInstitution] = useState({
-        id: '',
-        name: '',
-        description: '',
-        address: '',
-        siteURL: '',
-        titleImage: ''
-    });
+    const [institution, setInstitution] = useState<InstitutionFormValues>(new InstitutionFormValues())
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Institution name is required'),
@@ -34,19 +27,19 @@ export default observer(function InstitutionForm() {
     })
 
     useEffect(() => {
-        if (id) loadInstitution(id).then(institution => setInstitution(institution!));
+        if (id) loadInstitution(id)
+            .then(institution => setInstitution(new InstitutionFormValues(institution)));
         else setLoadingInitial(false);
-    }, [loadInstitution, id, setLoadingInitial])
+    }, [loadInstitution, id, setLoadingInitial, setInstitution])
 
-    function handleInstitutionFormSubmit(i: Institution) {
-        if (i.id.length === 0) {
-            let newInstitution = {
-                ...i,
-                id: uuid()
-            }
-            createInstitution(i).then(() => router.navigate(`/institutions/${newInstitution.id}`));
+    function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
+        if (!institution.id) {
+            institution.id = uuid();
+            createInstitution(institution).then(() =>
+                router.navigate(`/institutions/${institution.id}`));
         } else {
-            editInstitution(i).then(() => router.navigate(`/institutions/${i.id}`));
+            editInstitution(institution).then(() =>
+                router.navigate(`/institutions/${institution.id}`));
         }
     }
     if (loadingInitial) return <LoadingComponent content='Loading institution form...' />
@@ -66,7 +59,7 @@ export default observer(function InstitutionForm() {
                             positive
                             type='submit'
                             content='Submit'
-                            loading={loading}
+                            loading={isSubmitting}
                             disabled={!dirty || isSubmitting || !isValid}
                         />
                         <Button
@@ -75,7 +68,7 @@ export default observer(function InstitutionForm() {
                             floated='right'
                             type='button'
                             content='Cancel'
-                            disabled={loading}
+                            disabled={isSubmitting}
                         />
                     </Form>
                 )}

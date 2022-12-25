@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
-import { Institution } from "../models/institution";
+import { Institution, InstitutionFormValues } from "../models/institution";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -56,7 +56,6 @@ axios.interceptors.response.use(async response => {
         case 500:
             store.commonStore.setServerError(data);
             router.navigate('/server-error');
-            toast.error("Server Error");
             break;
     }
     return Promise.reject(error);
@@ -73,8 +72,8 @@ const requests = {
 const Institutions = {
     list: () => requests.get<Institution[]>("/institutions"),
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
-    create: (institution: Institution) => requests.post<void>("/institutions", institution),
-    update: (institution: Institution) => requests.put<void>(`/institutions/${institution.id}`, institution),
+    create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
+    update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`)
 }
 

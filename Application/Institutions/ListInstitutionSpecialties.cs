@@ -12,13 +12,13 @@ using Persistence;
 
 namespace Application.Institutions
 {
-    public class Details
+    public class ListInstitutionSpecialties
     {
-        public class Query : IRequest<Result<InstitutionDTO>>
+        public class Query : IRequest<Result<InstitutionDTOSpecialties>>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<InstitutionDTO>>
+        public class Handler : IRequestHandler<Query, Result<InstitutionDTOSpecialties>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,16 +28,14 @@ namespace Application.Institutions
                 _context = context;
             }
 
-            public async Task<Result<InstitutionDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<InstitutionDTOSpecialties>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions
-                    .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
+                var specialties = await _context.Institutions
+                    .ProjectTo<InstitutionDTOSpecialties>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
-                    if (institution == null) return null;
-                    
-                return Result<InstitutionDTO>.Success(institution);
+                    if (specialties == null) return null;
+                return Result<InstitutionDTOSpecialties>.Success(specialties);
             }
         }
-
     }
 }

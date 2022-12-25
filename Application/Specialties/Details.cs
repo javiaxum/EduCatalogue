@@ -10,15 +10,15 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 
-namespace Application.Institutions
+namespace Application.Specialties
 {
     public class Details
     {
-        public class Query : IRequest<Result<InstitutionDTO>>
+        public class Query : IRequest<Result<SpecialtyDTO>>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<InstitutionDTO>>
+        public class Handler : IRequestHandler<Query, Result<SpecialtyDTO>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,14 +28,14 @@ namespace Application.Institutions
                 _context = context;
             }
 
-            public async Task<Result<InstitutionDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<SpecialtyDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions
-                    .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
+                var institution = await _context.Specialties
+                    .ProjectTo<SpecialtyDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
                     if (institution == null) return null;
                     
-                return Result<InstitutionDTO>.Success(institution);
+                return Result<SpecialtyDTO>.Success(institution);
             }
         }
 

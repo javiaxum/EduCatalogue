@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20221203081607_Identity")]
-    partial class Identity
+    [Migration("20221224133618_NewMigration")]
+    partial class NewMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,9 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("TEXT");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("INTEGER");
@@ -85,6 +88,21 @@ namespace Persistence.Migrations
                         .HasDatabaseName("UserNameIndex");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.AppUserInstitution", b =>
+                {
+                    b.Property<string>("ManagerId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("InstitutionId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ManagerId", "InstitutionId");
+
+                    b.HasIndex("InstitutionId");
+
+                    b.ToTable("AppUserInstitution");
                 });
 
             modelBuilder.Entity("Domain.Component", b =>
@@ -163,16 +181,12 @@ namespace Persistence.Migrations
                     b.Property<int>("EctsCredits")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("IscedCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("UaCode")
+                    b.Property<Guid?>("SpecialtyCoreId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SpecialtyCoreId");
 
                     b.ToTable("Specialties");
                 });
@@ -190,6 +204,26 @@ namespace Persistence.Migrations
                     b.HasIndex("ComponentId");
 
                     b.ToTable("SpecialtyComponents");
+                });
+
+            modelBuilder.Entity("Domain.SpecialtyCore", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IscedCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("UaCode")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SpecialtyCores");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -320,6 +354,25 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.AppUserInstitution", b =>
+                {
+                    b.HasOne("Domain.Institution", "Institution")
+                        .WithMany("Managers")
+                        .HasForeignKey("InstitutionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.AppUser", "Manager")
+                        .WithMany("Institutions")
+                        .HasForeignKey("ManagerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Institution");
+
+                    b.Navigation("Manager");
+                });
+
             modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
                 {
                     b.HasOne("Domain.Institution", "Institution")
@@ -337,6 +390,15 @@ namespace Persistence.Migrations
                     b.Navigation("Institution");
 
                     b.Navigation("Specialty");
+                });
+
+            modelBuilder.Entity("Domain.Specialty", b =>
+                {
+                    b.HasOne("Domain.SpecialtyCore", "SpecialtyCore")
+                        .WithMany("Specialties")
+                        .HasForeignKey("SpecialtyCoreId");
+
+                    b.Navigation("SpecialtyCore");
                 });
 
             modelBuilder.Entity("Domain.SpecialtyComponent", b =>
@@ -409,6 +471,11 @@ namespace Persistence.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Domain.AppUser", b =>
+                {
+                    b.Navigation("Institutions");
+                });
+
             modelBuilder.Entity("Domain.Component", b =>
                 {
                     b.Navigation("Specialties");
@@ -416,6 +483,8 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Institution", b =>
                 {
+                    b.Navigation("Managers");
+
                     b.Navigation("Specialties");
                 });
 
@@ -424,6 +493,11 @@ namespace Persistence.Migrations
                     b.Navigation("Components");
 
                     b.Navigation("Institutions");
+                });
+
+            modelBuilder.Entity("Domain.SpecialtyCore", b =>
+                {
+                    b.Navigation("Specialties");
                 });
 #pragma warning restore 612, 618
         }

@@ -8,12 +8,10 @@ export default observer(function InstitutionsList() {
     const { institutionStore } = useStore();
 
     return (
-
         <Item.Group divided>
             {institutionStore.instititutionsByName.map((institution) => (
                 <InstitutionsListItem institution={institution} key={institution.id} />
             ))}
         </Item.Group>
-
     )
 })

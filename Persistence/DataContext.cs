@@ -15,17 +15,17 @@ namespace Persistence
 
         }
         public DbSet<Institution> Institutions { get; set; }
+        public DbSet<AppUserInstitution> AppUserInstitution { get; set; }
         public DbSet<InstitutionSpecialty> InstitutionSpecialties { get; set; }
         public DbSet<SpecialtyCore> SpecialtyCores { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<SpecialtyComponent> SpecialtyComponents { get; set; }
         public DbSet<Component> Components { get; set; }
-        public DbSet<AppUserInstitution> AppUserInstitution { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<AppUserInstitution>(x => x.HasKey(aa => new { aa.ManagerId, aa.InstitutionId}));
+            builder.Entity<AppUserInstitution>(x => x.HasKey(aa => new { aa.ManagerId, aa.InstitutionId }));
 
             builder.Entity<AppUserInstitution>()
             .HasOne(m => m.Manager)
@@ -54,11 +54,11 @@ namespace Persistence
 
             builder.Entity<SpecialtyComponent>()
                 .HasOne(s => s.Specialty)
-                .WithMany(c => c.Components)    
+                .WithMany(c => c.Components)
                 .OnDelete(DeleteBehavior.Cascade);
             builder.Entity<SpecialtyComponent>()
                 .HasOne(c => c.Component)
-                .WithMany(s => s.Specialties)    
+                .WithMany(s => s.Specialties)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

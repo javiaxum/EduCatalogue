@@ -33,7 +33,6 @@ namespace Application.Institutions
                 var institutions = await _context.Institutions
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync(cancellationToken);
-                
                 return Result<List<InstitutionDTO>>.Success(institutions);
             }
         }

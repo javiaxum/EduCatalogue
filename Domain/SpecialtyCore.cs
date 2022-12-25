@@ -12,6 +12,6 @@ namespace Domain
         public string UaCode { get; set; }
         public string IscedCode { get; set; }
         public string UaBranchCode { get => UaCode.Take(2).ToString(); }
-        public ICollection<Specialty> Specialties { get; set; }
+        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

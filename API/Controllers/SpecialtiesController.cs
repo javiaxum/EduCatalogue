@@ -16,7 +16,7 @@ namespace API.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetSpecialties()
+        public async Task<IActionResult> GetSpecialties(Guid id)
         {
             return Ok();
         }

@@ -11,6 +11,18 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            // Seed specialtyCores
+            if(!context.SpecialtyCores.Any())
+            {
+                var specialtyCore = new SpecialtyCore
+                {
+                    Name="Software Engineering",
+                    UaCode="121",
+                    IscedCode="0613"
+                };
+                await context.SpecialtyCores.AddAsync(specialtyCore);
+                await context.SaveChangesAsync();
+            }
             // in case of an empty DB seed users
             if (!userManager.Users.Any())
             {
@@ -40,6 +52,7 @@ namespace Persistence
             var powerUser = new AppUser
             {
                 UserName = "CatalogueOperator",
+                DisplayName = "CatalogueOperator",
                 Email = "EduCatalogue@service.com",
             };
 
@@ -53,7 +66,6 @@ namespace Persistence
 
             // check for institutions and seed if none was found
             if (context.Institutions.Any()) return;
-
             var Institutions = new List<Institution>
             {
                 new Institution
@@ -74,6 +86,18 @@ namespace Persistence
                 }
             };
             await context.Institutions.AddRangeAsync(Institutions);
+            await context.SaveChangesAsync();
+            var usermanager = await userManager.FindByEmailAsync("EduCatalogue@service.com");
+            var institution = await context.Institutions.FindAsync(Institutions[0].Id);
+
+            var manager = new AppUserInstitution
+                {
+                    Manager = usermanager,
+                    Institution = institution,
+                };
+
+            institution.Managers.Add(manager);
+
             await context.SaveChangesAsync();
         }
     }

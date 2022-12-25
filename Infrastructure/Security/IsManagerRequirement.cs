@@ -32,9 +32,14 @@ namespace Infrastructure.Security
 
             var institutionId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
                 .SingleOrDefault(x => x.Key == "id").Value?.ToString());
+
             var IsManager = _dbContext.AppUserInstitution
-                .FindAsync(userId, institutionId).Result;
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == institutionId)
+                .Result;
+
             if(IsManager == null) return Task.CompletedTask;
+
             context.Succeed(requirement);
             return Task.CompletedTask;
         }

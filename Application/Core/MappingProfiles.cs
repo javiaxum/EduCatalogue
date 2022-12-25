@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Institutions;
+using Application.Specialties;
 using AutoMapper;
 using Domain;
 
@@ -15,7 +16,9 @@ namespace Application.Core
             CreateMap<Institution, Institution>();
 
             CreateMap<Institution, InstitutionDTO>();
-
+                
+            CreateMap<Institution, InstitutionDTOSpecialties>();
+            
             CreateMap<AppUserInstitution, Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.Manager.UserName))
@@ -27,6 +30,10 @@ namespace Application.Core
             .ForMember(d => d.EctsCredits, o => o.MapFrom(s => s.Specialty.EctsCredits))
             .ForMember(d => d.Description, o => o.MapFrom(s => s.Specialty.Description))
             .ForMember(d => d.Degree, o => o.MapFrom(s => s.Specialty.Degree));
+
+            CreateMap<SpecialtyFormValues, Specialty>();
+
+            CreateMap<Specialty, SpecialtyDTO>();
         }
     }
 }
