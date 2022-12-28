@@ -1,6 +1,8 @@
-import { useField } from 'formik';
+import { useField, useFormikContext } from 'formik';
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Form, Label, Select } from 'semantic-ui-react';
+import { useStore } from '../../../app/stores/store';
 
 interface Props {
     placeholder: string;
@@ -9,7 +11,9 @@ interface Props {
     label?: string;
 }
 
-export default function CustomSelectInput(props: Props) {
+export default observer(function CustomSpecialtySelectInput(props: Props) {
+    const { specialtyStore } = useStore();
+    const formik = useFormikContext();
     const [field, meta, helpers] = useField(props.name);
     return (
         <Form.Field error={meta.touched && !!meta.error}>
@@ -18,7 +22,11 @@ export default function CustomSelectInput(props: Props) {
                 clearable
                 options={props.options}
                 value={field.value || null}
-                onChange={(e, d) => {helpers.setValue(d.value)}}
+                onChange={(e, d) => {
+                    helpers.setValue(d.value);
+                    formik.setFieldValue('iscedCode', `iscedCode: ${specialtyStore.getSpecialtyCore(d.value as string)?.iscedCode}`)
+                    formik.setFieldValue('uaCode', `uaCode: ${specialtyStore.getSpecialtyCore(d.value as string)?.uaCode}`)
+                }}
                 onBlur={() => helpers.setTouched(true)}
                 placeholder={props.placeholder}
             />
@@ -27,4 +35,4 @@ export default function CustomSelectInput(props: Props) {
             ) : (null)}
         </Form.Field>
     )
-}
+})

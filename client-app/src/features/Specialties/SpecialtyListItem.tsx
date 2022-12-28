@@ -9,15 +9,15 @@ interface Props {
 
 export default function SpecialtyListItem({ specialty }: Props) {
     return (
-        <Grid.Column width={4}>
-            <Card>
+        <Grid.Column style={{width: '245px'}}>
+            <Card className='specialtyCard' style={{display: 'block'}}>
                 <Card.Content>
                     <Card.Header as='a'>{specialty.specialtyCore.name}</Card.Header>
-                    <Card.Content style={{ color: '#444' }}>UA specialty code: {specialty.specialtyCore.uaCode}</Card.Content>
-                    <Card.Content style={{ color: '#444' }}>ISCED specialty code: {specialty.specialtyCore.iscedCode}</Card.Content>
-                    <Card.Description style={{ color: '#444' }}>{specialty.description.slice(0, 50)}</Card.Description>
+                    <Card.Description>UA specialty code: {specialty.specialtyCore.uaCode}</Card.Description>
+                    <Card.Description>ISCED specialty code: {specialty.specialtyCore.iscedCode}</Card.Description>
+                    <Card.Description>{specialty.description.slice(0, 50)}</Card.Description>
                 </Card.Content>
-                <Button as={Link} to={`/specialties/${specialty.id}`} floated='right' content='Details' />
+                <Button as={Link} to={`/manage/${specialty.id}`} content='Details' />
             </Card>
         </Grid.Column>
     )

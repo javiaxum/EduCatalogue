@@ -19,7 +19,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInstitutions()
         {
-            return HandleResult(await Mediator.Send(new List.Query()));
+            return HandleResult(await Mediator.Send(new Application.Institutions.List.Query()));
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -57,7 +57,6 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Specialties.Create.Command
             {
-                Id = id,
                 Specialty = specialty
             }));
         }

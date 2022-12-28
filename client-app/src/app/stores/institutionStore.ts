@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { Profile } from "../models/profile";
 import { store } from "./store";
+import * as Yup from 'yup';
 
 export default class InstitutionStore {
 
@@ -11,6 +12,8 @@ export default class InstitutionStore {
     loading: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
+    editMode: boolean = false;
+
 
     constructor() {
         makeAutoObservable(this);
@@ -27,11 +30,16 @@ export default class InstitutionStore {
         return this.institutionsRegistry.get(id);
     }
 
+    setEditMode = (state: boolean) => {
+        this.editMode = state;
+    }
+
     setActiveMenuItem = (itemName: string) => {
         this.detailsMenuActiveItem = itemName;
     }
 
     loadInstitutions = async () => {
+        this.setLoading(true);
         try {
             const institutions = await agent.Institutions.list();
             runInAction(() => {
@@ -40,33 +48,39 @@ export default class InstitutionStore {
                 });
             })
             this.setLoadingInitial(false);
+            this.setLoading(false);
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
+            this.setLoading(false);
         }
 
     }
     loadInstitution = async (id: string) => {
-        // let institution = this.institutionsRegistry.get(id);
-
-        // if (institution) {
-        //     this.selectedInstitution = institution;
-        //     this.setLoadingInitial(false);
-        //     return institution;
-        // }
-        // else {
+        this.setLoading(true);
+        let institution = this.institutionsRegistry.get(id);
+        if (institution) {
+            this.selectedInstitution = institution;
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+            return institution;
+        }
+        else {
             try {
                 const institution = await agent.Institutions.details(id);
                 runInAction(() => {
                     this.selectedInstitution = institution;
                 })
+                this.setInstitution(institution);
                 this.setLoadingInitial(false);
+                this.setLoading(false);
                 return institution;
             } catch (error) {
                 console.log(error);
                 this.setLoadingInitial(false);
+                this.setLoading(false);
             }
-        // }
+        }
     }
     createInstitution = async (institution: InstitutionFormValues) => {
         const user = store.userStore.user;
@@ -85,7 +99,7 @@ export default class InstitutionStore {
     }
     editInstitution = async (institution: InstitutionFormValues) => {
         try {
-            await agent.Institutions.update(institution);
+            await agent.Institutions.update(new InstitutionFormValues(institution));
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };

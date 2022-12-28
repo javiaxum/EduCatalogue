@@ -5,30 +5,33 @@ export interface Specialty {
     id: string;
     specialtyCore: SpecialtyCore;
     description: string;
-    ECTScredits: number;
+    ectsCredits: number;
     degree: string;
     components: EducationalComponent[];
 }
 
 export class Specialty implements Specialty {
-    constructor(init?: SpecialtyFormValues) {
+    constructor(init?: SpecialtyFormValues | Specialty) {
         Object.assign(this, init);
     }
 }
 
 export class SpecialtyFormValues {
     id?: string = undefined;
-    specialtyCore: SpecialtyCore = new SpecialtyCore();
+    institutionId: string = '';
+    uaCode: string = '';
+    iscedCode: string = '';
     description: string = '';
-    ECTScredits: number = 0;
+    ectsCredits: number = 0;
     degree: string = '';
 
-    constructor(specialty?: SpecialtyFormValues) {
+    constructor(specialty?: SpecialtyFormValues | Specialty) {
         if(specialty) {
             this.id = specialty.id;
-            this.specialtyCore = specialty.specialtyCore;
+            // this.institutionId = specialty.institutionId;
+            // this.uaCode = specialty.uaCode;
             this.description = specialty.description;
-            this.ECTScredits = specialty.ECTScredits;
+            this.ectsCredits = specialty.ectsCredits;
             this.degree = specialty.degree;
         }
     }

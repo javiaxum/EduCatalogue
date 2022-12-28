@@ -13,7 +13,7 @@ export interface Institution {
 }
 
 export class Institution implements Institution {
-    constructor(init?: InstitutionFormValues) {
+    constructor(init?: InstitutionFormValues | Institution) {
         Object.assign(this, init);
     }
 }
@@ -27,7 +27,7 @@ export class InstitutionFormValues {
     titleImage: string = '';
 
     constructor(institution?: InstitutionFormValues) {
-        if(institution) {
+        if (institution) {
             this.id = institution.id;
             this.name = institution.name;
             this.description = institution.description;

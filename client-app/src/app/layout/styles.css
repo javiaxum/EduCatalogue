@@ -2,6 +2,16 @@ body {
   background-color: rgb(255, 255, 255) !important;
 }
 
+/* .active.button.switch {
+  background-color: rgb(105, 105, 105) !important;
+} */
+
+.specialtyCard {
+  height: 150px !important;
+  width: 220px !important;
+  color: '#444';
+}
+
 .ui.inverted.menu {
   background-image: linear-gradient(135deg, rgb(30, 71, 160) 40%, rgb(34, 90, 202) 100%) !important;
   width: 100%;
@@ -33,6 +43,4 @@ body {
   font-weight: normal;
 }
 
-@media only screen and (min-width: 1200px) {
-  
-}
+@media only screen and (min-width: 1200px) {}

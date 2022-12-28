@@ -17,7 +17,6 @@ namespace Application.Specialties
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
             public SpecialtyFormValues Specialty { get; set; }
         }
 
@@ -41,7 +40,7 @@ namespace Application.Specialties
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Id);
+                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Specialty.InstitutionId);
                 var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.UaCode == request.Specialty.UaCode);
 
                 var specialty = new Specialty

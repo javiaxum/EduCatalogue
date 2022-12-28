@@ -16,9 +16,7 @@ namespace Application.Core
             CreateMap<Institution, Institution>();
 
             CreateMap<Institution, InstitutionDTO>();
-                
-            CreateMap<Institution, InstitutionDTOSpecialties>();
-            
+                            
             CreateMap<AppUserInstitution, Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.Manager.UserName))
@@ -33,7 +31,11 @@ namespace Application.Core
 
             CreateMap<SpecialtyFormValues, Specialty>();
 
+            CreateMap<Specialty, Specialty>();
+
             CreateMap<Specialty, SpecialtyDTO>();
+
+            CreateMap<SpecialtyCore, SpecialtyCoreDTO>();
         }
     }
 }

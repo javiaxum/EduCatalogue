@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class SpecialtyCore
+    public class SpecialtyCoreDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string UaCode { get; set; }
         public string IscedCode { get; set; }
         public string UaBranchCode { get => UaCode.Substring(0,2); }
-        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

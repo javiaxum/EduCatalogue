@@ -9,50 +9,91 @@ import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
-import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
-import { categoryOptions } from '../../../app/common/options/categoryOptions';
+import { SpecialtyFormValues } from '../../../app/models/specialty';
+import { router } from '../../routers/Routes';
+import CustomSelectField from './CustomSelectField';
+import CustomSpecialtySelectInput from './CustomSpecialtySelectInput';
 
-export default observer(function InstitutionForm() {
 
-    const { institutionStore } = useStore();
-    const { loading, loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial } = institutionStore;
+export default observer(function SpecialtyForm() {
+
+    const { specialtyStore } = useStore();
+    const { loadSpecialtyCores, loadSpecialty, createSpecialty, editSpecialty, loading, loadingInitial, setLoadingInitial, specialtyCoresByNameAndNumber, specialtyCoreRegistry } = specialtyStore;
     const { id } = useParams();
+    const { id1, id2 } = useParams();
 
-    const [specialty, setSpecialty] = useState({
-        id: '',
-        name: '',
-        description: '',
-        degree: '',
-        estcCredits: '',
-        duration: ''
-    });
+    const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
+
 
     const validationSchema = Yup.object({
         description: Yup.string().required('Specialty description is required'),
         degree: Yup.string().required(),
-        ectsCredits: Yup.string().required(),
-        duration: Yup.string().required(),
+        ectsCredits: Yup.number().required(),
     })
-
     useEffect(() => {
-        // if (id) loadInstitution(id).then(institution => setInstitution(institution!));
-        /*else*/ setLoadingInitial(false);
-    }, [loadInstitution, id, setLoadingInitial])
+        if (specialtyCoreRegistry.size < 2) {
+            loadSpecialtyCores().then(() => { setLoadingInitial(false) })
+        }
+        if (id1 && id2) {
+            loadSpecialty(id2)
+                .then(specialty => setSpecialty(new SpecialtyFormValues(specialty)));
+        } else {
+            setLoadingInitial(false);
+        }
+    },
+        [setLoadingInitial, loadingInitial, loadSpecialtyCores])
 
-    if (loadingInitial) return <LoadingComponent content='Loading institution form...' />
+    function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
+        if (id) {
+            if (!specialty.id) {
+                specialty.id = uuid();
+                createSpecialty(specialty, id).then(() =>
+                    router.navigate(`/manage/${id}`));
+            } else {
+                editSpecialty(specialty).then(() =>
+                    router.navigate(`/manage/${id}`));
+            }
+        }
+    }
+
+    if (loadingInitial) return (<LoadingComponent content='Loading specialties form...' />)
 
     return (
         <Segment clearing>
-            <Formik validationSchema={validationSchema} enableReinitialize initialValues={specialty} onSubmit={values => console.log(values)}>
-                {({ handleSubmit }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <CustomSelectInput options={categoryOptions} placeholder='Specialty' name='specialty' />
+            <Formik
+                validationSchema={validationSchema}
+                enableReinitialize
+                initialValues={specialty}
+                onSubmit={values => console.log(values)}
+            >
+                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                    <Form
+                        className='ui form'
+                        onSubmit={handleSubmit}
+                        autoComplete='off'>
+                        <CustomSpecialtySelectInput
+                            options={specialtyCoresByNameAndNumber}
+                            placeholder='Specialty'
+                            name='specialtySelect' />
+                        <CustomSelectField name='uaCode' placeholder='uaCode' />
+                        <CustomSelectField name='iscedCode' placeholder='iscedCode' />
                         <CustomTextArea rows={3} placeholder='Description' name='description' />
                         <CustomTextInput placeholder='Degree' name='degree' />
-                        <CustomTextInput placeholder='ECTS credits' name='ectsCredits' />
-                        <CustomTextInput placeholder='Duration' name='duration' />
-                        <Button floated='right' positive type='submit' content='Submit' loading={loading} />
-                        <Button as={Link} to='/Institutions' floated='right' type='button' content='Cancel' disabled={loading} />
+                        <CustomTextInput type='number' placeholder='ECTS credits' name='ectsCredits' />
+                        <Button
+                            floated='right'
+                            positive
+                            type='submit'
+                            content='Submit'
+                            loading={isSubmitting}
+                            disabled={!dirty || isSubmitting || !isValid} />
+                        <Button
+                            as={Link}
+                            to={`/institutions/${id}`}
+                            floated='right'
+                            type='button'
+                            content='Cancel'
+                            disabled={loading} />
                     </Form>
                 )}
             </Formik>

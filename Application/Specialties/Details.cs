@@ -14,11 +14,11 @@ namespace Application.Specialties
 {
     public class Details
     {
-        public class Query : IRequest<Result<SpecialtyDTO>>
+        public class Query : IRequest<Result<Specialty>>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<SpecialtyDTO>>
+        public class Handler : IRequestHandler<Query, Result<Specialty>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,14 +28,14 @@ namespace Application.Specialties
                 _context = context;
             }
 
-            public async Task<Result<SpecialtyDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<Specialty>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Specialties
-                    .ProjectTo<SpecialtyDTO>(_mapper.ConfigurationProvider)
+                var specialty = await _context.Specialties
+                    .ProjectTo<Specialty>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
-                    if (institution == null) return null;
+                    if (specialty == null) return null;
                     
-                return Result<SpecialtyDTO>.Success(institution);
+                return Result<Specialty>.Success(specialty);
             }
         }
 

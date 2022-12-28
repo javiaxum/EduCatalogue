@@ -1,22 +1,38 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button, Card, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Button, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
+import InstitutionDetailsInfoForm from '../form/InstitutionDetailsInfoForm';
 import InstitutionDetailsInfo from './InstitutionDetailsInfo';
 import InstitutionDetailsMenu from './InstitutionDetailsMenu';
 import InstitutionDetailsSpecialtiesList from './InstitutionDetailsSpecialtiesList';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
+import { Link } from 'react-router-dom';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore } = useStore();
-    const { selectedInstitution: institution, loadingInitial, loadInstitution, detailsMenuActiveItem } = institutionStore;
+    const {
+        selectedInstitution: institution,
+        loadingInitial,
+        loadInstitution,
+        detailsMenuActiveItem,
+        setActiveMenuItem,
+        editMode,
+        setEditMode, setLoading } = institutionStore;
     const { id } = useParams();
+
     useEffect(() => {
         if (id) loadInstitution(id);
     }, [loadInstitution, id]);
+
+
     if (loadingInitial) return <LoadingComponent />
     if (!institution) return (<></>);
+
     return (
         <Grid>
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
@@ -37,21 +53,31 @@ export default observer(function InstitutionDetails() {
                 }}>
                     <Item.Group>
                         <Item>
-                            <Header
-                                size='huge'
-                                content={institution.name}
-                                style={{ color: '#444' }}
-                            />
+                            <Item.Content>
+                                <Header
+                                    size='huge'
+                                    content={institution.name}
+                                    style={{ color: '#444' }}
+                                />
+                                <Button
+                                    onClick={() => {setEditMode(!editMode); setLoading(true)}}
+                                    as={Link}
+                                    to={`/manage/${institution.id}`}
+                                    floated='right'
+                                    style={{ width: '12rem' }}
+                                    content={'Manage Institution'}
+                                />
+                            </Item.Content>
                         </Item>
                         <Item>
-                            <InstitutionDetailsMenu />
+                            <Item.Content>
+                                <InstitutionDetailsMenu />
+                                {detailsMenuActiveItem === 'About' &&
+                                    <InstitutionDetailsInfo institution={institution} />}
+                                {detailsMenuActiveItem === 'Specialties' &&
+                                    <InstitutionDetailsSpecialtiesList />}
+                            </Item.Content>
                         </Item>
-                        {detailsMenuActiveItem === 'About' && <Item>
-                            <InstitutionDetailsInfo institution={institution}/>
-                        </Item>}
-                        {detailsMenuActiveItem === 'Specialties' && <Item>
-                            <InstitutionDetailsSpecialtiesList />
-                        </Item>}
                     </Item.Group>
                 </Segment>
             </Grid.Column>

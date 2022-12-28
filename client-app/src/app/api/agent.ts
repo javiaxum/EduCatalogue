@@ -2,6 +2,8 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
 import { Institution, InstitutionFormValues } from "../models/institution";
+import { Specialty, SpecialtyFormValues } from "../models/specialty";
+import { SpecialtyCore } from "../models/specialtyCore";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -77,6 +79,14 @@ const Institutions = {
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`)
 }
 
+const Specialties = {
+    details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
+    listCore: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
+    create: (specialty: SpecialtyFormValues, institutionId: string) => requests.post<void>(`/institutions/${institutionId}/specialties`, specialty),
+    update: (specialty: SpecialtyFormValues) => requests.put<void>(`/specialties/${specialty.id}`, specialty),
+    delete: (id: string) => requests.delete<void>(`/specialties/${id}`)
+}
+
 const Account = {
     current: () => requests.get<User>("/account"),
     login: (user: UserFormValues) => requests.post<User>("/account/login", user),
@@ -85,7 +95,8 @@ const Account = {
 
 const agent = {
     Institutions,
-    Account
+    Account,
+    Specialties
 }
 
 export default agent;

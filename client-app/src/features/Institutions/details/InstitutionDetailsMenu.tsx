@@ -1,11 +1,12 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Menu, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
 export default observer(function InstitutionDetailsMenu() {
-    const {institutionStore} = useStore();
-    const {setActiveMenuItem, detailsMenuActiveItem} = institutionStore;
+    const { institutionStore } = useStore();
+    const { setActiveMenuItem, detailsMenuActiveItem } = institutionStore;
+
     return (
         <Menu widths={5} style={{ width: '50rem', boxShadow: 'none', border: '0 1px 0 1px' }} color='blue'>
             <Menu.Item

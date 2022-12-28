@@ -10,8 +10,9 @@ export default observer(function InstitutionDashboard() {
     const { institutionStore } = useStore();
 
     useEffect(() => {
-        if (institutionStore.institutionsRegistry.size === 0) institutionStore.loadInstitutions();
-    }, [institutionStore])
+        if (institutionStore.institutionsRegistry.size <= 1) institutionStore.loadInstitutions();
+        return () => { institutionStore.setActiveMenuItem('About'); }
+    }, [institutionStore, institutionStore.setActiveMenuItem])
 
     if (institutionStore.loadingInitial || institutionStore.loading) return <LoadingComponent content='Loading institutions...' />
     return (

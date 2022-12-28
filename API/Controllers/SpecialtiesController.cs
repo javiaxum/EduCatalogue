@@ -7,8 +7,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Application.Institutions;
 using Microsoft.AspNetCore.Authorization;
+using Application.Specialties;
 
 namespace API.Controllers
 {
@@ -21,26 +21,29 @@ namespace API.Controllers
             return Ok();
         }
         [AllowAnonymous]
+        [HttpGet("specialtyCores")]
+        public async Task<IActionResult> GetSpecialtyCores()
+        {
+            return HandleResult(await Mediator.Send(new ListCores.Query { }));
+        }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSpecialty(Guid id)
         {
-            return Ok();
+            return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
         [HttpPost]
-        [Authorize(Roles = "Operator, Manager")]
-        public async Task<ActionResult> CreateSpecialty(Specialty specialty)
+        public async Task<ActionResult> CreateSpecialty(SpecialtyFormValues specialty)
         {
             return Ok();
         }
         [HttpPut("{id}")]
-        [Authorize(Roles = "Operator, Manager")]
         public async Task<IActionResult> EditSpecialty(Guid id, Specialty specialty)
         {
             specialty.Id = id;
             return Ok();
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Operator")]
         public async Task<ActionResult> DeleteSpecialty(Guid id)
         {
             return Ok();
