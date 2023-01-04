@@ -6,6 +6,11 @@ export default class CommonStore {
     error: ServerError | null = null;
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
+    editMode: boolean = false;
+    
+    setEditMode = (state: boolean) => {
+        this.editMode = state;
+    }
 
     constructor() {
         makeAutoObservable(this);

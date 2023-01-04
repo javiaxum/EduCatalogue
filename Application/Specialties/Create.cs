@@ -42,7 +42,7 @@ namespace Application.Specialties
             {
                 var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Specialty.InstitutionId);
                 var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.UaCode == request.Specialty.UaCode);
-
+                Console.WriteLine($"NAME: {institution.Name}");
                 var specialty = new Specialty
                 {
                     SpecialtyCore = specialtyCore,

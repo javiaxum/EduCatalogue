@@ -11,13 +11,14 @@ import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 import { router } from '../../routers/Routes';
 import InstitutionDetailsMenu from '../details/InstitutionDetailsMenu';
-import InstitutionDetailsSpecialtiesList from '../details/InstitutionDetailsSpecialtiesList';
+import InstitutionDetailsSpecialtiesList from '../details/specialties/InstitutionDetailsSpecialtiesList';
 import InstitutionDetailsInfoForm from './InstitutionDetailsInfoForm';
 
 export default observer(function InstitutionForm() {
-    const { institutionStore } = useStore();
-    const { setEditMode, loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading } = institutionStore;
+    const { institutionStore, commonStore } = useStore();
+    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading } = institutionStore;
     const { id } = useParams();
+    const { editMode, setEditMode } = commonStore;
 
     const [institution, setInstitution] = useState<InstitutionFormValues>(new InstitutionFormValues())
 
@@ -35,7 +36,7 @@ export default observer(function InstitutionForm() {
             setLoadingInitial(false);
         }
         setEditMode(true);
-    }, [loadInstitution, id, setLoadingInitial, setInstitution, setEditMode])
+    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
         if (!institution.id) {
@@ -78,7 +79,7 @@ export default observer(function InstitutionForm() {
                                     <Item>
                                         <Item.Content>
                                             <Header
-                                                style={{ color: '#444', width: '60%' , fontSize: '1rem' }}
+                                                style={{ color: '#444', width: '60%', fontSize: '1rem' }}
                                             >
                                                 <CustomTextInput placeholder='Name' name='name' />
                                             </Header>

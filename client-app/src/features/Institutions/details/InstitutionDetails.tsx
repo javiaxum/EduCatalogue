@@ -8,21 +8,21 @@ import { useStore } from '../../../app/stores/store';
 import InstitutionDetailsInfoForm from '../form/InstitutionDetailsInfoForm';
 import InstitutionDetailsInfo from './InstitutionDetailsInfo';
 import InstitutionDetailsMenu from './InstitutionDetailsMenu';
-import InstitutionDetailsSpecialtiesList from './InstitutionDetailsSpecialtiesList';
+import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsSpecialtiesList';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 
 export default observer(function InstitutionDetails() {
-    const { institutionStore } = useStore();
+    const { institutionStore, commonStore } = useStore();
     const {
         selectedInstitution: institution,
         loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
         setActiveMenuItem,
-        editMode,
-        setEditMode, setLoading } = institutionStore;
+        setLoading } = institutionStore;
+    const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export default observer(function InstitutionDetails() {
                                     style={{ color: '#444' }}
                                 />
                                 <Button
-                                    onClick={() => {setEditMode(!editMode); setLoading(true)}}
+                                    onClick={() => setEditMode(!editMode)}
                                     as={Link}
                                     to={`/manage/${institution.id}`}
                                     floated='right'

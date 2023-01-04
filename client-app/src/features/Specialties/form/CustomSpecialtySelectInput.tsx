@@ -2,6 +2,7 @@ import { useField, useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Form, Label, Select } from 'semantic-ui-react';
+import { SpecialtyCore } from '../../../app/models/specialtyCore';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
@@ -9,6 +10,7 @@ interface Props {
     name: string;
     options: any;
     label?: string;
+    padding?: string;
 }
 
 export default observer(function CustomSpecialtySelectInput(props: Props) {
@@ -16,20 +18,22 @@ export default observer(function CustomSpecialtySelectInput(props: Props) {
     const formik = useFormikContext();
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error}>
-            <label>{props.label}</label>
+        <Form.Field error={meta.touched && !!meta.error} style={{margin: '0', height: '35px', minHeight: '0'}}>
+            <label style={{margin: '0'}}>{props.label}</label>
             <Select
                 clearable
+                placeholder={field.value}
                 options={props.options}
-                value={field.value || null}
                 onChange={(e, d) => {
                     helpers.setValue(d.value);
-                    formik.setFieldValue('iscedCode', `iscedCode: ${specialtyStore.getSpecialtyCore(d.value as string)?.iscedCode}`)
-                    formik.setFieldValue('uaCode', `uaCode: ${specialtyStore.getSpecialtyCore(d.value as string)?.uaCode}`)
+                    const specialtyCore = new SpecialtyCore(specialtyStore.getSpecialtyCore(d.value as string))
+                    formik.setFieldValue('specialtyCore', specialtyCore);
+                    formik.setFieldValue('iscedCode', specialtyCore.iscedCode)
+                    formik.setFieldValue('uaCode', specialtyCore.uaCode)
                 }}
                 onBlur={() => helpers.setTouched(true)}
-                placeholder={props.placeholder}
-            />
+                style={{height: 'auto', minHeight: '0', padding: '.7rem 1.8rem .7rem .7rem'}}
+                />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
             ) : (null)}

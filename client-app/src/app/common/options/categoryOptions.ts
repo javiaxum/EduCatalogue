@@ -1,5 +1,5 @@
-export const categoryOptions = [
-    {text: "Software Engineering", value: "Software Engineering"},
-    {text: "Cybersecurity", value: "Cybersecurity"},
-    {text: "Computer Science", value: "Computer Science"}
+export const degreeOptions = [
+    {text: "Bachelor", value: "Bachelor"},
+    {text: "Master", value: "Master"},
+    {text: "Ph.D.", value: "Ph.D."}
 ]

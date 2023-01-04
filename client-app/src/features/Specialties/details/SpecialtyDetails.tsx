@@ -1,0 +1,98 @@
+import { observer } from 'mobx-react-lite';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { Button, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
+import { useStore } from '../../../app/stores/store';
+import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetailsComponentList';
+
+export default observer(function SpecialtyDetails() {
+    const { specialtyStore, commonStore, institutionStore } = useStore()
+    const { selectedSpecialty, loadSpecialty } = specialtyStore;
+    const { id } = useParams();
+
+    useEffect(() => {
+        if (id) loadSpecialty(id);
+    }, [loadSpecialty, selectedSpecialty, id]);
+
+    if (specialtyStore.loadingInitial) return <LoadingComponent />
+
+    return (
+        <Segment basic style={{ width: '80%', minWidth: '1000px', marginLeft: '10%' }}>
+            <Grid style={{ padding: '20px 0 0 0', color: '#444' }}>
+                <Grid.Row>
+                    <Header
+                        size='large'
+                        style={{ margin: '0', height: '35px' }}
+                    >
+                        Code and specialty:<Label
+                            size='big'
+                            content={`${selectedSpecialty?.specialtyCore.uaCode} ${selectedSpecialty?.specialtyCore.name}`}
+                            style={{padding: '0.5rem 0.5rem 0.5rem 0.5rem'}} />
+                    </Header>
+                    <Button
+                        onClick={() => commonStore.setEditMode(!commonStore.editMode)}
+                        as={Link}
+                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty?.id}`}
+                        style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
+                        content={'Manage Specialty'}
+                    />
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid style={{ width: '100%' }}>
+                        <Grid.Column width={8}>
+                            <Segment.Group style={{ boxShadow: 'none' }}>
+                                <Segment>
+                                    <Label
+                                        content={`Specialty code (ISCED): ${selectedSpecialty?.specialtyCore.iscedCode}`}
+                                    />
+                                </Segment>
+                                <Segment>
+                                    <Icon
+                                        name='graduation'
+                                        size='big'
+                                        color='blue' />
+                                    {`Degree: ${selectedSpecialty?.degree}`}
+                                </Segment>
+                                <Segment basic>
+                                    <Icon
+                                        name='clock'
+                                        size='big'
+                                        color='blue' />
+                                    {`ECTS credits: ${selectedSpecialty?.ectsCredits} credits`}
+                                </Segment>
+                                <Segment basic>
+                                    <Icon
+                                        name='book'
+                                        size='big'
+                                        color='blue' />
+                                    {`Knowledge branch: ${selectedSpecialty?.specialtyCore.uaBranchCode} "knowledge branch name here"`}
+                                </Segment>
+                            </Segment.Group>
+                        </Grid.Column>
+                        <Grid.Column width={8}>
+                            <Segment style={{ boxShadow: 'none', padding: '30px' }}>
+                                <Header as='h4' content='Description' dividing />
+                                <Segment basic style={{padding: '0 0 0 10px'}}>
+                                    {selectedSpecialty?.description}
+                                </Segment>
+                            </Segment>
+                        </Grid.Column>
+                    </Grid>
+                </Grid.Row>
+                <Grid.Row>
+                    <Divider />
+                    <Header
+                        content={`Educational components:`}
+                        size='huge'
+                        style={{ padding: '0 0 10px 0', color: '#444' }}
+                    />
+                </Grid.Row>
+                <Grid.Row>
+                    <SpecialtyDetailsComponentList />
+
+                </Grid.Row>
+            </Grid>
+        </Segment >
+    )
+})

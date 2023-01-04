@@ -1,5 +1,6 @@
 export interface EducationalComponent {
-    name: string
-    description: string
-    isOptional: boolean
+    id: string;
+    name: string;
+    description: string;
+    isOptional: boolean;
 }

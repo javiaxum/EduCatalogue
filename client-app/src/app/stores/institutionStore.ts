@@ -12,8 +12,6 @@ export default class InstitutionStore {
     loading: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
-    editMode: boolean = false;
-
 
     constructor() {
         makeAutoObservable(this);
@@ -28,10 +26,6 @@ export default class InstitutionStore {
     }
     private getInstitution = (id: string) => {
         return this.institutionsRegistry.get(id);
-    }
-
-    setEditMode = (state: boolean) => {
-        this.editMode = state;
     }
 
     setActiveMenuItem = (itemName: string) => {

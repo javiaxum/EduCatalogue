@@ -3,10 +3,10 @@ import App from "../../app/layout/App";
 import ErrorPage from "../errors/ErrorPage";
 import NotFound from "../errors/NotFound";
 import ServerError from "../errors/ServerError";
-import LoginForm from "../identity/LoginForm";
 import InstitutionDashboard from "../Institutions/dashboard/InstitutionDashboard";
 import InstitutionDetails from "../Institutions/details/InstitutionDetails";
 import InstitutionForm from "../Institutions/form/InstitutionForm";
+import SpecialtyDetails from "../Specialties/details/SpecialtyDetails";
 import SpecialtyForm from "../Specialties/form/SpecialtyForm";
 
 export const routes: RouteObject[] = [
@@ -20,6 +20,7 @@ export const routes: RouteObject[] = [
             { path: 'manage/:id', element: <InstitutionForm /> },
             { path: 'manage/:id/createSpecialty', element: <SpecialtyForm /> },
             { path: 'manage/:id1/specialty/:id2', element: <SpecialtyForm /> },
+            { path: 'specialties/:id', element: <SpecialtyDetails /> },
             { path: 'errors', element: <ErrorPage /> },
             { path: 'not-found', element: <NotFound /> },
             { path: 'server-error', element: <ServerError /> },

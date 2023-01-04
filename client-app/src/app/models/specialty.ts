@@ -18,21 +18,24 @@ export class Specialty implements Specialty {
 
 export class SpecialtyFormValues {
     id?: string = undefined;
-    institutionId: string = '';
-    uaCode: string = '';
     iscedCode: string = '';
+    uaCode: string = '';
+    specialtySelect: string = '';
+    specialtyCore: SpecialtyCore = new SpecialtyCore({});
     description: string = '';
     ectsCredits: number = 0;
     degree: string = '';
 
     constructor(specialty?: SpecialtyFormValues | Specialty) {
-        if(specialty) {
+        if (specialty) {
             this.id = specialty.id;
-            // this.institutionId = specialty.institutionId;
-            // this.uaCode = specialty.uaCode;
+            this.specialtyCore = specialty.specialtyCore;
+            this.specialtySelect = `${specialty.specialtyCore.uaCode} ${specialty.specialtyCore.name}`
             this.description = specialty.description;
             this.ectsCredits = specialty.ectsCredits;
             this.degree = specialty.degree;
+            this.iscedCode = specialty.specialtyCore.iscedCode;
+            this.uaCode = specialty.specialtyCore.uaCode;
         }
     }
 }

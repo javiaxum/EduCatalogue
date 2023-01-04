@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid, Item, Segment } from 'semantic-ui-react';
-import { Specialty } from '../../app/models/specialty';
+import { Specialty } from '../../../../app/models/specialty';
 
 interface Props {
     specialty: Specialty;
@@ -17,7 +17,7 @@ export default function SpecialtyListItem({ specialty }: Props) {
                     <Card.Description>ISCED specialty code: {specialty.specialtyCore.iscedCode}</Card.Description>
                     <Card.Description>{specialty.description.slice(0, 50)}</Card.Description>
                 </Card.Content>
-                <Button as={Link} to={`/manage/${specialty.id}`} content='Details' />
+                <Button as={Link} to={`/specialties/${specialty.id}`} content='Details' />
             </Card>
         </Grid.Column>
     )

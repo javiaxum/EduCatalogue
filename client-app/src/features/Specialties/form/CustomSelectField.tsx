@@ -12,8 +12,8 @@ interface Props {
     const [field, meta] = useField(props.name);
     return (
         <Form.Field error={meta.touched && !!meta.error}>
-            <label>{props.label}</label>
-            <input {...field} {...props} disabled={true}/>
+            <label style={{margin: '0'}}>{props.label}</label>
+            <input style={{padding: '0 0.2em 0 0.2em', height: '16.5px'}} {...field} {...props} disabled={true}/>
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
             ) : (null)}

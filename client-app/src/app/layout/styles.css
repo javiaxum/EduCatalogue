@@ -2,6 +2,14 @@ body {
   background-color: rgb(255, 255, 255) !important;
 }
 
+.root {
+  overflow: auto;
+}
+
+.ui.selection.dropdown>.dropdown.icon {
+  top: auto !important;
+}
+
 /* .active.button.switch {
   background-color: rgb(105, 105, 105) !important;
 } */
@@ -42,5 +50,3 @@ body {
   font-size: 1.7em;
   font-weight: normal;
 }
-
-@media only screen and (min-width: 1200px) {}

@@ -18,9 +18,10 @@ export default class SpecialtyStore {
         makeAutoObservable(this);
     }
 
+
     get specialtyCoresByNameAndNumber() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .map(element => ({ text: `${element.name}`, value: element.uaCode }))
+            .map(element => ({ text: `${element.uaCode} ${element.name}`, value: element.uaCode }))
             .sort((a, b) => a.text.localeCompare(b.text))
     }
 
@@ -46,6 +47,7 @@ export default class SpecialtyStore {
     }
 
     loadSpecialtyCores = async () => {
+        this.setLoading(true);
         try {
             const specialtyCores = await agent.Specialties.listCore();
             runInAction(() => {
@@ -63,8 +65,19 @@ export default class SpecialtyStore {
 
     }
     loadSpecialty = async (id: string) => {
+        this.setLoading(true);
+        let specialty = this.specialtyRegistry.get(id);
+        if (specialty) {
+            this.selectedSpecialty = specialty;
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+            return specialty;
+        }
         try {
             const specialty = await agent.Specialties.details(id);
+            runInAction(() => {
+                this.selectedSpecialty = specialty;
+            })
             this.setSpecialty(specialty)
             this.setLoadingInitial(false);
             this.setLoading(false);

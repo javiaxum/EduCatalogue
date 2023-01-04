@@ -12,15 +12,15 @@ interface Props {
 export default function CustomSelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error}>
-            <label>{props.label}</label>
+        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0' }}>
+            <label style={{ margin: '0' }}>{props.label}</label>
             <Select
-                clearable
                 options={props.options}
                 value={field.value || null}
-                onChange={(e, d) => {helpers.setValue(d.value)}}
+                onChange={(e, d) => { helpers.setValue(d.value) }}
                 onBlur={() => helpers.setTouched(true)}
                 placeholder={props.placeholder}
+                style={{height: 'auto', minHeight: 'auto', padding: '.4rem 1.2rem .4rem .4rem'}}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
