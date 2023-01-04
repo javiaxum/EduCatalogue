@@ -28,7 +28,7 @@ export default observer(function SpecialtyDetails() {
                         Code and specialty:<Label
                             size='big'
                             content={`${selectedSpecialty?.specialtyCore.uaCode} ${selectedSpecialty?.specialtyCore.name}`}
-                            style={{padding: '0.5rem 0.5rem 0.5rem 0.5rem'}} />
+                            style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
                     <Button
                         onClick={() => commonStore.setEditMode(!commonStore.editMode)}
@@ -36,6 +36,13 @@ export default observer(function SpecialtyDetails() {
                         to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty?.id}`}
                         style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
                         content={'Manage Specialty'}
+                    />
+                    <Button
+                        onClick={() => commonStore.setEditMode(false)}
+                        as={Link}
+                        to={`/institutions/${institutionStore.selectedInstitution?.id}`}
+                        style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
+                        content={'To institutions'}
                     />
                 </Grid.Row>
                 <Grid.Row>
@@ -73,7 +80,7 @@ export default observer(function SpecialtyDetails() {
                         <Grid.Column width={8}>
                             <Segment style={{ boxShadow: 'none', padding: '30px' }}>
                                 <Header as='h4' content='Description' dividing />
-                                <Segment basic style={{padding: '0 0 0 10px'}}>
+                                <Segment basic style={{ padding: '0 0 0 10px' }}>
                                     {selectedSpecialty?.description}
                                 </Segment>
                             </Segment>

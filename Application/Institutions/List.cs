@@ -14,10 +14,11 @@ namespace Application.Institutions
 {
     public class List
     {
-        public class Query : IRequest<Result<List<InstitutionDTO>>>
+        public class Query : IRequest<Result<PagedList<InstitutionDTO>>>
         {
+            public PagingParams Params { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<List<InstitutionDTO>>>
+        public class Handler : IRequestHandler<Query, Result<PagedList<InstitutionDTO>>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,12 +29,14 @@ namespace Application.Institutions
                 _context = context;
             }
 
-            public async Task<Result<List<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<PagedList<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var institutions = await _context.Institutions
+                var query = _context.Institutions
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
-                .ToListAsync(cancellationToken);
-                return Result<List<InstitutionDTO>>.Success(institutions);
+                .AsQueryable();
+                return Result<PagedList<InstitutionDTO>>.Success(
+                    await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.pageNumber, request.Params.PageSize)
+                );
             }
         }
     }

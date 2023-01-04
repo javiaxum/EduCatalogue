@@ -53,14 +53,12 @@ export default observer(function SpecialtyForm() {
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
         if (id) {
-            if (!specialty.id) {
-                specialty.id = uuid();
-                createSpecialty(specialty, id).then(() =>
-                    router.navigate(`/specialties/manage/${id}`));
-            } else {
-                editSpecialty(specialty).then(() =>
-                    router.navigate(`/specialties/manage/${id}`));
-            }
+            specialty.id = uuid();
+            createSpecialty(specialty, id).then(() =>
+                router.navigate(`/specialties/${specialty.id}`));
+        } else if (id1 && id2) {
+            editSpecialty(specialty).then(() =>
+                router.navigate(`/specialties/${id2}`));
         }
     }
 

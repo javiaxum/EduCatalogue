@@ -24,6 +24,10 @@ export default class SpecialtyStore {
             .map(element => ({ text: `${element.uaCode} ${element.name}`, value: element.uaCode }))
             .sort((a, b) => a.text.localeCompare(b.text))
     }
+    get specialtyCoresByName() {
+        return Array.from(this.specialtyCoreRegistry.values())
+            .sort((a, b) => a.name.localeCompare(b.name))
+    }
 
     private setSpecialty = (specialty: Specialty) => {
         this.specialtyRegistry.set(specialty.id, specialty);

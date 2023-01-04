@@ -10,6 +10,7 @@ using Persistence;
 using Application.Institutions;
 using Microsoft.AspNetCore.Authorization;
 using Application.Specialties;
+using Application.Core;
 
 namespace API.Controllers
 {
@@ -17,9 +18,9 @@ namespace API.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetInstitutions()
+        public async Task<IActionResult> GetInstitutions([FromQuery]PagingParams param)
         {
-            return HandleResult(await Mediator.Send(new Application.Institutions.List.Query()));
+            return HandleResult(await Mediator.Send(new Application.Institutions.List.Query{Params = param}));
         }
         [AllowAnonymous]
         [HttpGet("{id}")]

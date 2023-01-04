@@ -11,7 +11,7 @@
     "@types/react": "^18.0.25",
     "@types/react-datepicker": "^4.8.0",
     "@types/react-dom": "^18.0.9",
-    "axios": "^1.2.0",
+    "axios": "1.2.0",
     "date-fns": "^2.29.3",
     "formik": "^2.2.9",
     "history": "^4.10.1",

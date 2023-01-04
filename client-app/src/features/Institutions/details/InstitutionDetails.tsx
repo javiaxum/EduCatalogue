@@ -49,7 +49,8 @@ export default observer(function InstitutionDetails() {
                     color: 'white',
                     borderRadius: '0px',
                     boxShadow: 'none',
-                    border: 'none'
+                    border: 'none',
+                    minWidth: '1000px'
                 }}>
                     <Item.Group>
                         <Item>

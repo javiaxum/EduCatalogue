@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
-import SearchParams from '../search/SearchParams';
+import SearchParamsSideBar from '../search/SearchParamsSideBar';
 import InstitutionsList from './InstitutionsList';
 
 export default observer(function InstitutionDashboard() {
@@ -22,7 +22,7 @@ export default observer(function InstitutionDashboard() {
                     <InstitutionsList />
                 </Grid.Column>
                 <Grid.Column width={4}>
-                    <SearchParams />
+                    <SearchParamsSideBar />
                 </Grid.Column>
             </Grid>
         </Segment>
