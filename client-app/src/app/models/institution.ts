@@ -1,13 +1,19 @@
+import { City } from "./city";
 import { Profile } from "./profile";
+import { Review } from "./review";
 import { Specialty } from "./specialty";
 
 export interface Institution {
     id: string;
     name: string;
     description: string;
-    address: string;
+    studentCount: number;
+    city: City;
+    streetAddress: string;
     siteURL: string;
     titleImage: string;
+    emblemImage: string;
+    contactInformation: string;
     managers: Profile[];
     specialties: Specialty[];
 }
@@ -22,18 +28,26 @@ export class InstitutionFormValues {
     id?: string = undefined;
     name: string = '';
     description: string = '';
-    address: string = '';
+    studentCount: number = 0;
+    city: City = new City();
+    streetAddress: string = '';
     siteURL: string = '';
     titleImage: string = '';
+    emblemImage: string = '';
+    contactInformation: string = '';
 
     constructor(institution?: InstitutionFormValues) {
         if (institution) {
             this.id = institution.id;
             this.name = institution.name;
             this.description = institution.description;
-            this.address = institution.address;
+            this.studentCount = institution.studentCount;
+            this.city = institution.city;
+            this.streetAddress = institution.streetAddress;
             this.siteURL = institution.siteURL;
             this.titleImage = institution.titleImage;
+            this.emblemImage = institution.emblemImage;
+            this.contactInformation = institution.contactInformation;
         }
     }
 }

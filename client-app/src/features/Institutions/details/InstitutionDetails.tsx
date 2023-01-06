@@ -27,6 +27,7 @@ export default observer(function InstitutionDetails() {
 
     useEffect(() => {
         if (id) loadInstitution(id);
+        setEditMode(false);
     }, [loadInstitution, id]);
 
 

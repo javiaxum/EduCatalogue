@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230106134146_EntityRework")]
+    partial class EntityRework
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -115,25 +118,6 @@ namespace Persistence.Migrations
                     b.ToTable("Branches");
                 });
 
-            modelBuilder.Entity("Domain.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid?>("StateId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StateId");
-
-                    b.ToTable("Cities");
-                });
-
             modelBuilder.Entity("Domain.Component", b =>
                 {
                     b.Property<int>("Id")
@@ -173,7 +157,7 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CityId")
+                    b.Property<string>("City")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("ContactInformation")
@@ -201,8 +185,6 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.ToTable("Institutions");
                 });
@@ -237,11 +219,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
+                        .HasColumnType("TEXT");
 
-                    b.Property<string>("AuthorId")
+                    b.Property<string>("AppUserId")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
@@ -258,7 +240,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AuthorId");
+                    b.HasIndex("AppUserId");
 
                     b.HasIndex("InstitutionId");
 
@@ -329,20 +311,6 @@ namespace Persistence.Migrations
                     b.HasIndex("LocalBranchId");
 
                     b.ToTable("SpecialtyCores");
-                });
-
-            modelBuilder.Entity("Domain.State", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -492,22 +460,6 @@ namespace Persistence.Migrations
                     b.Navigation("Manager");
                 });
 
-            modelBuilder.Entity("Domain.City", b =>
-                {
-                    b.HasOne("Domain.State", null)
-                        .WithMany("Cities")
-                        .HasForeignKey("StateId");
-                });
-
-            modelBuilder.Entity("Domain.Institution", b =>
-                {
-                    b.HasOne("Domain.City", "City")
-                        .WithMany("Institution")
-                        .HasForeignKey("CityId");
-
-                    b.Navigation("City");
-                });
-
             modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
                 {
                     b.HasOne("Domain.Institution", "Institution")
@@ -531,7 +483,7 @@ namespace Persistence.Migrations
                 {
                     b.HasOne("Domain.AppUser", "Author")
                         .WithMany()
-                        .HasForeignKey("AuthorId");
+                        .HasForeignKey("AppUserId");
 
                     b.HasOne("Domain.Institution", "Institution")
                         .WithMany("Reviews")
@@ -648,11 +600,6 @@ namespace Persistence.Migrations
                     b.Navigation("Institutions");
                 });
 
-            modelBuilder.Entity("Domain.City", b =>
-                {
-                    b.Navigation("Institution");
-                });
-
             modelBuilder.Entity("Domain.Component", b =>
                 {
                     b.Navigation("Specialties");
@@ -687,11 +634,6 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.SpecialtyCore", b =>
                 {
                     b.Navigation("Specialties");
-                });
-
-            modelBuilder.Entity("Domain.State", b =>
-                {
-                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

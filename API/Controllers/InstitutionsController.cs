@@ -20,7 +20,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetInstitutions([FromQuery]PagingParams param)
         {
-            return HandleResult(await Mediator.Send(new Application.Institutions.List.Query{Params = param}));
+            return HandlePagedResult(await Mediator.Send(new Application.Institutions.List.Query{Params = param}));
         }
         [AllowAnonymous]
         [HttpGet("{id}")]

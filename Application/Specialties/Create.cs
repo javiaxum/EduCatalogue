@@ -41,8 +41,7 @@ namespace Application.Specialties
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Specialty.InstitutionId);
-                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.UaCode == request.Specialty.UaCode);
-                Console.WriteLine($"NAME: {institution.Name}");
+                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == request.Specialty.LocalSpecialtyCode);
                 var specialty = new Specialty
                 {
                     SpecialtyCore = specialtyCore,

@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
 import { Institution, InstitutionFormValues } from "../models/institution";
+import { PaginatedResult } from "../models/pagination";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
 import { User, UserFormValues } from "../models/user";
@@ -19,18 +20,23 @@ const responseData = <T>(response: AxiosResponse<T>) => response.data; // or res
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
-    if(token && config.headers) config.headers.Authorization = `Bearer ${token}`;
+    if (token && config.headers) config.headers.Authorization = `Bearer ${token}`;
     return config;
 })
 
 axios.interceptors.response.use(async response => {
     await sleep(1000);
+    const pagination = response.headers["pagination"];
+    if (pagination) {
+        response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+        return response as AxiosResponse<PaginatedResult<any>>;
+    }
     return response;
 }, (error: AxiosError) => {
     const { data, status, config } = error.response as AxiosResponse;
     switch (status) {
         case 400:
-            if(config.method === 'get' && data.errors.hasOwnProperty('id')){
+            if (config.method === 'get' && data.errors.hasOwnProperty('id')) {
                 router.navigate('/not-found');
             }
             if (data.errors) {
@@ -72,7 +78,7 @@ const requests = {
 }
 
 const Institutions = {
-    list: () => requests.get<Institution[]>("/institutions"),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", {params}).then(responseData),
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),

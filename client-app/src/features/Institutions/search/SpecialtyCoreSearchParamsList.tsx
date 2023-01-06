@@ -9,7 +9,6 @@ export default observer(function SpecialtyCoreSearchParamsList() {
     const { loadSpecialtyCores, specialtyCoreRegistry } = specialtyStore;
 
     useEffect(() => {
-        if (specialtyStore.specialtyCoreRegistry.size <= 1) specialtyStore.loadSpecialtyCores();
         return () => { }
     }, [specialtyCoreRegistry, loadSpecialtyCores])
 

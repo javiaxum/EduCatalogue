@@ -41,7 +41,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditSpecialty(Guid id, Specialty specialty)
         {
             specialty.Id = id;
-            return Ok();
+            return Ok("Specialty Edit handler was not implemented yet");
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSpecialty(Guid id)

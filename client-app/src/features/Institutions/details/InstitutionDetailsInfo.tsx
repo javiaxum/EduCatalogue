@@ -4,7 +4,7 @@ import { Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
 import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 
 interface Props {
-    institution: Institution | InstitutionFormValues;
+    institution: Institution;
 }
 
 export default function InstitutionDetailsInfo({ institution }: Props) {
@@ -25,9 +25,13 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                             <Grid.Column width={1}>
                                 <Icon name='marker' size='large' color='blue' />
                             </Grid.Column>
-                            <Grid.Column width={14}>
+                            <Grid.Column width={7}>
+                                City:
+                                <span>  {institution.city.name}</span>
+                            </Grid.Column>
+                            <Grid.Column width={7}>
                                 Address:
-                                <span>  {institution.address}</span>
+                                <span>  {institution.streetAddress}</span>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>

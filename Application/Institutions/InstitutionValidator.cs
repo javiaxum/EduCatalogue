@@ -13,7 +13,8 @@ namespace Application.Institutions
         {
             RuleFor(x => x.Name).NotEmpty();
             RuleFor(x => x.Description).NotEmpty();
-            RuleFor(x => x.Address).NotEmpty();
+            RuleFor(x => x.City).NotEmpty();
+            RuleFor(x => x.StreetAddress).NotEmpty();
         }
     }
 }

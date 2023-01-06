@@ -4,6 +4,7 @@ import { Institution, InstitutionFormValues } from "../models/institution";
 import { Profile } from "../models/profile";
 import { store } from "./store";
 import * as Yup from 'yup';
+import { Pagination, PagingParams } from "../models/pagination";
 
 export default class InstitutionStore {
 
@@ -12,6 +13,8 @@ export default class InstitutionStore {
     loading: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
+    pagination: Pagination | null = null;
+    pagingParams: PagingParams = new PagingParams();
 
     constructor() {
         makeAutoObservable(this);
@@ -35,12 +38,13 @@ export default class InstitutionStore {
     loadInstitutions = async () => {
         this.setLoading(true);
         try {
-            const institutions = await agent.Institutions.list();
+            const result = await agent.Institutions.list(this.axiosParams);
             runInAction(() => {
-                institutions.forEach(institution => {
+                result.data.forEach(institution => {
                     this.institutionsRegistry.set(institution.id, institution)
                 });
             })
+            this.setPagination(result.pagination)
             this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
@@ -50,6 +54,22 @@ export default class InstitutionStore {
         }
 
     }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
+
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        return params;
+    }
+
     loadInstitution = async (id: string) => {
         this.setLoading(true);
         let institution = this.institutionsRegistry.get(id);

@@ -21,6 +21,10 @@ namespace Persistence
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<SpecialtyComponent> SpecialtyComponents { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Branch> Branches { get; set; }
+        public DbSet<City> Cities { get; set; }
+        public DbSet<State> States { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -59,6 +63,11 @@ namespace Persistence
             builder.Entity<SpecialtyComponent>()
                 .HasOne(c => c.Component)
                 .WithMany(s => s.Specialties)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Review>()
+                .HasOne(i => i.Institution)
+                .WithMany(r => r.Reviews)
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

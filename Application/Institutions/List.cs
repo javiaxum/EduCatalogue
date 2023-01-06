@@ -32,6 +32,7 @@ namespace Application.Institutions
             public async Task<Result<PagedList<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _context.Institutions
+                .OrderBy(x => x.Name)
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
                 .AsQueryable();
                 return Result<PagedList<InstitutionDTO>>.Success(

@@ -8,10 +8,9 @@ namespace Domain
     public class SpecialtyCore
     {
         public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string UaCode { get; set; }
-        public string IscedCode { get; set; }
-        public string UaBranchCode { get => UaCode.Substring(0,2); }
+        public LocalIdentifierCore LICore { get; set; }
+        public ISCEDCore ISCEDCore { get; set; }
+        public Branch LocalBranch { get; set; }
         public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

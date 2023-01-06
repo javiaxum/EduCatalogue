@@ -9,7 +9,11 @@ namespace Application.Specialties
     public class SpecialtyDTO
     {
         public Guid Id { get; set; }
-        public SpecialtyCore SpecialtyCore { get; set; }
+        public string LocalSpecialtyCode { get; set; }
+        public string LocalSpecialtyName { get; set; }
+        public string LocalBranchName { get; set; }
+        public string ISCEDSpecialtyCode { get; set; }
+        public string ISCEDSpecialtyName { get; set; }
         public string Description { get; set; }
         public int EctsCredits { get; set; }
         public string Degree { get; set; }
