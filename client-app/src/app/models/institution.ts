@@ -8,7 +8,7 @@ export interface Institution {
     name: string;
     description: string;
     studentCount: number;
-    city: City;
+    city: string;
     streetAddress: string;
     siteURL: string;
     titleImage: string;
@@ -16,6 +16,7 @@ export interface Institution {
     contactInformation: string;
     managers: Profile[];
     specialties: Specialty[];
+    reviews: Review[];
 }
 
 export class Institution implements Institution {
@@ -29,7 +30,7 @@ export class InstitutionFormValues {
     name: string = '';
     description: string = '';
     studentCount: number = 0;
-    city: City = new City();
+    city: string = '';
     streetAddress: string = '';
     siteURL: string = '';
     titleImage: string = '';

@@ -7,13 +7,15 @@ using FluentValidation;
 
 namespace Application.Specialties
 {
-    public class SpecialtyFormValuesValidator : AbstractValidator<SpecialtyFormValues>
+    public class SpecialtyDTOValidator : AbstractValidator<SpecialtyDTO>
     {
-        public SpecialtyFormValuesValidator()
+        public SpecialtyDTOValidator()
         {
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.Degree).NotEmpty();
             RuleFor(x => x.EctsCredits).NotEmpty();
+            RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
+            RuleFor(x => x.PriceUAH).NotEmpty();
         }
     }
 }

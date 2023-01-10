@@ -11,7 +11,7 @@ import ModalContainer from '../common/modals/ModalContainer';
 
 export default observer(function App() {
   const location = useLocation();
-  const { commonStore, userStore } = useStore();
+  const { commonStore, userStore, institutionStore } = useStore();
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().finally(() => {
@@ -20,7 +20,8 @@ export default observer(function App() {
     } else {
       commonStore.setAppLoaded();
     }
-  }, [commonStore, userStore])
+    institutionStore.loadInstitutions();
+  }, [commonStore, userStore, institutionStore.loadInstitutions, institutionStore])
 
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 

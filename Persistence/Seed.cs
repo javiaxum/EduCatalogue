@@ -162,7 +162,7 @@ namespace Persistence
                 await context.SaveChangesAsync();
             }
 
-            if(!context.Cities.Any())
+            if (!context.Cities.Any())
             {
                 var cities = new List<City>
                 {
@@ -1005,85 +1005,130 @@ namespace Persistence
             }
 
             // check for institutions and seed if none was found
-            if (context.Institutions.Any()) return;
-            var Institutions = new List<Institution>
+            if (!context.Institutions.Any())
             {
-                new Institution
+                var Institutions = new List<Institution>
                 {
-                    Name = "Львівський національний медичний університет імені Данила Галицького",
-                    Description = "Львівський національний медичний університет імені Данила Галицького (ЛНМУ; лат. Universitatis Medicinalis Leopoliensis) — один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. За даними міжнародної бази Scopus університет посідає перше місце серед медичних вишів України",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                    StudentCount = 5150,
-                    StreetAddress = "вул. Пекарська, 69",
-                    TitleImage = null,
-                    SiteURL = "new.meduniv.lviv.ua",
-                    ContactInformation = "0231231028"
-                },
-                new Institution
-                {
-                    Name = "Київський національний університет імені Тараса Шевченка",
-                    Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                    StudentCount = 32000,
-                    StreetAddress = "вул. Володимирська, 60",
-                    SiteURL = "knu.ua",
-                    ContactInformation = "6683328733"
-                },
-                new Institution
-                {
-                    Name = "Буковинський державний медичний університет",
-                    Description = "один із найбільших закладів вищої освіти м. Чернівці. Це сучасний багатопрофільний заклад вищої медичної освіти, включений до загального реєстру Всесвітньої організації охорони здоров'я, Великої Хартії університетів, Європейської асоціації університету, що здійснює підготовку здобувачів вищої освіти за ступеневою системою освіти. ",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                    StudentCount = 5284,
-                    StreetAddress = "Театральна площа, 2",
-                    SiteURL = "www.bsmu.edu.ua",
-                    ContactInformation = "23474623659"
-                },
-                new Institution
-                {
-                    Name = "Львівський національний медичний університет імені Данила Галицького",
-                    Description = "один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. ",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                    StudentCount = 5150,
-                    StreetAddress = "вул. Пекарська, 69",
-                    SiteURL = "www.meduniv.lviv.ua",
-                    ContactInformation = "02312328"
-                },
-                new Institution
-                {
-                    Name = "Тернопільський національний медичний університет",
-                    Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                    StudentCount = 6530,
-                    StreetAddress = "Майдан Волі, 1",
-                    SiteURL = "tdmu.edu.ua",
-                    ContactInformation = "023sdads8"
-                },
-                new Institution
-                {
-                    Name = "Національний технічний університет «Харківський політехнічний інститут»",
-                    Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
-                    City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                    StudentCount = 12000,
-                    StreetAddress = "вул. Кирпичова, 21",
-                    SiteURL = "kpi.kharkov.ua",
-                    ContactInformation = "3rwe2ddsw8"
-                },
-            };
-            await context.Institutions.AddRangeAsync(Institutions);
-            await context.SaveChangesAsync();
-            var usermanager = await userManager.FindByEmailAsync("EduCatalogue@service.com");
-            var institution = await context.Institutions.FindAsync(Institutions[0].Id);
+                    new Institution
+                    {
+                        Name = "Львівський національний медичний університет імені Данила Галицького",
+                        Description = "Львівський національний медичний університет імені Данила Галицького (ЛНМУ; лат. Universitatis Medicinalis Leopoliensis) — один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. За даними міжнародної бази Scopus університет посідає перше місце серед медичних вишів України",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
+                        StudentCount = 5150,
+                        StreetAddress = "вул. Пекарська, 69",
+                        TitleImage = null,
+                        SiteURL = "new.meduniv.lviv.ua",
+                        ContactInformation = "0231231028"
+                    },
+                    new Institution
+                    {
+                        Name = "Київський національний університет імені Тараса Шевченка",
+                        Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
+                        StudentCount = 32000,
+                        StreetAddress = "вул. Володимирська, 60",
+                        SiteURL = "knu.ua",
+                        ContactInformation = "6683328733"
+                    },
+                    new Institution
+                    {
+                        Name = "Буковинський державний медичний університет",
+                        Description = "один із найбільших закладів вищої освіти м. Чернівці. Це сучасний багатопрофільний заклад вищої медичної освіти, включений до загального реєстру Всесвітньої організації охорони здоров'я, Великої Хартії університетів, Європейської асоціації університету, що здійснює підготовку здобувачів вищої освіти за ступеневою системою освіти. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
+                        StudentCount = 5284,
+                        StreetAddress = "Театральна площа, 2",
+                        SiteURL = "www.bsmu.edu.ua",
+                        ContactInformation = "23474623659"
+                    },
+                    new Institution
+                    {
+                        Name = "Львівський національний медичний університет імені Данила Галицького 2",
+                        Description = "один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
+                        StudentCount = 5150,
+                        StreetAddress = "вул. Пекарська, 69",
+                        SiteURL = "www.meduniv.lviv.ua",
+                        ContactInformation = "02312328"
+                    },
+                    new Institution
+                    {
+                        Name = "Тернопільський національний медичний університет",
+                        Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
+                        StudentCount = 6530,
+                        StreetAddress = "Майдан Волі, 1",
+                        SiteURL = "tdmu.edu.ua",
+                        ContactInformation = "023sdads8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут»",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                };
+                await context.Institutions.AddRangeAsync(Institutions);
+                await context.SaveChangesAsync();
 
-            var manager = new AppUserInstitution
-            {
-                Manager = usermanager,
-                Institution = institution,
-            };
 
-            institution.Managers.Add(manager);
+                // Seed managers
+                var usermanager = await userManager.FindByEmailAsync("EduCatalogue@service.com");
+                var institution = await context.Institutions.FindAsync(Institutions[0].Id);
 
-            await context.SaveChangesAsync();
+                var manager = new AppUserInstitution
+                {
+                    Manager = usermanager,
+                    Institution = institution,
+                };
+
+                institution.Managers.Add(manager);
+
+
+                // Seed Specialties
+                var specialtyCore1 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == "012");
+                var specialtyCore2 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == "011");
+                var specialties = new List<Specialty>
+                {
+                    new Specialty
+                    {
+                        SpecialtyCore = specialtyCore1,
+                        Description = "Specialty test description",
+                        EctsCredits = 240,
+                        Degree = "Bachelor",
+                        PriceUAH = 80000,
+                        StartsAt = DateTime.UtcNow,
+                        EndsAt = DateTime.UtcNow.AddYears(4),
+                    },
+                    new Specialty
+                    {
+                        SpecialtyCore = specialtyCore2,
+                        Description = "Specialty test description",
+                        EctsCredits = 180,
+                        Degree = "Bachelor",
+                        PriceUAH = 80001,
+                        StartsAt = DateTime.UtcNow,
+                        EndsAt = DateTime.UtcNow.AddYears(4),
+                    },
+                };
+				var InstitutionSpecialty = new List<InstitutionSpecialty>
+				{
+					new InstitutionSpecialty
+					{
+						Specialty = specialties[0],
+					},
+					new InstitutionSpecialty
+					{
+						Specialty = specialties[1],
+					},
+				};
+				institution.Specialties.Add(InstitutionSpecialty[0]);
+				institution.Specialties.Add(InstitutionSpecialty[1]);
+                await context.SaveChangesAsync();
+            }
         }
     }
 }

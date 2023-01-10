@@ -70,5 +70,10 @@ namespace Persistence
                 .WithMany(r => r.Reviews)
                 .OnDelete(DeleteBehavior.Cascade);
         }
+
+        internal Task FirstOrDefault()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

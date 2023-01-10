@@ -25,21 +25,21 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                             <Grid.Column width={1}>
                                 <Icon name='marker' size='large' color='blue' />
                             </Grid.Column>
-                            <Grid.Column width={7}>
+                            <Grid.Column width={3}>
                                 City:
-                                <span>  {institution.city.name}</span>
+                                <span>  {institution.city}</span>
                             </Grid.Column>
-                            <Grid.Column width={7}>
+                            <Grid.Column width={5}>
                                 Address:
                                 <span>  {institution.streetAddress}</span>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={1}>
-                                <Icon name='home' size='large' color='blue' />
+                                <Icon name='chain' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={14}>
-                                Homepage:
+                                Website:
                                 <a href={`https://${institution.siteURL}`} target="_blank">  {institution.siteURL}</a>
                             </Grid.Column>
                         </Grid.Row>

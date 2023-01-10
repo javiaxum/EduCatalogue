@@ -17,14 +17,15 @@ namespace Application.Specialties
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public SpecialtyFormValues Specialty { get; set; }
+            public Guid Id { get; set; }
+            public SpecialtyDTO Specialty { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Specialty).SetValidator(new SpecialtyFormValuesValidator());
+                RuleFor(x => x.Specialty).SetValidator(new SpecialtyDTOValidator());
             }
         }
 
@@ -40,14 +41,17 @@ namespace Application.Specialties
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Specialty.InstitutionId);
+                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Id);
                 var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == request.Specialty.LocalSpecialtyCode);
                 var specialty = new Specialty
                 {
                     SpecialtyCore = specialtyCore,
                     Description = request.Specialty.Description,
                     EctsCredits = request.Specialty.EctsCredits,
-                    Degree = request.Specialty.Degree
+                    Degree = request.Specialty.Degree,
+                    PriceUAH = request.Specialty.PriceUAH,
+                    StartsAt = request.Specialty.StartsAt,
+                    EndsAt = request.Specialty.EndsAt
                 };
                 var institutionSpecialty = new InstitutionSpecialty
                 {

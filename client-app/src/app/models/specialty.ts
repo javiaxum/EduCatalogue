@@ -3,10 +3,12 @@ import { SpecialtyCore } from "./specialtyCore";
 
 export interface Specialty {
     id: string;
-    specialtyCore: SpecialtyCore;
+    localSpecialtyCode: string;
     description: string;
     ectsCredits: number;
     degree: string;
+    priceUAH: number;
+    // implement date
     components: EducationalComponent[];
 }
 
@@ -18,24 +20,23 @@ export class Specialty implements Specialty {
 
 export class SpecialtyFormValues {
     id?: string = undefined;
-    iscedCode: string = '';
-    uaCode: string = '';
-    specialtySelect: string = '';
-    specialtyCore: SpecialtyCore = new SpecialtyCore({});
+    localSpecialtyCode: string = '';
+    localBranchCode: string = '';
+    localBranchName: string = '';
+    iscedSpecialtyCode: string = '';
     description: string = '';
     ectsCredits: number = 0;
+    priceUAH: number = 0;
     degree: string = '';
 
     constructor(specialty?: SpecialtyFormValues | Specialty) {
         if (specialty) {
             this.id = specialty.id;
-            this.specialtyCore = specialty.specialtyCore;
-            this.specialtySelect = `${specialty.specialtyCore.uaCode} ${specialty.specialtyCore.name}`
+            this.localSpecialtyCode = specialty.localSpecialtyCode;
             this.description = specialty.description;
             this.ectsCredits = specialty.ectsCredits;
+            this.priceUAH = specialty.priceUAH;
             this.degree = specialty.degree;
-            this.iscedCode = specialty.specialtyCore.iscedCode;
-            this.uaCode = specialty.specialtyCore.uaCode;
         }
     }
 }

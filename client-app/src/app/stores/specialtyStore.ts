@@ -1,7 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Profile } from "../models/profile";
-import { ServerError } from "../models/serverError";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
 import { store } from "./store";
@@ -10,6 +9,7 @@ export default class SpecialtyStore {
 
     specialtyRegistry = new Map<string, Specialty>();
     selectedSpecialty: Specialty | undefined;
+    selectedSpecialtyCore: SpecialtyCore | undefined;
     specialtyCoreRegistry = new Map<string, SpecialtyCore>();
     loadingInitial: boolean = true;
     loading: boolean = false;
@@ -18,15 +18,15 @@ export default class SpecialtyStore {
         makeAutoObservable(this);
     }
 
-
-    get specialtyCoresByNameAndNumber() {
+    get specialtyCoresByNameSelectInput() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .map(element => ({ text: `${element.uaCode} ${element.name}`, value: element.uaCode }))
+            .map(element => ({ text: `${element.localSpecialtyCode} ${element.iscedSpecialtyName}`, value: element.localSpecialtyCode }))
             .sort((a, b) => a.text.localeCompare(b.text))
     }
     get specialtyCoresByName() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .sort((a, b) => a.name.localeCompare(b.name))
+            .map(element => (element))
+            .sort((a, b) => a.localSpecialtyCode.localeCompare(b.localSpecialtyCode))
     }
 
     private setSpecialty = (specialty: Specialty) => {
@@ -56,7 +56,7 @@ export default class SpecialtyStore {
             const specialtyCores = await agent.Specialties.listCore();
             runInAction(() => {
                 specialtyCores.forEach(specialtyCore => {
-                    this.specialtyCoreRegistry.set(specialtyCore.uaCode, specialtyCore)
+                    this.specialtyCoreRegistry.set(specialtyCore.localSpecialtyCode, specialtyCore)
                 });
             })
             this.setLoadingInitial(false);
@@ -73,6 +73,7 @@ export default class SpecialtyStore {
         let specialty = this.specialtyRegistry.get(id);
         if (specialty) {
             this.selectedSpecialty = specialty;
+            this.selectedSpecialtyCore = this.getSpecialtyCore(this.selectedSpecialty.localSpecialtyCode);
             this.setLoadingInitial(false);
             this.setLoading(false);
             return specialty;
@@ -81,6 +82,7 @@ export default class SpecialtyStore {
             const specialty = await agent.Specialties.details(id);
             runInAction(() => {
                 this.selectedSpecialty = specialty;
+                this.selectedSpecialtyCore = this.getSpecialtyCore(this.selectedSpecialty.localSpecialtyCode);
             })
             this.setSpecialty(specialty)
             this.setLoadingInitial(false);

@@ -8,7 +8,7 @@ import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetai
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
-    const { selectedSpecialty, loadSpecialty } = specialtyStore;
+    const { selectedSpecialty, selectedSpecialtyCore, loadSpecialty } = specialtyStore;
     const { id } = useParams();
 
     useEffect(() => {
@@ -27,7 +27,7 @@ export default observer(function SpecialtyDetails() {
                     >
                         Code and specialty:<Label
                             size='big'
-                            content={`${selectedSpecialty?.specialtyCore.uaCode} ${selectedSpecialty?.specialtyCore.name}`}
+                            content={`${selectedSpecialtyCore?.localSpecialtyCode} ${selectedSpecialtyCore?.iscedSpecialtyName}`}
                             style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
                     <Button
@@ -51,7 +51,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`Specialty code (ISCED): ${selectedSpecialty?.specialtyCore.iscedCode}`}
+                                        content={`Specialty code (ISCED): ${selectedSpecialtyCore?.iscedSpecialtyCode}`}
                                     />
                                 </Segment>
                                 <Segment>
@@ -73,7 +73,7 @@ export default observer(function SpecialtyDetails() {
                                         name='book'
                                         size='big'
                                         color='blue' />
-                                    {`Knowledge branch: ${selectedSpecialty?.specialtyCore.uaBranchCode} "knowledge branch name here"`}
+                                    {`Knowledge branch: ${selectedSpecialtyCore?.localBranchCode} ${selectedSpecialtyCore?.localBranchName}`}
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>
@@ -97,7 +97,6 @@ export default observer(function SpecialtyDetails() {
                 </Grid.Row>
                 <Grid.Row>
                     <SpecialtyDetailsComponentList />
-
                 </Grid.Row>
             </Grid>
         </Segment >

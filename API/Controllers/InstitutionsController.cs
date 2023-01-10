@@ -54,10 +54,11 @@ namespace API.Controllers
         }
         [AllowAnonymous]
         [HttpPost("{id}/specialties")]
-        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyFormValues specialty)
+        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDTO specialty)
         {
             return HandleResult(await Mediator.Send(new Application.Specialties.Create.Command
             {
+                Id = id,
                 Specialty = specialty
             }));
         }

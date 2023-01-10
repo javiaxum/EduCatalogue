@@ -10,6 +10,7 @@ namespace Domain
         public Guid Id { get; set; }
         public string LocalSpecialtyCode { get; set; }
         public string LocalSpecialtyName { get; set; }
+        public string LocalBranchCode { get; set; }
         public string LocalBranchName { get; set; }
         public string ISCEDSpecialtyCode { get; set; }
         public string ISCEDSpecialtyName { get; set; }

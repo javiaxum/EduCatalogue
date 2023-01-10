@@ -1,20 +1,30 @@
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { Button, Segment } from 'semantic-ui-react';
-import { PagingParams } from '../../models/pagination';
+import { Pagination, PagingParams } from '../../models/pagination';
 import { useStore } from '../../stores/store';
 
 
 export default observer(function PaginationBar() {
     const { institutionStore, specialtyStore } = useStore();
-    const { setPagingParams, pagination, loadInstitutions } = institutionStore;
+    const { setPagingParams, pagination, loadInstitutions, institutionsRegistry, setPagination } = institutionStore;
 
     const [loadingNext, setLoadingNext] = useState(false);
 
     function HandleLoad(i: number) {
         setLoadingNext(true);
-        setPagingParams(new PagingParams(i))
-        loadInstitutions().then(() => setLoadingNext(false));
+        if (pagination?.currentPage! < i && i * pagination?.itemsPerPage! > institutionsRegistry.size) {
+            setPagingParams(new PagingParams(i));
+            loadInstitutions().then(() => {
+                setLoadingNext(false);
+            });
+        }
+        else {
+            let newPagination = new Pagination(pagination!);
+            newPagination.currentPage = i;
+            setPagination(newPagination);
+            setLoadingNext(false);
+        }
     }
 
     let elements = [];

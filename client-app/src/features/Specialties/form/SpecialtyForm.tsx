@@ -21,7 +21,17 @@ import { degreeOptions } from '../../../app/common/options/categoryOptions';
 export default observer(function SpecialtyForm() {
 
     const { specialtyStore, commonStore, institutionStore } = useStore();
-    const { loadSpecialtyCores, loadSpecialty, createSpecialty, editSpecialty, loading, loadingInitial, setLoadingInitial, specialtyCoresByNameAndNumber, specialtyCoreRegistry, selectedSpecialty } = specialtyStore;
+    const { loadSpecialtyCores,
+        loadSpecialty,
+        createSpecialty,
+        editSpecialty,
+        loading,
+        loadingInitial,
+        setLoadingInitial,
+        selectedSpecialtyCore,
+        specialtyCoresByNameSelectInput: specialtyCoresByName,
+        specialtyCoreRegistry,
+        selectedSpecialty, getSpecialtyCore } = specialtyStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
@@ -45,7 +55,7 @@ export default observer(function SpecialtyForm() {
             if (id1 === 'undefined') {
                 router.navigate(`/institutions`);
             }
-            // institutionStore.loadInstitution() loading institution in case form page was refreshed and institutionStore value lost
+            // institutionStore.loadInstitution() loading institution in case form page was refreshed thus institutionStore value lost
         }
         setLoadingInitial(false);
         setEditMode(true);
@@ -87,8 +97,8 @@ export default observer(function SpecialtyForm() {
                                 </Header>
                                 <Label style={{ margin: '0', padding: '1px', width: '30%' }}>
                                     <CustomSpecialtySelectInput
-                                        options={specialtyCoresByNameAndNumber}
-                                        placeholder={selectedSpecialty?.specialtyCore.name! || 'this'}
+                                        options={specialtyCoresByName}
+                                        placeholder={`${selectedSpecialtyCore?.localSpecialtyCode} ${selectedSpecialtyCore?.localSpecialtyName}` || 'this'}
                                         name='specialtySelect'
                                         padding='0.3em' />
                                 </Label>
@@ -161,7 +171,7 @@ export default observer(function SpecialtyForm() {
                                                             name='book'
                                                             size='big'
                                                             color='blue' />
-                                                        Knowledge branch: {selectedSpecialty?.specialtyCore.uaBranchCode} "knowledge branch name here"
+                                                        Knowledge branch: {selectedSpecialtyCore?.localBranchCode} {selectedSpecialtyCore?.localBranchName}
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>

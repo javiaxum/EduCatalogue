@@ -36,7 +36,7 @@ namespace Application.Institutions
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
                 .AsQueryable();
                 return Result<PagedList<InstitutionDTO>>.Success(
-                    await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.pageNumber, request.Params.PageSize)
+                    await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
                 );
             }
         }

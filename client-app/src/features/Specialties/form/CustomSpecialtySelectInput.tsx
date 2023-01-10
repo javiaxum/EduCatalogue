@@ -27,9 +27,10 @@ export default observer(function CustomSpecialtySelectInput(props: Props) {
                 onChange={(e, d) => {
                     helpers.setValue(d.value);
                     const specialtyCore = new SpecialtyCore(specialtyStore.getSpecialtyCore(d.value as string))
-                    formik.setFieldValue('specialtyCore', specialtyCore);
-                    formik.setFieldValue('iscedCode', specialtyCore.iscedCode)
-                    formik.setFieldValue('uaCode', specialtyCore.uaCode)
+                    formik.setFieldValue('iscedSpecialtyCode', specialtyCore.iscedSpecialtyCode)
+                    formik.setFieldValue('localSpecialtyCode', specialtyCore.localSpecialtyCode)
+                    formik.setFieldValue('localBranchCode', specialtyCore.localBranchCode)
+                    formik.setFieldValue('localBranchName', specialtyCore.localBranchName)
                 }}
                 onBlur={() => helpers.setTouched(true)}
                 style={{height: 'auto', minHeight: '0', padding: '.7rem 1.8rem .7rem .7rem'}}

@@ -20,8 +20,23 @@ export default class InstitutionStore {
         makeAutoObservable(this);
     }
 
+    setPagingParams = (pagingParams: PagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        return params;
+    }
+
     get instititutionsByName() {
         return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name)); // possibly not sorting by name
+    }
+
+    get instititutionsByNameForPage() {
+        return this.instititutionsByName.slice((this.pagination?.currentPage! - 1) * this.pagination?.itemsPerPage!, this.pagination?.currentPage! * this.pagination?.itemsPerPage!);
     }
 
     private setInstitution = (institution: Institution) => {
@@ -57,17 +72,7 @@ export default class InstitutionStore {
 
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
-    }
-
-    setPagingParams = (pagingParams: PagingParams) => {
-        this.pagingParams = pagingParams;
-    }
-
-    get axiosParams() {
-        const params = new URLSearchParams();
-        params.append('pageNumber', this.pagingParams.pageNumber.toString());
-        params.append('pageSize', this.pagingParams.pageSize.toString());
-        return params;
+        console.log(pagination);
     }
 
     loadInstitution = async (id: string) => {

@@ -1,9 +1,11 @@
 export interface SpecialtyCore {
     id: string;
-    name: string;
-    uaCode: string;
-    iscedCode: string;
-    uaBranchCode: string;
+    localSpecialtyCode: string;
+    localSpecialtyName: string;
+    localBranchCode: string;
+    localBranchName: string;
+    iscedSpecialtyCode: string;
+    iscedSpecialtyName: string;
 }
 
 export class SpecialtyCore implements SpecialtyCore {

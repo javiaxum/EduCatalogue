@@ -6,7 +6,7 @@ import SpecialtyListAddNewItem from './SpecialtyListAddNewItem';
 import SpecialtyListItem from './SpecialtyListItem';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
-    const { institutionStore, commonStore } = useStore();
+    const { institutionStore, commonStore, specialtyStore } = useStore();
     const { editMode } = commonStore;
 
     return (
@@ -16,7 +16,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                 ? (<>{!editMode && <Segment style={{ color: '#444' }}>There are no specialties available...</Segment>}</>)
                 : (<>
                     {institutionStore.selectedInstitution.specialties.map((specialty) => (
-                        <SpecialtyListItem specialty={specialty} key={specialty.id} />
+                        <SpecialtyListItem specialty={specialty} specialtyCore={specialtyStore.getSpecialtyCore(specialty.localSpecialtyCode)!} key={specialty.id} />
                     ))}
                 </>
                 )}
