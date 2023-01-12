@@ -72,7 +72,6 @@ export default class InstitutionStore {
 
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
-        console.log(pagination);
     }
 
     loadInstitution = async (id: string) => {

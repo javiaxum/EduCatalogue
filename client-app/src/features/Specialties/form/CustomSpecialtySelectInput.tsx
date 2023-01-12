@@ -30,7 +30,7 @@ export default observer(function CustomSpecialtySelectInput(props: Props) {
                     formik.setFieldValue('iscedSpecialtyCode', specialtyCore.iscedSpecialtyCode)
                     formik.setFieldValue('localSpecialtyCode', specialtyCore.localSpecialtyCode)
                     formik.setFieldValue('localBranchCode', specialtyCore.localBranchCode)
-                    formik.setFieldValue('localBranchName', specialtyCore.localBranchName)
+                    formik.setFieldValue('localBranchName', branchStore.getBranch(specialtyCore.localBranchCode))
                 }}
                 onBlur={() => helpers.setTouched(true)}
                 style={{height: 'auto', minHeight: '0', padding: '.7rem 1.8rem .7rem .7rem'}}

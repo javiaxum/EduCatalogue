@@ -171,7 +171,7 @@ export default observer(function SpecialtyForm() {
                                                             name='book'
                                                             size='big'
                                                             color='blue' />
-                                                        Knowledge branch: {selectedSpecialtyCore?.localBranchCode} {selectedSpecialtyCore?.localBranchName}
+                                                        Knowledge branch: {selectedSpecialtyCore?.localBranchCode} Local branch name
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>

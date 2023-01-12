@@ -9,8 +9,7 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public LocalIdentifierCore LICore { get; set; }
-        public ISCEDCore ISCEDCore { get; set; }
-        public Branch LocalBranch { get; set; }
+        public ICollection<ISCEDCore> ISCEDCores { get; set; } = new List<ISCEDCore>();
         public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

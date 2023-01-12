@@ -1,5 +1,6 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
+import { Branch } from "../models/branch";
 import { Profile } from "../models/profile";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
@@ -11,11 +12,16 @@ export default class SpecialtyStore {
     selectedSpecialty: Specialty | undefined;
     selectedSpecialtyCore: SpecialtyCore | undefined;
     specialtyCoreRegistry = new Map<string, SpecialtyCore>();
+    branchRegistry = new Map<string, Branch>();
     loadingInitial: boolean = true;
     loading: boolean = false;
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    loadBranches = async () => {
+        
     }
 
     get specialtyCoresByNameSelectInput() {
@@ -53,7 +59,8 @@ export default class SpecialtyStore {
     loadSpecialtyCores = async () => {
         this.setLoading(true);
         try {
-            const specialtyCores = await agent.Specialties.listCore();
+            const specialtyCores = await agent.Specialties.listCores();
+            const branch = await agent.Specialties.listBranches()
             runInAction(() => {
                 specialtyCores.forEach(specialtyCore => {
                     this.specialtyCoreRegistry.set(specialtyCore.localSpecialtyCode, specialtyCore)
@@ -66,7 +73,6 @@ export default class SpecialtyStore {
             this.setLoadingInitial(false);
             this.setLoading(false);
         }
-
     }
     loadSpecialty = async (id: string) => {
         this.setLoading(true);

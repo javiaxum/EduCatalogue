@@ -18,6 +18,7 @@ namespace Persistence
         public DbSet<AppUserInstitution> AppUserInstitution { get; set; }
         public DbSet<InstitutionSpecialty> InstitutionSpecialties { get; set; }
         public DbSet<SpecialtyCore> SpecialtyCores { get; set; }
+        public DbSet<ISCEDCore> ISCEDCores { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
         public DbSet<SpecialtyComponent> SpecialtyComponents { get; set; }
         public DbSet<Component> Components { get; set; }

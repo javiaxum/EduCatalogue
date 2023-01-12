@@ -34,24 +34,29 @@ namespace Application.Core
             .ForMember(d => d.PriceUAH, o => o.MapFrom(s => s.Specialty.PriceUAH))
             .ForMember(d => d.StartsAt, o => o.MapFrom(s => s.Specialty.StartsAt))
             .ForMember(d => d.EndsAt, o => o.MapFrom(s => s.Specialty.EndsAt));
-            
-            
+
+
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.LICore.Id));
 
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()
-            .ForMember(d => d.ISCEDSpecialtyCode, o => o.MapFrom(s => s.ISCEDCore.Id))
-            .ForMember(d => d.ISCEDSpecialtyName, o => o.MapFrom(s => s.ISCEDCore.Name))
-            .ForMember(d => d.LocalBranchName, o => o.MapFrom(s => s.LocalBranch.Name))
+            .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores))
             .ForMember(d => d.LocalSpecialtyName, o => o.MapFrom(s => s.LICore.Name))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.LICore.Id));
+
+            CreateMap<ISCEDCore, ISCEDCoreDTO>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+            .ForMember(d => d.Name, o => o.MapFrom(s => s.Name));
 
             CreateMap<Review, ReviewDTO>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Author.DisplayName))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))
             .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Image));
+
+
+            CreateMap<Branch, Branch>();
         }
     }
 }

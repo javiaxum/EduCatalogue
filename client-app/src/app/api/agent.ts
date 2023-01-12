@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
+import { Branch } from "../models/branch";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { PaginatedResult } from "../models/pagination";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
@@ -87,7 +88,8 @@ const Institutions = {
 
 const Specialties = {
     details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
-    listCore: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
+    listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
+    listBranches: () => requests.get<Branch[]>("/specialties/branches"),
     create: (specialty: SpecialtyFormValues, institutionId: string) => requests.post<void>(`/institutions/${institutionId}/specialties`, specialty),
     update: (specialty: SpecialtyFormValues) => requests.put<void>(`/specialties/${specialty.id}`, specialty),
     delete: (id: string) => requests.delete<void>(`/specialties/${id}`)

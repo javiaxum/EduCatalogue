@@ -27,6 +27,12 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new ListCores.Query { }));
         }
         [AllowAnonymous]
+        [HttpGet("branches")]
+        public async Task<IActionResult> GetBranches()
+        {
+            return HandleResult(await Mediator.Send(new ListBranches.Query { }));
+        }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSpecialty(Guid id)
         {
