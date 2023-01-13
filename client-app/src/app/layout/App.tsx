@@ -22,6 +22,7 @@ export default observer(function App() {
     }
     institutionStore.loadInstitutions();
     specialtyStore.loadSpecialtyCores();
+    specialtyStore.loadBranches();
   }, [commonStore, userStore, institutionStore.loadInstitutions, institutionStore])
 
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />

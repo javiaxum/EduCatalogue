@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Segment } from 'semantic-ui-react';
+import { Dropdown, Form, Header, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import SpecialtyCoreSearchParamsList from './SpecialtyCoreSearchParamsList';
 
@@ -8,11 +8,12 @@ export default function SearchParamsSideBar() {
     // implement custom radio button    
 
     return (
-        <>
+        <Segment>
+            <Header as='h3' content='Filtering options'/>
             <SpecialtyCoreSearchParamsList />
             {/* <Form>
 
             </Form> */}
-        </>
+        </Segment>
     )
 }

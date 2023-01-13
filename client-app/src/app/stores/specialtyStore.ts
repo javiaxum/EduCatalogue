@@ -29,6 +29,11 @@ export default class SpecialtyStore {
             .map(element => (element))
             .sort((a, b) => a.id.localeCompare(b.id))
     }
+    get branchesById() {
+        return Array.from(this.branchRegistry.values())
+            .map(element => (element))
+            .sort((a, b) => a.id.localeCompare(b.id))
+    }
 
     getSpecialtyCoreISCEDString = (id: string) => {
         const specialtyCore = this.specialtyCoreRegistry.get(id);
@@ -68,6 +73,24 @@ export default class SpecialtyStore {
             runInAction(() => {
                 specialtyCores.forEach(specialtyCore => {
                     this.specialtyCoreRegistry.set(specialtyCore.id, specialtyCore)
+                });
+            })
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
+    loadBranches = async () => {
+        this.setLoading(true);
+        try {
+            const branches = await agent.Specialties.listBranches();
+            runInAction(() => {
+                branches.forEach(branch => {
+                    this.branchRegistry.set(branch.id, branch)
                 });
             })
             this.setLoadingInitial(false);

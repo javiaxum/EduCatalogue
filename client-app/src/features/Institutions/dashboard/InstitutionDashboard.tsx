@@ -23,7 +23,7 @@ export default observer(function InstitutionDashboard() {
                 <Grid.Column width={12}>
                     <InstitutionsList />
                 </Grid.Column>
-                <Grid.Column width={4}>
+                <Grid.Column width={4} stretched>
                     <SearchParamsSideBar />
                 </Grid.Column>
             </Grid>
