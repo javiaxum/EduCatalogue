@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Container, Header, Image, Item, Segment } from 'semantic-ui-react';
+import { Button, Container, Header, Image, Segment } from 'semantic-ui-react';
 import { useStore } from '../../app/stores/store';
 import LoginForm from '../identity/LoginForm';
 import RegisterForm from '../identity/RegisterForm';
@@ -17,7 +17,7 @@ export default observer(function HomePage() {
                 </Header>
 
                 {userStore.isLoggedIn
-                    ? (<Button as={Link} to={`/institutions`} floated='right' content='To Institutions' />)
+                    ? (<Button as={Link} to={`/institutions`} content='To Institutions' />)
                     : (<>
                         <Button size='big' style={{width: '7em'}} inverted onClick={() => modalStore.openModal(<LoginForm />)} content='Login' />
                         <Button size='big' style={{width: '7em'}} inverted onClick={() => modalStore.openModal(<RegisterForm />)} content='Register' />

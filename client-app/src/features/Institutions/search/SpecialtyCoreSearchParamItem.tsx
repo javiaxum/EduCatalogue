@@ -9,7 +9,7 @@ interface Props {
 export default function SpecialtyCoreSearchParamItem({specialtyCore}: Props) {
     return (
         <Segment basic>
-            <Checkbox label={`${specialtyCore.localSpecialtyCode} ${specialtyCore.localSpecialtyName}`} style={{color: '#444'}}/>
+            <Checkbox label={`${specialtyCore.id} ${specialtyCore.name}`} style={{color: '#444'}}/>
         </Segment>
     )
 }

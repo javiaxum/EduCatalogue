@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.EduComponents;
 using Application.Institutions;
 using Application.Reviews;
 using Application.Specialties;
@@ -27,7 +28,7 @@ namespace Application.Core
 
             CreateMap<InstitutionSpecialty, SpecialtyDTO>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Specialty.Id))
-            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.Specialty.SpecialtyCore.LICore.Id))
+            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.Specialty.SpecialtyCore.Id))
             .ForMember(d => d.Description, o => o.MapFrom(s => s.Specialty.Description))
             .ForMember(d => d.EctsCredits, o => o.MapFrom(s => s.Specialty.EctsCredits))
             .ForMember(d => d.Degree, o => o.MapFrom(s => s.Specialty.Degree))
@@ -39,12 +40,21 @@ namespace Application.Core
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
-            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.LICore.Id));
+            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
+
+            CreateMap<Specialty, SpecialtyComponentsDTO>()
+            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id))
+            .ForMember(d => d.Components, o => o.MapFrom(s => s.Components));
+
+            CreateMap<SpecialtyComponent, ComponentDTO>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.Component.Id))
+            .ForMember(d => d.Name, o => o.MapFrom(s => s.Component.Name))
+            .ForMember(d => d.isOptional, o => o.MapFrom(s => s.Component.isOptional))
+            .ForMember(d => d.Description, o => o.MapFrom(s => s.Component.Description));
+            
 
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()
-            .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores))
-            .ForMember(d => d.LocalSpecialtyName, o => o.MapFrom(s => s.LICore.Name))
-            .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.LICore.Id));
+            .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores));
 
             CreateMap<ISCEDCore, ISCEDCoreDTO>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))

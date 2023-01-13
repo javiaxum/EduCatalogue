@@ -42,7 +42,7 @@ namespace Application.Specialties
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Id);
-                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == request.Specialty.LocalSpecialtyCode);
+                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == request.Specialty.LocalSpecialtyCode);
                 var specialty = new Specialty
                 {
                     SpecialtyCore = specialtyCore,

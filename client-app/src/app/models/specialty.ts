@@ -8,7 +8,8 @@ export interface Specialty {
     ectsCredits: number;
     degree: string;
     priceUAH: number;
-    // implement date
+    statrtsAt: Date;
+    endsAt: Date;
     components: EducationalComponent[];
 }
 

@@ -2624,11 +2624,9 @@ namespace Persistence
                 {
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="011",
                             Name="Освітні, педагогічні науки",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0111"),
@@ -2636,11 +2634,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="012",
                             Name="Дошкільна освіта",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0112"),
@@ -2648,11 +2644,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="013",
                             Name="Початкова освіта",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0113"),
@@ -2660,11 +2654,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="014",
                             Name="Середня освіта (за предметними спеціальностями)",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0114"),
@@ -2672,11 +2663,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="015",
                             Name="Професійна освіта (за спеціалізаціями)",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0114"),
@@ -2684,11 +2672,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="016",
                             Name="Спеціальна освіта",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0113"),
@@ -2696,11 +2681,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="017",
                             Name="Фізична культура і спорт",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1014"),
@@ -2708,11 +2690,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="021",
                             Name="Аудіовізуальне мистецтво та виробництво",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0211"),
@@ -2720,11 +2699,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="022",
                             Name="Дизайн",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0212"),
@@ -2732,11 +2708,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="023",
                             Name="Образотворче мистецтво, декоративне мистецтво, реставрація",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0213"),
@@ -2745,11 +2718,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="024",
                             Name="Хореографія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0215"),
@@ -2757,11 +2727,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="025",
                             Name="Музичне мистецтво",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0215"),
@@ -2769,11 +2736,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="026",
                             Name="Сценічне мистецтво",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0215"),
@@ -2781,11 +2745,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="027",
                             Name="Музеєзнавство, пам’яткознавство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0322"),
@@ -2793,11 +2754,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="028",
                             Name="Менеджмент соціокультурної діяльності",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -2805,11 +2763,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="029",
                             Name="Інформаційна, бібліотечна та архівна справа",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0322"),
@@ -2818,11 +2773,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="031",
                             Name="Релігієзнавство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0221"),
@@ -2830,11 +2782,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="032",
                             Name="Історія та археологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0222"),
@@ -2842,11 +2791,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="033",
                             Name="Філософія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0223"),
@@ -2854,11 +2800,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="034",
                             Name="Культурологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0314"),
@@ -2866,11 +2809,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="035",
                             Name="Філологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0231"),
@@ -2879,11 +2819,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="041",
                             Name="Богослов’я",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0221"),
@@ -2891,11 +2828,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="051",
                             Name="Економіка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0311"),
@@ -2903,11 +2837,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="052",
                             Name="Політологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0312"),
@@ -2915,11 +2846,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="053",
                             Name="Психологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0313"),
@@ -2927,11 +2855,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="054",
                             Name="Соціологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0314"),
@@ -2939,11 +2864,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="061",
                             Name="Журналістика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0321"),
@@ -2951,11 +2873,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="071",
                             Name="Облік і оподаткування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0411"),
@@ -2963,11 +2882,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="072",
                             Name="Фінанси, банківська справа, страхування та фондовий ринок",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0412"),
@@ -2975,11 +2891,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="073",
                             Name="Менеджмент",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -2988,11 +2901,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="075",
                             Name="Маркетинг",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0414"),
@@ -3000,11 +2910,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="076",
                             Name="Підприємництво та торгівля",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -3013,11 +2920,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="081",
                             Name="Право",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0421"),
@@ -3025,11 +2929,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="091",
                             Name="Біологія та біохімія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0511"),
@@ -3039,11 +2940,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="101",
                             Name="Екологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0521"),
@@ -3052,11 +2950,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="102",
                             Name="Хімія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0531"),
@@ -3064,11 +2959,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="103",
                             Name="Науки про Землю**",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0532"),
@@ -3076,11 +2968,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="104",
                             Name="Фізика та астрономія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0533"),
@@ -3088,11 +2977,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="105",
                             Name="Прикладна фізика та наноматеріали",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0533"),
@@ -3101,11 +2987,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="106",
                             Name="Географія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0314"),
@@ -3113,11 +2996,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="111",
                             Name="Математика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0541"),
@@ -3125,11 +3005,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="112",
                             Name="Статистика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0542"),
@@ -3137,11 +3014,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="113",
                             Name="Прикладна математика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0541"),
@@ -3151,11 +3025,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="121",
                             Name="Інженерія програмного забезпечення",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0613"),
@@ -3163,11 +3034,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="122",
                             Name="Комп’ютерні науки",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0613"),
@@ -3175,11 +3043,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="123",
                             Name="Комп’ютерна інженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0612"),
@@ -3188,11 +3053,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="124",
                             Name="Системний аналіз",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0688"),
@@ -3200,11 +3062,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="125",
                             Name="Кібербезпека та захист інформації",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0612"),
@@ -3213,11 +3072,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="126",
                             Name="Інформаційні системи та технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0611"),
@@ -3226,11 +3082,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="131",
                             Name="Прикладна механіка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0715"),
@@ -3238,11 +3091,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="132",
                             Name="Матеріалознавство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0588"),
@@ -3252,11 +3102,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="133",
                             Name="Галузеве машинобудування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0715"),
@@ -3265,11 +3112,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="134",
                             Name="Авіаційна та ракетно-космічна техніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -3277,11 +3121,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="135",
                             Name="Суднобудування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -3289,11 +3130,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="136",
                             Name="Металургія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0715"),
@@ -3301,11 +3139,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="141",
                             Name="Електроенергетика, електротехніка та електромеханіка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0713"),
@@ -3313,11 +3148,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="142",
                             Name="Енергетичне машинобудування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0713"),
@@ -3326,11 +3158,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="143",
                             Name="Атомна енергетика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0713"),
@@ -3338,11 +3167,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="144",
                             Name="Теплоенергетика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0713"),
@@ -3350,11 +3176,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="145",
                             Name="Відновлювані джерела енергії та гідроенергетика",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0713"),
@@ -3362,11 +3185,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="161",
                             Name="Хімічні технології та інженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0711"),
@@ -3374,11 +3194,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="162",
                             Name="Біотехнології та біоінженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0512"),
@@ -3387,11 +3204,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="163",
                             Name="Біомедична інженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0588"),
@@ -3400,11 +3214,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="171",
                             Name="Електроніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3412,11 +3223,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="172",
                             Name="Електронні комунікації та радіотехніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3424,11 +3232,8 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
                             Id="173",
                             Name="Авіоніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3437,11 +3242,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="174",
                             Name="Автоматизація, комп’ютерно-інтегровані технології та робототехніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3449,11 +3252,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="175",
                             Name="Інформаційно-вимірювальні технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3462,11 +3263,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="176",
                             Name="Мікро- та наносистемна техніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0714"),
@@ -3475,11 +3274,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="181",
                             Name="Харчові технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0721"),
@@ -3487,11 +3284,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="182",
                             Name="Технології легкої промисловості",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0723"),
@@ -3499,11 +3294,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="183",
                             Name="Технології захисту навколишнього середовища",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0712"),
@@ -3511,11 +3304,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="184",
                             Name="Гірництво",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0724"),
@@ -3523,11 +3314,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="185",
                             Name="Нафтогазова інженерія та технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0724"),
@@ -3535,11 +3324,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="186",
                             Name="Видавництво та поліграфія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0211"),
@@ -3548,11 +3335,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="187",
                             Name="Деревообробні та меблеві технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0722"),
@@ -3560,11 +3345,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="191",
                             Name="Архітектура та містобудування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0731"),
@@ -3572,11 +3355,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="192",
                             Name="Будівництво та цивільна інженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0732"),
@@ -3584,11 +3365,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="193",
                             Name="Геодезія та землеустрій",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0532"),
@@ -3597,11 +3376,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="194",
                             Name="Гідротехнічне будівництво, водна інженерія та водні технології",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0732"),
@@ -3609,11 +3386,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="201",
                             Name="Агрономія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0811"),
@@ -3621,11 +3396,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="202",
                             Name="Захист і карантин рослин",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0811"),
@@ -3633,11 +3406,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="203",
                             Name="Садівництво, плодоовочівництво та виноградарство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0811"),
@@ -3646,11 +3417,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="204",
                             Name="Технологія виробництва і переробки продукції тваринництва",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0811"),
@@ -3658,11 +3427,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="206",
                             Name="Садово-паркове господарство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0812"),
@@ -3670,11 +3437,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="207",
                             Name="Водні біоресурси та аквакультура",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0831"),
@@ -3682,11 +3447,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="208",
                             Name="Агроінженерія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -3695,11 +3458,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="211",
                             Name="Ветеринарна медицина",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0841"),
@@ -3708,11 +3469,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="221",
                             Name="Стоматологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0911"),
@@ -3720,11 +3479,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="222",
                             Name="Медицина",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0912"),
@@ -3732,11 +3489,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="223",
                             Name="Медсестринство",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0913"),
@@ -3744,11 +3499,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="224",
                             Name="Технології медичної діагностики та лікування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0914"),
@@ -3756,11 +3509,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="225",
                             Name="Медична психологія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0313"),
@@ -3768,11 +3519,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="226",
                             Name="Фармація, промислова фармація",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0588"),
@@ -3782,11 +3531,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="227",
                             Name="Терапія та реабілітація",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0915"),
@@ -3794,11 +3541,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="228",
                             Name="Педіатрія",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0912"),
@@ -3806,11 +3551,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="229",
                             Name="Громадське здоров’я",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -3821,11 +3564,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="231",
                             Name="Соціальна робота",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0921"),
@@ -3835,11 +3576,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="232",
                             Name="Соціальне забезпечення",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -3848,11 +3587,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="241",
                             Name="Готельно-ресторанна справа",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1013"),
@@ -3860,11 +3597,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="242",
                             Name="Туризм і рекреація",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1015"),
@@ -3872,11 +3607,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="251",
                             Name="Державна безпека",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3884,11 +3617,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="252",
                             Name="Безпека державного кордону",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3896,11 +3627,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="253",
                             Name="Військове управління (за видами збройних сил)",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3908,11 +3637,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="254",
                             Name="Забезпечення військ (сил)",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3920,11 +3647,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="255",
                             Name="Озброєння та військова техніка",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3932,11 +3657,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="256",
                             Name="Національна безпека (за окремими сферами забезпечення і видами діяльності)***",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3944,11 +3667,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="257",
                             Name="Управління інформаційною безпекою",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1031"),
@@ -3956,11 +3677,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="261",
                             Name="Пожежна безпека",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1032"),
@@ -3968,11 +3687,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="262",
                             Name="Правоохоронна діяльність",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1032"),
@@ -3980,11 +3697,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="263",
                             Name="Цивільна безпека",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1022"),
@@ -3993,11 +3708,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="271",
                             Name="Морський та внутрішній водний транспорт****",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -4006,11 +3719,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="272",
                             Name="Авіаційний транспорт",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -4019,11 +3730,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="273",
                             Name="Залізничний транспорт",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -4033,11 +3742,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="274",
                             Name="Автомобільний транспорт",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0716"),
@@ -4046,11 +3753,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="275",
                             Name="Транспортні технології (за видами)",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "1041"),
@@ -4058,11 +3763,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="281",
                             Name="Публічне управління та адміністрування",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0413"),
@@ -4070,11 +3773,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="291",
                             Name="Міжнародні відносини, суспільні комунікації та регіональні студії",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0312"),
@@ -4084,11 +3785,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="292",
                             Name="Міжнародні економічні відносини",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0311"),
@@ -4097,11 +3796,9 @@ namespace Persistence
                     },
                     new SpecialtyCore
                     {
-                        LICore = new LocalIdentifierCore
-                        {
+
                             Id="293",
                             Name="Міжнародне право",
-                        },
                         ISCEDCores = new List<ISCEDCore>
                         {
                             await context.ISCEDCores.FirstOrDefaultAsync(x => x.Id == "0421"),
@@ -4237,8 +3934,8 @@ namespace Persistence
 
 
                 // Seed Specialties
-                var specialtyCore1 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == "012");
-                var specialtyCore2 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.LICore.Id == "011");
+                var specialtyCore1 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "012");
+                var specialtyCore2 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "011");
                 var specialties = new List<Specialty>
                 {
                     new Specialty

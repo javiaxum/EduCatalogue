@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Container, Divider, Grid, Header, Icon, Item, Label, Segment } from 'semantic-ui-react';
+import { Button, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -20,19 +20,19 @@ import { degreeOptions } from '../../../app/common/options/categoryOptions';
 
 export default observer(function SpecialtyForm() {
 
-    const { specialtyStore, commonStore, institutionStore } = useStore();
-    const { loadSpecialtyCores,
+    const { specialtyStore, commonStore } = useStore();
+    const {
         loadSpecialty,
         createSpecialty,
         editSpecialty,
+        getSpecialtyCore,
+        getBranch,
         loading,
         loadingInitial,
         setLoadingInitial,
-        selectedSpecialtyCore,
-        specialtyCoresByNameSelectInput: specialtyCoresByName,
-        specialtyCoreRegistry,
-        selectedSpecialty, getSpecialtyCore } = specialtyStore;
-    const { editMode, setEditMode } = commonStore;
+        specialtyCoresByNameSelectInput: specialtyCoresByName
+    } = specialtyStore;
+    const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
 
@@ -46,20 +46,16 @@ export default observer(function SpecialtyForm() {
         ectsCredits: Yup.number().required(),
     })
     useEffect(() => {
-        if (specialtyCoreRegistry.size === 0) {
-            loadSpecialtyCores();
-        }
         if (id2) {
             loadSpecialty(id2)
                 .then(specialty => setSpecialty(new SpecialtyFormValues(specialty)));
             if (id1 === 'undefined') {
                 router.navigate(`/institutions`);
             }
-            // institutionStore.loadInstitution() loading institution in case form page was refreshed thus institutionStore value lost
         }
         setLoadingInitial(false);
         setEditMode(true);
-    }, [setLoadingInitial, loadingInitial, loadSpecialtyCores])
+    }, [setLoadingInitial, loadingInitial, setEditMode, id1, id2, loadSpecialty])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
         if (id) {
@@ -98,7 +94,7 @@ export default observer(function SpecialtyForm() {
                                 <Label style={{ margin: '0', padding: '1px', width: '30%' }}>
                                     <CustomSpecialtySelectInput
                                         options={specialtyCoresByName}
-                                        placeholder={`${selectedSpecialtyCore?.localSpecialtyCode} ${selectedSpecialtyCore?.localSpecialtyName}` || 'this'}
+                                        placeholder={`${specialty.localSpecialtyCode} ${getSpecialtyCore(specialty.localBranchCode)?.name}` || 'this'}
                                         name='specialtySelect'
                                         padding='0.3em' />
                                 </Label>
@@ -171,7 +167,7 @@ export default observer(function SpecialtyForm() {
                                                             name='book'
                                                             size='big'
                                                             color='blue' />
-                                                        Knowledge branch: {selectedSpecialtyCore?.localBranchCode} Local branch name
+                                                        Knowledge branch: {specialty.localSpecialtyCode.slice(0, 2)} {getBranch(specialty.localSpecialtyCode.slice(0, 2))?.name}
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>

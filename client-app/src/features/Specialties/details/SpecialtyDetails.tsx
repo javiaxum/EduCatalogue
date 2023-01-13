@@ -8,14 +8,15 @@ import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetai
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
-    const { selectedSpecialty, selectedSpecialtyCore, loadSpecialty } = specialtyStore;
+    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch } = specialtyStore;
     const { id } = useParams();
 
     useEffect(() => {
         if (id) loadSpecialty(id);
     }, [loadSpecialty, selectedSpecialty, id]);
 
-    if (specialtyStore.loadingInitial) return <LoadingComponent />
+    if (loadingInitial) return <LoadingComponent />
+    if (!selectedSpecialty) return (<></>);
 
     return (
         <Segment basic style={{ width: '80%', minWidth: '1000px', marginLeft: '10%' }}>
@@ -27,13 +28,13 @@ export default observer(function SpecialtyDetails() {
                     >
                         Code and specialty:<Label
                             size='big'
-                            content={`${selectedSpecialtyCore?.localSpecialtyCode} ${selectedSpecialtyCore?.iscedSpecialtyName}`}
+                            content={`${selectedSpecialty.localSpecialtyCode} ${getSpecialtyCore(selectedSpecialty.localSpecialtyCode!)?.name}`}
                             style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
                     <Button
                         onClick={() => commonStore.setEditMode(!commonStore.editMode)}
                         as={Link}
-                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty?.id}`}
+                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
                         style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
                         content={'Manage Specialty'}
                     />
@@ -51,7 +52,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`Specialty code (ISCED): ${selectedSpecialtyCore?.iscedSpecialtyCode}`}
+                                        content={`Specialty code (ISCED): `}
                                     />
                                 </Segment>
                                 <Segment>
@@ -59,21 +60,21 @@ export default observer(function SpecialtyDetails() {
                                         name='graduation'
                                         size='big'
                                         color='blue' />
-                                    {`Degree: ${selectedSpecialty?.degree}`}
+                                    {`Degree: ${selectedSpecialty.degree}`}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='clock'
                                         size='big'
                                         color='blue' />
-                                    {`ECTS credits: ${selectedSpecialty?.ectsCredits} credits`}
+                                    {`ECTS credits: ${selectedSpecialty.ectsCredits} credits`}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='book'
                                         size='big'
                                         color='blue' />
-                                    {`Knowledge branch: ${selectedSpecialtyCore?.localBranchCode} ${selectedSpecialtyCore?.localBranchName}`}
+                                    {`Knowledge branch: ${selectedSpecialty.localSpecialtyCode.slice(0,2)} ${getBranch(selectedSpecialty.localSpecialtyCode.slice(0,2))?.name}`}
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>
@@ -81,7 +82,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment style={{ boxShadow: 'none', padding: '30px' }}>
                                 <Header as='h4' content='Description' dividing />
                                 <Segment basic style={{ padding: '0 0 0 10px' }}>
-                                    {selectedSpecialty?.description}
+                                    {selectedSpecialty.description}
                                 </Segment>
                             </Segment>
                         </Grid.Column>

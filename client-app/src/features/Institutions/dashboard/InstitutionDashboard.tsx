@@ -13,9 +13,6 @@ export default observer(function InstitutionDashboard() {
     
 
     useEffect(() => {
-        if (institutionStore.institutionsRegistry.size <= 1) institutionStore.loadInstitutions();
-        if (specialtyStore.specialtyCoreRegistry.size <= 1) specialtyStore.loadSpecialtyCores();
-
         return () => { institutionStore.setActiveMenuItem('About'); }
     }, [institutionStore, setActiveMenuItem])
 

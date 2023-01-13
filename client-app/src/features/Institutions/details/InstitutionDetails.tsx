@@ -20,8 +20,7 @@ export default observer(function InstitutionDetails() {
         loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
-        setActiveMenuItem,
-        setLoading } = institutionStore;
+    } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
 

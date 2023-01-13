@@ -10,7 +10,6 @@ export default class SpecialtyStore {
 
     specialtyRegistry = new Map<string, Specialty>();
     selectedSpecialty: Specialty | undefined;
-    selectedSpecialtyCore: SpecialtyCore | undefined;
     specialtyCoreRegistry = new Map<string, SpecialtyCore>();
     branchRegistry = new Map<string, Branch>();
     loadingInitial: boolean = true;
@@ -20,19 +19,26 @@ export default class SpecialtyStore {
         makeAutoObservable(this);
     }
 
-    loadBranches = async () => {
-        
-    }
-
     get specialtyCoresByNameSelectInput() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .map(element => ({ text: `${element.localSpecialtyCode} ${element.iscedSpecialtyName}`, value: element.localSpecialtyCode }))
+            .map(element => ({ text: `${element.id} ${element.name}`, value: element.id }))
             .sort((a, b) => a.text.localeCompare(b.text))
     }
     get specialtyCoresByName() {
         return Array.from(this.specialtyCoreRegistry.values())
             .map(element => (element))
-            .sort((a, b) => a.localSpecialtyCode.localeCompare(b.localSpecialtyCode))
+            .sort((a, b) => a.id.localeCompare(b.id))
+    }
+
+    getSpecialtyCoreISCEDString = (id: string) => {
+        const specialtyCore = this.specialtyCoreRegistry.get(id);
+        let iscedCodeString = "";
+        if (specialtyCore) {
+            for (let i = 0; i < specialtyCore.iscedCores.length; i++) {
+                if (iscedCodeString !== "") iscedCodeString += ` ${specialtyCore!.iscedCores[i].id}`
+            }
+        }
+        return iscedCodeString;
     }
 
     private setSpecialty = (specialty: Specialty) => {
@@ -41,13 +47,12 @@ export default class SpecialtyStore {
     private getSpecialty = (id: string) => {
         return this.specialtyRegistry.get(id);
     }
+    getBranch = (id: string) => {
+        return this.branchRegistry.get(id);
+    }
     getSpecialtyCore = (id: string) => {
         return this.specialtyCoreRegistry.get(id);
     }
-
-    // setActiveMenuItem = (itemName: string) => {
-    //     this.detailsMenuActiveItem = itemName;
-    // }
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
@@ -60,10 +65,9 @@ export default class SpecialtyStore {
         this.setLoading(true);
         try {
             const specialtyCores = await agent.Specialties.listCores();
-            const branch = await agent.Specialties.listBranches()
             runInAction(() => {
                 specialtyCores.forEach(specialtyCore => {
-                    this.specialtyCoreRegistry.set(specialtyCore.localSpecialtyCode, specialtyCore)
+                    this.specialtyCoreRegistry.set(specialtyCore.id, specialtyCore)
                 });
             })
             this.setLoadingInitial(false);
@@ -74,12 +78,12 @@ export default class SpecialtyStore {
             this.setLoading(false);
         }
     }
+
     loadSpecialty = async (id: string) => {
         this.setLoading(true);
         let specialty = this.specialtyRegistry.get(id);
         if (specialty) {
             this.selectedSpecialty = specialty;
-            this.selectedSpecialtyCore = this.getSpecialtyCore(this.selectedSpecialty.localSpecialtyCode);
             this.setLoadingInitial(false);
             this.setLoading(false);
             return specialty;
@@ -88,7 +92,6 @@ export default class SpecialtyStore {
             const specialty = await agent.Specialties.details(id);
             runInAction(() => {
                 this.selectedSpecialty = specialty;
-                this.selectedSpecialtyCore = this.getSpecialtyCore(this.selectedSpecialty.localSpecialtyCode);
             })
             this.setSpecialty(specialty)
             this.setLoadingInitial(false);
