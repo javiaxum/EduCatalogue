@@ -28,6 +28,7 @@ export default class InstitutionStore {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
+        params.append('specialtyIds', this.pagingParams.pageSize.toString());
         return params;
     }
 

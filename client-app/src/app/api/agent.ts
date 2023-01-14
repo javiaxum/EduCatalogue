@@ -17,7 +17,7 @@ const sleep = (delay: number) => {
     })
 }
 
-const responseData = <T>(response: AxiosResponse<T>) => response.data; // or response data
+const responseBody = <T>(response: AxiosResponse<T>) => response.data; // or response data
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
@@ -72,14 +72,14 @@ axios.interceptors.response.use(async response => {
 )
 
 const requests = {
-    get: <T>(url: string) => axios.get<T>(url).then(responseData),
-    post: <T>(url: string, data: {}) => axios.post<T>(url, data).then(responseData),
-    put: <T>(url: string, data: {}) => axios.put<T>(url, data).then(responseData),
-    delete: <T>(url: string) => axios.delete<T>(url).then(responseData)
+    get: <T>(url: string) => axios.get<T>(url).then(responseBody),
+    post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(responseBody),
+    put: <T>(url: string, body: {}) => axios.put<T>(url, body).then(responseBody),
+    delete: <T>(url: string) => axios.delete<T>(url).then(responseBody)
 }
 
 const Institutions = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", {params}).then(responseData),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", {params}).then(responseBody),
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),

@@ -16,7 +16,7 @@ namespace Application.Institutions
     {
         public class Query : IRequest<Result<PagedList<InstitutionDTO>>>
         {
-            public PagingParams Params { get; set; }
+            public InstitutionParams Params { get; set; }
         }
         public class Handler : IRequestHandler<Query, Result<PagedList<InstitutionDTO>>>
         {
@@ -35,6 +35,12 @@ namespace Application.Institutions
                 .OrderBy(x => x.Name)
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
                 .AsQueryable();
+
+                if (request.Params.SpecialtyCodes.Any())
+                {
+                    query = query.Where(x => x.Specialties.Any(s => request.Params.SpecialtyCodes.Contains(s.LocalSpecialtyCode)));
+                }
+
                 return Result<PagedList<InstitutionDTO>>.Success(
                     await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
                 );
