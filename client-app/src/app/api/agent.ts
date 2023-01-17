@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { toast } from "react-toastify";
 import { router } from "../../features/routers/Routes";
 import { Branch } from "../models/branch";
+import { City } from "../models/city";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { PaginatedResult } from "../models/pagination";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
@@ -83,7 +84,8 @@ const Institutions = {
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
-    delete: (id: string) => requests.delete<void>(`/institutions/${id}`)
+    delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
+    listCities: () => requests.get<City[]>("/institutions/cities"),
 }
 
 const Specialties = {

@@ -15,9 +15,9 @@ namespace Persistence
             // Seed states with cities
             if (!context.States.Any())
             {
-                var states = new List<State>
+                var states = new List<Region>
                 {
-                    new State
+                    new Region
                     {
                         Name = "м. Севастополь",
                         Cities = new List<City>
@@ -32,7 +32,7 @@ namespace Persistence
                             },
                         },
                     },
-                    new State
+                    new Region
                     {
                         Name = "АР Крим",
                         Cities = new List<City>
@@ -103,7 +103,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Вінницька",
                         Cities = new List<City>
@@ -182,7 +182,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Волинська",
                         Cities = new List<City>
@@ -233,7 +233,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Дніпропетровська",
                         Cities = new List<City>
@@ -320,7 +320,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Донецька",
                         Cities = new List<City>
@@ -535,7 +535,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Житомирська",
                         Cities = new List<City>
@@ -590,7 +590,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Закарпатська",
                         Cities = new List<City>
@@ -641,7 +641,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Запорізька",
                         Cities = new List<City>
@@ -708,7 +708,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Івано-Франківська",
                         Cities = new List<City>
@@ -775,7 +775,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Київська",
                         Cities = new List<City>
@@ -886,7 +886,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Кіровоградська",
                         Cities = new List<City>
@@ -941,7 +941,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Луганська",
                         Cities = new List<City>
@@ -1096,7 +1096,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Львівська",
                         Cities = new List<City>
@@ -1279,7 +1279,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Миколаївська",
                         Cities = new List<City>
@@ -1322,7 +1322,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Одеська",
                         Cities = new List<City>
@@ -1405,7 +1405,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Полтавська",
                         Cities = new List<City>
@@ -1476,7 +1476,7 @@ namespace Persistence
                             }
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Рівненська",
                         Cities = new List<City>
@@ -1527,7 +1527,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Сумська",
                         Cities = new List<City>
@@ -1594,7 +1594,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Тернопільська",
                         Cities = new List<City>
@@ -1673,7 +1673,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Харківська",
                         Cities = new List<City>
@@ -1748,7 +1748,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Херсонська",
                         Cities = new List<City>
@@ -1791,7 +1791,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Хмельницька",
                         Cities = new List<City>
@@ -1850,7 +1850,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Черкаська",
                         Cities = new List<City>
@@ -1921,7 +1921,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Чернівецька",
                         Cities = new List<City>
@@ -1976,7 +1976,7 @@ namespace Persistence
                             },
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "Чернігівська",
                         Cities = new List<City>
@@ -2047,7 +2047,7 @@ namespace Persistence
                             }
                         }
                     },
-                    new State
+                    new Region
                     {
                         Name = "м.Київ",
                         Cities = new List<City>
@@ -3907,7 +3907,107 @@ namespace Persistence
                     },
                     new Institution
                     {
-                        Name = "Національний технічний університет «Харківський політехнічний інститут»",
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 2",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 3",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 4",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 5",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 6",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 7",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 8",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 9",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 10",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 11",
+                        Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
+                        StudentCount = 12000,
+                        StreetAddress = "вул. Кирпичова, 21",
+                        SiteURL = "kpi.kharkov.ua",
+                        ContactInformation = "3rwe2ddsw8"
+                    },
+                    new Institution
+                    {
+                        Name = "Національний технічний університет «Харківський політехнічний інститут» 12",
                         Description = "заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького. Також другий за часом відкриття технологічний інститут в Україні після Львівської технічної академії (1844). В даний час — найбільший навчальний центр східної України і найбільший ВНЗ міста Харкова. В університеті навчаються приблизно 26 тисяч студентів. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
                         StudentCount = 12000,
@@ -3945,8 +4045,8 @@ namespace Persistence
                         EctsCredits = 240,
                         Degree = "Bachelor",
                         PriceUAH = 80000,
-                        StartsAt = DateTime.UtcNow,
-                        EndsAt = DateTime.UtcNow.AddYears(4),
+                        StartYear = 2021,
+                        EndYear = 2025,
                     },
                     new Specialty
                     {
@@ -3955,23 +4055,13 @@ namespace Persistence
                         EctsCredits = 180,
                         Degree = "Bachelor",
                         PriceUAH = 80001,
-                        StartsAt = DateTime.UtcNow,
-                        EndsAt = DateTime.UtcNow.AddYears(4),
+                        StartYear = 2021,
+                        EndYear = 2025,
                     },
                 };
-                var InstitutionSpecialty = new List<InstitutionSpecialty>
-                {
-                    new InstitutionSpecialty
-                    {
-                        Specialty = specialties[0],
-                    },
-                    new InstitutionSpecialty
-                    {
-                        Specialty = specialties[1],
-                    },
-                };
-                institution.Specialties.Add(InstitutionSpecialty[0]);
-                institution.Specialties.Add(InstitutionSpecialty[1]);
+                
+                institution.Specialties.Add(specialties[0]);
+                institution.Specialties.Add(specialties[1]);
                 await context.SaveChangesAsync();
             }
         }

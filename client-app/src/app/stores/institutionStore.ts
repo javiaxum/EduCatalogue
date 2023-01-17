@@ -1,34 +1,145 @@
-import { makeAutoObservable, runInAction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { Profile } from "../models/profile";
 import { store } from "./store";
 import * as Yup from 'yup';
 import { Pagination, PagingParams } from "../models/pagination";
+import { City } from "../models/city";
 
 export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
+    cityRegistry = new Map<string, City>();
     selectedInstitution: Institution | undefined = undefined;
     loading: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
     pagination: Pagination | null = null;
     pagingParams: PagingParams = new PagingParams();
+    specialtyPredicate = new Map();
+    citiesPredicate = new Map();
+    cityNameFilter: string = '';
+    minPrice: string = '';
+    maxPrice: string = '';
+
 
     constructor() {
         makeAutoObservable(this);
+
+        reaction(
+            () => this.specialtyPredicate.keys(),
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },
+        )
+        reaction(
+            () => this.citiesPredicate.keys(),
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },
+        )
+        reaction(
+            () => this.maxPrice,
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },
+        )
+        reaction(
+            () => this.minPrice,
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },
+        )
+    }
+
+    setMaxPrice = (value: string) => {
+        this.maxPrice = value;
+    }
+
+    setMinPrice = (value: string) => {
+        this.minPrice = value;
+    }
+
+    setCityNameFilter = (value: string) => {
+        this.cityNameFilter = value;
+    }
+
+    get citiesByName() {
+        return Array.from(this.cityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    loadCities = async () => {
+        this.setLoading(true);
+        try {
+            const cities = await agent.Institutions.listCities();
+            runInAction(() => {
+                cities.forEach(city => {
+                    this.cityRegistry.set(city.id, city)
+                });
+            })
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+
     }
 
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
     }
 
+    toggleSpecialtyPredicateParam = (key: string, value: boolean) => {
+        this.specialtyPredicate.forEach((lvalue, lkey: string) => {
+            if (key.length != lkey.length)
+                this.specialtyPredicate.clear();
+        });
+        if (this.specialtyPredicate.get(key))
+            this.specialtyPredicate.delete(key);
+        else
+            this.specialtyPredicate.set(key, value);
+    }
+
+    toggleCityPredicateParam = (key: string, value: boolean) => {
+        if (this.citiesPredicate.get(key))
+            this.citiesPredicate.delete(key);
+        else
+            this.citiesPredicate.set(key, value);
+    }
+
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-        params.append('specialtyIds', this.pagingParams.pageSize.toString());
+        let branchesPredicate = '';
+        let specialtiesPredicate = '';
+        let citiesPredicate = '';
+        this.specialtyPredicate.forEach((value, key: string) => {
+            if (key.length > 2)
+                specialtiesPredicate += `-${key}`
+            else
+                branchesPredicate += `-${key}`
+        })
+        this.citiesPredicate.forEach((value, key: string) => {
+            citiesPredicate += `-${key}`
+        })
+        params.append('specialtiesPredicate', specialtiesPredicate);
+        params.append('branchesPredicate', branchesPredicate);
+        params.append('citiesPredicate', citiesPredicate);
+        params.append('minPrice', this.minPrice.toString());
+        if (this.maxPrice && parseInt(this.maxPrice) != 0)
+            params.append('maxPrice', this.maxPrice.toString());
         return params;
     }
 
@@ -60,7 +171,7 @@ export default class InstitutionStore {
                     this.institutionsRegistry.set(institution.id, institution)
                 });
             })
-            this.setPagination(result.pagination)
+            this.setPagination(result.pagination);
             this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {

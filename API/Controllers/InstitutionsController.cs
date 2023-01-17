@@ -18,9 +18,9 @@ namespace API.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> GetInstitutions([FromQuery]InstitutionParams param)
+        public async Task<IActionResult> GetInstitutions([FromQuery] InstitutionParams param)
         {
-            return HandlePagedResult(await Mediator.Send(new Application.Institutions.List.Query{Params = param}));
+            return HandlePagedResult(await Mediator.Send(new Application.Institutions.List.Query { Params = param }));
         }
         [AllowAnonymous]
         [HttpGet("{id}")]
@@ -51,6 +51,12 @@ namespace API.Controllers
         public async Task<IActionResult> GetInstitutionSpecialties(Guid id)
         {
             return HandleResult(await Mediator.Send(new ListInstitutionSpecialties.Query { Id = id }));
+        }
+        [AllowAnonymous]
+        [HttpGet("cities")]
+        public async Task<IActionResult> GetCities()
+        {
+            return HandleResult(await Mediator.Send(new ListCities.Query { }));
         }
         [AllowAnonymous]
         [HttpPost("{id}/specialties")]

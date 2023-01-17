@@ -11,6 +11,8 @@ export default observer(function PaginationBar() {
 
     const [loadingNext, setLoadingNext] = useState(false);
 
+    if(!pagination) return <></>;
+
     function HandleLoad(i: number) {
         setLoadingNext(true);
         if (pagination?.currentPage! < i && i * pagination?.itemsPerPage! > institutionsRegistry.size) {
@@ -32,7 +34,6 @@ export default observer(function PaginationBar() {
         elements.push((<Button
             onClick={() => HandleLoad(i)}
             content={i}
-            loading={loadingNext}
             key={i}
             active={pagination?.currentPage === i} />))
     }

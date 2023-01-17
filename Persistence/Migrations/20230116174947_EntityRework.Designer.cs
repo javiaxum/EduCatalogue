@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230108103822_SpecialtyDateTime")]
-    partial class SpecialtyDateTime
+    [Migration("20230116174947_EntityRework")]
+    partial class EntityRework
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -120,19 +120,19 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.City", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("StateId")
+                    b.Property<Guid?>("RegionId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("StateId");
+                    b.HasIndex("RegionId");
 
                     b.ToTable("Cities");
                 });
@@ -149,9 +149,6 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("isOptional")
-                        .HasColumnType("INTEGER");
-
                     b.HasKey("Id");
 
                     b.ToTable("Components");
@@ -167,7 +164,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ISCEDCore");
+                    b.ToTable("ISCEDCores");
                 });
 
             modelBuilder.Entity("Domain.Institution", b =>
@@ -176,8 +173,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("CityId")
-                        .HasColumnType("TEXT");
+                    b.Property<int?>("CityId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("ContactInformation")
                         .HasColumnType("TEXT");
@@ -210,24 +207,10 @@ namespace Persistence.Migrations
                     b.ToTable("Institutions");
                 });
 
-            modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
+            modelBuilder.Entity("Domain.Region", b =>
                 {
-                    b.Property<Guid>("InstitutionId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<Guid>("SpecialtyId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("InstitutionId", "SpecialtyId");
-
-                    b.HasIndex("SpecialtyId");
-
-                    b.ToTable("InstitutionSpecialties");
-                });
-
-            modelBuilder.Entity("Domain.LocalIdentifierCore", b =>
-                {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -235,7 +218,7 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LocalIdentifierCore");
+                    b.ToTable("States");
                 });
 
             modelBuilder.Entity("Domain.Review", b =>
@@ -283,19 +266,27 @@ namespace Persistence.Migrations
                     b.Property<int>("EctsCredits")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("EndsAt")
+                    b.Property<int>("EndYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid?>("InstitutionId")
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("PriceUAH")
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid?>("SpecialtyCoreId")
+                    b.Property<string>("SpecialtyCoreId")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("StartsAt")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("StartYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isBudget")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("InstitutionId");
 
                     b.HasIndex("SpecialtyCoreId");
 
@@ -310,6 +301,9 @@ namespace Persistence.Migrations
                     b.Property<int>("ComponentId")
                         .HasColumnType("INTEGER");
 
+                    b.Property<bool>("isOptional")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("SpecialtyId", "ComponentId");
 
                     b.HasIndex("ComponentId");
@@ -319,34 +313,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.SpecialtyCore", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("ISCEDCoreId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LICoreId")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LocalBranchId")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ISCEDCoreId");
-
-                    b.HasIndex("LICoreId");
-
-                    b.HasIndex("LocalBranchId");
-
-                    b.ToTable("SpecialtyCores");
-                });
-
-            modelBuilder.Entity("Domain.State", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<string>("Id")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
@@ -354,7 +321,22 @@ namespace Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("States");
+                    b.ToTable("SpecialtyCores");
+                });
+
+            modelBuilder.Entity("ISCEDCoreSpecialtyCore", b =>
+                {
+                    b.Property<string>("ISCEDCoresId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SpecialtyCoresId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ISCEDCoresId", "SpecialtyCoresId");
+
+                    b.HasIndex("SpecialtyCoresId");
+
+                    b.ToTable("ISCEDCoreSpecialtyCore");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -506,9 +488,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.City", b =>
                 {
-                    b.HasOne("Domain.State", null)
+                    b.HasOne("Domain.Region", null)
                         .WithMany("Cities")
-                        .HasForeignKey("StateId");
+                        .HasForeignKey("RegionId");
                 });
 
             modelBuilder.Entity("Domain.Institution", b =>
@@ -518,25 +500,6 @@ namespace Persistence.Migrations
                         .HasForeignKey("CityId");
 
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Domain.InstitutionSpecialty", b =>
-                {
-                    b.HasOne("Domain.Institution", "Institution")
-                        .WithMany("Specialties")
-                        .HasForeignKey("InstitutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Specialty", "Specialty")
-                        .WithMany("Institutions")
-                        .HasForeignKey("SpecialtyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Institution");
-
-                    b.Navigation("Specialty");
                 });
 
             modelBuilder.Entity("Domain.Review", b =>
@@ -557,9 +520,15 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Specialty", b =>
                 {
+                    b.HasOne("Domain.Institution", "Institution")
+                        .WithMany("Specialties")
+                        .HasForeignKey("InstitutionId");
+
                     b.HasOne("Domain.SpecialtyCore", "SpecialtyCore")
                         .WithMany("Specialties")
                         .HasForeignKey("SpecialtyCoreId");
+
+                    b.Navigation("Institution");
 
                     b.Navigation("SpecialtyCore");
                 });
@@ -583,25 +552,19 @@ namespace Persistence.Migrations
                     b.Navigation("Specialty");
                 });
 
-            modelBuilder.Entity("Domain.SpecialtyCore", b =>
+            modelBuilder.Entity("ISCEDCoreSpecialtyCore", b =>
                 {
-                    b.HasOne("Domain.ISCEDCore", "ISCEDCore")
-                        .WithMany("SpecialtyCores")
-                        .HasForeignKey("ISCEDCoreId");
-
-                    b.HasOne("Domain.LocalIdentifierCore", "LICore")
-                        .WithMany("SpecialtyCores")
-                        .HasForeignKey("LICoreId");
-
-                    b.HasOne("Domain.Branch", "LocalBranch")
+                    b.HasOne("Domain.ISCEDCore", null)
                         .WithMany()
-                        .HasForeignKey("LocalBranchId");
+                        .HasForeignKey("ISCEDCoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("ISCEDCore");
-
-                    b.Navigation("LICore");
-
-                    b.Navigation("LocalBranch");
+                    b.HasOne("Domain.SpecialtyCore", null)
+                        .WithMany()
+                        .HasForeignKey("SpecialtyCoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -670,11 +633,6 @@ namespace Persistence.Migrations
                     b.Navigation("Specialties");
                 });
 
-            modelBuilder.Entity("Domain.ISCEDCore", b =>
-                {
-                    b.Navigation("SpecialtyCores");
-                });
-
             modelBuilder.Entity("Domain.Institution", b =>
                 {
                     b.Navigation("Managers");
@@ -684,26 +642,19 @@ namespace Persistence.Migrations
                     b.Navigation("Specialties");
                 });
 
-            modelBuilder.Entity("Domain.LocalIdentifierCore", b =>
+            modelBuilder.Entity("Domain.Region", b =>
                 {
-                    b.Navigation("SpecialtyCores");
+                    b.Navigation("Cities");
                 });
 
             modelBuilder.Entity("Domain.Specialty", b =>
                 {
                     b.Navigation("Components");
-
-                    b.Navigation("Institutions");
                 });
 
             modelBuilder.Entity("Domain.SpecialtyCore", b =>
                 {
                     b.Navigation("Specialties");
-                });
-
-            modelBuilder.Entity("Domain.State", b =>
-                {
-                    b.Navigation("Cities");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,6 +1,7 @@
 export interface City {
     id: string;
     name: string;
+    institutionsCount: number;
 }
 
 export class City implements City {

@@ -50,15 +50,10 @@ namespace Application.Specialties
                     EctsCredits = request.Specialty.EctsCredits,
                     Degree = request.Specialty.Degree,
                     PriceUAH = request.Specialty.PriceUAH,
-                    StartsAt = request.Specialty.StartsAt,
-                    EndsAt = request.Specialty.EndsAt
+                    StartYear = request.Specialty.StartYear,
+                    EndYear = request.Specialty.EndYear,
+                    Institution = institution
                 };
-                var institutionSpecialty = new InstitutionSpecialty
-                {
-                    Institution = institution,
-                    Specialty = specialty
-                };
-                specialty.Institutions.Add(institutionSpecialty);
 
                 _context.Specialties.Add(specialty);
 

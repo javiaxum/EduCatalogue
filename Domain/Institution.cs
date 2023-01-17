@@ -18,7 +18,7 @@ namespace Domain
         public string EmblemImage { get; set; }
         public string ContactInformation { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<InstitutionSpecialty> Specialties { get; set; } = new List<InstitutionSpecialty>();
+        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
         public ICollection<AppUserInstitution> Managers { get; set; } = new List<AppUserInstitution>();
     }
 }

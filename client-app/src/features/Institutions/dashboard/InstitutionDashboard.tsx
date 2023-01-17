@@ -10,24 +10,26 @@ import InstitutionsList from './InstitutionsList';
 export default observer(function InstitutionDashboard() {
     const { institutionStore, specialtyStore } = useStore();
     const { setActiveMenuItem } = institutionStore;
-    
+
 
     useEffect(() => {
         return () => { institutionStore.setActiveMenuItem('About'); }
     }, [institutionStore, setActiveMenuItem])
 
-    if ((institutionStore.loadingInitial || institutionStore.loading))  return <LoadingComponent content='Loading institutions...' />
+    // if ((institutionStore.loadingInitial || institutionStore.loading))  return <LoadingComponent content='Loading institutions...' />
     return (
         <Segment style={{ borderRadius: '0px', border: 'none' }}>
             <Grid>
-                <Grid.Column width={12}>
+                <Grid.Column width={2} stretched>
+                </Grid.Column>
+                <Grid.Column width={11}>
                     <InstitutionsList />
                 </Grid.Column>
-                <Grid.Column width={4} stretched>
+                <Grid.Column width={3} stretched>
                     <SearchParamsSideBar />
                 </Grid.Column>
             </Grid>
-            <PaginationBar/>
+            <PaginationBar />
         </Segment>
 
     )

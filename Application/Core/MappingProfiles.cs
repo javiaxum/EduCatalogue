@@ -33,9 +33,8 @@ namespace Application.Core
             .ForMember(d => d.EctsCredits, o => o.MapFrom(s => s.Specialty.EctsCredits))
             .ForMember(d => d.Degree, o => o.MapFrom(s => s.Specialty.Degree))
             .ForMember(d => d.PriceUAH, o => o.MapFrom(s => s.Specialty.PriceUAH))
-            .ForMember(d => d.StartsAt, o => o.MapFrom(s => s.Specialty.StartsAt))
-            .ForMember(d => d.EndsAt, o => o.MapFrom(s => s.Specialty.EndsAt));
-
+            .ForMember(d => d.StartYear, o => o.MapFrom(s => s.Specialty.StartYear))
+            .ForMember(d => d.EndYear, o => o.MapFrom(s => s.Specialty.EndYear));
 
             CreateMap<Specialty, Specialty>();
 
@@ -49,9 +48,9 @@ namespace Application.Core
             CreateMap<SpecialtyComponent, ComponentDTO>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Component.Id))
             .ForMember(d => d.Name, o => o.MapFrom(s => s.Component.Name))
-            .ForMember(d => d.isOptional, o => o.MapFrom(s => s.Component.isOptional))
+            .ForMember(d => d.isOptional, o => o.MapFrom(s => s.isOptional))
             .ForMember(d => d.Description, o => o.MapFrom(s => s.Component.Description));
-            
+
 
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()
             .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores));
@@ -65,8 +64,10 @@ namespace Application.Core
             .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))
             .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Image));
 
-
             CreateMap<Branch, Branch>();
+
+            CreateMap<City, CityDTO>()
+            .ForMember(d => d.InstitutionsCount, o => o.MapFrom(s => s.Institution.Count()));
         }
     }
 }

@@ -7,9 +7,11 @@ namespace Application.Core
 {
     public class InstitutionParams : PagingParams
     {
-        public ICollection<string> SpecialtyCodes { get; set; } = new List<string>();
-        public int MinPrice { get; set; } = 0;
-        public int MaxPrice { get; set; } = int.MaxValue;
+        public string BranchesPredicate { get; set; } = "";
+        public string SpecialtiesPredicate { get; set; } = "";
+        public string CitiesPredicate { get; set; } = "";
+        public string MinPrice { get; set; } = "";
+        public string MaxPrice { get; set; } = "";
         public string City { get; set; }
         public int StudentCount { get; set; }
     }

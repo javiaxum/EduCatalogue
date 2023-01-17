@@ -90,7 +90,7 @@ export default class SpecialtyStore {
             const branches = await agent.Specialties.listBranches();
             runInAction(() => {
                 branches.forEach(branch => {
-                    this.branchRegistry.set(branch.id, branch)
+                    this.branchRegistry.set(branch.id, branch);
                 });
             })
             this.setLoadingInitial(false);

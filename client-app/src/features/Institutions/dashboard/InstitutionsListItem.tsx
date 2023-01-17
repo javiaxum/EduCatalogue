@@ -11,12 +11,9 @@ export default function InstitutionsListItem({ institution }: Props) {
     return (
         <Item>
             <Item.Content>
-                <Item.Header as='a'>{institution.name}</Item.Header>
+                <Item.Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Item.Header>
                 <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>
                 <Item.Meta>{institution.city}, {institution.streetAddress}</Item.Meta>
-                <Item.Extra>
-                    <Button as={Link} to={`/institutions/${institution.id}`} floated='right' content='View' />
-                </Item.Extra>
             </Item.Content>
         </Item>
     )
