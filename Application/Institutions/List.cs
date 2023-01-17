@@ -49,15 +49,15 @@ namespace Application.Institutions
                 }
                 if (!String.IsNullOrEmpty(request.Params.MinPrice))
                 {
-                    int minParseresult;
-                    if(int.TryParse(request.Params.MinPrice, out minParseresult))
-                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH >= minParseresult));
+                    int minParseResult;
+                    if(int.TryParse(request.Params.MinPrice, out minParseResult))
+                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH >= minParseResult));
                 }
                 if (!String.IsNullOrEmpty(request.Params.MaxPrice))
                 {
-                    int maxParseresult;
-                    if(int.TryParse(request.Params.MaxPrice, out maxParseresult))
-                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH <= maxParseresult));
+                    int maxParseResult;
+                    if(int.TryParse(request.Params.MaxPrice, out maxParseResult))
+                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH <= maxParseResult));
                 }
                 return Result<PagedList<InstitutionDTO>>.Success(
                     await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)

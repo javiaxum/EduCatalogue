@@ -24,13 +24,12 @@ export default observer(function InstitutionDashboard() {
                 </Grid.Column>
                 <Grid.Column width={11}>
                     <InstitutionsList />
+                    <PaginationBar />
                 </Grid.Column>
                 <Grid.Column width={3} stretched>
                     <SearchParamsSideBar />
                 </Grid.Column>
             </Grid>
-            <PaginationBar />
         </Segment>
-
     )
 })

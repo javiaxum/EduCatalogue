@@ -6,23 +6,15 @@ import { Institution } from '../../../app/models/institution';
 export default function InstitutionsListItemPlaceholder() {
     return (
         <Fragment>
-            <Placeholder fluid style={{ marginTop: 25 }}>
+            <Placeholder fluid style={{ marginTop: 10 }}>
                 <Segment.Group>
                     <Segment style={{ minHeight: 110 }}>
                         <Placeholder>
-                            <Placeholder.Header image>
-                                <Placeholder.Line />
-                                <Placeholder.Line />
-                            </Placeholder.Header>
+                            <Placeholder.Line />
+                            <Placeholder.Line />
                             <Placeholder.Paragraph>
                                 <Placeholder.Line />
                             </Placeholder.Paragraph>
-                        </Placeholder>
-                    </Segment>
-                    <Segment>
-                        <Placeholder>
-                            <Placeholder.Line />
-                            <Placeholder.Line />
                         </Placeholder>
                     </Segment>
                 </Segment.Group>

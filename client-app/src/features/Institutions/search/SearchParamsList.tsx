@@ -8,7 +8,18 @@ import SearchParamItem from "./SearchParamItem";
 
 export default observer(function SearchParamsList() {
     const { specialtyStore, institutionStore } = useStore();
-    const { specialtyPredicate, citiesPredicate, toggleSpecialtyPredicateParam, toggleCityPredicateParam, citiesByName, setCityNameFilter, cityNameFilter, maxPrice, minPrice, setMaxPrice, setMinPrice } = institutionStore;
+    const {
+        specialtyPredicate,
+        citiesPredicate,
+        toggleSpecialtyPredicateParam,
+        toggleCityPredicateParam,
+        citiesByName,
+        setCityNameFilter,
+        cityNameFilter,
+        maxPrice,
+        minPrice,
+        setMaxPrice,
+        setMinPrice } = institutionStore;
 
     return (
         <Grid style={{ padding: '0.4rem' }}>
@@ -17,7 +28,8 @@ export default observer(function SearchParamsList() {
                 <Input
                     label={'min'}
                     placeholder="0"
-                    min={0} name="min"
+                    min={0}
+                    name="min"
                     type="number"
                     style={{ width: '30%', padding: '2px' }}
                     value={minPrice}

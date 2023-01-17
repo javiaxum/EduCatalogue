@@ -16,6 +16,8 @@ export default observer(function InstitutionsList() {
                     <InstitutionsListItemPlaceholder />
                     <InstitutionsListItemPlaceholder />
                     <InstitutionsListItemPlaceholder />
+                    <InstitutionsListItemPlaceholder />
+                    <InstitutionsListItemPlaceholder />
                 </>
             ) : (
                 <>
