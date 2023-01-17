@@ -147,10 +147,6 @@ export default class InstitutionStore {
         return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name)); // possibly not sorting by name
     }
 
-    get instititutionsByNameForPage() {
-        return this.instititutionsByName.slice((this.pagination?.currentPage! - 1) * this.pagination?.itemsPerPage!, this.pagination?.currentPage! * this.pagination?.itemsPerPage!);
-    }
-
     private setInstitution = (institution: Institution) => {
         this.institutionsRegistry.set(institution.id, institution);
     }

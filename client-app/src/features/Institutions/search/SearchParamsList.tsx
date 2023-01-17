@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import react from "react";
-import { Divider, Grid, Header, Input, Search } from "semantic-ui-react";
+import { Divider, Grid, Header, Input, Search, Select } from "semantic-ui-react";
+import { degreeOptions } from "../../../app/common/options/degreeOptions";
 import { useStore } from "../../../app/stores/store";
 import SearchParamItem from "./SearchParamItem";
 
@@ -19,7 +20,8 @@ export default observer(function SearchParamsList() {
         maxPrice,
         minPrice,
         setMaxPrice,
-        setMinPrice } = institutionStore;
+        setMinPrice, 
+        pagination } = institutionStore;
 
     return (
         <Grid style={{ padding: '0.4rem' }}>
@@ -49,7 +51,7 @@ export default observer(function SearchParamsList() {
                     }} />
             </Grid.Column>
             <Header as='h4' content='Knowledge branch' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column style={{ padding: '0.4rem', height: '300px', overflowX: 'hidden' }} width={16}>
+            <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 {specialtyStore.branchesById.map((branch) => (
                     <SearchParamItem code={branch.id} name={branch.name} key={branch.id} checked={specialtyPredicate.get(branch.id)} togglePredicateParam={toggleSpecialtyPredicateParam} />
                 ))}
@@ -58,7 +60,7 @@ export default observer(function SearchParamsList() {
                 <Divider />
             </Grid.Column>
             <Header as='h4' content='Specialties' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column style={{ padding: '0.4rem', height: '300px', overflowX: 'hidden' }} width={16}>
+            <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 {specialtyStore.specialtyCoresByName.map((specialtyCore) => (
                     <SearchParamItem code={specialtyCore.id} name={specialtyCore.name} key={specialtyCore.id} checked={specialtyPredicate.get(specialtyCore.id)} togglePredicateParam={toggleSpecialtyPredicateParam} />
                 ))}
@@ -73,7 +75,7 @@ export default observer(function SearchParamsList() {
                 onSearchChange={(e, d) => {
                     setCityNameFilter(d.value!);
                 }} />
-            <Grid.Column style={{ padding: '0.4rem', height: '300px', overflowX: 'hidden' }} width={16}>
+            <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 {cityNameFilter && cityNameFilter.length != 0 ? citiesByName.filter(city => city.name.toLocaleLowerCase().includes(cityNameFilter.toLocaleLowerCase())).map((city) => (
                     <SearchParamItem code={city.name} key={city.name} checked={citiesPredicate.get(city.name)} togglePredicateParam={toggleCityPredicateParam} />
                 )) : (citiesByName.map((city) => (
@@ -81,6 +83,10 @@ export default observer(function SearchParamsList() {
                 ))
                 )}
             </Grid.Column>
+            <Header as='h4' content='Degree' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Select
+                options={degreeOptions}
+            />
         </Grid>
     )
 })

@@ -15,7 +15,7 @@ import CustomSelectField from './CustomSelectField';
 import CustomSpecialtySelectInput from './CustomSpecialtySelectInput';
 import SpecialtyDetailsComponentList from '../details/educationalComponent/SpecialtyDetailsComponentList';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
-import { degreeOptions } from '../../../app/common/options/categoryOptions';
+import { degreeOptions } from '../../../app/common/options/degreeOptions';
 
 
 export default observer(function SpecialtyForm() {

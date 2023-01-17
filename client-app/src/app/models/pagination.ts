@@ -19,7 +19,7 @@ export class PagingParams {
     pageNumber;
     pageSize;
 
-    constructor(pageNumber = 1, pageSize = 5) {
+    constructor(pageNumber = 1, pageSize = 6) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }

@@ -41,8 +41,7 @@ export default observer(function InstitutionDetails() {
                 </Segment>
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
-                    position: 'absolute',
-                    top: '12em',
+                    top: '-4em',
                     left: '5%',
                     width: '90%',
                     height: 'auto',

@@ -4,6 +4,7 @@ body {
 
 .root {
   overflow: auto;
+  min-height: 2000px !important;
 }
 
 .ui.selection.dropdown>.dropdown.icon {

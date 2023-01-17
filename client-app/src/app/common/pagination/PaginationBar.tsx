@@ -9,16 +9,13 @@ export default observer(function PaginationBar() {
     const { institutionStore, specialtyStore } = useStore();
     const { setPagingParams, pagination, loadInstitutions, institutionsRegistry, setPagination } = institutionStore;
 
-    const [loadingNext, setLoadingNext] = useState(false);
 
     if (!pagination) return <></>;
 
     function HandleLoad(i: number) {
-        setLoadingNext(true);
         setPagingParams(new PagingParams(i));
-        loadInstitutions().then(() => {
-            setLoadingNext(false);
-        });
+        institutionsRegistry.clear();
+        loadInstitutions();
         }
 
     let elements = [];

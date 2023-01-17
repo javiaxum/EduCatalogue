@@ -8,6 +8,7 @@ import { useStore } from '../stores/store';
 import { observer } from 'mobx-react-lite';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import CustomFooter from './CustomFooter';
 
 export default observer(function App() {
   const location = useLocation();
@@ -37,11 +38,12 @@ export default observer(function App() {
       ) : (
         <>
           <NavBar />
-          <Container>
+          <Container style={{ minHeight: '850px' }} >
             <Outlet />
           </Container>
         </>
       )}
+      <CustomFooter />
     </>
   );
 })

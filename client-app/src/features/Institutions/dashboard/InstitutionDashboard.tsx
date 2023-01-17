@@ -19,10 +19,10 @@ export default observer(function InstitutionDashboard() {
     // if ((institutionStore.loadingInitial || institutionStore.loading))  return <LoadingComponent content='Loading institutions...' />
     return (
         <Segment style={{ borderRadius: '0px', border: 'none' }}>
-            <Grid>
-                <Grid.Column width={2} stretched>
+            <Grid style={{border: '0', margin: '0'}}>
+                <Grid.Column width={3} stretched>
                 </Grid.Column>
-                <Grid.Column width={11}>
+                <Grid.Column width={10}>
                     <InstitutionsList />
                     <PaginationBar />
                 </Grid.Column>
