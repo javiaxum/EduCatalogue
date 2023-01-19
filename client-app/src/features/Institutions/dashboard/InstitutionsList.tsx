@@ -21,7 +21,6 @@ export default observer(function InstitutionsList() {
                     color='grey'
                     content={`found ${pagination?.totalItems} ${pagination?.totalItems === 1 ? 'item' : 'items'}`}
                     style={{ display: 'inline', marginLeft: '20px' }} />}
-
             <Divider horizontal>
                 <Select
                     style={{ left: '0px' }}

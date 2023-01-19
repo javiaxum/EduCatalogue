@@ -101,10 +101,10 @@ export default class InstitutionStore {
     }
 
     toggleSpecialtyPredicateParam = (key: string, value: boolean) => {
-        this.specialtyPredicate.forEach((lvalue, lkey: string) => {
-            if (key.length != lkey.length)
-                this.specialtyPredicate.clear();
-        });
+        // this.specialtyPredicate.forEach((lvalue, lkey: string) => {
+        //     if (key.length != lkey.length)
+        //         this.specialtyPredicate.clear();
+        // });
         if (this.specialtyPredicate.get(key))
             this.specialtyPredicate.delete(key);
         else

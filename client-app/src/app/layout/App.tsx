@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
@@ -36,12 +36,12 @@ export default observer(function App() {
       {location.pathname === '/' ? (
         <HomePage />
       ) : (
-        <>
+        <Fragment>
           <NavBar />
-          <Container style={{ minHeight: '850px' }} >
+          <Container style={{ minHeight: 'calc(100vh - 140px)' }} >
             <Outlet />
           </Container>
-        </>
+        </Fragment>
       )}
       <CustomFooter />
     </>

@@ -8,7 +8,7 @@ import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetai
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
-    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch } = specialtyStore;
+    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSpecialtyCoreISCEDString } = specialtyStore;
     const { id } = useParams();
 
     useEffect(() => {
@@ -32,18 +32,18 @@ export default observer(function SpecialtyDetails() {
                             style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
                     <Button
-                        onClick={() => commonStore.setEditMode(!commonStore.editMode)}
-                        as={Link}
-                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
-                        style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
-                        content={'Manage Specialty'}
-                    />
-                    <Button
                         onClick={() => commonStore.setEditMode(false)}
                         as={Link}
                         to={`/institutions/${institutionStore.selectedInstitution?.id}`}
-                        style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
+                        style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
                         content={'To institutions'}
+                    />
+                    <Button
+                        onClick={() => commonStore.setEditMode(!commonStore.editMode)}
+                        as={Link}
+                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
+                        style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
+                        content={'Manage Specialty'}
                     />
                 </Grid.Row>
                 <Grid.Row>
@@ -52,7 +52,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`Specialty code (ISCED): `}
+                                        content={`Specialty code (ISCED): ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)} `}
                                     />
                                 </Segment>
                                 <Segment>
@@ -74,7 +74,7 @@ export default observer(function SpecialtyDetails() {
                                         name='book'
                                         size='big'
                                         color='blue' />
-                                    {`Knowledge branch: ${selectedSpecialty.localSpecialtyCode.slice(0,2)} ${getBranch(selectedSpecialty.localSpecialtyCode.slice(0,2))?.name}`}
+                                    {`Knowledge branch: ${selectedSpecialty.localSpecialtyCode.slice(0, 2)} ${getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}`}
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>

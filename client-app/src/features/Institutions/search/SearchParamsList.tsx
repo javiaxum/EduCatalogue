@@ -34,7 +34,7 @@ export default observer(function SearchParamsList() {
                     name="min"
                     type="number"
                     style={{ width: '30%', padding: '2px' }}
-                    value={minPrice}
+                    value={minPrice} 
                     onChange={(e, d) => {
                         setMinPrice(d.value);
                     }} />

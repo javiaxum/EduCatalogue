@@ -40,7 +40,8 @@ export default class SpecialtyStore {
         let iscedCodeString = "";
         if (specialtyCore) {
             for (let i = 0; i < specialtyCore.iscedCores.length; i++) {
-                if (iscedCodeString !== "") iscedCodeString += ` ${specialtyCore!.iscedCores[i].id}`
+                if (iscedCodeString !== "") iscedCodeString += ' ';
+                iscedCodeString += specialtyCore!.iscedCores[i].id
             }
         }
         return iscedCodeString;

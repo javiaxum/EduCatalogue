@@ -14,11 +14,13 @@ export default observer(function SearchParamItem({ code: id, name, togglePredica
 
     const { institutionStore, specialtyStore } = useStore();
 
+    const keys = Array.from(institutionStore.specialtyPredicate.keys());
     return (
         <GridColumn width={16} style={{ padding: '0.2rem' }}>
             <Checkbox
                 checked={checked}
                 label={`${id} ${name ? name : ''}`}
+                disabled={(id.length === 3 && !keys.find((x) => x.length === 2 && x === id.slice(0, 2))) && keys.find((x) => x.length === 2)}
                 onChange={() => {
                     togglePredicateParam(id, !checked)
                 }}
