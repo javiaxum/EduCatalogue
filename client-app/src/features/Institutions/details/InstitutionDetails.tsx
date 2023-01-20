@@ -20,6 +20,7 @@ export default observer(function InstitutionDetails() {
         loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
+        loading
     } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
@@ -30,7 +31,7 @@ export default observer(function InstitutionDetails() {
     }, [loadInstitution, id]);
 
 
-    if (loadingInitial) return <LoadingComponent />
+    if (loadingInitial || loading) return <LoadingComponent />
     if (!institution) return (<></>);
 
     return (

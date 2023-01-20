@@ -8,14 +8,15 @@ import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetai
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
-    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSpecialtyCoreISCEDString } = specialtyStore;
+    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSpecialtyCoreISCEDString, loading } = specialtyStore;
+    const { } = institutionStore;
     const { id } = useParams();
 
     useEffect(() => {
         if (id) loadSpecialty(id);
     }, [loadSpecialty, selectedSpecialty, id]);
 
-    if (loadingInitial) return <LoadingComponent />
+    if (loadingInitial || loading) return <LoadingComponent />
     if (!selectedSpecialty) return (<></>);
 
     return (

@@ -12,10 +12,10 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     const { editMode } = commonStore;
 
     return (
-        <Grid style={{ width: '100%', display: 'block' }}>
+        <Grid style={{ width: '100%', display: 'block', padding: '10px' }}>
             {selectedInstitution?.specialties.length === 0
                 || !selectedInstitution?.specialties
-                ? (<>{!editMode && <Segment style={{ color: '#444' }}>There are no specialties available...</Segment>}</>)
+                ? (<>{!editMode && <Segment style={{ color: '#444', width: '300px' }}>There are no specialties available...</Segment>}</>)
                 : (<>
                     {selectedInstitution!.specialties.map((specialty) => (
                         <SpecialtyListItem
