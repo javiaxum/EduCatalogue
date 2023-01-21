@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.EduComponents
+namespace Domain
 {
-    public class ComponentDTO
+    public class ComponentCore
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ESCTSCredits { get; set; }
-        public bool isOptional { get; set; }
+        public ICollection<Component> Components { get; set; }
     }
 }

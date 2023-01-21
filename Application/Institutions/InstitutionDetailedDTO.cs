@@ -9,7 +9,7 @@ using Application.Specialties;
 
 namespace Application
 {
-    public class InstitutionDTO
+    public class InstitutionDetailedDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -21,6 +21,7 @@ namespace Application
         public string TitleImage { get; set; } // images can be reworked into Image <-> Institution relationship with flags matching image type
         public string EmblemImage { get; set; }
         public string ContactInformation { get; set; }
-        public double Rating { get; set; }
+        public ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
+        public ICollection<SpecialtyDTO> Specialties { get; set; } = new List<SpecialtyDTO>();
     }
 }

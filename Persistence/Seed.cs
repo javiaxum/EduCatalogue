@@ -3826,7 +3826,32 @@ namespace Persistence
                         DisplayName = "Test User3",
                         UserName = "testuser3",
                         Email = "testmail3@test.com"
-                    }
+                    },
+                    new AppUser {
+                        DisplayName = "Test User4",
+                        UserName = "testuser4",
+                        Email = "testmail4@test.com"
+                    },
+                    new AppUser {
+                        DisplayName = "Test User5",
+                        UserName = "testuser5",
+                        Email = "testmail5@test.com"
+                    },
+                    new AppUser {
+                        DisplayName = "Test User6",
+                        UserName = "testuser6",
+                        Email = "testmail6@test.com"
+                    },
+                    new AppUser {
+                        DisplayName = "Test User7",
+                        UserName = "testuser7",
+                        Email = "testmail7@test.com"
+                    },
+                    new AppUser {
+                        DisplayName = "Test User8",
+                        UserName = "testuser8",
+                        Email = "testmail8@test.com"
+                    },
                 };
                 foreach (var user in users)
                 {
@@ -4122,37 +4147,567 @@ namespace Persistence
 
                 institution.Managers.Add(manager);
 
-
-                // Seed Specialties
-                var specialtyCore1 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "012");
-                var specialtyCore2 = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "011");
-                var specialties = new List<Specialty>
+                // Seed Components
+                var componentsCores = new List<ComponentCore>
                 {
-                    new Specialty
+                    new ComponentCore
                     {
-                        SpecialtyCore = specialtyCore1,
-                        Description = "Specialty test description",
-                        EctsCredits = 240,
-                        Degree = "Bachelor",
-                        PriceUAH = 80000,
-                        StartYear = 2021,
-                        EndYear = 2025,
+                        Name="Цивільне право",
                     },
-                    new Specialty
+                    new ComponentCore
                     {
-                        SpecialtyCore = specialtyCore2,
-                        Description = "Specialty test description",
-                        EctsCredits = 180,
-                        Degree = "Bachelor",
-                        PriceUAH = 80001,
-                        StartYear = 2021,
-                        EndYear = 2025,
+                        Name="Правові висновки Верховного Cуду",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Альтернативні способи вирішення суперечок",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Нотаріальний процес",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Порівняльне цивільне право і процес",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Школа прикладної юриспруденції",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Практична підготовка",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Дискретна математика",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Математичний аналіз",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Фізика",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Вступ до комп'ютерних наук",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Іноземна мова",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Теорія ймовірностей та математична статистика",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Комп'ютерні технології обробки та візуалізації даних",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Алгоритмізація та програмування",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Оптимізаційні методи та моделі",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Штучний інтелект",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Управління ІТ-проектами",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Технологія Java",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Адміністрування серверних систем",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Web-технології",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Інженерна та комп'ютерна графіка",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Технології аналізу даних",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Технології створення програмних продуктів",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Правознавство",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Психологія",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Ораторське мистецтво",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Безпека життя",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Історія української культури",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Ораторське мистецтво",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Менеджмент",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Філософія",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Соціологія",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Логіка",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Бухгалтерський облік",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Організація баз даних та знань",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Архітектура обчислювальних систем",
+                    },
+                    new ComponentCore
+                    {
+                        Name="Теорія управління в інформаційних системах",
                     },
                 };
-                
-                institution.Specialties.Add(specialties[0]);
-                institution.Specialties.Add(specialties[1]);
+
+                await context.ComponentCores.AddRangeAsync(componentsCores);
                 await context.SaveChangesAsync();
+
+                var componentsLaw = new List<Component>
+                {
+                    new Component
+                    {
+                        ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Цивільне право"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Правові висновки Верховного Cуду"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Альтернативні способи вирішення суперечок"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Нотаріальний процес"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Порівняльне цивільне право і процес"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Школа прикладної юриспруденції"),
+                        ESCTSCredits=18,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                };
+                var componentsCScience = new List<Component>
+                {
+                    new Component
+                    {
+                        ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Вступ до комп'ютерних наук"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Дискретна математика"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Фізика"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Математичний аналіз"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Комп'ютерні технології обробки та візуалізації даних"),
+                        ESCTSCredits=6,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Алгоритмізація та програмування"),
+                        ESCTSCredits=18,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Оптимізаційні методи та моделі"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Філософія"),
+                        ESCTSCredits=6,
+                        isOptional=true,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Адміністрування серверних систем"),
+                        ESCTSCredits=6,
+                        isOptional=true,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Організація баз даних та знань"),
+                        ESCTSCredits=6,
+                        isOptional=true,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Архітектура обчислювальних систем"),
+                        ESCTSCredits=6,
+                        isOptional=true,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Web-технології"),
+                        ESCTSCredits=6,
+                        isOptional=true,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Теорія управління в інформаційних системах"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Технології аналізу даних"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                    new Component
+                    {
+                        ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Безпека життя"),
+                        ESCTSCredits=12,
+                        isOptional=false,
+                    },
+                };
+
+                var user1 = await userManager.FindByEmailAsync("testmail@test.com");
+                var user2 = await userManager.FindByEmailAsync("testmail2@test.com");
+                var user3 = await userManager.FindByEmailAsync("testmail3@test.com");
+                var user4 = await userManager.FindByEmailAsync("testmail4@test.com");
+                var user5 = await userManager.FindByEmailAsync("testmail5@test.com");
+                var user6 = await userManager.FindByEmailAsync("testmail6@test.com");
+
+                // Seed Specialties and Reviews
+                foreach (var item in context.Institutions)
+                {
+                    var reviews = new List<Review>
+                    {
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user1,
+                            ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user2,
+                            ReviewMessage = "Slightly different test review message consisting of author, institution, message, 4 star* rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user3,
+                            ReviewMessage = "Another test review message consisting of author being user3, institution, message, 1 star rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user4,
+                            ReviewMessage = "Another one review message consisting of author being user4, institution, message, 5 star rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user5,
+                            ReviewMessage = "Test review message consisting of author being user5, institution, message, 3 start rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                        new Review
+                        {
+                            Institution = item,
+                            Author = user6,
+                            ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
+                            Rating=new Random().Next(1, 6),
+                        },
+                    };
+                    var specialties = new List<Specialty>
+                    {
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "122"),
+                            Description = "Загальна освіта в галузі інформаційних технологій, спеціалізація «Комп’ютерні науки».Ключові слова: програмування, алгоритмізація, моделювання,комп’ютерна обробка даних, обчислювальні системи та технології,нечіткі моделі, Machine Learning, Big Data Processing, програмування на C#, C++, Python, Java, комп’ютерні мережі, розподілені серверні системи, розподілені та паралельні обчислення, нечіткі моделі та мережі, методи обчислювального інтелекту.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 80000,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
+                            Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
+                            EctsCredits = 60,
+                            Degree = "Master",
+                            PriceUAH = 40001,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsLaw,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
+                            Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 100001,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsLaw,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "125"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 180,
+                            Degree = "Bachelor",
+                            PriceUAH = 45021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "121"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 75021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "123"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "124"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 95021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "112"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 76021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            NonPaidEducationAvailable = true,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "111"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 52331,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "076"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 88754,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "073"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 87213,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "141"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "142"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "143"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "144"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            NonPaidEducationAvailable = true,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                        new Specialty
+                        {
+                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "145"),
+                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
+                            EctsCredits = 240,
+                            Degree = "Bachelor",
+                            PriceUAH = 85021,
+                            StartYear = 2020,
+                            EndYear = 2024,
+                            Components = componentsCScience,
+                            Institution = item,
+                        },
+                    };
+                    await context.AddRangeAsync(reviews);
+                    await context.AddRangeAsync(specialties);
+                    await context.SaveChangesAsync();
+                }
             }
         }
     }

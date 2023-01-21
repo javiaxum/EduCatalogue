@@ -14,11 +14,11 @@ namespace Application.Institutions
 {
     public class Details
     {
-        public class Query : IRequest<Result<InstitutionDTO>>
+        public class Query : IRequest<Result<InstitutionDetailedDTO>>
         {
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Query, Result<InstitutionDTO>>
+        public class Handler : IRequestHandler<Query, Result<InstitutionDetailedDTO>>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,14 +28,14 @@ namespace Application.Institutions
                 _context = context;
             }
 
-            public async Task<Result<InstitutionDTO>> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<Result<InstitutionDetailedDTO>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var institution = await _context.Institutions
-                    .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
+                    .ProjectTo<InstitutionDetailedDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
                     if (institution == null) return null;
                     
-                return Result<InstitutionDTO>.Success(institution);
+                return Result<InstitutionDetailedDTO>.Success(institution);
             }
         }
 

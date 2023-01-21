@@ -13,10 +13,10 @@ namespace Domain
         public int EctsCredits { get; set; }
         public string Degree { get; set; }
         public decimal PriceUAH { get; set; }
-        public bool isBudget { get; set; }
+        public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
         public Institution Institution { get; set; }
-        public ICollection<SpecialtyComponent> Components { get; set; } = new List<SpecialtyComponent>();
+        public ICollection<Component> Components { get; set; } = new List<Component>();
     }
 }

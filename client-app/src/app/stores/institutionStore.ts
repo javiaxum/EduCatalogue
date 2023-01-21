@@ -185,7 +185,7 @@ export default class InstitutionStore {
     loadInstitution = async (id: string) => {
         this.setLoading(true);
         let institution = this.institutionsRegistry.get(id);
-        if (institution) {
+        if (institution && institution.specialties) {
             this.selectedInstitution = institution;
             this.setLoadingInitial(false);
             this.setLoading(false);

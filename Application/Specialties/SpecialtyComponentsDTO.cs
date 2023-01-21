@@ -14,8 +14,9 @@ namespace Application.Specialties
         public int EctsCredits { get; set; }
         public string Degree { get; set; }
         public decimal PriceUAH { get; set; }
-        public DateTime StartsAt { get; set; }
-        public DateTime EndsAt { get; set; }
+        public bool NonPaidEducationAvailable { get; set; }
+        public int StartYear { get; set; }
+        public int EndYear { get; set; }
         public ICollection<ComponentDTO> Components { get; set; } = new List<ComponentDTO>();
     }
 }

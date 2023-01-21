@@ -14,6 +14,7 @@ namespace Application.Specialties
         public int EctsCredits { get; set; }
         public string Degree { get; set; }
         public decimal PriceUAH { get; set; }
+        public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
     }

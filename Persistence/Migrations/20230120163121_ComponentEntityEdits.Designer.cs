@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Persistence;
 
@@ -10,9 +11,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230120163121_ComponentEntityEdits")]
+    partial class ComponentEntityEdits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.0");
@@ -293,9 +296,6 @@ namespace Persistence.Migrations
                     b.Property<Guid?>("InstitutionId")
                         .HasColumnType("TEXT");
 
-                    b.Property<bool>("NonPaidEducationAvailable")
-                        .HasColumnType("INTEGER");
-
                     b.Property<decimal>("PriceUAH")
                         .HasColumnType("TEXT");
 
@@ -303,6 +303,9 @@ namespace Persistence.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<int>("StartYear")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("isBudget")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

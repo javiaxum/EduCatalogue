@@ -13,7 +13,7 @@ interface Props {
 export default function SpecialtyListItem({ specialty, specialtyCore, iscedCodeString }: Props) {
 
     return (
-        <Grid.Column style={{ width: '245px' }}>
+        <Grid.Column style={{ width: '245px', display: 'inline-block' }}>
             <Card className='specialtyCard' style={{ display: 'block' }}>
                 <Card.Content>
                     <Card.Header as='a'>{specialtyCore.name}</Card.Header>

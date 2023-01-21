@@ -16,12 +16,11 @@ namespace Persistence
         }
         public DbSet<Institution> Institutions { get; set; }
         public DbSet<AppUserInstitution> AppUserInstitution { get; set; }
-        // public DbSet<InstitutionSpecialty> InstitutionSpecialties { get; set; }
         public DbSet<SpecialtyCore> SpecialtyCores { get; set; }
         public DbSet<ISCEDCore> ISCEDCores { get; set; }
         public DbSet<Specialty> Specialties { get; set; }
-        public DbSet<SpecialtyComponent> SpecialtyComponents { get; set; }
         public DbSet<Component> Components { get; set; }
+        public DbSet<ComponentCore> ComponentCores { get; set; }
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<City> Cities { get; set; }
@@ -55,16 +54,16 @@ namespace Persistence
             //     .HasForeignKey(si => si.SpecialtyId)
             //     .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Entity<SpecialtyComponent>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentId }));
+            // builder.Entity<SpecialtyComponent>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentId }));
 
-            builder.Entity<SpecialtyComponent>()
-                .HasOne(s => s.Specialty)
-                .WithMany(c => c.Components)
-                .OnDelete(DeleteBehavior.Cascade);
-            builder.Entity<SpecialtyComponent>()
-                .HasOne(c => c.Component)
-                .WithMany(s => s.Specialties)
-                .OnDelete(DeleteBehavior.Cascade);
+            // builder.Entity<SpecialtyComponent>()
+            //     .HasOne(s => s.Specialty)
+            //     .WithMany(c => c.Components)
+            //     .OnDelete(DeleteBehavior.Cascade);
+            // builder.Entity<SpecialtyComponent>()
+            //     .HasOne(c => c.Component)
+            //     .WithMany(s => s.Specialties)
+            //     .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Review>()
                 .HasOne(i => i.Institution)
