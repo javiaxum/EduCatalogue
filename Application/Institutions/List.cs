@@ -32,35 +32,35 @@ namespace Application.Institutions
             public async Task<Result<PagedList<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var query = _context.Institutions
-                .OrderBy(x => x.Name)
-                .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider)
                 .AsQueryable();
                 if (!String.IsNullOrEmpty(request.Params.BranchesPredicate))
                 {
-                    query = query.Where(x => x.Specialties.Any(s => request.Params.BranchesPredicate.Contains(s.LocalSpecialtyCode.Substring(0, 2))));
+                    query = query.Where(x => x.Specialties.Any(s => request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2))));
                 }
                 if (!String.IsNullOrEmpty(request.Params.SpecialtiesPredicate))
                 {
-                    query = query.Where(x => x.Specialties.Any(s => request.Params.SpecialtiesPredicate.Contains(s.LocalSpecialtyCode.Substring(0, 2))));
+                    query = query.Where(x => x.Specialties.Any(s => request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id)));
                 }
                 if (!String.IsNullOrEmpty(request.Params.CitiesPredicate))
                 {
-                    query = query.Where(x => request.Params.CitiesPredicate.Contains(x.City));
+                    query = query.Where(x => request.Params.CitiesPredicate.Contains(x.City.Name));
                 }
                 if (!String.IsNullOrEmpty(request.Params.MinPrice))
                 {
                     int minParseResult;
-                    if(int.TryParse(request.Params.MinPrice, out minParseResult))
-                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH >= minParseResult));
+                    if (int.TryParse(request.Params.MinPrice, out minParseResult))
+                        query = query.Where(x => x.Specialties.Any(s => s.PriceUAH >= minParseResult));
                 }
                 if (!String.IsNullOrEmpty(request.Params.MaxPrice))
                 {
                     int maxParseResult;
-                    if(int.TryParse(request.Params.MaxPrice, out maxParseResult))
-                    query = query.Where(x => x.Specialties.Any(s => s.PriceUAH <= maxParseResult));
+                    if (int.TryParse(request.Params.MaxPrice, out maxParseResult))
+                        query = query.Where(x => x.Specialties.Any(s => s.PriceUAH <= maxParseResult));
                 }
+                var result = query.OrderBy(x => x.Name)
+                .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider);
                 return Result<PagedList<InstitutionDTO>>.Success(
-                    await PagedList<InstitutionDTO>.CreateAsync(query, request.Params.PageNumber, request.Params.PageSize)
+                    await PagedList<InstitutionDTO>.CreateAsync(result, request.Params.PageNumber, request.Params.PageSize)
                 );
             }
         }
