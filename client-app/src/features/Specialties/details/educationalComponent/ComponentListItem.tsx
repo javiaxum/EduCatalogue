@@ -14,7 +14,6 @@ export default function ComponentListItem({ component }: Props) {
             <Card className='specialtyCard' style={{display: 'block'}}>
                 <Card.Content>
                     <Card.Header as='a'>{component.name}</Card.Header>
-                    <Card.Description>Description: {component.description.slice(0, 50)}</Card.Description>
                 </Card.Content>
                 {/* <Button as={Link} to={`/specialties/${specialty.id}`} content='Details' /> */}
             </Card>

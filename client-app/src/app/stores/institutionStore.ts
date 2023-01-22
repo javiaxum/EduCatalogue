@@ -18,6 +18,7 @@ export default class InstitutionStore {
     pagination: Pagination | null = null;
     pagingParams: PagingParams = new PagingParams();
     specialtyPredicate = new Map();
+    branchPredicate = new Map();
     citiesPredicate = new Map();
     cityNameFilter: string = '';
     minPrice: string = '';
@@ -29,6 +30,14 @@ export default class InstitutionStore {
 
         reaction(
             () => this.specialtyPredicate.keys(),
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },
+        )
+        reaction(
+            () => this.branchPredicate.keys(),
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
@@ -101,14 +110,17 @@ export default class InstitutionStore {
     }
 
     toggleSpecialtyPredicateParam = (key: string, value: boolean) => {
-        // this.specialtyPredicate.forEach((lvalue, lkey: string) => {
-        //     if (key.length != lkey.length)
-        //         this.specialtyPredicate.clear();
-        // });
         if (this.specialtyPredicate.get(key))
             this.specialtyPredicate.delete(key);
         else
             this.specialtyPredicate.set(key, value);
+    }
+
+    toggleBranchPredicateParam = (key: string, value: boolean) => {
+        if (this.branchPredicate.get(key))
+            this.branchPredicate.delete(key);
+        else
+            this.branchPredicate.set(key, value);
     }
 
     toggleCityPredicateParam = (key: string, value: boolean) => {
@@ -126,10 +138,10 @@ export default class InstitutionStore {
         let specialtiesPredicate = '';
         let citiesPredicate = '';
         this.specialtyPredicate.forEach((value, key: string) => {
-            if (key.length > 2)
-                specialtiesPredicate += `-${key}`
-            else
-                branchesPredicate += `-${key}`
+            specialtiesPredicate += `-${key}`
+        })
+        this.branchPredicate.forEach((value, key: string) => {
+            branchesPredicate += `-${key}`
         })
         this.citiesPredicate.forEach((value, key: string) => {
             citiesPredicate += `-${key}`

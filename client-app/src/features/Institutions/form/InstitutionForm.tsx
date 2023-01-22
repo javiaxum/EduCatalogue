@@ -13,6 +13,7 @@ import { router } from '../../routers/Routes';
 import InstitutionDetailsMenu from '../details/InstitutionDetailsMenu';
 import InstitutionDetailsSpecialtiesList from '../details/specialties/InstitutionDetailsSpecialtiesList';
 import InstitutionDetailsInfoForm from './InstitutionDetailsInfoForm';
+import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetailsReviewsList';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
@@ -67,8 +68,8 @@ export default observer(function InstitutionForm() {
                                 padding: '1em 3em 1em 3em',
                                 position: 'absolute',
                                 top: '12em',
-                                left: '5%',
-                                width: '90%',
+                                left: '15%',
+                                width: '70%',
                                 height: 'auto',
                                 color: 'white',
                                 borderRadius: '0px',
@@ -79,8 +80,7 @@ export default observer(function InstitutionForm() {
                                     <Item>
                                         <Item.Content>
                                             <Header
-                                                style={{ color: '#444', width: '60%', fontSize: '1rem' }}
-                                            >
+                                                style={{ color: '#444', width: '60%', fontSize: '1rem' }}>
                                                 <CustomTextInput placeholder='Name' name='name' />
                                             </Header>
                                             <Button.Group floated='right' style={{ minWidth: '10%', maxWidth: '30%' }} >
@@ -89,8 +89,7 @@ export default observer(function InstitutionForm() {
                                                     type='submit'
                                                     content='Submit'
                                                     loading={isSubmitting}
-                                                    disabled={!dirty || isSubmitting || !isValid}
-                                                />
+                                                    disabled={!dirty || isSubmitting || !isValid} />
                                                 <Button
                                                     as={Link}
                                                     to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
@@ -98,25 +97,23 @@ export default observer(function InstitutionForm() {
                                                     floated='right'
                                                     type='button'
                                                     content='Cancel'
-                                                    disabled={isSubmitting}
-                                                />
+                                                    disabled={isSubmitting} />
                                             </Button.Group>
-                                        </Item.Content>
-                                    </Item>
-                                    <Item>
-                                        <Item.Content>
-                                            <InstitutionDetailsMenu />
-                                            {detailsMenuActiveItem === 'About' &&
-                                                <InstitutionDetailsInfoForm />}
-                                            {detailsMenuActiveItem === 'Specialties' &&
-                                                <InstitutionDetailsSpecialtiesList />}
                                         </Item.Content>
                                     </Item>
                                 </Item.Group>
                             </Segment>
                         </Grid.Column>
+                        <Grid.Column style={{width: '70%', left: '15%', top: '-20px'}}>
+                            <InstitutionDetailsMenu />
+                            {detailsMenuActiveItem === 'About' &&
+                                <InstitutionDetailsInfoForm />}
+                            {detailsMenuActiveItem === 'Specialties' &&
+                                <InstitutionDetailsSpecialtiesList />}
+                            {detailsMenuActiveItem === 'Reviews' &&
+                                <InstitutionDetailsReviewsList />}
+                        </Grid.Column>
                     </Grid>
-
                 </Form>
             )}
         </Formik>

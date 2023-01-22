@@ -6,8 +6,7 @@ body {
   overflow: auto;
 }
 
-.foot {
-  position: absolute;
+.footer {
   height: 70px;
   left: 0;
   bottom: 0;
@@ -23,7 +22,7 @@ body {
 } */
 
 .specialtyCard {
-  height: 150px !important;
+  height: 200px !important;
   width: 220px !important;
   color: '#444';
 }

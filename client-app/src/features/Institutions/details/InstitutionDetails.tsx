@@ -12,6 +12,7 @@ import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsS
 import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
+import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore } = useStore();
@@ -43,8 +44,8 @@ export default observer(function InstitutionDetails() {
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
                     top: '-4em',
-                    left: '5%',
-                    width: '90%',
+                    left: '15%',
+                    width: '70%',
                     height: 'auto',
                     color: 'white',
                     borderRadius: '0px',
@@ -70,17 +71,17 @@ export default observer(function InstitutionDetails() {
                                 />
                             </Item.Content>
                         </Item>
-                        <Item>
-                            <Item.Content>
-                                <InstitutionDetailsMenu />
-                                {detailsMenuActiveItem === 'About' &&
-                                    <InstitutionDetailsInfo institution={institution} />}
-                                {detailsMenuActiveItem === 'Specialties' &&
-                                    <InstitutionDetailsSpecialtiesList />}
-                            </Item.Content>
-                        </Item>
                     </Item.Group>
                 </Segment>
+            </Grid.Column>
+            <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
+                <InstitutionDetailsMenu />
+                {detailsMenuActiveItem === 'About' &&
+                    <InstitutionDetailsInfo institution={institution} />}
+                {detailsMenuActiveItem === 'Specialties' &&
+                    <InstitutionDetailsSpecialtiesList />}
+                {detailsMenuActiveItem === 'Reviews' &&
+                    <InstitutionDetailsReviewsList />}
             </Grid.Column>
         </Grid>
     )
