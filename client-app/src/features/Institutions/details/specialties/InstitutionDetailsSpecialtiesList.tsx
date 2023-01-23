@@ -10,18 +10,20 @@ import SpecialtyListItem from './SpecialtyListItem';
 export default observer(function InstitutionDetailsSpecialtiesList() {
     const { institutionStore, commonStore, specialtyStore } = useStore();
     const { getSpecialtyCore, getSpecialtyCoreISCEDString } = specialtyStore;
-    const { selectedInstitution, specialtyPredicate } = institutionStore;
+    const { selectedInstitution, specialtyPredicate, branchPredicate } = institutionStore;
     const { editMode } = commonStore;
 
     if (!selectedInstitution || !selectedInstitution.specialties) return <></>;
 
-    let filteredSpecialties = selectedInstitution.specialties.filter((x) => specialtyPredicate.size !== 0 || specialtyPredicate.has(x.localSpecialtyCode))
-
+    let filteredSpecialties = selectedInstitution.specialties.filter((x) =>
+        specialtyPredicate.size === 0
+        || specialtyPredicate.has(x.localSpecialtyCode)
+        || branchPredicate.has(x.localSpecialtyCode.slice(0, 2)));
     return (
         <Grid style={{ padding: '10px' }}>
             <Grid.Column width={12}>
                 <Grid >
-                    {filteredSpecialties.length == 0
+                    {filteredSpecialties.length === 0
                         ? <Segment style={{ color: '#444', width: '300px' }}>There are no specialties available...</Segment>
                         : (
                             <>
@@ -45,16 +47,5 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                 <SearchParamsList />
             </Grid.Column>
         </Grid>
-
-        //     <Segment as={Link} to={`/specialties/${specialty.id}`} className='specialtyCard' style={{ display: 'block', height: '240px' }}>
-        //     <Item>
-        //         <Item.Content>
-        //             <Item.Header>{specialtyCore.name.slice(0, 40)} {specialtyCore.name.length > 40 && '...'}</Item.Header>
-        //             <Item.Description>UA specialty code: {specialtyCore.id}</Item.Description>
-        //             <Item.Description>ISCED specialty code: {iscedCodeString}</Item.Description>
-        //             <Item.Description>{specialty.description.slice(0, 50)}</Item.Description>
-        //         </Item.Content>
-        //     </Item>
-        // </Segment>
     )
 })

@@ -36,6 +36,7 @@ export class InstitutionFormValues {
     titleImage: string = '';
     emblemImage: string = '';
     contactInformation: string = '';
+    reviews: Review[] = [];
 
     constructor(institution?: InstitutionFormValues) {
         if (institution) {
@@ -49,6 +50,7 @@ export class InstitutionFormValues {
             this.titleImage = institution.titleImage;
             this.emblemImage = institution.emblemImage;
             this.contactInformation = institution.contactInformation;
+            this.reviews = institution.reviews;
         }
     }
 }

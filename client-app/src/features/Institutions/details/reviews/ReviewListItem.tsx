@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Container, Grid, Icon, Image, Item } from 'semantic-ui-react';
@@ -31,7 +32,7 @@ export default function SpecialtyListItem({ review }: Props) {
                         ))}
                     </Grid.Column>
                     <Grid.Column width={3} floated='right'>
-                        {review.createdAt.toString().split('T')[0]}
+                        {format(review.createdAt, 'dd-MMM yyyy')}
                     </Grid.Column>
                 </Grid>
                 <Item.Description>{review.reviewMessage}</Item.Description>

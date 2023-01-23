@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { InstitutionFormValues } from '../../../app/models/institution';
+import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 import InstitutionDetailsInfoForm from '../form/InstitutionDetailsInfoForm';
 import InstitutionDetailsInfo from './InstitutionDetailsInfo';
@@ -17,7 +17,6 @@ import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsLi
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore } = useStore();
     const {
-        selectedInstitution: institution,
         loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
@@ -25,9 +24,10 @@ export default observer(function InstitutionDetails() {
     } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
+    const [institution, setInstituion] = useState<Institution>(new Institution());
 
     useEffect(() => {
-        if (id) loadInstitution(id);
+        if (id) loadInstitution(id).then((institution) => setInstituion(new Institution(institution)));
         setEditMode(false);
     }, [loadInstitution, id]);
 
@@ -81,7 +81,7 @@ export default observer(function InstitutionDetails() {
                 {detailsMenuActiveItem === 'Specialties' &&
                     <InstitutionDetailsSpecialtiesList />}
                 {detailsMenuActiveItem === 'Reviews' &&
-                    <InstitutionDetailsReviewsList />}
+                    <InstitutionDetailsReviewsList reviews={institution.reviews} />}
             </Grid.Column>
         </Grid>
     )

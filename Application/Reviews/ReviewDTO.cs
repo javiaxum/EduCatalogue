@@ -8,7 +8,7 @@ namespace Application.Reviews
 {
     public class ReviewDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ReviewMessage { get; set; }
         public int Rating { get; set; }

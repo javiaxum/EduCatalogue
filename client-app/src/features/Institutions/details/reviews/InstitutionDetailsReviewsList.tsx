@@ -1,26 +1,33 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Divider, Grid, Item, Segment } from 'semantic-ui-react';
+import { Review } from '../../../../app/models/review';
 import { useStore } from '../../../../app/stores/store';
 import SearchParamsList from '../../../Specialties/search/SearchParamsList';
 import ReviewListItem from './ReviewListItem';
 
-export default observer(function InstitutionDetailsSpecialtiesList() {
+interface Props {
+    reviews: Review[];
+}
+
+export default observer(function InstitutionDetailsSpecialtiesList({ reviews }: Props) {
     const { institutionStore, commonStore, specialtyStore } = useStore();
     const { getSpecialtyCore, getSpecialtyCoreISCEDString } = specialtyStore;
-    const { selectedInstitution, specialtyPredicate } = institutionStore;
+    const { specialtyPredicate } = institutionStore;
     const { editMode } = commonStore;
+
+    useEffect(() => {
+    })
 
     return (
         <Grid>
             <Grid.Column width={13}>
                 <Grid style={{ width: '100%', display: 'block', padding: '10px' }}>
                     <Item.Group divided>
-                        {selectedInstitution?.reviews.length === 0
-                            || !selectedInstitution?.reviews
+                        {reviews.length === 0
                             ? (<>{!editMode && <Segment style={{ color: '#444', width: '300px' }}>There are no specialties available...</Segment>}</>)
                             : (<>
-                                {selectedInstitution.reviews.map((review) => (
+                                {reviews.map((review) => (
                                     <ReviewListItem
                                         review={review}
                                         key={review.id} />

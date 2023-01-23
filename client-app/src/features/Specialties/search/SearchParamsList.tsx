@@ -31,7 +31,7 @@ export default observer(function SearchParamsList() {
         return !institutionStore.specialtyPredicate.has(a.id) ? !institutionStore.specialtyPredicate.has(b.id) ? 0 : 1 : !institutionStore.specialtyPredicate.has(b) ? -1 : 0;
     }
     function compareFnBr(a: Branch, b: Branch) {
-        return !institutionStore.branchPredicate.has(a.id) ? !institutionStore.specialtyPredicate.has(b.id) ? 0 : 1 : !institutionStore.specialtyPredicate.has(b) ? -1 : 0;
+        return !institutionStore.branchPredicate.has(a.id) ? !institutionStore.branchPredicate.has(b.id) ? 0 : 1 : !institutionStore.branchPredicate.has(b) ? -1 : 0;
     }
     return (
         <Grid style={{ padding: '0.4rem' }}>

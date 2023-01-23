@@ -82,6 +82,11 @@ export default class InstitutionStore {
         this.cityNameFilter = value;
     }
 
+    get specialtyAndBranchPredicates() {
+        return Array.from(this.specialtyPredicate.keys()).concat(Array.from(this.branchPredicate.keys()));
+    }
+
+
     get citiesByName() {
         return Array.from(this.cityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -160,6 +165,11 @@ export default class InstitutionStore {
     }
 
     private setInstitution = (institution: Institution) => {
+        institution.reviews.forEach((x) => {
+            x.createdAt = new Date(x.createdAt);
+
+        })
+        console.log(institution.reviews);
         this.institutionsRegistry.set(institution.id, institution);
     }
     private getInstitution = (id: string) => {
@@ -197,7 +207,7 @@ export default class InstitutionStore {
     loadInstitution = async (id: string) => {
         this.setLoading(true);
         let institution = this.institutionsRegistry.get(id);
-        if (institution && institution.specialties) {
+        if (institution && institution.specialties && institution.reviews) {
             this.selectedInstitution = institution;
             this.setLoadingInitial(false);
             this.setLoading(false);
