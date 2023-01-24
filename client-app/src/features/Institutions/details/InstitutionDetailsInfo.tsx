@@ -18,29 +18,48 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                                 <Icon size='large' color='blue' name='info' />
                             </Grid.Column>
                             <Grid.Column width={14}>
+                                Description:  
                                 <p>{institution.description}</p>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={1}>
+                                <Icon size='large' color='blue' name='graduation' />
+                            </Grid.Column>
+                            <Grid.Column width={5}>
+                                Student count: 
+                                {institution.studentCount}
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={1}>
                                 <Icon name='marker' size='large' color='blue' />
                             </Grid.Column>
-                            <Grid.Column width={3}>
-                                City:
-                                <span>  {institution.city}</span>
+                            <Grid.Column width={7}>
+                                City: 
+                                {institution.city}
                             </Grid.Column>
-                            <Grid.Column width={5}>
-                                Address:
-                                <span>  {institution.streetAddress}</span>
+                            <Grid.Column width={7}>
+                                Address: 
+                                {institution.streetAddress}
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={1}>
-                                <Icon name='chain' size='large' color='blue' />
+                                <Icon name='home' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={14}>
-                                Website:
+                                Homepage: 
                                 <a href={`https://${institution.siteURL}`} target="_blank">  {institution.siteURL}</a>
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={1}>
+                                <Icon name='phone' size='large' color='blue' />
+                            </Grid.Column>
+                            <Grid.Column width={14}>
+                                Contact information:
+                                {institution.contactInformation}
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

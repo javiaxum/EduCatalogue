@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
-import { sortingOptions } from '../../../app/common/options/sortingOptions';
+import { institutionSortingOptions } from '../../../app/common/options/institutionSortingOptions';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
@@ -24,7 +24,7 @@ export default observer(function InstitutionsList() {
             <Divider horizontal>
                 <Select
                     style={{ left: '0px' }}
-                    options={sortingOptions}
+                    options={institutionSortingOptions}
                     min={0}
                 />
             </Divider>

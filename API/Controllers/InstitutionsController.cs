@@ -54,9 +54,9 @@ namespace API.Controllers
         }
         [AllowAnonymous]
         [HttpGet("cities")]
-        public async Task<IActionResult> GetCities()
+        public async Task<IActionResult> GetCities([FromQuery] CitiesParams param)
         {
-            return HandleResult(await Mediator.Send(new ListCities.Query { }));
+            return HandleResult(await Mediator.Send(new ListCities.Query { Params = param }));
         }
         [AllowAnonymous]
         [HttpPost("{id}/specialties")]
@@ -67,6 +67,12 @@ namespace API.Controllers
                 Id = id,
                 Specialty = specialty
             }));
+        }
+        [AllowAnonymous]
+        [HttpPost("{id}/reviews")]
+        public async Task<ActionResult> CreateReview(Guid id, Review review)
+        {
+            return HandleResult(await Mediator.Send(new Application.Reviews.Create.Command { Id = id, Review = review }));
         }
     }
 }

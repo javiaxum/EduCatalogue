@@ -12,10 +12,11 @@ using Persistence;
 
 namespace Application.Institutions
 {
-    public class ListCities // List all cities containing at least a single university added to this site
+    public class ListCities
     {
         public class Query : IRequest<Result<List<CityDTO>>>
         {
+            public CitiesParams Params { get; set; }
         }
         public class Handler : IRequestHandler<Query, Result<List<CityDTO>>>
         {
@@ -30,13 +31,17 @@ namespace Application.Institutions
 
             public async Task<Result<List<CityDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var cities = await _context.Cities
+                var query = _context.Cities
                 .OrderBy(x => x.Name)
                 .ProjectTo<CityDTO>(_mapper.ConfigurationProvider)
-                .Where(x => x.InstitutionsCount != 0)
-                .ToListAsync(cancellationToken);
+                .AsQueryable();
+                
+                if (request.Params.hasInstitutionEntity)
+                    query = query.Where(x => x.InstitutionsCount != 0);
 
-                return Result<List<CityDTO>>.Success(cities);
+                var result = await query.ToListAsync(cancellationToken);
+
+                return Result<List<CityDTO>>.Success(result);
             }
         }
     }

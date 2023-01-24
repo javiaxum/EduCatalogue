@@ -692,10 +692,6 @@ namespace Persistence
                             },
                             new City
                             {
-                                Name = "Оріхів"
-                            },
-                            new City
-                            {
                                 Name = "Пологи"
                             },
                             new City

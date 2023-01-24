@@ -14,8 +14,9 @@ export default observer(function SearchParamsList() {
         specialtyPredicate,
         citiesPredicate,
         toggleSpecialtyPredicateParam,
+        toggleBranchPredicateParam,
         toggleCityPredicateParam,
-        citiesByName,
+        populatedCitiesByName: citiesByName,
         setCityNameFilter,
         cityNameFilter,
         maxPrice,
@@ -58,7 +59,7 @@ export default observer(function SearchParamsList() {
             <Header as='h4' content='Knowledge branch' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 {specialtyStore.branchesById.map((branch) => (
-                    <SearchParamItem code={branch.id} name={branch.name} key={branch.id} checked={specialtyPredicate.get(branch.id)} togglePredicateParam={toggleSpecialtyPredicateParam} />
+                    <SearchParamItem code={branch.id} name={branch.name} key={branch.id} checked={specialtyPredicate.get(branch.id)} togglePredicateParam={toggleBranchPredicateParam} />
                 ))}
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>
@@ -81,7 +82,7 @@ export default observer(function SearchParamsList() {
                     setCityNameFilter(d.value!);
                 }} />
             <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
-                {citiesByName.filter(city => cityNameFilter.length > 0 || city.name.toLocaleLowerCase().includes(cityNameFilter.toLocaleLowerCase())).map((city) => (
+                {citiesByName.filter(city => cityNameFilter.length === 0 || city.name.toLocaleLowerCase().includes(cityNameFilter.toLocaleLowerCase())).map((city) => (
                     <SearchParamItem code={city.name} key={city.name} checked={citiesPredicate.get(city.name)} togglePredicateParam={toggleCityPredicateParam} />
                 ))}
             </Grid.Column>

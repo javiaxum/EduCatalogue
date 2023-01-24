@@ -17,7 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading } = institutionStore;
+    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadAllCities } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -36,8 +36,9 @@ export default observer(function InstitutionForm() {
         else {
             setLoadingInitial(false);
         }
+        loadAllCities();
         setEditMode(true);
-    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode])
+    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadAllCities])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
         if (!institution.id) {
@@ -49,7 +50,7 @@ export default observer(function InstitutionForm() {
                 router.navigate(`/institutions/${institution.id}`));
         }
     }
-    if (loadingInitial || loading) return <LoadingComponent content='Loading institution form...' />
+    if (loadingInitial) return <LoadingComponent content='Loading institution form...' />
 
     return (
         <Formik
@@ -66,15 +67,15 @@ export default observer(function InstitutionForm() {
                             </Segment>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
-                                position: 'absolute',
-                                top: '12em',
+                                top: '-4em',
                                 left: '15%',
                                 width: '70%',
                                 height: 'auto',
                                 color: 'white',
                                 borderRadius: '0px',
                                 boxShadow: 'none',
-                                border: 'none'
+                                border: 'none',
+                                minWidth: '1000px'
                             }}>
                                 <Item.Group>
                                     <Item>
@@ -104,14 +105,14 @@ export default observer(function InstitutionForm() {
                                 </Item.Group>
                             </Segment>
                         </Grid.Column>
-                        <Grid.Column style={{width: '70%', left: '15%', top: '-20px'}}>
+                        <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                             <InstitutionDetailsMenu />
                             {detailsMenuActiveItem === 'About' &&
                                 <InstitutionDetailsInfoForm />}
                             {detailsMenuActiveItem === 'Specialties' &&
                                 <InstitutionDetailsSpecialtiesList />}
-                            {detailsMenuActiveItem === 'Reviews' &&
-                                <InstitutionDetailsReviewsList reviews={institution.reviews}/>}
+                            {/* {detailsMenuActiveItem === 'Reviews' &&
+                                <InstitutionDetailsReviewsList />} */}
                         </Grid.Column>
                     </Grid>
                 </Form>

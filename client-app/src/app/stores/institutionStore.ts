@@ -6,13 +6,16 @@ import { store } from "./store";
 import * as Yup from 'yup';
 import { Pagination, PagingParams } from "../models/pagination";
 import { City } from "../models/city";
+import { Review, ReviewFormValues } from "../models/review";
 
 export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
-    cityRegistry = new Map<string, City>();
+    populatedCityRegistry = new Map<string, City>();
+    allCityRegistry = new Map<string, City>();
     selectedInstitution: Institution | undefined = undefined;
     loading: boolean = false;
+    reviewForm: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
     pagination: Pagination | null = null;
@@ -70,6 +73,31 @@ export default class InstitutionStore {
         )
     }
 
+    setReviewForm = (state: boolean) => {
+        this.reviewForm = state;
+    }
+
+    createReview = async (review: ReviewFormValues, institutionId: string) => {
+        const user = store.userStore.user;
+        const author = new Profile(user!);
+        try {
+            await agent.Reviews.create(institutionId, review);
+            const newReview = new Review(review);
+            newReview.author = author;
+            newReview.createdAt = new Date();
+            this.setReview(institutionId, newReview);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    setReview = (institutionId: string, review: Review) => {
+        let institution = this.institutionsRegistry.get(institutionId);
+        institution?.reviews.push(review);
+        this.institutionsRegistry.set(institutionId, institution!);
+        this.selectedInstitution?.reviews.push(review);
+    }
+
     setMaxPrice = (value: string) => {
         this.maxPrice = value;
     }
@@ -87,21 +115,46 @@ export default class InstitutionStore {
     }
 
 
-    get citiesByName() {
-        return Array.from(this.cityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    get populatedCitiesByName() {
+        return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+    get allCitiesByName() {
+        return Array.from(this.allCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
 
-    loadCities = async () => {
+    loadCitiesWithInstitutions = async () => {
         this.setLoading(true);
         try {
-            const cities = await agent.Institutions.listCities();
+            const params = new URLSearchParams();
+            params.append('hasInstitutionEntity', 'true');
+            const populatedCities = await agent.Institutions.listCities(params);
             runInAction(() => {
-                cities.forEach(city => {
-                    this.cityRegistry.set(city.id, city)
+                populatedCities.forEach(city => {
+                    this.populatedCityRegistry.set(city.id, city)
                 });
             })
             this.setLoadingInitial(false);
             this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+
+    }
+
+    loadAllCities = async () => {
+        this.setLoading(true);
+        try {
+            const cities = await agent.Institutions.listCities(new URLSearchParams());
+            runInAction(() => {
+                cities.forEach(city => {
+                    this.allCityRegistry.set(city.id, city)
+                });
+            })
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+            return cities;
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
@@ -169,7 +222,6 @@ export default class InstitutionStore {
             x.createdAt = new Date(x.createdAt);
 
         })
-        console.log(institution.reviews);
         this.institutionsRegistry.set(institution.id, institution);
     }
     private getInstitution = (id: string) => {
@@ -217,6 +269,7 @@ export default class InstitutionStore {
             try {
                 const institution = await agent.Institutions.details(id);
                 runInAction(() => {
+                    console.log(institution.reviews)
                     this.selectedInstitution = institution;
                 })
                 this.setInstitution(institution);

@@ -20,20 +20,21 @@ export default observer(function InstitutionDetails() {
         loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
-        loading
-    } = institutionStore;
+        loading,
+        selectedInstitution } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
-    const [institution, setInstituion] = useState<Institution>(new Institution());
+    // const [institution, setInstitution] = useState<Institution>(new Institution());
 
     useEffect(() => {
-        if (id) loadInstitution(id).then((institution) => setInstituion(new Institution(institution)));
+        if (id) loadInstitution(id);
+        // .then((institution) => setInstitution(new Institution(institution)));
         setEditMode(false);
     }, [loadInstitution, id]);
 
 
     if (loadingInitial || loading) return <LoadingComponent />
-    if (!institution) return (<></>);
+    if (!selectedInstitution) return (<></>);
 
     return (
         <Grid>
@@ -58,13 +59,13 @@ export default observer(function InstitutionDetails() {
                             <Item.Content>
                                 <Header
                                     size='huge'
-                                    content={institution.name}
+                                    content={selectedInstitution.name}
                                     style={{ color: '#444' }}
                                 />
                                 <Button
                                     onClick={() => setEditMode(!editMode)}
                                     as={Link}
-                                    to={`/manage/${institution.id}`}
+                                    to={`/manage/${selectedInstitution.id}`}
                                     floated='right'
                                     style={{ width: '12rem' }}
                                     content={'Manage Institution'}
@@ -77,11 +78,11 @@ export default observer(function InstitutionDetails() {
             <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
-                    <InstitutionDetailsInfo institution={institution} />}
+                    <InstitutionDetailsInfo institution={selectedInstitution} />}
                 {detailsMenuActiveItem === 'Specialties' &&
                     <InstitutionDetailsSpecialtiesList />}
-                {detailsMenuActiveItem === 'Reviews' &&
-                    <InstitutionDetailsReviewsList reviews={institution.reviews} />}
+                {/* {detailsMenuActiveItem === 'Reviews' && selectedInstitution.reviews &&
+                    <InstitutionDetailsReviewsList />} */}
             </Grid.Column>
         </Grid>
     )

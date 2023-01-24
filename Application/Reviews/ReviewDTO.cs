@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Profiles;
 using Domain;
 
 namespace Application.Reviews
@@ -12,8 +13,6 @@ namespace Application.Reviews
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ReviewMessage { get; set; }
         public int Rating { get; set; }
-        public string DisplayName { get; set; }
-        public string Username { get; set; }
-        public string Image { get; set; }
+        public Profile Author { get; set; }
     }
 }

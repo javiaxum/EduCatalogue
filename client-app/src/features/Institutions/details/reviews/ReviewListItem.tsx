@@ -23,13 +23,11 @@ export default function SpecialtyListItem({ review }: Props) {
         <Item style={{ minHeight: '90px', width: '700px', color: '#444' }}>
             <Item.Content>
                 <Grid>
-                    <Grid.Column width={3} style={{}}>
-                        <Item.Header as='h5'><Image src={review.image || '/assets/user.png'} avatar spaced='right' />{review.displayName}</Item.Header>
+                    <Grid.Column style={{minWidth: '200px'}}>
+                        <Item.Header as='h5'><Image src={review.author.image || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
                     </Grid.Column>
                     <Grid.Column width={3}>
-                        {elements.map(element => (
-                            element
-                        ))}
+                        {elements}
                     </Grid.Column>
                     <Grid.Column width={3} floated='right'>
                         {format(review.createdAt, 'dd-MMM yyyy')}

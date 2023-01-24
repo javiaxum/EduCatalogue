@@ -5,6 +5,7 @@ import { Branch } from "../models/branch";
 import { City } from "../models/city";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { PaginatedResult } from "../models/pagination";
+import { ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
 import { User, UserFormValues } from "../models/user";
@@ -85,7 +86,11 @@ const Institutions = {
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
-    listCities: () => requests.get<City[]>("/institutions/cities"),
+    listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", {params}).then(responseBody),
+}
+
+const Reviews = {
+    create: (institutionId: string, review: ReviewFormValues) => requests.post<void>(`/institutions/${institutionId}/reviews`, review),
 }
 
 const Specialties = {
@@ -106,7 +111,8 @@ const Account = {
 const agent = {
     Institutions,
     Account,
-    Specialties
+    Specialties,
+    Reviews,
 }
 
 export default agent;

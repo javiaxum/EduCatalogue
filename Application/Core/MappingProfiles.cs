@@ -47,14 +47,13 @@ namespace Application.Core
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()
             .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores));
 
-            CreateMap<ISCEDCore, ISCEDCoreDTO>()
-            .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
-            .ForMember(d => d.Name, o => o.MapFrom(s => s.Name));
+            CreateMap<ISCEDCore, ISCEDCoreDTO>();
 
-            CreateMap<Review, ReviewDTO>()
-            .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Author.DisplayName))
-            .ForMember(d => d.Username, o => o.MapFrom(s => s.Author.UserName))
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Author.Image));
+            CreateMap<Review, ReviewDTO>();
+            CreateMap<AppUser, Application.Profiles.Profile>()
+            .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
+            .ForMember(d => d.Username, o => o.MapFrom(s => s.UserName))
+            .ForMember(d => d.Image, o => o.MapFrom(s => s.Image));
 
             CreateMap<Branch, Branch>();
 

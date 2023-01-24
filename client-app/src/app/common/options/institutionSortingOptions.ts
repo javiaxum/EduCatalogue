@@ -1,4 +1,4 @@
-export const sortingOptions = [
+export const institutionSortingOptions = [
     {text: "A-Z", value: "A-Z"},
     {text: "Z-A", value: "Z-A"},
     {text: "Highest rating", value: "Highest rating"},

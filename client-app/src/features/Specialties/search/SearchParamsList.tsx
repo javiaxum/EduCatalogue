@@ -18,7 +18,7 @@ export default observer(function SearchParamsList() {
         toggleSpecialtyPredicateParam,
         toggleCityPredicateParam,
         toggleBranchPredicateParam,
-        citiesByName,
+        populatedCitiesByName: citiesByName,
         setCityNameFilter,
         cityNameFilter,
         maxPrice,

@@ -19,7 +19,7 @@ export default function CustomSelectInput(props: Props) {
                 value={field.value || null}
                 onChange={(e, d) => { helpers.setValue(d.value) }}
                 onBlur={() => helpers.setTouched(true)}
-                placeholder={props.placeholder}
+                placeholder={field.value || props.placeholder}
                 style={{height: 'auto', minHeight: 'auto', padding: '.4rem 1.2rem .4rem .4rem'}}
             />
             {meta.touched && meta.error ? (
