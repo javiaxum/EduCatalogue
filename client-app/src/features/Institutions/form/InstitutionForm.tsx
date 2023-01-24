@@ -111,8 +111,8 @@ export default observer(function InstitutionForm() {
                                 <InstitutionDetailsInfoForm />}
                             {detailsMenuActiveItem === 'Specialties' &&
                                 <InstitutionDetailsSpecialtiesList />}
-                            {/* {detailsMenuActiveItem === 'Reviews' &&
-                                <InstitutionDetailsReviewsList />} */}
+                            {detailsMenuActiveItem === 'Reviews' &&
+                                <InstitutionDetailsReviewsList />}
                         </Grid.Column>
                     </Grid>
                 </Form>

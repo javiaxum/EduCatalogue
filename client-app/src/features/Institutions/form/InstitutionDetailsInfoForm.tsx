@@ -70,6 +70,9 @@ export default observer(function InstitutionDetailsInfoForm() {
                 </Grid>
             </Grid.Column>
             <Grid.Column width={6}>
+                <Button style={{position: 'absolute', opacity: '90%', height: '4rem', top: '19em', zIndex: '1000' }}>
+                    <Icon name='image' style={{padding: '0', margin: '0'}}/>
+                </Button>
                 <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
             </Grid.Column>
         </Grid>

@@ -33,7 +33,7 @@ export default observer(function InstitutionDetails() {
     }, [loadInstitution, id]);
 
 
-    if (loadingInitial || loading) return <LoadingComponent />
+    if (loadingInitial) return <LoadingComponent />
     if (!selectedInstitution) return (<></>);
 
     return (
@@ -78,11 +78,11 @@ export default observer(function InstitutionDetails() {
             <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
-                    <InstitutionDetailsInfo institution={selectedInstitution} />}
+                <InstitutionDetailsInfo institution={selectedInstitution} />}
                 {detailsMenuActiveItem === 'Specialties' &&
                     <InstitutionDetailsSpecialtiesList />}
-                {/* {detailsMenuActiveItem === 'Reviews' && selectedInstitution.reviews &&
-                    <InstitutionDetailsReviewsList />} */}
+                {detailsMenuActiveItem === 'Reviews' && selectedInstitution.reviews &&
+                    <InstitutionDetailsReviewsList />}
             </Grid.Column>
         </Grid>
     )

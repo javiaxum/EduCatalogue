@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
 import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 
 interface Props {
@@ -18,7 +18,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                                 <Icon size='large' color='blue' name='info' />
                             </Grid.Column>
                             <Grid.Column width={14}>
-                                Description:  
+                                Description:
                                 <p>{institution.description}</p>
                             </Grid.Column>
                         </Grid.Row>
@@ -27,7 +27,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                                 <Icon size='large' color='blue' name='graduation' />
                             </Grid.Column>
                             <Grid.Column width={5}>
-                                Student count: 
+                                Student count:
                                 {institution.studentCount}
                             </Grid.Column>
                         </Grid.Row>
@@ -36,11 +36,11 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                                 <Icon name='marker' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={7}>
-                                City: 
+                                City:
                                 {institution.city}
                             </Grid.Column>
                             <Grid.Column width={7}>
-                                Address: 
+                                Address:
                                 {institution.streetAddress}
                             </Grid.Column>
                         </Grid.Row>
@@ -49,7 +49,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                                 <Icon name='home' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={14}>
-                                Homepage: 
+                                Homepage:
                                 <a href={`https://${institution.siteURL}`} target="_blank">  {institution.siteURL}</a>
                             </Grid.Column>
                         </Grid.Row>
@@ -65,7 +65,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                     </Grid>
                 </Grid.Column>
                 <Grid.Column width={6}>
-                    <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
+                        <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
                 </Grid.Column>
             </Grid>
         </>

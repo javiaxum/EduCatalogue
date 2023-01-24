@@ -24,7 +24,7 @@ export default class SpecialtyStore {
             .map(element => ({ text: `${element.id} ${element.name}`, value: element.id }))
             .sort((a, b) => a.text.localeCompare(b.text))
     }
-    get specialtyCoresByName() {
+    get specialtyCoresById() {
         return Array.from(this.specialtyCoreRegistry.values())
             .map(element => (element))
             .sort((a, b) => a.id.localeCompare(b.id))

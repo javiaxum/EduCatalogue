@@ -16,16 +16,11 @@ export default observer(function SearchParamsList() {
         branchPredicate,
         citiesPredicate,
         toggleSpecialtyPredicateParam,
-        toggleCityPredicateParam,
         toggleBranchPredicateParam,
-        populatedCitiesByName: citiesByName,
-        setCityNameFilter,
-        cityNameFilter,
         maxPrice,
         minPrice,
         setMaxPrice,
-        setMinPrice,
-        pagination } = institutionStore;
+        setMinPrice } = institutionStore;
 
     function compareFnSC(a: SpecialtyCore, b: SpecialtyCore) {
         return !institutionStore.specialtyPredicate.has(a.id) ? !institutionStore.specialtyPredicate.has(b.id) ? 0 : 1 : !institutionStore.specialtyPredicate.has(b) ? -1 : 0;
@@ -63,7 +58,12 @@ export default observer(function SearchParamsList() {
             <Header as='h4' content='Knowledge branch' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 {specialtyStore.branchesById.sort(compareFnBr).map((branch) => (
-                    <SearchParamItem code={branch.id} name={branch.name} key={branch.id} checked={branchPredicate.get(branch.id)} togglePredicateParam={toggleBranchPredicateParam} />
+                    <SearchParamItem
+                        id={branch.id}
+                        name={`${branch.id} ${branch.name}`}
+                        key={branch.id}
+                        checked={branchPredicate.get(branch.id)}
+                        togglePredicateParam={toggleBranchPredicateParam} />
                 ))}
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>
@@ -71,8 +71,13 @@ export default observer(function SearchParamsList() {
             </Grid.Column>
             <Header as='h4' content='Specialties' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
-                {specialtyStore.specialtyCoresByName.sort(compareFnSC).map((specialtyCore) => (
-                    <SearchParamItem code={specialtyCore.id} name={specialtyCore.name} key={specialtyCore.id} checked={specialtyPredicate.get(specialtyCore.id)} togglePredicateParam={toggleSpecialtyPredicateParam} />
+                {specialtyStore.specialtyCoresById.sort(compareFnSC).map((specialtyCore) => (
+                    <SearchParamItem
+                        id={specialtyCore.id}
+                        name={`${specialtyCore.id} ${specialtyCore.name}`}
+                        key={specialtyCore.id}
+                        checked={specialtyPredicate.get(specialtyCore.id)}
+                        togglePredicateParam={toggleSpecialtyPredicateParam} />
                 ))}
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>

@@ -269,6 +269,9 @@ export default class InstitutionStore {
             try {
                 const institution = await agent.Institutions.details(id);
                 runInAction(() => {
+                    institution.reviews.forEach((x) => {
+                        x.createdAt = new Date(x.createdAt);
+                    })
                     console.log(institution.reviews)
                     this.selectedInstitution = institution;
                 })

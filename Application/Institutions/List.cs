@@ -43,7 +43,7 @@ namespace Application.Institutions
                 }
                 if (!String.IsNullOrEmpty(request.Params.CitiesPredicate))
                 {
-                    query = query.Where(x => request.Params.CitiesPredicate.Contains(x.City.Name));
+                    query = query.Where(x => request.Params.CitiesPredicate.Contains(x.City.Id.ToString()));
                 }
                 if (!String.IsNullOrEmpty(request.Params.MinPrice))
                 {

@@ -15,10 +15,16 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
 
     if (!selectedInstitution || !selectedInstitution.specialties) return <></>;
 
-    let filteredSpecialties = selectedInstitution.specialties.filter((x) =>
-        specialtyPredicate.size === 0
-        || specialtyPredicate.has(x.localSpecialtyCode)
-        || branchPredicate.has(x.localSpecialtyCode.slice(0, 2)));
+
+    let filteredSpecialties = selectedInstitution.specialties;
+    if (branchPredicate.size !== 0)
+        filteredSpecialties = filteredSpecialties.filter((x) =>
+            branchPredicate.has(x.localSpecialtyCode.slice(0, 2)));
+    if (specialtyPredicate.size !== 0)
+        filteredSpecialties = filteredSpecialties.filter((x) =>
+            specialtyPredicate.has(x.localSpecialtyCode));
+
+
     return (
         <Grid style={{ padding: '10px' }}>
             <Grid.Column width={12}>
