@@ -58,7 +58,7 @@ export default observer(function InstitutionDetailsInfoForm() {
                             City:
                             <CustomSelectInput
                                 disabled={selectedRegionId == undefined}
-                                placeholder='Choose city'
+                                placeholder={ selectedInstituionRegion?.cities.find((x) => x.id == selectedInstitution.cityId)?.name || 'Choose city'}
                                 name='city'
                                 options={regionRegistry.find((x) => x.id === selectedRegionId)?.cities.map(element => ({ text: `${element.name}`, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text))} />

@@ -16,6 +16,8 @@ export default observer(function InstitutionDetailsInfo() {
         selectedInstitution: institution } = institutionStore;
 
     if (!institution || !regionRegistry) return <></>
+
+    const 
         
     return (
         <>
@@ -46,7 +48,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 City:
-                                {Array.from(regionRegistry.values()).flat().find((x) => x.id == institution.cityId.toLocaleLowerCase())?.name}
+                                {regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()))?.name}
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 Address:
