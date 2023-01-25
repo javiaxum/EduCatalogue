@@ -1,13 +1,22 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
 import { Institution, InstitutionFormValues } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    institution: Institution;
-}
+export default observer(function InstitutionDetailsInfo() {
 
-export default function InstitutionDetailsInfo({ institution }: Props) {
+    const { institutionStore, commonStore } = useStore();
+    const {
+        loadingInitial,
+        loadInstitution,
+        detailsMenuActiveItem,
+        regionRegistry,
+        selectedInstitution: institution } = institutionStore;
+
+    if (!institution || !regionRegistry) return <></>
+        
     return (
         <>
             <Grid>
@@ -37,7 +46,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 City:
-                                {institution.cityId}
+                                {Array.from(regionRegistry.values()).flat().find((x) => x.id == institution.cityId.toLocaleLowerCase())?.name}
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 Address:
@@ -65,9 +74,9 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                     </Grid>
                 </Grid.Column>
                 <Grid.Column width={6}>
-                        <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
+                    <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
                 </Grid.Column>
             </Grid>
         </>
     )
-}
+})

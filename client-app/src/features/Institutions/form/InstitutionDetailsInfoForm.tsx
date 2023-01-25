@@ -8,7 +8,13 @@ import { useStore } from '../../../app/stores/store';
 
 export default observer(function InstitutionDetailsInfoForm() {
     const { institutionStore } = useStore();
-    const { allRegionsByName, regionRegistry, setSelectedRegion, selectedRegionId } = institutionStore;
+    const { regionRegistry, setSelectedRegion, selectedRegionId, selectedInstitution } = institutionStore;
+
+    if (!selectedInstitution) return <></>;
+
+    const selectedInstituionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id == selectedInstitution.cityId.toLocaleLowerCase()));
+
+    if (selectedInstituionRegion) setSelectedRegion(selectedInstituionRegion.id)
 
     return (
         <Grid>
@@ -42,18 +48,19 @@ export default observer(function InstitutionDetailsInfoForm() {
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                     setSelectedRegion(data.value as string);
                                 }}
-                                placeholder='Region'
+                                placeholder={selectedInstituionRegion?.name || 'Select region'}
+                                value={regionRegistry.find((x) => x.cities.find((x) => x.id == selectedInstitution.cityId.toLocaleLowerCase()))}
                                 name='region'
-                                options={allRegionsByName.sort((a, b) => a.localeCompare(b)).map(element => ({ text: `${element}`, value: element }))
+                                options={regionRegistry.map(element => ({ text: `${element.name}`, value: element.id }))
                                 } />
                         </Grid.Column>
                         <Grid.Column width={5}>
                             City:
                             <CustomSelectInput
                                 disabled={selectedRegionId == undefined}
-                                placeholder='City'
+                                placeholder='Choose city'
                                 name='city'
-                                options={regionRegistry.get(selectedRegionId!)?.map(element => ({ text: `${element.name}`, value: element.id }))
+                                options={regionRegistry.find((x) => x.id === selectedRegionId)?.cities.map(element => ({ text: `${element.name}`, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text))} />
                         </Grid.Column>
                         <Grid.Column width={5}>

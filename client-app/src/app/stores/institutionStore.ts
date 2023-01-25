@@ -13,7 +13,7 @@ export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
     populatedCityRegistry = new Map<string, City>();
-    regionRegistry = new Map<string, City[]>();
+    regionRegistry = new Array<Region>();
     selectedInstitution: Institution | undefined = undefined;
     selectedRegionId: string | undefined = undefined;
     loading: boolean = false;
@@ -78,7 +78,7 @@ export default class InstitutionStore {
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }
-    setSelectedRegion = (selectedRegionId: string) => {
+    setSelectedRegion = (selectedRegionId: string | undefined) => {
         this.selectedRegionId = selectedRegionId;
     }
 
@@ -123,9 +123,9 @@ export default class InstitutionStore {
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
-    get allRegionsByName() {
-        return Array.from(this.regionRegistry.keys()).sort((a, b) => a.localeCompare(b));
-    }
+    // get allRegionsByName() {
+    //     return this.regionRegistry.sort((a, b) => a.name.localeCompare(b.name));
+    // }
 
     loadCitiesWithInstitutions = async () => {
         this.setLoading(true);
@@ -153,13 +153,10 @@ export default class InstitutionStore {
         try {
             const regions = await agent.Institutions.listRegions();
             runInAction(() => {
-                regions.forEach(region => {
-                    this.regionRegistry.set(region.name, region.cities)
-                });
+                this.regionRegistry = regions;
             })
             this.setLoadingInitial(false);
             this.setLoading(false);
-            return regions;
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);

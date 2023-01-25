@@ -17,7 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities: loadAllCities } = institutionStore;
+    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities} = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -39,9 +39,8 @@ export default observer(function InstitutionForm() {
         else {
             setLoadingInitial(false);
         }
-        loadAllCities();
         setEditMode(true);
-    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadAllCities])
+    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
         if (!institution.id) {

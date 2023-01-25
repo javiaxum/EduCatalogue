@@ -17,7 +17,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     const [selectedRating, setSelectedRating] = useState<number | undefined>(undefined);
     const [sorting, setSorting] = useState<string>(reviewSortingOptions[0].text);
 
-    if(!selectedInstitution) return <></>
+    if(!selectedInstitution || !selectedInstitution.reviews) return <></>
 
     let buttons = [];
     for (let i = 1; i <= 5; i++) {

@@ -78,10 +78,10 @@ export default observer(function InstitutionDetails() {
             <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
-                <InstitutionDetailsInfo institution={selectedInstitution} />}
+                <InstitutionDetailsInfo />}
                 {detailsMenuActiveItem === 'Specialties' &&
                     <InstitutionDetailsSpecialtiesList />}
-                {detailsMenuActiveItem === 'Reviews' && selectedInstitution.reviews &&
+                {detailsMenuActiveItem === 'Reviews' &&
                     <InstitutionDetailsReviewsList />}
             </Grid.Column>
         </Grid>
