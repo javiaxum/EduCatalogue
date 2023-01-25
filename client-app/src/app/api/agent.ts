@@ -5,6 +5,7 @@ import { Branch } from "../models/branch";
 import { City } from "../models/city";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { PaginatedResult } from "../models/pagination";
+import { Region } from "../models/region";
 import { ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
@@ -87,6 +88,7 @@ const Institutions = {
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
     listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", {params}).then(responseBody),
+    listRegions: () => requests.get<Region[]>("/institutions/regions"),
 }
 
 const Reviews = {

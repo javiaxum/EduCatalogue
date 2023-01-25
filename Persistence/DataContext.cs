@@ -24,7 +24,7 @@ namespace Persistence
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<City> Cities { get; set; }
-        public DbSet<Region> States { get; set; }
+        public DbSet<Region> Regions { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -17,7 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadAllCities } = institutionStore;
+    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities: loadAllCities } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -26,8 +26,11 @@ export default observer(function InstitutionForm() {
     const validationSchema = Yup.object({
         name: Yup.string().required('Institution name is required'),
         description: Yup.string().required('Institution description is required'),
-        address: Yup.string().required(),
+        streetAddress: Yup.string().required(),
         siteURL: Yup.string().required(),
+        region: Yup.string().required(),
+        city: Yup.string().required(),
+        contactInformation: Yup.string().required(),
     })
 
     useEffect(() => {
@@ -64,6 +67,7 @@ export default observer(function InstitutionForm() {
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                                 <Image src={'/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover' }} />
+                                
                             </Segment>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',

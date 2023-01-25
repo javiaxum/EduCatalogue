@@ -74,5 +74,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Reviews.Create.Command { Id = id, Review = review }));
         }
+        [AllowAnonymous]
+        [HttpGet("regions")]
+        public async Task<IActionResult> GetRegions()
+        {
+            return HandleResult(await Mediator.Send(new ListRegions.Query { }));
+        }
     }
 }

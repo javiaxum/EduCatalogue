@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import { Button, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
+import { Button, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
@@ -8,7 +8,7 @@ import { useStore } from '../../../app/stores/store';
 
 export default observer(function InstitutionDetailsInfoForm() {
     const { institutionStore } = useStore();
-    const { cityNameFilter, allCitiesByName: citiesByName, setCityNameFilter, loadAllCities } = institutionStore;
+    const { allRegionsByName, regionRegistry, setSelectedRegion, selectedRegionId } = institutionStore;
 
     return (
         <Grid>
@@ -36,15 +36,27 @@ export default observer(function InstitutionDetailsInfoForm() {
                         <Grid.Column width={1}>
                             <Icon name='marker' size='large' color='blue' />
                         </Grid.Column>
-                        <Grid.Column width={7}>
+                        <Grid.Column width={5}>
+                            Region:
+                            <CustomSelectInput
+                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+                                    setSelectedRegion(data.value as string);
+                                }}
+                                placeholder='Region'
+                                name='region'
+                                options={allRegionsByName.sort((a, b) => a.localeCompare(b)).map(element => ({ text: `${element}`, value: element }))
+                                } />
+                        </Grid.Column>
+                        <Grid.Column width={5}>
                             City:
                             <CustomSelectInput
+                                disabled={selectedRegionId == undefined}
                                 placeholder='City'
                                 name='city'
-                                options={citiesByName.map(element => ({ text: `${element.name}`, value: element.name }))
+                                options={regionRegistry.get(selectedRegionId!)?.map(element => ({ text: `${element.name}`, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text))} />
                         </Grid.Column>
-                        <Grid.Column width={7}>
+                        <Grid.Column width={5}>
                             Address:
                             <CustomTextInput placeholder='Address' name='streetAddress' />
                         </Grid.Column>
@@ -70,8 +82,8 @@ export default observer(function InstitutionDetailsInfoForm() {
                 </Grid>
             </Grid.Column>
             <Grid.Column width={6}>
-                <Button style={{position: 'absolute', opacity: '90%', height: '4rem', top: '19em', zIndex: '1000' }}>
-                    <Icon name='image' style={{padding: '0', margin: '0'}}/>
+                <Button style={{ position: 'absolute', opacity: '90%', height: '4rem', top: '19em', zIndex: '1000' }}>
+                    <Icon name='image' style={{ padding: '0', margin: '0' }} />
                 </Button>
                 <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
             </Grid.Column>

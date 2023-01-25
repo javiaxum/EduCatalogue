@@ -13,7 +13,7 @@ namespace Persistence
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
             // Seed states with cities
-            if (!context.States.Any())
+            if (!context.Regions.Any())
             {
                 var states = new List<Region>
                 {
@@ -2055,7 +2055,7 @@ namespace Persistence
                         }
                     },
                 };
-                await context.States.AddRangeAsync(states);
+                await context.Regions.AddRangeAsync(states);
                 await context.SaveChangesAsync();
             }
             // Seed localbranches

@@ -7,13 +7,15 @@ import * as Yup from 'yup';
 import { Pagination, PagingParams } from "../models/pagination";
 import { City } from "../models/city";
 import { Review, ReviewFormValues } from "../models/review";
+import { Region } from "../models/region";
 
 export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
     populatedCityRegistry = new Map<string, City>();
-    allCityRegistry = new Map<string, City>();
+    regionRegistry = new Map<string, City[]>();
     selectedInstitution: Institution | undefined = undefined;
+    selectedRegionId: string | undefined = undefined;
     loading: boolean = false;
     reviewForm: boolean = false;
     loadingInitial: boolean = true;
@@ -76,6 +78,9 @@ export default class InstitutionStore {
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }
+    setSelectedRegion = (selectedRegionId: string) => {
+        this.selectedRegionId = selectedRegionId;
+    }
 
     createReview = async (review: ReviewFormValues, institutionId: string) => {
         const user = store.userStore.user;
@@ -118,8 +123,8 @@ export default class InstitutionStore {
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
-    get allCitiesByName() {
-        return Array.from(this.allCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    get allRegionsByName() {
+        return Array.from(this.regionRegistry.keys()).sort((a, b) => a.localeCompare(b));
     }
 
     loadCitiesWithInstitutions = async () => {
@@ -143,18 +148,18 @@ export default class InstitutionStore {
 
     }
 
-    loadAllCities = async () => {
+    loadRegionsWithCities = async () => {
         this.setLoading(true);
         try {
-            const cities = await agent.Institutions.listCities(new URLSearchParams());
+            const regions = await agent.Institutions.listRegions();
             runInAction(() => {
-                cities.forEach(city => {
-                    this.allCityRegistry.set(city.id, city)
+                regions.forEach(region => {
+                    this.regionRegistry.set(region.name, region.cities)
                 });
             })
             this.setLoadingInitial(false);
             this.setLoading(false);
-            return cities;
+            return regions;
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);

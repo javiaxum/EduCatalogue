@@ -22,7 +22,7 @@ namespace Application.Core
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
 
             CreateMap<Institution, InstitutionDetailedDTO>()
-            .ForMember(d => d.City, o => o.MapFrom(s => s.City.Name));
+            .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id));
 
             CreateMap<AppUserInstitution, Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
@@ -32,6 +32,7 @@ namespace Application.Core
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
+            .ForMember(d => d.ISCEDcores, o => o.MapFrom(s => s.SpecialtyCore.ISCEDCores))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<Specialty, SpecialtyComponentsDTO>()
@@ -43,13 +44,13 @@ namespace Application.Core
             .ForMember(d => d.ESCTSCredits, o => o.MapFrom(s => s.ESCTSCredits))
             .ForMember(d => d.isOptional, o => o.MapFrom(s => s.isOptional));
 
-
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()
             .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores));
 
             CreateMap<ISCEDCore, ISCEDCoreDTO>();
 
             CreateMap<Review, ReviewDTO>();
+
             CreateMap<AppUser, Application.Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.UserName))
@@ -58,7 +59,10 @@ namespace Application.Core
             CreateMap<Branch, Branch>();
 
             CreateMap<City, CityDTO>()
+            .ForMember(d => d.RegionId, o => o.MapFrom(s => s.Region.Id))
             .ForMember(d => d.InstitutionsCount, o => o.MapFrom(s => s.Institution.Count()));
+
+            CreateMap<Region, RegionDTO>();
         }
     }
 }

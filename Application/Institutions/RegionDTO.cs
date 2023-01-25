@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Institutions;
 
-namespace Domain
+namespace Application.Institutions
 {
-    public class City
+    public class RegionDTO
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public Region Region { get; set; }        
-        public ICollection<Institution> Institution { get; set; } = new List<Institution>();
+        public ICollection<CityDTO> Cities { get; set; }
     }
 }

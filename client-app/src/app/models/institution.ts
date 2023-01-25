@@ -8,7 +8,7 @@ export interface Institution {
     name: string;
     description: string;
     studentCount: number;
-    city: string;
+    cityId: string;
     streetAddress: string;
     siteURL: string;
     titleImage: string;
@@ -30,7 +30,7 @@ export class InstitutionFormValues {
     name: string = '';
     description: string = '';
     studentCount: number = 0;
-    city: string = '';
+    cityId: string = '';
     streetAddress: string = '';
     siteURL: string = '';
     titleImage: string = '';
@@ -43,7 +43,7 @@ export class InstitutionFormValues {
             this.name = institution.name;
             this.description = institution.description;
             this.studentCount = institution.studentCount;
-            this.city = institution.city;
+            this.cityId = institution.cityId;
             this.streetAddress = institution.streetAddress;
             this.siteURL = institution.siteURL;
             this.titleImage = institution.titleImage;

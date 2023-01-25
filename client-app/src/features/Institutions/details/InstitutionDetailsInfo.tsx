@@ -37,7 +37,7 @@ export default function InstitutionDetailsInfo({ institution }: Props) {
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 City:
-                                {institution.city}
+                                {institution.cityId}
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 Address:
