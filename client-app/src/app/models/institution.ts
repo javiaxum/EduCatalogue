@@ -29,7 +29,7 @@ export class InstitutionFormValues {
     id?: string = undefined;
     name: string = '';
     description: string = '';
-    studentCount: number = 0;
+    studentCount: number = 0; 
     cityId: string = '';
     streetAddress: string = '';
     siteURL: string = '';

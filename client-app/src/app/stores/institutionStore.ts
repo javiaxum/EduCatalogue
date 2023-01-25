@@ -15,7 +15,7 @@ export default class InstitutionStore {
     populatedCityRegistry = new Map<string, City>();
     regionRegistry = new Array<Region>();
     selectedInstitution: Institution | undefined = undefined;
-    selectedRegionId: string | undefined = undefined;
+    selectedRegion: Region | undefined = undefined;
     loading: boolean = false;
     reviewForm: boolean = false;
     loadingInitial: boolean = true;
@@ -78,8 +78,8 @@ export default class InstitutionStore {
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }
-    setSelectedRegion = (selectedRegionId: string | undefined) => {
-        this.selectedRegionId = selectedRegionId;
+    setSelectedRegion = (selectedRegion: Region | undefined) => {
+        this.selectedRegion = selectedRegion;
     }
 
     createReview = async (review: ReviewFormValues, institutionId: string) => {
@@ -123,9 +123,6 @@ export default class InstitutionStore {
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
-    // get allRegionsByName() {
-    //     return this.regionRegistry.sort((a, b) => a.name.localeCompare(b.name));
-    // }
 
     loadCitiesWithInstitutions = async () => {
         this.setLoading(true);
@@ -274,7 +271,6 @@ export default class InstitutionStore {
                     institution.reviews.forEach((x) => {
                         x.createdAt = new Date(x.createdAt);
                     })
-                    console.log(institution.reviews)
                     this.selectedInstitution = institution;
                 })
                 this.setInstitution(institution);

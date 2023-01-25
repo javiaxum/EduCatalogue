@@ -21,7 +21,7 @@ export default observer(function CustomSelectInput(props: Props) {
             <Select
                 disabled={props.disabled}
                 options={props.options}
-                value={props.value}
+                value={field.value || props.value}
                 onChange={(e, d) => {
                     helpers.setValue(d.value);
                     if (props.onChange) props.onChange(e, d);

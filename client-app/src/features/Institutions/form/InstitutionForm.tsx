@@ -17,7 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities} = institutionStore;
+    const { loadInstitution, loadingInitial, regionRegistry, selectedInstitution, setSelectedRegion, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -29,7 +29,7 @@ export default observer(function InstitutionForm() {
         streetAddress: Yup.string().required(),
         siteURL: Yup.string().required(),
         region: Yup.string().required(),
-        city: Yup.string().required(),
+        cityId: Yup.string().required(),
         contactInformation: Yup.string().required(),
     })
 
@@ -59,14 +59,13 @@ export default observer(function InstitutionForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={institution}
-            onSubmit={values => handleInstitutionFormSubmit(values)}>
+            onSubmit={values => console.log(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Grid>
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                                 <Image src={'/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover' }} />
-                                
                             </Segment>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
@@ -93,7 +92,8 @@ export default observer(function InstitutionForm() {
                                                     type='submit'
                                                     content='Submit'
                                                     loading={isSubmitting}
-                                                    disabled={!dirty || isSubmitting || !isValid} />
+                                                    disabled={!dirty || isSubmitting || !isValid}
+                                                />
                                                 <Button
                                                     as={Link}
                                                     to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
