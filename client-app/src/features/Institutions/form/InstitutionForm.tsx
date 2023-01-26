@@ -17,7 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, regionRegistry, selectedInstitution, setSelectedRegion, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities } = institutionStore;
+    const { loadInstitution, loadingInitial, regionRegistry, selectedInstitution, getRegionByCityId, setSelectedRegion, selectedRegion, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -35,10 +35,14 @@ export default observer(function InstitutionForm() {
 
     useEffect(() => {
         if (id) loadInstitution(id)
-            .then(institution => setInstitution(new InstitutionFormValues(institution)));
+            .then(institution => {
+                setInstitution(new InstitutionFormValues(institution));
+                setSelectedRegion(getRegionByCityId(institution?.cityId.toLocaleLowerCase()!));
+            });
         else {
             setLoadingInitial(false);
         }
+
         setEditMode(true);
     }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities])
 
@@ -111,7 +115,7 @@ export default observer(function InstitutionForm() {
                         <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                             <InstitutionDetailsMenu />
                             {detailsMenuActiveItem === 'About' &&
-                                <InstitutionDetailsInfoForm />}
+                                <InstitutionDetailsInfoForm institution={institution} />}
                             {detailsMenuActiveItem === 'Specialties' &&
                                 <InstitutionDetailsSpecialtiesList />}
                             {detailsMenuActiveItem === 'Reviews' &&

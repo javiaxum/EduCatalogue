@@ -16,15 +16,14 @@ export default observer(function InstitutionDetailsInfo() {
         selectedInstitution: institution } = institutionStore;
 
     if (!institution || !regionRegistry) return <></>
-        
-    const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
 
-
+    // const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
+    // add region name to the institution details info
     return (
         <>
             <Grid>
                 <Grid.Column width={10}>
-                    <Grid divided style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
+                    <Grid style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
                         <Grid.Row>
                             <Grid.Column width={1}>
                                 <Icon size='large' color='blue' name='info' />
@@ -47,9 +46,12 @@ export default observer(function InstitutionDetailsInfo() {
                             <Grid.Column width={1}>
                                 <Icon name='marker' size='large' color='blue' />
                             </Grid.Column>
-                            <Grid.Column width={7}>
+                            <Grid.Column width={6}>
                                 City:
-                                {institutionRegion?.cities.find((x)=> x.id == institution.cityId.toLocaleLowerCase())?.name}
+                                {institution.cityName}
+                            </Grid.Column>
+                            <Grid.Column width={1}>
+                                <Icon name='home' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 Address:
@@ -58,7 +60,7 @@ export default observer(function InstitutionDetailsInfo() {
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={1}>
-                                <Icon name='home' size='large' color='blue' />
+                                <Icon name='chain' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={14}>
                                 Homepage:

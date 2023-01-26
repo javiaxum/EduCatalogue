@@ -13,7 +13,7 @@ export default function InstitutionsListItem({ institution }: Props) {
             <Item.Content>
                 <Item.Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Item.Header>
                 <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>
-                <Item.Meta>{institution.cityId}, {institution.streetAddress}</Item.Meta>
+                <Item.Meta>{institution.cityName}, {institution.streetAddress}</Item.Meta>
             </Item.Content>
         </Item>
     )

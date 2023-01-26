@@ -23,11 +23,11 @@ export default observer(function CustomSelectInput(props: Props) {
                 options={props.options}
                 value={field.value || props.value}
                 onChange={(e, d) => {
-                    helpers.setValue(d.value);
+                    helpers.setValue(d.value as string);
                     if (props.onChange) props.onChange(e, d);
                 }}
                 onBlur={() => helpers.setTouched(true)}
-                placeholder={field.value || props.placeholder}
+                placeholder={props.placeholder}
                 style={{ height: 'auto', minHeight: 'auto', padding: '.4rem 1.2rem .4rem .4rem' }}
             />
             {meta.touched && meta.error ? (

@@ -9,6 +9,7 @@ export interface Institution {
     description: string;
     studentCount: number;
     cityId: string;
+    cityName: string;
     streetAddress: string;
     siteURL: string;
     titleImage: string;

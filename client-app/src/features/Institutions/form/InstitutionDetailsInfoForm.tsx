@@ -1,30 +1,25 @@
+import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import { Button, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
+import { InstitutionFormValues } from '../../../app/models/institution';
 import { Region } from '../../../app/models/region';
 import { useStore } from '../../../app/stores/store';
 
-export default observer(function InstitutionDetailsInfoForm() {
+interface Props {
+    institution: InstitutionFormValues
+}
+
+export default observer(function InstitutionDetailsInfoForm({institution}: Props) {
     const { institutionStore } = useStore();
-    const { regionRegistry, setSelectedRegion, selectedRegion, selectedInstitution } = institutionStore;
-
-    useEffect(() => {
-        setSelectedRegion(regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() === selectedInstitution?.cityId.toLocaleLowerCase())));
-    })
-
-
+    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion } = institutionStore;
     return (
         <Grid>
             <Grid.Column width={10}>
-                <Button
-                    type='button'
-                    onClick={() => {
-                        console.log(selectedRegion?.name)
-                    }} />
-                <Grid divided style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
+                <Grid style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
                         <Grid.Column width={1}>
                             <Icon size='large' color='blue' name='info' />
@@ -47,35 +42,37 @@ export default observer(function InstitutionDetailsInfoForm() {
                         <Grid.Column width={1}>
                             <Icon name='marker' size='large' color='blue' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={7}>
                             Region:
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                     setSelectedRegion(regionRegistry.find((x) => x.id == data.value));
                                 }}
-                                placeholder={selectedRegion?.name || 'Select region'}
-                                value={regionRegistry.find((x) => x.cities.find((x) => x.id === selectedInstitution?.cityId.toLocaleLowerCase()))?.id || ''}
+                                placeholder={'Select region'}
+                                value={selectedRegion?.id || ''}
                                 name='region'
-                                options={regionRegistry.map(element => ({ text: `${element.name}`, value: element.id.toLocaleLowerCase() }))
+                                options={regionRegistry.map(element => ({ text: element.name, value: element.id}))
                                 } />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={8}>
                             City:
                             <CustomSelectInput
-                                disabled={selectedRegion === undefined}
-                                placeholder={'Choose city'}
+                                placeholder={'Select city'}
                                 name='cityId'
-                                options={selectedRegion?.cities.map(element => ({ text: `${element.name}`, value: element.id.toLocaleLowerCase() }))
+                                options={selectedRegion?.cities.map(element => ({ text: element.name, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: '' }]} />
                         </Grid.Column>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={1}>
+                            <Icon name='home' size='large' color='blue' />
+                        </Grid.Column>
+                        <Grid.Column width={15}>
                             Address:
                             <CustomTextInput placeholder='Address' name='streetAddress' />
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
                         <Grid.Column width={1}>
-                            <Icon name='home' size='large' color='blue' />
+                            <Icon name='chain' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={14}>
                             Homepage:

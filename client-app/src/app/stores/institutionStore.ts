@@ -162,6 +162,10 @@ export default class InstitutionStore {
 
     }
 
+    getRegionByCityId = (cityId: string) => {
+        return this.regionRegistry.find((x) => x.cities.find((x) => x.id === cityId));
+    }
+
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
     }
@@ -237,6 +241,7 @@ export default class InstitutionStore {
             const result = await agent.Institutions.list(this.axiosParams);
             runInAction(() => {
                 result.data.forEach(institution => {
+                    institution.cityId = institution.cityId ? institution.cityId.toLocaleLowerCase() : '';
                     this.institutionsRegistry.set(institution.id, institution)
                 });
             })
@@ -271,6 +276,7 @@ export default class InstitutionStore {
                     institution.reviews.forEach((x) => {
                         x.createdAt = new Date(x.createdAt);
                     })
+                    institution.cityId = institution.cityId.toLocaleLowerCase();
                     this.selectedInstitution = institution;
                 })
                 this.setInstitution(institution);
