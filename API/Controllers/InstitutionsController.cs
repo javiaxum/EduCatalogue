@@ -11,6 +11,7 @@ using Application.Institutions;
 using Microsoft.AspNetCore.Authorization;
 using Application.Specialties;
 using Application.Core;
+using Application;
 
 namespace API.Controllers
 {
@@ -30,13 +31,13 @@ namespace API.Controllers
         }
         [AllowAnonymous]
         [HttpPost]
-        public async Task<ActionResult> CreateInstitution(Institution institution)
+        public async Task<ActionResult> CreateInstitution(InstitutionDTO institution)
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.Create.Command { Institution = institution }));
         }
         [AllowAnonymous]
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditInstitution(Guid id, Institution institution)
+        public async Task<IActionResult> EditInstitution(Guid id, InstitutionDTO institution)
         {
             institution.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { Institution = institution }));

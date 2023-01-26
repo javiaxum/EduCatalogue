@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
 using Application.Interfaces;
+using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -16,7 +17,7 @@ namespace Application.Institutions
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Institution Institution { get; set; }
+            public InstitutionDTO Institution { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -31,8 +32,10 @@ namespace Application.Institutions
         {
             private readonly DataContext _context;
             private readonly IUsernameAccessor _usernameAccessor;
-            public Handler(DataContext context, IUsernameAccessor usernameAccessor)
+            private readonly IMapper _mapper;
+            public Handler(DataContext context, IUsernameAccessor usernameAccessor, IMapper mapper)
             {
+                _mapper = mapper;
                 _usernameAccessor = usernameAccessor;
                 _context = context;
             }
@@ -40,16 +43,19 @@ namespace Application.Institutions
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
+                var newInstitution = new Institution();
+                _mapper.Map(request.Institution, newInstitution);
+                newInstitution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == new Guid(request.Institution.CityId));
 
                 var manager = new AppUserInstitution
                 {
                     Manager = user,
-                    Institution = request.Institution,
+                    Institution = newInstitution,
                 };
-                
-                request.Institution.Managers.Add(manager);
 
-                _context.Institutions.Add(request.Institution);
+                newInstitution.Managers.Add(manager);
+
+                _context.Institutions.Add(newInstitution);
 
                 var result = await _context.SaveChangesAsync() > 0;
 

@@ -10,12 +10,12 @@ interface Props {
 
 export default function ComponentListItem({ component }: Props) {
     return (
-        <Grid.Column style={{width: '245px'}}>
-            <Card className='specialtyCard' style={{display: 'block'}}>
-                <Card.Content>
-                    <Card.Header as='a'>{component.name}</Card.Header>
+        <Grid.Column style={{ width: '250px' }}>
+            <Card className='componentCard' style={{ display: 'flex' }}>
+                <Card.Content style={{padding: '1rem 1rem 0 1rem'}} >
+                    <Card.Header as='a' style={{ paddingTop: 'auto', paddingBottom: 'auto' }}>{component.name}</Card.Header>
                 </Card.Content>
-                {/* <Button as={Link} to={`/specialties/${specialty.id}`} content='Details' /> */}
+                <Card.Meta content={`ECTS credits: ${component.ectsCredits}`} style={{padding: '0.3rem 0 1rem 1rem'}} />
             </Card>
         </Grid.Column>
     )

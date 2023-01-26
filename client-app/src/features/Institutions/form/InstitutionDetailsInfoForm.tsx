@@ -16,6 +16,7 @@ interface Props {
 export default observer(function InstitutionDetailsInfoForm({institution}: Props) {
     const { institutionStore } = useStore();
     const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion } = institutionStore;
+    const formik = useFormikContext();
     return (
         <Grid>
             <Grid.Column width={10}>
@@ -47,10 +48,10 @@ export default observer(function InstitutionDetailsInfoForm({institution}: Props
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                     setSelectedRegion(regionRegistry.find((x) => x.id == data.value));
+                                    formik.getFieldHelpers('cityId').setValue('')
                                 }}
                                 placeholder={'Select region'}
-                                value={selectedRegion?.id || ''}
-                                name='region'
+                                name='regionId'
                                 options={regionRegistry.map(element => ({ text: element.name, value: element.id}))
                                 } />
                         </Grid.Column>
@@ -59,6 +60,7 @@ export default observer(function InstitutionDetailsInfoForm({institution}: Props
                             <CustomSelectInput
                                 placeholder={'Select city'}
                                 name='cityId'
+                                disabled={!!!selectedRegion}
                                 options={selectedRegion?.cities.map(element => ({ text: element.name, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: '' }]} />
                         </Grid.Column>

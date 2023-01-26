@@ -4557,49 +4557,49 @@ namespace Persistence
                         new Component
                         {
                             ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Цивільне право"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Правові висновки Верховного Cуду"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Альтернативні способи вирішення суперечок"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Нотаріальний процес"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Порівняльне цивільне право і процес"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Школа прикладної юриспруденції"),
-                            ESCTSCredits=18,
+                            ECTSCredits=18,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
@@ -4609,112 +4609,112 @@ namespace Persistence
                         new Component
                         {
                             ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Вступ до комп'ютерних наук"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Дискретна математика"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Фізика"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Математичний аналіз"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Комп'ютерні технології обробки та візуалізації даних"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Алгоритмізація та програмування"),
-                            ESCTSCredits=18,
+                            ECTSCredits=18,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Оптимізаційні методи та моделі"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Філософія"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=true,
                             Specialty=item
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Адміністрування серверних систем"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=true,
                             Specialty=item
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Організація баз даних та знань"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=true,
                             Specialty=item
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Архітектура обчислювальних систем"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=true,
                             Specialty=item
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Web-технології"),
-                            ESCTSCredits=6,
+                            ECTSCredits=6,
                             isOptional=true,
                             Specialty=item
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Теорія управління в інформаційних системах"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Технології аналізу даних"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },
                         new Component
                         {
                             ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Безпека життя"),
-                            ESCTSCredits=12,
+                            ECTSCredits=12,
                             isOptional=false,
                             Specialty=item,
                         },

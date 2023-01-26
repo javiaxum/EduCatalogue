@@ -166,6 +166,10 @@ export default class InstitutionStore {
         return this.regionRegistry.find((x) => x.cities.find((x) => x.id === cityId));
     }
 
+    getCityById = (cityId: string, regionId: string) => {
+        return this.regionRegistry.find((x) => x.id == regionId)?.cities.find((x) => x.id == cityId);
+    }
+
     setPagingParams = (pagingParams: PagingParams) => {
         this.pagingParams = pagingParams;
     }
@@ -311,6 +315,7 @@ export default class InstitutionStore {
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };
+                    editedInstitution.cityName = this.getCityById(institution.cityId, institution.regionId!)!.name;
                     this.institutionsRegistry.set(institution.id, editedInstitution as Institution);
                     this.selectedInstitution = editedInstitution as Institution;
                 }
@@ -320,16 +325,13 @@ export default class InstitutionStore {
         }
     }
     deleteInstitution = async (id: string) => {
-        this.setLoading(true);
         try {
             await agent.Institutions.delete(id);
             runInAction(() => {
                 this.institutionsRegistry.delete(id);
             })
-            this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoading(false);
         }
 
     }

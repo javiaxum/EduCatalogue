@@ -1,6 +1,6 @@
 export interface EducationalComponent {
     id: string;
     name: string;
-    description: string;
+    ectsCredits: string;
     isOptional: boolean;
 }

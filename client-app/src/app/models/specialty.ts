@@ -1,3 +1,4 @@
+import { number } from "yup";
 import { EducationalComponent } from "./educationalComponent";
 import { SpecialtyCore } from "./specialtyCore";
 
@@ -8,8 +9,9 @@ export interface Specialty {
     ectsCredits: number;
     degree: string;
     priceUAH: number;
-    statrtsAt: Date;
-    endsAt: Date;
+    nonPaidEducationAvailable: boolean;
+    startYear: number;
+    endYear: number;
     components: EducationalComponent[];
 }
 
@@ -28,6 +30,9 @@ export class SpecialtyFormValues {
     description: string = '';
     ectsCredits: number = 0;
     priceUAH: number = 0;
+    nonPaidEducationAvailable: boolean = false;
+    startYear: number = 0;
+    endYear: number = 0;
     degree: string = '';
 
     constructor(specialty?: SpecialtyFormValues | Specialty) {
@@ -37,6 +42,9 @@ export class SpecialtyFormValues {
             this.description = specialty.description;
             this.ectsCredits = specialty.ectsCredits;
             this.priceUAH = specialty.priceUAH;
+            this.nonPaidEducationAvailable = specialty.nonPaidEducationAvailable;
+            this.startYear = specialty.startYear;
+            this.endYear = specialty.endYear;
             this.degree = specialty.degree;
         }
     }

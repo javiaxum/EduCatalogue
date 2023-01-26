@@ -1,5 +1,6 @@
 import { City } from "./city";
 import { Profile } from "./profile";
+import { Region } from "./region";
 import { Review } from "./review";
 import { Specialty } from "./specialty";
 
@@ -32,6 +33,7 @@ export class InstitutionFormValues {
     description: string = '';
     studentCount: number = 0; 
     cityId: string = '';
+    regionId?: string = '';
     streetAddress: string = '';
     siteURL: string = '';
     titleImage: string = '';

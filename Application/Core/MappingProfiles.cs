@@ -17,6 +17,8 @@ namespace Application.Core
         {
             CreateMap<Institution, Institution>();
 
+            CreateMap<InstitutionDTO, Institution>();
+
             CreateMap<Institution, InstitutionDTO>()
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.CityName, o => o.MapFrom(s => s.City.Name))
@@ -43,7 +45,7 @@ namespace Application.Core
             CreateMap<Component, ComponentDTO>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
             .ForMember(d => d.Name, o => o.MapFrom(s => s.ComponentCore.Name))
-            .ForMember(d => d.ESCTSCredits, o => o.MapFrom(s => s.ESCTSCredits))
+            .ForMember(d => d.ECTSCredits, o => o.MapFrom(s => s.ECTSCredits))
             .ForMember(d => d.isOptional, o => o.MapFrom(s => s.isOptional));
 
             CreateMap<SpecialtyCore, SpecialtyCoreDTO>()

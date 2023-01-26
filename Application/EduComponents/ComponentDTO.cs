@@ -9,7 +9,7 @@ namespace Application.EduComponents
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public int ESCTSCredits { get; set; }
+        public int ECTSCredits { get; set; }
         public bool isOptional { get; set; }
     }
 }

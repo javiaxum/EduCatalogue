@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -75,7 +75,7 @@ export default observer(function SpecialtyForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={specialty}
-            onSubmit={values => handleSpecialtyFormSubmit(values)}
+            onSubmit={values => console.log(values)}
         >
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form
@@ -87,17 +87,13 @@ export default observer(function SpecialtyForm() {
                             <Grid.Row style={{ height: '63px' }}>
                                 <Header
                                     size='large'
-                                    style={{ margin: '0', height: '35px' }}
-                                >
+                                    style={{ margin: '0', height: '35px' }}>
                                     Code and specialty:
                                 </Header>
-                                <Label style={{ margin: '0', padding: '1px', width: '30%' }}>
-                                    <CustomSpecialtySelectInput
-                                        options={specialtyCoresByName}
-                                        placeholder={`${specialty.localSpecialtyCode} ${getSpecialtyCore(specialty.localBranchCode)?.name}` || 'this'}
-                                        name='specialtySelect'
-                                        padding='0.3em' />
-                                </Label>
+                                <CustomSelectInput
+                                    options={specialtyCoresByName}
+                                    placeholder={`${specialty.localSpecialtyCode} ${getSpecialtyCore(specialty.localBranchCode)?.name}` || 'this'}
+                                    name='specialtySelect' />
                                 <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
                                     <Button
                                         positive
@@ -118,18 +114,11 @@ export default observer(function SpecialtyForm() {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid style={{ width: '100%' }}>
-                                    <Grid.Column width={8}>
+                                    <Grid.Column width={6}>
                                         <Segment.Group style={{ boxShadow: 'none' }}>
                                             <Segment>
                                                 <Label style={{ height: '26px' }}>
-                                                    <Grid style={{ margin: '0' }}>
-                                                        <Grid.Column style={{ width: '9rem', padding: '0' }}>
-                                                            Specialty code (ISCED):
-                                                        </Grid.Column>
-                                                        <Grid.Column style={{ width: '3rem', padding: '0', top: '-1.5px' }}>
-                                                            <CustomSelectField name='iscedCode' placeholder='iscedCode' />
-                                                        </Grid.Column>
-                                                    </Grid>
+                                                    Specialty code (ISCED): { }
                                                 </Label>
                                             </Segment>
                                             <Segment>
@@ -143,6 +132,17 @@ export default observer(function SpecialtyForm() {
                                                     </Grid.Column>
                                                     <Grid.Column style={{ width: '15rem', paddingLeft: '0' }}>
                                                         <CustomSelectInput options={degreeOptions} placeholder='Degree' name='degree' />
+                                                    </Grid.Column>
+                                                </Grid>
+                                            </Segment>
+                                            <Segment basic>
+                                                <Grid>
+                                                    <Grid.Column style={{ width: '100%', paddingRight: '0' }}>
+                                                        <Icon
+                                                            name='book'
+                                                            size='big'
+                                                            color='blue' />
+                                                        Knowledge branch: {specialty.localSpecialtyCode.slice(0, 2)} {getBranch(specialty.localSpecialtyCode.slice(0, 2))?.name}
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>
@@ -162,21 +162,50 @@ export default observer(function SpecialtyForm() {
                                             </Segment>
                                             <Segment basic>
                                                 <Grid>
-                                                    <Grid.Column style={{ width: '100%', paddingRight: '0' }}>
+                                                    <Grid.Column style={{ width: '8.2rem', paddingRight: '0' }}>
                                                         <Icon
                                                             name='book'
                                                             size='big'
                                                             color='blue' />
-                                                        Knowledge branch: {specialty.localSpecialtyCode.slice(0, 2)} {getBranch(specialty.localSpecialtyCode.slice(0, 2))?.name}
+                                                        Full price:
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', height: '56px' }}>
+                                                        <CustomTextInput type='number' placeholder='0' name='priceUAH' padding='0.4em 0.2em 0.4em 0.2em' />
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '13.2rem', padding: '1.2rem 0 1rem 0', height: '56px' }}>
+                                                        Non paid education available: 
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '7rem', padding: '1.35rem 0 1rem 0', height: '56px' }}>
+                                                        <Checkbox name='nonPaidEducationAvailable' padding='0.4em 0.2em 0.4em 0.2em' />
+                                                    </Grid.Column>
+                                                </Grid>
+                                            </Segment>
+                                            <Segment basic>
+                                                <Grid>
+                                                    <Grid.Column style={{ width: '8.6rem', paddingRight: '0' }}>
+                                                        <Icon
+                                                            name='flag'
+                                                            size='big'
+                                                            color='blue' />
+                                                        Start year:
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', paddingRight: '0' }}>
+                                                        <CustomTextInput type='number' placeholder='0' name='startYear' padding='0.4em 0.2em 0.4em 0.2em' />
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '5.4rem', paddingRight: '0', paddingTop: '1.2rem' }}>
+                                                        End year:
+                                                    </Grid.Column>
+                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', }}>
+                                                        <CustomTextInput type='number' placeholder='0' name='endYear' padding='0.4em 0.2em 0.4em 0.2em' />
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>
                                         </Segment.Group>
                                     </Grid.Column>
-                                    <Grid.Column width={8}>
+                                    <Grid.Column width={8} stretched>
                                         <Segment style={{ boxShadow: 'none', padding: '30px' }}>
                                             <Header as='h4' content='Description' dividing style={{ marginBottom: '0' }} />
-                                            <CustomTextArea rows={3} placeholder='Description' name='description' />
+                                            <CustomTextArea rows={4} placeholder='Description' name='description' />
                                         </Segment>
                                     </Grid.Column>
                                 </Grid>

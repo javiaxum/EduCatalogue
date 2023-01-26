@@ -17,7 +17,17 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
-    const { loadInstitution, loadingInitial, regionRegistry, selectedInstitution, getRegionByCityId, setSelectedRegion, selectedRegion, createInstitution, editInstitution, setLoadingInitial, detailsMenuActiveItem, loading, loadRegionsWithCities } = institutionStore;
+    const {
+        loadInstitution,
+        loadingInitial,
+        getRegionByCityId,
+        setSelectedRegion,
+        createInstitution,
+        editInstitution,
+        setLoadingInitial,
+        detailsMenuActiveItem,
+        loading,
+        loadRegionsWithCities } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -28,7 +38,7 @@ export default observer(function InstitutionForm() {
         description: Yup.string().required('Institution description is required'),
         streetAddress: Yup.string().required(),
         siteURL: Yup.string().required(),
-        region: Yup.string().required(),
+        regionId: Yup.string().required(),
         cityId: Yup.string().required(),
         contactInformation: Yup.string().required(),
     })
@@ -36,8 +46,11 @@ export default observer(function InstitutionForm() {
     useEffect(() => {
         if (id) loadInstitution(id)
             .then(institution => {
-                setInstitution(new InstitutionFormValues(institution));
-                setSelectedRegion(getRegionByCityId(institution?.cityId.toLocaleLowerCase()!));
+                let formValues = new InstitutionFormValues(institution);
+                const region = getRegionByCityId(institution?.cityId.toLocaleLowerCase()!)
+                formValues.regionId = region?.id;
+                setInstitution(formValues);
+                setSelectedRegion(region);
             });
         else {
             setLoadingInitial(false);
@@ -63,7 +76,7 @@ export default observer(function InstitutionForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={institution}
-            onSubmit={values => console.log(values)}>
+            onSubmit={values => handleInstitutionFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Grid>

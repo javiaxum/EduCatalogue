@@ -13,9 +13,9 @@ export default observer(function InstitutionDetailsInfo() {
         loadInstitution,
         detailsMenuActiveItem,
         regionRegistry,
-        selectedInstitution: institution } = institutionStore;
+        selectedInstitution } = institutionStore;
 
-    if (!institution || !regionRegistry) return <></>
+    if (!selectedInstitution || !regionRegistry) return <></>
 
     // const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
     // add region name to the institution details info
@@ -30,7 +30,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={14}>
                                 Description:
-                                <p>{institution.description}</p>
+                                <p>{selectedInstitution.description}</p>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
@@ -39,7 +39,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={5}>
                                 Student count:
-                                {institution.studentCount}
+                                {selectedInstitution.studentCount}
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
@@ -48,14 +48,14 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={6}>
                                 City:
-                                {institution.cityName}
+                                {selectedInstitution.cityName}
                             </Grid.Column>
                             <Grid.Column width={1}>
                                 <Icon name='home' size='large' color='blue' />
                             </Grid.Column>
                             <Grid.Column width={7}>
                                 Address:
-                                {institution.streetAddress}
+                                {selectedInstitution.streetAddress}
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
@@ -64,7 +64,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={14}>
                                 Homepage:
-                                <a href={`https://${institution.siteURL}`} target="_blank">  {institution.siteURL}</a>
+                                <a href={`https://${selectedInstitution.siteURL}`} target="_blank">  {selectedInstitution.siteURL}</a>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
@@ -73,7 +73,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid.Column>
                             <Grid.Column width={14}>
                                 Contact information:
-                                {institution.contactInformation}
+                                {selectedInstitution.contactInformation}
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>

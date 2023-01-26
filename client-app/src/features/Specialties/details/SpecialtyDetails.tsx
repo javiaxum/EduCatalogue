@@ -17,7 +17,7 @@ export default observer(function SpecialtyDetails() {
     }, [loadSpecialty, selectedSpecialty, id]);
 
     if (loadingInitial || loading) return <LoadingComponent />
-    if (!selectedSpecialty) return (<></>);
+    if (!selectedSpecialty) return <></>;
 
     return (
         <Segment basic style={{ width: '80%', minWidth: '1000px', marginLeft: '10%' }}>
@@ -37,7 +37,7 @@ export default observer(function SpecialtyDetails() {
                         as={Link}
                         to={`/institutions/${institutionStore.selectedInstitution?.id}`}
                         style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
-                        content={'To institutions'}
+                        content={'To institution'}
                     />
                     <Button
                         onClick={() => commonStore.setEditMode(!commonStore.editMode)}
@@ -49,7 +49,7 @@ export default observer(function SpecialtyDetails() {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid style={{ width: '100%' }}>
-                        <Grid.Column width={8}>
+                        <Grid.Column width={5}>
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
@@ -77,9 +77,23 @@ export default observer(function SpecialtyDetails() {
                                         color='blue' />
                                     {`Knowledge branch: ${selectedSpecialty.localSpecialtyCode.slice(0, 2)} ${getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}`}
                                 </Segment>
+                                <Segment basic>
+                                    <Icon
+                                        name='dollar'
+                                        size='big'
+                                        color='blue' />
+                                    {`Full price: ${selectedSpecialty.priceUAH} UAH`}
+                                </Segment>
+                                <Segment basic>
+                                    <Icon
+                                        name='flag'
+                                        size='big'
+                                        color='blue' />
+                                    {`Start year: ${selectedSpecialty.startYear}`} {`End year: ${selectedSpecialty.endYear}`}
+                                </Segment>
                             </Segment.Group>
                         </Grid.Column>
-                        <Grid.Column width={8}>
+                        <Grid.Column width={8} stretched>
                             <Segment style={{ boxShadow: 'none', padding: '30px' }}>
                                 <Header as='h4' content='Description' dividing />
                                 <Segment basic style={{ padding: '0 0 0 10px' }}>
@@ -94,8 +108,7 @@ export default observer(function SpecialtyDetails() {
                     <Header
                         content={`Educational components:`}
                         size='huge'
-                        style={{ padding: '0 0 10px 0', color: '#444' }}
-                    />
+                        style={{ padding: '0 0 10px 0', color: '#444' }}/>
                 </Grid.Row>
                 <Grid.Row>
                     <SpecialtyDetailsComponentList />

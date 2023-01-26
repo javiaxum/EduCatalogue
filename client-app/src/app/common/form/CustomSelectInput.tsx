@@ -19,9 +19,10 @@ export default observer(function CustomSelectInput(props: Props) {
         <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0' }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <Select
+                clearable
                 disabled={props.disabled}
                 options={props.options}
-                value={field.value || props.value}
+                value={field.value || props.value || null}
                 onChange={(e, d) => {
                     helpers.setValue(d.value as string);
                     if (props.onChange) props.onChange(e, d);

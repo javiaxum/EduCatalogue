@@ -7,6 +7,7 @@ using AutoMapper;
 using Domain;
 using FluentValidation;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Institutions
@@ -15,7 +16,7 @@ namespace Application.Institutions
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Institution Institution { get; set; }
+            public InstitutionDTO Institution { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -42,6 +43,7 @@ namespace Application.Institutions
                 if (institution == null) return null;
                 
                 _mapper.Map(request.Institution, institution);
+                institution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == new Guid(request.Institution.CityId));
 
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("An error has occured while updating an institution");
