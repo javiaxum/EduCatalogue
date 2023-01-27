@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
-using Application.Interfaces;
 using AutoMapper;
 using Domain;
 using FluentValidation;
@@ -13,11 +12,10 @@ using Persistence;
 
 namespace Application.Specialties
 {
-    public class Create
+    public class Edit
     {
         public class Command : IRequest<Result<Unit>>
         {
-            public Guid Id { get; set; }
             public SpecialtyDTO Specialty { get; set; }
         }
 
@@ -25,7 +23,7 @@ namespace Application.Specialties
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Specialty).SetValidator(new SpecialtyDTOValidator());
+                RuleFor(x => x.Specialty).SetValidator(new SpecialtyValidator());
             }
         }
 
@@ -41,19 +39,13 @@ namespace Application.Specialties
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.Id);
-                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == request.Specialty.LocalSpecialtyCode);
-                var specialty = new Specialty();
+                var specialty = await _context.Specialties.FindAsync(request.Specialty.Id);
+                if (specialty == null) return null;
+                
                 _mapper.Map(request.Specialty, specialty);
-                specialty.Institution = institution;
-                specialty.SpecialtyCore = specialtyCore;
-
-                _context.Specialties.Add(specialty);
-
+                
                 var result = await _context.SaveChangesAsync() > 0;
-
-                if (!result) return Result<Unit>.Failure("An error has occured while creating a specialty");
-
+                if (!result) return Result<Unit>.Failure("An error has occured while updating an institution");
                 return Result<Unit>.Success(Unit.Value);
             }
         }

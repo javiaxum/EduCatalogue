@@ -10,7 +10,6 @@ namespace Application.Specialties
     {
         public Guid Id { get; set; }
         public string LocalSpecialtyCode { get; set; }
-        public ICollection<ISCEDCoreDTO> ISCEDcores { get; set; }
         public string Description { get; set; }
         public int EctsCredits { get; set; }
         public string Degree { get; set; }

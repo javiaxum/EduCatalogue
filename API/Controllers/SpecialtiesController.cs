@@ -44,10 +44,10 @@ namespace API.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> EditSpecialty(Guid id, Specialty specialty)
+        public async Task<IActionResult> EditSpecialty(Guid id, SpecialtyDTO specialty)
         {
             specialty.Id = id;
-            return Ok("Specialty Edit handler was not implemented yet");
+            return HandleResult(await Mediator.Send(new Edit.Command {Specialty = specialty}));
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSpecialty(Guid id)

@@ -40,7 +40,7 @@ namespace API.Controllers
         public async Task<IActionResult> EditInstitution(Guid id, InstitutionDTO institution)
         {
             institution.Id = id;
-            return HandleResult(await Mediator.Send(new Edit.Command { Institution = institution }));
+            return HandleResult(await Mediator.Send(new Application.Institutions.Edit.Command { Institution = institution }));
         }
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteInstitution(Guid id)

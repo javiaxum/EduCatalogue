@@ -36,8 +36,10 @@ namespace Application.Core
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
-            .ForMember(d => d.ISCEDcores, o => o.MapFrom(s => s.SpecialtyCore.ISCEDCores))
+            // .ForMember(d => d.ISCEDcores, o => o.MapFrom(s => s.SpecialtyCore.ISCEDCores))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
+
+            CreateMap<SpecialtyDTO, Specialty>();
 
             CreateMap<Specialty, SpecialtyComponentsDTO>()
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));

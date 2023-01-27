@@ -13,6 +13,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
+import { router } from '../../routers/Routes';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore } = useStore();

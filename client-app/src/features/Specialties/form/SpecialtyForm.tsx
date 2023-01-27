@@ -15,17 +15,19 @@ import SpecialtyDetailsComponentList from '../details/educationalComponent/Speci
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import { degreeOptions } from '../../../app/common/options/degreeOptions';
 import CustomCheckboxInput from '../../../app/common/form/CustomCheckboxInput';
+import { SpecialtyCore } from '../../../app/models/specialtyCore';
 
 
 export default observer(function SpecialtyForm() {
 
-    const { specialtyStore, commonStore } = useStore();
+    const { specialtyStore, commonStore, institutionStore } = useStore();
     const {
         loadSpecialty,
         createSpecialty,
         editSpecialty,
         getSpecialtyCore,
         getBranch,
+        getSpecialty,
         loading,
         loadingInitial,
         setLoadingInitial,
@@ -36,6 +38,7 @@ export default observer(function SpecialtyForm() {
     const { id1, id2 } = useParams();
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
+    const [specialtyCore, setSpecialtyCore] = useState<SpecialtyCore>(new SpecialtyCore());
 
     const validationSchema = Yup.object({
         localSpecialtyCode: Yup.string().required(),
@@ -50,23 +53,31 @@ export default observer(function SpecialtyForm() {
     useEffect(() => {
         if (id2) {
             loadSpecialty(id2)
-                .then(specialty => { setSpecialty(new SpecialtyFormValues(specialty)) });
+                .then(specialty => {
+                    setSpecialty(new SpecialtyFormValues(specialty));
+                    setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(specialty?.localSpecialtyCode!)!));
+                });
+            if (id1) institutionStore.loadInstitution(id1);
             if (id1 === 'undefined') {
                 router.navigate(`/institutions`);
             }
         }
         setLoadingInitial(false);
         setEditMode(true);
-    }, [setLoadingInitial, loadingInitial, setEditMode, id1, id2, loadSpecialty])
+    }, [setLoadingInitial, institutionStore.loadInstitution, setSpecialty, setSpecialtyCore, getSpecialtyCore, loadingInitial, setEditMode, id1, id2, loadSpecialty])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
         if (id) {
             specialty.id = uuid();
-            createSpecialty(specialty, id).then(() =>
-                router.navigate(`/specialties/${specialty.id}`));
+            createSpecialty(specialty, id).then(() => {
+                institutionStore.setSpecialty(getSpecialty(specialty.id!)!, id);
+                router.navigate(`/specialties/${specialty.id}`)
+            });
         } else if (id1 && id2) {
-            editSpecialty(specialty).then(() =>
-                router.navigate(`/specialties/${id2}`));
+            editSpecialty(specialty).then(() => {
+                institutionStore.setSpecialty(getSpecialty(specialty.id!)!, id1);
+                router.navigate(`/specialties/${id2}`)
+            });
         }
     }
 
@@ -76,7 +87,7 @@ export default observer(function SpecialtyForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={specialty}
-            onSubmit={values => { }}
+            onSubmit={values => handleSpecialtyFormSubmit(values)}
         >
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form
@@ -92,9 +103,9 @@ export default observer(function SpecialtyForm() {
                                     Code and specialty:
                                 </Header>
                                 <CustomSelectInput
-                                    // onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    //     // setSelectedSpecialtyCoreId(data.value as string);
-                                    // }}
+                                    onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+                                        setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)));
+                                    }}
                                     options={specialtyCoresByNameSelectInput}
                                     placeholder='Select specialty'
                                     name='localSpecialtyCode' />
@@ -122,7 +133,7 @@ export default observer(function SpecialtyForm() {
                                         <Segment.Group style={{ boxShadow: 'none' }}>
                                             <Segment>
                                                 <Label style={{ height: '26px' }}>
-                                                    Specialty code (ISCED): {getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)}
+                                                    Specialty code (ISCED): {specialtyCore.id && getSpecialtyCoreISCEDString(specialtyCore.id)}
                                                 </Label>
                                             </Segment>
                                             <Segment>
@@ -149,7 +160,7 @@ export default observer(function SpecialtyForm() {
                                                             name='book'
                                                             size='big'
                                                             color='blue' />
-                                                        Knowledge branch: {specialty.localSpecialtyCode.slice(0, 2)} {getBranch(specialty.localSpecialtyCode.slice(0, 2))?.name}
+                                                        Knowledge branch: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>

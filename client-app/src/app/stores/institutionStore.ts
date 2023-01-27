@@ -8,6 +8,7 @@ import { Pagination, PagingParams } from "../models/pagination";
 import { City } from "../models/city";
 import { Review, ReviewFormValues } from "../models/review";
 import { Region } from "../models/region";
+import { Specialty } from "../models/specialty";
 
 export default class InstitutionStore {
 
@@ -101,6 +102,14 @@ export default class InstitutionStore {
         institution?.reviews.push(review);
         this.institutionsRegistry.set(institutionId, institution!);
         this.selectedInstitution?.reviews.push(review);
+    }
+
+    setSpecialty = (specialty: Specialty, institutionId: string) => {
+        let institution = this.institutionsRegistry.get(institutionId);
+        let newSpecialties = [...institution!.specialties.filter((x) => x.id !== specialty.id), specialty];
+        institution!.specialties = newSpecialties;
+        this.institutionsRegistry.set(institutionId, institution!);
+        this.selectedInstitution!.specialties = newSpecialties;
     }
 
     setMaxPrice = (value: string) => {

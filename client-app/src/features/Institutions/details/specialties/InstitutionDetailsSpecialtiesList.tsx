@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
-import { Specialty } from '../../../../app/models/specialty';
 import { useStore } from '../../../../app/stores/store';
 import SearchParamsList from '../../../Specialties/search/SearchParamsList';
 import SpecialtyListAddNewItem from './SpecialtyListAddNewItem';
@@ -15,7 +14,6 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
 
     if (!selectedInstitution || !selectedInstitution.specialties) return <></>;
 
-
     let filteredSpecialties = selectedInstitution.specialties;
     if (branchPredicate.size !== 0)
         filteredSpecialties = filteredSpecialties.filter((x) =>
@@ -23,7 +21,6 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     if (specialtyPredicate.size !== 0)
         filteredSpecialties = filteredSpecialties.filter((x) =>
             specialtyPredicate.has(x.localSpecialtyCode));
-
 
     return (
         <Grid style={{ padding: '10px' }}>

@@ -10,10 +10,12 @@ export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
     const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSpecialtyCoreISCEDString, loading } = specialtyStore;
     const { } = institutionStore;
+    const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
 
     useEffect(() => {
         if (id) loadSpecialty(id).then();
+        setEditMode(false);
     }, [loadSpecialty, selectedSpecialty, id]);
 
     if (loadingInitial || loading) return <LoadingComponent />
