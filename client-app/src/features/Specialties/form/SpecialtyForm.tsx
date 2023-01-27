@@ -38,10 +38,14 @@ export default observer(function SpecialtyForm() {
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
 
     const validationSchema = Yup.object({
-        specialtySelect: Yup.string().required(),
+        localSpecialtyCode: Yup.string().required(),
         description: Yup.string().required('Specialty description is required'),
         degree: Yup.string().required(),
         ectsCredits: Yup.number().required(),
+        priceUAH: Yup.number().required(),
+        nonPaidEducationAvailable: Yup.string().required(),
+        startYear: Yup.number().required(),
+        endYear: Yup.number().required(),
     })
     useEffect(() => {
         if (id2) {
@@ -72,7 +76,7 @@ export default observer(function SpecialtyForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={specialty}
-            onSubmit={values => {}}
+            onSubmit={values => { }}
         >
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form
@@ -99,8 +103,8 @@ export default observer(function SpecialtyForm() {
                                         positive
                                         type='submit'
                                         content='Submit'
-                                    // loading={isSubmitting}
-                                    // disabled={!dirty || isSubmitting || !isValid}
+                                        loading={isSubmitting}
+                                        disabled={!dirty || isSubmitting || !isValid}
                                     />
                                     <Button
                                         as={Link}
