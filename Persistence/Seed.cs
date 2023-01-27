@@ -4542,10 +4542,6 @@ namespace Persistence
                         },
                     };
 
-
-                    
-
-
                     await context.AddRangeAsync(reviews);
                     await context.AddRangeAsync(specialties.Skip(new Random().Next(0, 8)).Skip(new Random().Next(0, 8)));
                     await context.SaveChangesAsync();

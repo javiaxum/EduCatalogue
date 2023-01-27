@@ -24,9 +24,6 @@ export class Specialty implements Specialty {
 export class SpecialtyFormValues {
     id?: string = undefined;
     localSpecialtyCode: string = '';
-    localBranchCode: string = '';
-    localBranchName: string = '';
-    iscedSpecialtyCode: string = '';
     description: string = '';
     ectsCredits: number = 0;
     priceUAH: number = 0;

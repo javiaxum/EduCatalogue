@@ -13,7 +13,7 @@ export default observer(function SpecialtyDetails() {
     const { id } = useParams();
 
     useEffect(() => {
-        if (id) loadSpecialty(id);
+        if (id) loadSpecialty(id).then();
     }, [loadSpecialty, selectedSpecialty, id]);
 
     if (loadingInitial || loading) return <LoadingComponent />
@@ -49,11 +49,11 @@ export default observer(function SpecialtyDetails() {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid style={{ width: '100%' }}>
-                        <Grid.Column width={5}>
+                        <Grid.Column width={6}>
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`Specialty code (ISCED): ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)} `}
+                                        content={`Specialty code (ISCED): ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
                                     />
                                 </Segment>
                                 <Segment>
@@ -61,35 +61,36 @@ export default observer(function SpecialtyDetails() {
                                         name='graduation'
                                         size='big'
                                         color='blue' />
-                                    {`Degree: ${selectedSpecialty.degree}`}
+                                    Degree: {selectedSpecialty.degree}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='clock'
                                         size='big'
                                         color='blue' />
-                                    {`ECTS credits: ${selectedSpecialty.ectsCredits} credits`}
+                                    ECTS credits: {selectedSpecialty.ectsCredits} credits
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='book'
                                         size='big'
                                         color='blue' />
-                                    {`Knowledge branch: ${selectedSpecialty.localSpecialtyCode.slice(0, 2)} ${getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}`}
+                                    Knowledge branch: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='dollar'
                                         size='big'
                                         color='blue' />
-                                    {`Full price: ${selectedSpecialty.priceUAH} UAH`}
+                                    Full price: {selectedSpecialty.priceUAH} UAH
+                                    {selectedSpecialty.nonPaidEducationAvailable && <Label content='Non paid education is available' />}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='flag'
                                         size='big'
                                         color='blue' />
-                                    {`Start year: ${selectedSpecialty.startYear}`} {`End year: ${selectedSpecialty.endYear}`}
+                                    Start year: {selectedSpecialty.startYear} End year: {selectedSpecialty.endYear}
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>
@@ -108,7 +109,7 @@ export default observer(function SpecialtyDetails() {
                     <Header
                         content={`Educational components:`}
                         size='huge'
-                        style={{ padding: '0 0 10px 0', color: '#444' }}/>
+                        style={{ padding: '0 0 10px 0', color: '#444' }} />
                 </Grid.Row>
                 <Grid.Row>
                     <SpecialtyDetailsComponentList />

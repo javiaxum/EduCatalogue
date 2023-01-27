@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Checkbox, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Divider, DropdownProps, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -11,11 +11,10 @@ import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import { SpecialtyFormValues } from '../../../app/models/specialty';
 import { router } from '../../routers/Routes';
-import CustomSelectField from './CustomSelectField';
-import CustomSpecialtySelectInput from './CustomSpecialtySelectInput';
 import SpecialtyDetailsComponentList from '../details/educationalComponent/SpecialtyDetailsComponentList';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import { degreeOptions } from '../../../app/common/options/degreeOptions';
+import CustomCheckboxInput from '../../../app/common/form/CustomCheckboxInput';
 
 
 export default observer(function SpecialtyForm() {
@@ -30,14 +29,13 @@ export default observer(function SpecialtyForm() {
         loading,
         loadingInitial,
         setLoadingInitial,
-        specialtyCoresByNameSelectInput: specialtyCoresByName
-    } = specialtyStore;
+        getSpecialtyCoreISCEDString,
+        specialtyCoresByNameSelectInput } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
-
 
     const validationSchema = Yup.object({
         specialtySelect: Yup.string().required(),
@@ -48,7 +46,7 @@ export default observer(function SpecialtyForm() {
     useEffect(() => {
         if (id2) {
             loadSpecialty(id2)
-                .then(specialty => setSpecialty(new SpecialtyFormValues(specialty)));
+                .then(specialty => { setSpecialty(new SpecialtyFormValues(specialty)) });
             if (id1 === 'undefined') {
                 router.navigate(`/institutions`);
             }
@@ -69,13 +67,12 @@ export default observer(function SpecialtyForm() {
     }
 
     if (loadingInitial || loading) return (<LoadingComponent content='Loading specialties form...' />)
-
     return (
         <Formik
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={specialty}
-            onSubmit={values => console.log(values)}
+            onSubmit={values => {}}
         >
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form
@@ -91,16 +88,19 @@ export default observer(function SpecialtyForm() {
                                     Code and specialty:
                                 </Header>
                                 <CustomSelectInput
-                                    options={specialtyCoresByName}
-                                    placeholder={`${specialty.localSpecialtyCode} ${getSpecialtyCore(specialty.localBranchCode)?.name}` || 'this'}
-                                    name='specialtySelect' />
+                                    // onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+                                    //     // setSelectedSpecialtyCoreId(data.value as string);
+                                    // }}
+                                    options={specialtyCoresByNameSelectInput}
+                                    placeholder='Select specialty'
+                                    name='localSpecialtyCode' />
                                 <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
                                     <Button
                                         positive
                                         type='submit'
                                         content='Submit'
-                                        loading={isSubmitting}
-                                        disabled={!dirty || isSubmitting || !isValid}
+                                    // loading={isSubmitting}
+                                    // disabled={!dirty || isSubmitting || !isValid}
                                     />
                                     <Button
                                         as={Link}
@@ -118,7 +118,7 @@ export default observer(function SpecialtyForm() {
                                         <Segment.Group style={{ boxShadow: 'none' }}>
                                             <Segment>
                                                 <Label style={{ height: '26px' }}>
-                                                    Specialty code (ISCED): { }
+                                                    Specialty code (ISCED): {getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)}
                                                 </Label>
                                             </Segment>
                                             <Segment>
@@ -131,7 +131,10 @@ export default observer(function SpecialtyForm() {
                                                         Degree:
                                                     </Grid.Column>
                                                     <Grid.Column style={{ width: '15rem', paddingLeft: '0' }}>
-                                                        <CustomSelectInput options={degreeOptions} placeholder='Degree' name='degree' />
+                                                        <CustomSelectInput
+                                                            options={degreeOptions}
+                                                            placeholder='Degree'
+                                                            name='degree' />
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>
@@ -164,7 +167,7 @@ export default observer(function SpecialtyForm() {
                                                 <Grid>
                                                     <Grid.Column style={{ width: '8.2rem', paddingRight: '0' }}>
                                                         <Icon
-                                                            name='book'
+                                                            name='dollar'
                                                             size='big'
                                                             color='blue' />
                                                         Full price:
@@ -173,10 +176,10 @@ export default observer(function SpecialtyForm() {
                                                         <CustomTextInput type='number' placeholder='0' name='priceUAH' padding='0.4em 0.2em 0.4em 0.2em' />
                                                     </Grid.Column>
                                                     <Grid.Column style={{ width: '13.2rem', padding: '1.2rem 0 1rem 0', height: '56px' }}>
-                                                        Non paid education available: 
+                                                        Non paid education available:
                                                     </Grid.Column>
                                                     <Grid.Column style={{ width: '7rem', padding: '1.35rem 0 1rem 0', height: '56px' }}>
-                                                        <Checkbox name='nonPaidEducationAvailable' padding='0.4em 0.2em 0.4em 0.2em' />
+                                                        <CustomCheckboxInput name='nonPaidEducationAvailable' />
                                                     </Grid.Column>
                                                 </Grid>
                                             </Segment>
@@ -215,8 +218,7 @@ export default observer(function SpecialtyForm() {
                                 <Header
                                     content={`Educational components:`}
                                     size='huge'
-                                    style={{ padding: '0 0 10px 0', color: '#444' }}
-                                />
+                                    style={{ padding: '0 0 10px 0', color: '#444' }} />
                             </Grid.Row>
                             <Grid.Row>
                                 <SpecialtyDetailsComponentList />
