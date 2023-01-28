@@ -6,6 +6,7 @@ import ServerError from "../errors/ServerError";
 import InstitutionDashboard from "../Institutions/dashboard/InstitutionDashboard";
 import InstitutionDetails from "../Institutions/details/InstitutionDetails";
 import InstitutionForm from "../Institutions/form/InstitutionForm";
+import ProfilePage from "../profiles/ProfilePage";
 import SpecialtyDetails from "../Specialties/details/SpecialtyDetails";
 import SpecialtyForm from "../Specialties/form/SpecialtyForm";
 
@@ -21,6 +22,7 @@ export const routes: RouteObject[] = [
             { path: 'manage/:id/createSpecialty', element: <SpecialtyForm /> },
             { path: 'manage/:id1/specialty/:id2', element: <SpecialtyForm /> },
             { path: 'specialties/:id', element: <SpecialtyDetails /> },
+            { path: 'profiles/:username', element: <ProfilePage /> },
             { path: 'errors', element: <ErrorPage /> },
             { path: 'not-found', element: <NotFound /> },
             { path: 'server-error', element: <ServerError /> },

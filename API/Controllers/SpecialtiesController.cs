@@ -15,12 +15,6 @@ namespace API.Controllers
     public class SpecialtiesController : BaseAPIController
     {
         [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> GetSpecialties(Guid id)
-        {
-            return Ok();
-        }
-        [AllowAnonymous]
         [HttpGet("specialtyCores")]
         public async Task<IActionResult> GetSpecialtyCores()
         {
@@ -38,21 +32,16 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-        [HttpPost]
-        public async Task<ActionResult> CreateSpecialty(SpecialtyDTO specialty)
-        {
-            return Ok();
-        }
         [HttpPut("{id}")]
         public async Task<IActionResult> EditSpecialty(Guid id, SpecialtyDTO specialty)
         {
             specialty.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command {Specialty = specialty}));
         }
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSpecialty(Guid id)
-        {
-            return Ok();
-        }
+        // [HttpDelete("{id}")]
+        // public async Task<ActionResult> DeleteSpecialty(Guid id)
+        // {
+        //     return Ok();
+        // }
     }
 }

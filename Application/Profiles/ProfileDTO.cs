@@ -6,11 +6,10 @@ using Domain;
 
 namespace Application.Profiles
 {
-    public class Profile
+    public class ProfileDTO
     {
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public string Image { get; set; }
-        public ICollection<Image> Images { get; set; }
     }
 }

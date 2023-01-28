@@ -8,6 +8,7 @@ using AutoMapper;
 using Domain;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Infrastructure.Images;
 using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -56,9 +57,11 @@ internal class Program
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
             });
         });
-        builder.Services.AddMediatR(typeof(List.Handler).Assembly);
+        // builder.Services.AddMediatR(typeof(List.Handler).Assembly);
+        builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());              
         builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
-
+        builder.Services.AddScoped<IImageAccessor, ImageAccessor>();
+        builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
         builder.Services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireNonAlphanumeric = false;
@@ -80,12 +83,12 @@ internal class Program
         });
         builder.Services.AddAuthorization(opt =>
         {
-            // opt.AddPolicy("IsInstitutionManager", policy =>
-            // {
-            //     policy.Requirements.Add(new IsManagerRequirement());
-            // });
+            opt.AddPolicy("IsInstitutionManager", policy =>
+            {
+                policy.Requirements.Add(new IsManagerRequirement());
+            });
         });
-        // builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
+        builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
 
         var app = builder.Build();

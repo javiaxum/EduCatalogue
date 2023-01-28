@@ -13,6 +13,6 @@ namespace Application.Reviews
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         public string ReviewMessage { get; set; }
         public int Rating { get; set; }
-        public Profile Author { get; set; }
+        public ProfileDTO Author { get; set; }
     }
 }

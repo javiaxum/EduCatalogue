@@ -17,6 +17,7 @@ namespace Domain
         public string TitleImage { get; set; } // images can be revorked into Image <-> Institution relationship with flags matching image type
         public string EmblemImage { get; set; }
         public string ContactInformation { get; set; }
+        public ICollection<Image> Images { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
         public ICollection<AppUserInstitution> Managers { get; set; } = new List<AppUserInstitution>();

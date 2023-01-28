@@ -32,7 +32,7 @@ namespace API.Controllers
         [Route("login")]
         public async Task<ActionResult<AppUserDTO>> Login(LoginDTO loginDTO)
         {
-            var user = await _userManager.FindByEmailAsync(loginDTO.Email);
+            var user = await _userManager.Users.Include(i => i.Images).FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
             if (user == null) return Unauthorized("An error occured while authorizing user");
 
@@ -66,7 +66,6 @@ namespace API.Controllers
                 DisplayName = registerDTO.DisplayName,
                 UserName = registerDTO.Username,
                 Email = registerDTO.Email,
-                Image = null
             };
             var result = await _userManager.CreateAsync(user, registerDTO.Password);
 
@@ -81,7 +80,8 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<AppUserDTO>> GetCurrentUser()
         {
-            var user = await _userManager.FindByEmailAsync(User.FindFirstValue(ClaimTypes.Email));
+            var user = await _userManager.Users.Include(i => i.Images)
+            .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserDTO(user);
         }
@@ -91,9 +91,12 @@ namespace API.Controllers
             return new AppUserDTO
             {
                 DisplayName = appUser.DisplayName,
-                Image = appUser.Image,
                 Token = _tokenService.CreateToken(appUser),
-                Username = appUser.UserName
+                Username = appUser.UserName,
+                Email = appUser.Email,
+                EmailConfirmed = appUser.EmailConfirmed,
+                TwoFactorEnabled = appUser.TwoFactorEnabled,
+                Image = appUser?.Images?.FirstOrDefault(x => x.Type == "ProfileMainImage")?.Url
             };
         }
     }

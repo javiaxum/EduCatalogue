@@ -5,6 +5,7 @@ import { Form, Label, StrictHeaderProps } from 'semantic-ui-react';
 interface Props {
     placeholder: string;
     name: string;
+    disabled?: boolean;
     label?: string;
     type?: string;
     padding?: string;

@@ -9,7 +9,7 @@ namespace Domain
     public class AppUser : IdentityUser
     {
         public string DisplayName { get; set; }
-        public string Image { get; set; }
+        public ICollection<Image> Images { get; set; }
         public ICollection<AppUserInstitution> Institutions { get; set; } = new List<AppUserInstitution>();
 
     }

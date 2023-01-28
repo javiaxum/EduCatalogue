@@ -28,10 +28,17 @@ namespace Application.Core
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.CityName, o => o.MapFrom(s => s.City.Name));
 
-            CreateMap<AppUserInstitution, Profiles.Profile>()
-            .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
-            .ForMember(d => d.Username, o => o.MapFrom(s => s.Manager.UserName))
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Manager.Image));
+            // CreateMap<AppUserInstitution, Profiles.Profile>()
+            // .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
+            // .ForMember(d => d.Username, o => o.MapFrom(s => s.Manager.UserName))
+            // .ForMember(d => d.Image, o => o.MapFrom(s => s.Manager.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
+
+
+            CreateMap<AppUser, Profiles.ProfileDTO>()
+            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
+
+            CreateMap<AppUser, Profiles.Profile>()
+            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
 
             CreateMap<Specialty, Specialty>();
 
@@ -60,7 +67,8 @@ namespace Application.Core
             CreateMap<AppUser, Application.Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
             .ForMember(d => d.Username, o => o.MapFrom(s => s.UserName))
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Image));
+            .ForMember(d => d.Images, o => o.MapFrom(s => s.Images))
+            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
 
             CreateMap<Branch, Branch>();
 

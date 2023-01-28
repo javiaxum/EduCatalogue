@@ -1,6 +1,4 @@
-import { number } from "yup";
 import { EducationalComponent } from "./educationalComponent";
-import { SpecialtyCore } from "./specialtyCore";
 
 export interface Specialty {
     id: string;

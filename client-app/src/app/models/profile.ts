@@ -4,6 +4,7 @@ export interface Profile {
     username: string;
     displayName: string;
     image?: string;
+    images?: Image[];
 }
 
 export class Profile implements Profile {
@@ -12,4 +13,10 @@ export class Profile implements Profile {
         this.displayName = user.displayName;
         this.image = user.image;
     }
+}
+
+export interface Image {
+    id: string,
+    url: string,
+    type: string
 }

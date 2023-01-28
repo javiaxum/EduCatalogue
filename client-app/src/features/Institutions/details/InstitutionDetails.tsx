@@ -25,11 +25,9 @@ export default observer(function InstitutionDetails() {
         selectedInstitution } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
-    // const [institution, setInstitution] = useState<Institution>(new Institution());
 
     useEffect(() => {
         if (id) loadInstitution(id);
-        // .then((institution) => setInstitution(new Institution(institution)));
         setEditMode(false);
     }, [loadInstitution, id]);
 

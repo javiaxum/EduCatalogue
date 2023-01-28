@@ -42,7 +42,7 @@ export default observer(function SpecialtyDetails() {
                         content={'To institution'}
                     />
                     <Button
-                        onClick={() => commonStore.setEditMode(!commonStore.editMode)}
+                        onClick={() => commonStore.setEditMode(true)}
                         as={Link}
                         to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
                         style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}

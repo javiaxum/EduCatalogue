@@ -9,6 +9,7 @@ import { Region } from "../models/region";
 import { ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
+import { Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -110,11 +111,16 @@ const Account = {
     register: (user: UserFormValues) => requests.post<User>("/account/register", user)
 }
 
+const Profiles = {
+    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+}
+
 const agent = {
     Institutions,
     Account,
     Specialties,
     Reviews,
+    Profiles
 }
 
 export default agent;
