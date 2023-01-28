@@ -26,7 +26,7 @@ export default observer(function ProfileHeader({ profile }: Props) {
                             <Item.Content verticalAlign='middle'>
                                 <Header as='h1' content={profile.displayName} />
                                 <Item.Content>
-                                <Button style={{ position: 'absolute', opacity: '90%', padding: '0', height: '3rem', width: '12rem', left: '11rem', top: '9rem', zIndex: '1000' }}>
+                                <Button style={{ position: 'absolute', opacity: '90%', padding: '0', height: '3rem', width: '12rem', left: '13rem', top: '9rem', zIndex: '1000' }}>
                                     Set profile image<Icon name='image' style={{ padding: '0 0 0 0.5rem', margin: '0' }} />
                                 </Button>
                             </Item.Content>

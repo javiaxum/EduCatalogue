@@ -1,3 +1,5 @@
+import { Review } from "./review";
+
 export interface User {
     username: string;
     displayName: string;

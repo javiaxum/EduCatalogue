@@ -1,6 +1,6 @@
 import { Formik } from 'formik';
 import React from 'react';
-import { Button, Form, Grid, Header, Segment } from 'semantic-ui-react';
+import { Button, Form, Grid, Header, Label, Segment } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
 import * as Yup from 'yup';
 import CustomTextInput from '../../app/common/form/CustomTextInput';
@@ -57,6 +57,11 @@ export default observer(function ProfileSettings({ profile }: Props) {
                                 </Grid.Column>
                                 <Grid.Column width={3} style={{ padding: '0' }}>
                                     <CustomTextInput placeholder='DisplayName' name='email' />
+                                </Grid.Column>
+                                <Grid.Column width={3} style={{ padding: '0 0 0 1rem' }}>
+                                    {user?.emailConfirmed
+                                        ? <Label positive color='green' content='Confirmed' />
+                                        : <Button basic color='red' content='Confirm Email' />}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row style={{ padding: '0' }}>

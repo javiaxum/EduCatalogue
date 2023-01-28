@@ -10,7 +10,7 @@ interface Props {
     review: Review;
 }
 
-export default function SpecialtyListItem({ review }: Props) {
+export default function ReviewListItem({ review }: Props) {
 
     let elements = [];
     for (let i = 1; i <= review.rating; i++) {

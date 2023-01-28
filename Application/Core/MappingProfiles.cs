@@ -62,7 +62,8 @@ namespace Application.Core
 
             CreateMap<ISCEDCore, ISCEDCoreDTO>();
 
-            CreateMap<Review, ReviewDTO>();
+            CreateMap<Review, ReviewDTO>()
+            .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id));            
 
             CreateMap<AppUser, Application.Profiles.Profile>()
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))

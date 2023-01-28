@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Application.Reviews;
 using Domain;
 
 namespace Application.Profiles
@@ -12,5 +13,6 @@ namespace Application.Profiles
         public string DisplayName { get; set; }
         public string Image { get; set; }
         public ICollection<Image> Images { get; set; }
+        public ICollection<ReviewDTO> Reviews { get; set; }
     }
 }

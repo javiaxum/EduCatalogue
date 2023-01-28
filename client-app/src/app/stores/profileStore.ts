@@ -16,6 +16,9 @@ export default class ProfileStore {
         try {
             const profile = await agent.Profiles.get(username);
             runInAction(() => {
+                profile.reviews.forEach((x) => {
+                    x.createdAt = new Date(x.createdAt);
+                })
                 this.profile = profile;
                 this.loading = false;
             })

@@ -4,6 +4,7 @@ export interface Review {
     id: string;
     author: Profile;
     reviewMessage: string;
+    institutionId: string;
     rating: number;
     createdAt: Date;
 }

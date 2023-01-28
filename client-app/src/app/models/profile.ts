@@ -1,3 +1,4 @@
+import { Review } from "./review";
 import { User } from "./user";
 
 export interface Profile {
@@ -5,6 +6,7 @@ export interface Profile {
     displayName: string;
     image?: string;
     images?: Image[];
+    reviews: Review[];
 }
 
 export class Profile implements Profile {

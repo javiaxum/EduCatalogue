@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Reviews;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using MediatR;
@@ -31,7 +32,8 @@ namespace Application.Profiles
             public async Task<Result<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.ProjectTo<Profile>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Username == request.Username);
-
+                var reviews = await _context.Reviews.ProjectTo<ReviewDTO>(_mapper.ConfigurationProvider).Where(x => x.Author.Username == request.Username).ToListAsync();
+                user.Reviews = reviews;
                 return Result<Profile>.Success(user);
             }
         }

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
+import ProfileReviews from './ProfileReviews';
 import ProfileSettings from './ProfileSettings';
 
 interface Props {
@@ -13,6 +14,7 @@ interface Props {
 export default observer(function ProfileOptions({ profile }: Props) {
     const { commonStore, userStore } = useStore();
     const [menuItem, setMenuItem] = useState<string>('Profile');
+
     return (
         <Grid style={{ paddingTop: '10px' }}>
             <Grid.Column width={16}>
@@ -33,13 +35,15 @@ export default observer(function ProfileOptions({ profile }: Props) {
                         onClick={() => setMenuItem('Pending changes')}
                     />
                     <Menu.Item
-                        name='Tracked institutions'
-                        active={menuItem === 'Tracked institutions'}
-                        onClick={() => setMenuItem('Tracked institutions')}
+                        name='Reviews'
+                        active={menuItem === 'Reviews'}
+                        onClick={() => setMenuItem('Reviews')}
                     />
                 </Menu>
                 <Segment attached='bottom'>
                     {(menuItem === 'Profile' && userStore.user?.username === profile.username) && <ProfileSettings profile={profile} />}
+                    {(menuItem === 'Reviews' && userStore.user?.username === profile.username && profile.reviews)
+                        && <ProfileReviews reviews={profile.reviews} />}
                 </Segment>
             </Grid.Column>
         </Grid>
