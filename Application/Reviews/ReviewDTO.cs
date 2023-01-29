@@ -14,6 +14,6 @@ namespace Application.Reviews
         public string ReviewMessage { get; set; }
         public int Rating { get; set; }
         public Guid InstitutionId { get; set; }
-        public ProfileDTO Author { get; set; }
+        public Profile Author { get; set; }
     }
 }

@@ -14,6 +14,7 @@ import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
 import { router } from '../../routers/Routes';
+import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore } = useStore();
@@ -22,7 +23,8 @@ export default observer(function InstitutionDetails() {
         loadInstitution,
         detailsMenuActiveItem,
         loading,
-        selectedInstitution } = institutionStore;
+        selectedInstitution,
+        isInstitutionManager } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
 
@@ -39,7 +41,7 @@ export default observer(function InstitutionDetails() {
         <Grid>
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                    <Image src={selectedInstitution.backgroundImageUrl ||'/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover' }} />
+                    <Image src={selectedInstitution.backgroundImageUrl || '/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover' }} />
                 </Segment>
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
@@ -61,14 +63,14 @@ export default observer(function InstitutionDetails() {
                                     content={selectedInstitution.name}
                                     style={{ color: '#444' }}
                                 />
-                                <Button
+                                {isInstitutionManager && <Button
                                     onClick={() => setEditMode(!editMode)}
                                     as={Link}
                                     to={`/manage/${selectedInstitution.id}`}
                                     floated='right'
                                     style={{ width: '12rem' }}
                                     content={'Manage Institution'}
-                                />
+                                />}
                             </Item.Content>
                         </Item>
                     </Item.Group>
@@ -77,11 +79,13 @@ export default observer(function InstitutionDetails() {
             <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
-                <InstitutionDetailsInfo />}
+                    <InstitutionDetailsInfo />}
                 {detailsMenuActiveItem === 'Specialties' &&
                     <InstitutionDetailsSpecialtiesList />}
                 {detailsMenuActiveItem === 'Reviews' &&
                     <InstitutionDetailsReviewsList />}
+                {detailsMenuActiveItem === 'Gallery' &&
+                    <InstitutionDetailsGallery />}
             </Grid.Column>
         </Grid>
     )

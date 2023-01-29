@@ -4,9 +4,13 @@ import { User } from "./user";
 export interface Profile {
     username: string;
     displayName: string;
+    email: string;
+    emailConfirmed: boolean
+    twoFactorEnabled: boolean;
     image?: string;
     images?: Image[];
     reviews: Review[];
+    managedInstitutions: ManagedInstitution[];
 }
 
 export class Profile implements Profile {
@@ -20,5 +24,9 @@ export class Profile implements Profile {
 export interface Image {
     id: string,
     url: string,
-    type: string
+}
+
+export interface ManagedInstitution {
+    id: string,
+    name: string,
 }

@@ -7,10 +7,9 @@ using Domain;
 
 namespace Application.Profiles
 {
-    public class Profile
+    public class ManagedInstitution
     {
-        public string Username { get; set; }
-        public string DisplayName { get; set; }
-        public string AvatarUrl { get; set; }
+        public Guid Id { get; set; }
+        public string Name { get; set; }
     }
 }

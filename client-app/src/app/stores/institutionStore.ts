@@ -76,6 +76,12 @@ export default class InstitutionStore {
         )
     }
 
+    get isInstitutionManager() {
+        if (store.userStore.isLoggedIn && store.profileStore.profile)
+            return !!store.profileStore.profile?.managedInstitutions.find((x) => x.id === this.selectedInstitution?.id);
+        return false;
+    }
+
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }

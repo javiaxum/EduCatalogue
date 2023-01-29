@@ -93,10 +93,7 @@ namespace API.Controllers
                 DisplayName = appUser.DisplayName,
                 Token = _tokenService.CreateToken(appUser),
                 Username = appUser.UserName,
-                Email = appUser.Email,
-                EmailConfirmed = appUser.EmailConfirmed,
-                TwoFactorEnabled = appUser.TwoFactorEnabled,
-                Avatar = appUser?.Avatar
+                Avatar = appUser?.Avatar,
             };
         }
     }

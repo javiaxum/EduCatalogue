@@ -12,7 +12,7 @@ import CustomFooter from './CustomFooter';
 
 export default observer(function App() {
   const location = useLocation();
-  const { commonStore, userStore, institutionStore, specialtyStore } = useStore();
+  const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
   const { loadCitiesWithInstitutions, loadInstitutions, loadRegionsWithCities } = institutionStore;
   const { loadSpecialtyCores, loadBranches } = specialtyStore;
   useEffect(() => {
@@ -28,7 +28,8 @@ export default observer(function App() {
     loadBranches();
     loadCitiesWithInstitutions();
     loadRegionsWithCities();
-  }, [commonStore, userStore, loadInstitutions, loadCitiesWithInstitutions, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
+    loadProfile();
+  }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutions, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
 
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 

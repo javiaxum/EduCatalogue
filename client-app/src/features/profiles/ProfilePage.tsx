@@ -12,12 +12,11 @@ export default observer(function ProfilePage() {
     const { profileStore, commonStore } = useStore();
     const { editMode, setEditMode } = commonStore;
     const { loadProfile, profile } = profileStore;
-    const { username } = useParams();
 
     useEffect(() => {
-        if (username) loadProfile(username);
+        loadProfile();
         // setEditMode(false);
-    }, [loadProfile, username]);
+    }, [loadProfile]);
 
 
     return (

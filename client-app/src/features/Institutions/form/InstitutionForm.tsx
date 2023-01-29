@@ -14,6 +14,7 @@ import InstitutionDetailsMenu from '../details/InstitutionDetailsMenu';
 import InstitutionDetailsSpecialtiesList from '../details/specialties/InstitutionDetailsSpecialtiesList';
 import InstitutionDetailsInfoForm from './InstitutionDetailsInfoForm';
 import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetailsReviewsList';
+import InstitutionDetailsGallery from '../details/gallery/InstitutionDetailsGallery';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
@@ -133,6 +134,8 @@ export default observer(function InstitutionForm() {
                                 <InstitutionDetailsSpecialtiesList />}
                             {detailsMenuActiveItem === 'Reviews' &&
                                 <InstitutionDetailsReviewsList />}
+                            {detailsMenuActiveItem === 'Gallery' &&
+                                <InstitutionDetailsGallery />}
                         </Grid.Column>
                     </Grid>
                 </Form>

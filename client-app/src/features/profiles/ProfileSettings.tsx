@@ -13,15 +13,13 @@ interface Props {
 }
 
 export default observer(function ProfileSettings({ profile }: Props) {
-    const { userStore } = useStore();
-    const { user } = userStore;
 
     const validationSchema = Yup.object({
         DisplayName: Yup.string().required('Institution name is required'),
     })
 
 
-    function handleProfileFormSubmit(profile: User) {
+    function handleProfileFormSubmit(profile: Profile) {
 
     }
 
@@ -30,7 +28,7 @@ export default observer(function ProfileSettings({ profile }: Props) {
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
-                initialValues={user!}
+                initialValues={profile!}
                 onSubmit={values => handleProfileFormSubmit(values)}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
@@ -59,14 +57,14 @@ export default observer(function ProfileSettings({ profile }: Props) {
                                     <CustomTextInput placeholder='DisplayName' name='email' />
                                 </Grid.Column>
                                 <Grid.Column width={5} style={{ padding: '0 0 0 1rem' }}>
-                                    {user?.emailConfirmed
+                                    {profile?.emailConfirmed
                                         ? <Label positive color='green' content='Confirmed' />
                                         : <Button basic color='red' content='Confirm Email' />}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row style={{ padding: '0' }}>
                                 <Grid.Column style={{ width: '480px', padding: '0.5rem 0 1rem 1rem' }}>
-                                    Two Factor authentication: {user?.twoFactorEnabled
+                                    Two Factor authentication: {profile?.twoFactorEnabled
                                         ? <Button positive color='green' content='Enabled' />
                                         : <Button color='red' content='Disabled' />}
                                 </Grid.Column>

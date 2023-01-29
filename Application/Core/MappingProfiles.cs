@@ -36,8 +36,13 @@ namespace Application.Core
             // .ForMember(d => d.Image, o => o.MapFrom(s => s.Manager.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
 
 
-            CreateMap<AppUser, Profiles.ProfileDTO>()
-            .ForMember(d => d.AvatarUrl, o => o.MapFrom(s => s.Avatar.Url));
+            CreateMap<AppUser, Profiles.ProfileDetailed>()
+            .ForMember(d => d.ManagedInstitutions, o => o.MapFrom(s => s.Institutions));
+
+            CreateMap<AppUserInstitution, Profiles.ManagedInstitution>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.InstitutionId))
+            .ForMember(d => d.Name, o => o.MapFrom(s => s.Institution.Name));
+            
 
             CreateMap<AppUser, Profiles.Profile>()
             .ForMember(d => d.AvatarUrl, o => o.MapFrom(s => s.Avatar.Url));

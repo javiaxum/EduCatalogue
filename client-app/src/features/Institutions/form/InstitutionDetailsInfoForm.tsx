@@ -6,16 +6,15 @@ import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import { InstitutionFormValues } from '../../../app/models/institution';
-import { Region } from '../../../app/models/region';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
     institution: InstitutionFormValues
 }
 
-export default observer(function InstitutionDetailsInfoForm({institution}: Props) {
+export default observer(function InstitutionDetailsInfoForm({ institution }: Props) {
     const { institutionStore } = useStore();
-    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion } = institutionStore;
+    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion, selectedInstitution } = institutionStore;
     const formik = useFormikContext();
     return (
         <Grid>
@@ -52,7 +51,7 @@ export default observer(function InstitutionDetailsInfoForm({institution}: Props
                                 }}
                                 placeholder={'Select region'}
                                 name='regionId'
-                                options={regionRegistry.map(element => ({ text: element.name, value: element.id}))
+                                options={regionRegistry.map(element => ({ text: element.name, value: element.id }))
                                 } />
                         </Grid.Column>
                         <Grid.Column width={8}>
@@ -93,10 +92,13 @@ export default observer(function InstitutionDetailsInfoForm({institution}: Props
                 </Grid>
             </Grid.Column>
             <Grid.Column width={6}>
-                <Button style={{ position: 'absolute', opacity: '90%', height: '4rem', top: '19em', zIndex: '1000' }}>
-                    <Icon name='image' style={{ padding: '0', margin: '0' }} />
+                <Button type='button' style={{ position: 'absolute', opacity: '90%', height: '3rem', top: '20em', zIndex: '1000' }}>
+                    Set title image<Icon name='image' style={{ padding: '0 0 0 0.3rem', margin: '0' }} />
                 </Button>
-                <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover' }} />
+                <Image
+                    avatar
+                    src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
+                    style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
             </Grid.Column>
         </Grid>
     )

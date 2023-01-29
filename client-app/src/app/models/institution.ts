@@ -1,5 +1,5 @@
 import { City } from "./city";
-import { Profile } from "./profile";
+import { Image, Profile } from "./profile";
 import { Region } from "./region";
 import { Review } from "./review";
 import { Specialty } from "./specialty";
@@ -21,6 +21,7 @@ export interface Institution {
     managers: Profile[];
     specialties: Specialty[];
     reviews: Review[];
+    images: Image[];
 }
 
 export class Institution implements Institution {
@@ -33,10 +34,12 @@ export class InstitutionFormValues {
     id?: string = undefined;
     name: string = '';
     description: string = '';
-    studentCount: number = 0; 
+    studentCount: number = 0;
     cityId: string = '';
     regionId?: string = '';
     streetAddress: string = '';
+    titleImageId: string = '';
+    backgroundImageId: string = '';
     siteURL: string = '';
     contactInformation: string = '';
 
@@ -48,6 +51,8 @@ export class InstitutionFormValues {
             this.studentCount = institution.studentCount;
             this.cityId = institution.cityId;
             this.streetAddress = institution.streetAddress;
+            this.titleImageId = institution.titleImageId;
+            this.backgroundImageId = institution.backgroundImageId;
             this.siteURL = institution.siteURL;
             this.contactInformation = institution.contactInformation;
         }

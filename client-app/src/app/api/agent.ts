@@ -112,7 +112,7 @@ const Account = {
 }
 
 const Profiles = {
-    get: (username: string) => requests.get<Profile>(`/profiles/${username}`),
+    get: () => requests.get<Profile>(`/profile`),
 }
 
 const agent = {

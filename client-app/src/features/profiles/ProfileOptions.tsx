@@ -12,8 +12,10 @@ interface Props {
 }
 
 export default observer(function ProfileOptions({ profile }: Props) {
-    const { commonStore, userStore } = useStore();
+    const { commonStore, userStore, profileStore: {isCurrentUser} } = useStore();
     const [menuItem, setMenuItem] = useState<string>('Profile');
+
+    if(!isCurrentUser) return <></>
 
     return (
         <Grid style={{ paddingTop: '10px' }}>
@@ -41,8 +43,8 @@ export default observer(function ProfileOptions({ profile }: Props) {
                     />
                 </Menu>
                 <Segment attached='bottom'>
-                    {(menuItem === 'Profile' && userStore.user?.username === profile.username) && <ProfileSettings profile={profile} />}
-                    {(menuItem === 'Reviews' && userStore.user?.username === profile.username && profile.reviews)
+                    {menuItem === 'Profile' && <ProfileSettings profile={profile} />}
+                    {(menuItem === 'Reviews' && profile.reviews)
                         && <ProfileReviews reviews={profile.reviews} />}
                 </Segment>
             </Grid.Column>

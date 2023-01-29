@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { Profile } from "../models/profile";
+import { store } from "./store";
 
 export default class ProfileStore {
 
@@ -11,10 +12,17 @@ export default class ProfileStore {
         makeAutoObservable(this);
     }
 
-    loadProfile = async (username: string) => {
+    get isCurrentUser() {
+        if(store.userStore.user && this.profile) {
+            return this.profile.username === store.userStore.user.username;
+        }
+        return false;
+    }
+
+    loadProfile = async () => {
         this.loading = true;
         try {
-            const profile = await agent.Profiles.get(username);
+            const profile = await agent.Profiles.get();
             runInAction(() => {
                 profile.reviews.forEach((x) => {
                     x.createdAt = new Date(x.createdAt);

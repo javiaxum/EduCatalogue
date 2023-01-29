@@ -7,12 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
 {
-    public class ProfilesController : BaseAPIController
+    public class ProfileController : BaseAPIController
     {
-        [HttpGet("{username}")]
-        public async Task<IActionResult> GetProfile(string username)
+        [HttpGet]
+        public async Task<IActionResult> GetProfile()
         {
-            return HandleResult(await Mediator.Send(new Details.Query {Username = username}));
+            return HandleResult(await Mediator.Send(new Details.Query {}));
         }
     }
 }
