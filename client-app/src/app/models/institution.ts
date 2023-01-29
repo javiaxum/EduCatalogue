@@ -13,8 +13,10 @@ export interface Institution {
     cityName: string;
     streetAddress: string;
     siteURL: string;
-    titleImage: string;
-    emblemImage: string;
+    titleImageId: string;
+    backgroundImageId: string;
+    titleImageUrl: string;
+    backgroundImageUrl: string;
     contactInformation: string;
     managers: Profile[];
     specialties: Specialty[];
@@ -36,8 +38,6 @@ export class InstitutionFormValues {
     regionId?: string = '';
     streetAddress: string = '';
     siteURL: string = '';
-    titleImage: string = '';
-    emblemImage: string = '';
     contactInformation: string = '';
 
     constructor(institution?: InstitutionFormValues) {
@@ -49,8 +49,6 @@ export class InstitutionFormValues {
             this.cityId = institution.cityId;
             this.streetAddress = institution.streetAddress;
             this.siteURL = institution.siteURL;
-            this.titleImage = institution.titleImage;
-            this.emblemImage = institution.emblemImage;
             this.contactInformation = institution.contactInformation;
         }
     }

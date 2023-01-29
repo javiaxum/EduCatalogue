@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Application.Images;
+using Application.Core;
 
 namespace API.Controllers
 {
@@ -14,15 +15,17 @@ namespace API.Controllers
     {
         [AllowAnonymous]
         [HttpPost("profileImage")]
-        public async Task<ActionResult> Add([FromForm] Add.Command command)
+        public async Task<ActionResult> Add([FromForm] AddProfileAvatar.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }
         [AllowAnonymous]
-        [HttpPost("setMainProfileImage/{id}")]
-        public async Task<ActionResult> SetMainProfileImage(string id)
+        [HttpPost("institutions/{id}")]
+        public async Task<ActionResult> AddInstitutionImage([FromForm] AddInstitutionImage.Command command, Guid id, [FromQuery] ImageParams param)
         {
-            return HandleResult(await Mediator.Send(new SetMainProfileImage.Command { Id = id }));
+            command.Id = id;
+            command.Params = param;
+            return HandleResult(await Mediator.Send(command));
         }
         [AllowAnonymous]
         [HttpDelete("profileImage/{id}")]

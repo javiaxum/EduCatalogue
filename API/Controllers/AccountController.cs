@@ -32,7 +32,7 @@ namespace API.Controllers
         [Route("login")]
         public async Task<ActionResult<AppUserDTO>> Login(LoginDTO loginDTO)
         {
-            var user = await _userManager.Users.Include(i => i.Images).FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
             if (user == null) return Unauthorized("An error occured while authorizing user");
 
@@ -80,7 +80,7 @@ namespace API.Controllers
         [HttpGet]
         public async Task<ActionResult<AppUserDTO>> GetCurrentUser()
         {
-            var user = await _userManager.Users.Include(i => i.Images)
+            var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
 
             return CreateUserDTO(user);
@@ -96,7 +96,7 @@ namespace API.Controllers
                 Email = appUser.Email,
                 EmailConfirmed = appUser.EmailConfirmed,
                 TwoFactorEnabled = appUser.TwoFactorEnabled,
-                Image = appUser?.Images?.FirstOrDefault(x => x.Type == "ProfileMainImage")?.Url
+                Avatar = appUser?.Avatar
             };
         }
     }

@@ -18,9 +18,9 @@ namespace Application
         public string CityId { get; set; }
         public string CityName { get; set; }
         public string StreetAddress { get; set; }
-        public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
-        public string TitleImage { get; set; } // images can be reworked into Image <-> Institution relationship with flags matching image type
-        public string EmblemImage { get; set; }
+        public string SiteURL { get; set; }
+        public string TitleImageUrl { get; set; }
+        public string BackgroundImageUrl { get; set; }
         public string ContactInformation { get; set; }
         public double Rating { get; set; }
     }

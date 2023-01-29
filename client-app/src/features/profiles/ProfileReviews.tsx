@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Item, Image, Header } from 'semantic-ui-react';
+import { Grid, Item, Image, Header, Divider, Segment } from 'semantic-ui-react';
 import { Review } from '../../app/models/review';
 import { useStore } from '../../app/stores/store';
 import ReviewListItem from '../Institutions/details/reviews/ReviewListItem';
@@ -10,21 +10,24 @@ interface Props {
 
 export default function ProfileReviews({ reviews }: Props) {
     const { institutionStore } = useStore();
-
     return (
         <Item.Group>
             {reviews.map((review) =>
-                <Grid>
-                    <Grid.Column width={10}>
+                <Segment.Group>
+                    <Segment key={review.id}>
+                        <Grid>
+                            <Grid.Column width={2} style={{ padding: '0.5rem 1rem 1rem 1rem' }}>
+                                <Image src={institutionStore.institutionsRegistry.get(review.institutionId)?.titleImageUrl || '/assets/user.png'} avatar style={{ minHeight: '5rem', minWidth: '5rem' }} spaced='right' />
+                            </Grid.Column>
+                            <Grid.Column width={10} style={{ padding: '2.5rem 0 0 1.5rem' }} >
+                                <Header as='h4' content={institutionStore.institutionsRegistry.get(review.institutionId)?.name} />
+                            </Grid.Column>
+                        </Grid>
+                    </Segment>
+                    <Segment>
                         <ReviewListItem review={review} key={review.id} />
-                    </Grid.Column>
-                    <Grid.Column width={4}>
-                        <Header as='h4' content={institutionStore.institutionsRegistry.get(review.institutionId)?.name} />
-                    </Grid.Column>
-                    <Grid.Column width={2}>
-                        <Image src={institutionStore.institutionsRegistry.get(review.institutionId)?.titleImage || '/assets/user.png'} avatar style={{ height: '5rem', width: '5rem' }} spaced='right' />
-                    </Grid.Column>
-                </Grid>
+                    </Segment>
+                </Segment.Group>
             )}
         </Item.Group>
     )

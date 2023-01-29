@@ -14,22 +14,22 @@ export default function ReviewListItem({ review }: Props) {
 
     let elements = [];
     for (let i = 1; i <= review.rating; i++) {
-        elements.push((<Icon color='yellow' name='star' />))
+        elements.push((<Icon color='yellow' name='star' key={i} />))
     }
     for (let i = 1; i <= 5 - review.rating; i++) {
-        elements.push((<Icon color='yellow' name='star outline' />))
+        elements.push((<Icon color='yellow' name='star outline' key={5 - i + 1} />))
     }
     return (
-        <Item style={{ minHeight: '90px', width: '700px', color: '#444' }}>
+        <Item style={{ minHeight: '90px', minWidth: '600px', color: '#444' }}>
             <Item.Content>
                 <Grid>
-                    <Grid.Column style={{minWidth: '200px'}}>
+                    <Grid.Column style={{ minWidth: '200px' }}>
                         <Item.Header as='h5'><Image src={review.author.image || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
                     </Grid.Column>
-                    <Grid.Column width={3}>
+                    <Grid.Column width={4}>
                         {elements}
                     </Grid.Column>
-                    <Grid.Column width={3} floated='right'>
+                    <Grid.Column width={3}>
                         {format(review.createdAt, 'dd-MMM yyyy')}
                     </Grid.Column>
                 </Grid>

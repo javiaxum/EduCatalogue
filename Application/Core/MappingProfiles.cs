@@ -20,6 +20,8 @@ namespace Application.Core
             CreateMap<InstitutionDTO, Institution>();
 
             CreateMap<Institution, InstitutionDTO>()
+            .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))
+            .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.CityName, o => o.MapFrom(s => s.City.Name))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
@@ -35,15 +37,14 @@ namespace Application.Core
 
 
             CreateMap<AppUser, Profiles.ProfileDTO>()
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
+            .ForMember(d => d.AvatarUrl, o => o.MapFrom(s => s.Avatar.Url));
 
             CreateMap<AppUser, Profiles.Profile>()
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
+            .ForMember(d => d.AvatarUrl, o => o.MapFrom(s => s.Avatar.Url));
 
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
-            // .ForMember(d => d.ISCEDcores, o => o.MapFrom(s => s.SpecialtyCore.ISCEDCores))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<SpecialtyDTO, Specialty>();
@@ -63,13 +64,7 @@ namespace Application.Core
             CreateMap<ISCEDCore, ISCEDCoreDTO>();
 
             CreateMap<Review, ReviewDTO>()
-            .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id));            
-
-            CreateMap<AppUser, Application.Profiles.Profile>()
-            .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.DisplayName))
-            .ForMember(d => d.Username, o => o.MapFrom(s => s.UserName))
-            .ForMember(d => d.Images, o => o.MapFrom(s => s.Images))
-            .ForMember(d => d.Image, o => o.MapFrom(s => s.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
+            .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id));
 
             CreateMap<Branch, Branch>();
 

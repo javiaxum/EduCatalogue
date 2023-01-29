@@ -12,30 +12,32 @@ using Persistence;
 
 namespace Application.Images
 {
-    public class Add
+    public class AddInstitutionImage
     {
         public class Command : IRequest<Result<Image>>
         {
             public IFormFile File { get; set; }
+            public ImageParams Params { get; set; }
+            public Guid Id { get; set; }
         }
         public class Handler : IRequestHandler<Command, Result<Image>>
         {
+            private readonly DataContext _context;
             private readonly IUsernameAccessor _usernameAccessor;
             private readonly IImageAccessor _imageAccessor;
-            private readonly DataContext _context;
             public Handler(DataContext context, IImageAccessor imageAccessor, IUsernameAccessor usernameAccessor)
             {
-                _context = context;
                 _imageAccessor = imageAccessor;
                 _usernameAccessor = usernameAccessor;
+                _context = context;
             }
 
             public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.Include(i => i.Images)
-                    .FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
+                var institution = await _context.Institutions
+                    .FirstOrDefaultAsync(x => x.Id == request.Id);
 
-                if (user == null) return null;
+                if (institution == null) return null;
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
@@ -45,9 +47,11 @@ namespace Application.Images
                     Id = imageUploadResult.PublicId,
                 };
 
-                if (!user.Images.Any(x => x.Type == "ProfileMainImage"))
-                    image.Type = "ProfileMainImage";
-                user.Images.Add(image);
+                if (request.Params.isTitleImage)
+                    institution.TitleImageId = image.Id;
+                else if (request.Params.isBackgroundImage)
+                    institution.BackgroundImageId = image.Id;
+                institution.Images.Add(image);
 
                 var result = await _context.SaveChangesAsync() > 0;
 

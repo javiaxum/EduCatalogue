@@ -6,6 +6,7 @@ using Application.Institutions;
 using Application.Profiles;
 using Application.Reviews;
 using Application.Specialties;
+using Domain;
 
 namespace Application
 {
@@ -19,9 +20,10 @@ namespace Application
         public string CityName { get; set; }
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
-        public string TitleImage { get; set; } // images can be reworked into Image <-> Institution relationship with flags matching image type
-        public string EmblemImage { get; set; }
+        public string TitleImageId { get; set; }
+        public string BackgroundImageId { get; set; }
         public string ContactInformation { get; set; }
+        public ICollection<Image> Images { get; set; } = new List<Image>();
         public ICollection<ReviewDTO> Reviews { get; set; } = new List<ReviewDTO>();
         public ICollection<SpecialtyDTO> Specialties { get; set; } = new List<SpecialtyDTO>();
     }

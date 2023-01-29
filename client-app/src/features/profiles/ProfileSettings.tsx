@@ -39,7 +39,7 @@ export default observer(function ProfileSettings({ profile }: Props) {
                                 <Grid.Column style={{ width: '110px', padding: '0.5rem 0 1rem 1rem' }}>
                                     Username:
                                 </Grid.Column>
-                                <Grid.Column width={3} style={{ padding: '0' }}>
+                                <Grid.Column width={4} style={{ padding: '0' }}>
                                     <CustomTextInput disabled={true} placeholder='Username' name='username' />
                                 </Grid.Column>
                             </Grid.Row>
@@ -47,7 +47,7 @@ export default observer(function ProfileSettings({ profile }: Props) {
                                 <Grid.Column style={{ width: '110px', padding: '0.5rem 0 1rem 1rem' }}>
                                     Display name:
                                 </Grid.Column>
-                                <Grid.Column width={3} style={{ padding: '0' }}>
+                                <Grid.Column width={4} style={{ padding: '0' }}>
                                     <CustomTextInput placeholder='DisplayName' name='displayName' />
                                 </Grid.Column>
                             </Grid.Row>
@@ -55,17 +55,17 @@ export default observer(function ProfileSettings({ profile }: Props) {
                                 <Grid.Column style={{ width: '110px', padding: '0.5rem 0 1rem 1rem' }}>
                                     Email:
                                 </Grid.Column>
-                                <Grid.Column width={3} style={{ padding: '0' }}>
+                                <Grid.Column width={4} style={{ padding: '0' }}>
                                     <CustomTextInput placeholder='DisplayName' name='email' />
                                 </Grid.Column>
-                                <Grid.Column width={3} style={{ padding: '0 0 0 1rem' }}>
+                                <Grid.Column width={5} style={{ padding: '0 0 0 1rem' }}>
                                     {user?.emailConfirmed
                                         ? <Label positive color='green' content='Confirmed' />
                                         : <Button basic color='red' content='Confirm Email' />}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row style={{ padding: '0' }}>
-                                <Grid.Column style={{ width: '380px', padding: '0.5rem 0 1rem 1rem' }}>
+                                <Grid.Column style={{ width: '480px', padding: '0.5rem 0 1rem 1rem' }}>
                                     Two Factor authentication: {user?.twoFactorEnabled
                                         ? <Button positive color='green' content='Enabled' />
                                         : <Button color='red' content='Disabled' />}

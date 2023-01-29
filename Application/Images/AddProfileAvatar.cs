@@ -12,44 +12,46 @@ using Persistence;
 
 namespace Application.Images
 {
-    public class Delete
+    public class AddProfileAvatar
     {
-        public class Command : IRequest<Result<Unit>>
+        public class Command : IRequest<Result<Image>>
         {
-            public string Id { get; set; }
+            public IFormFile File { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Result<Unit>>
+        public class Handler : IRequestHandler<Command, Result<Image>>
         {
+            private readonly DataContext _context;
             private readonly IUsernameAccessor _usernameAccessor;
             private readonly IImageAccessor _imageAccessor;
-            private readonly DataContext _context;
             public Handler(DataContext context, IImageAccessor imageAccessor, IUsernameAccessor usernameAccessor)
             {
-                _context = context;
                 _imageAccessor = imageAccessor;
                 _usernameAccessor = usernameAccessor;
+                _context = context;
             }
 
-            public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users
                     .FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
 
                 if (user == null) return null;
 
-                if (user.Avatar == null) return null;
+                var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
-                var imageDeleteResult = await _imageAccessor.DeleteImage(user.Avatar.Id);
+                var image = new Image
+                {
+                    Url = imageUploadResult.Url,
+                    Id = imageUploadResult.PublicId,
+                };
 
-                if (imageDeleteResult == null) return Result<Unit>.Failure("An error has occured while deleting an image from Cloudinary");
-
-                user.Avatar = null;
+                user.Avatar = image;
 
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (result) return Result<Unit>.Success(Unit.Value);
+                if (result) return Result<Image>.Success(image);
 
-                return Result<Unit>.Failure("An error has occured while deleting an image from API");
+                return Result<Image>.Failure("An error has occured while saving an image");
             }
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Reviews;
+using Domain;
 
 namespace API.DTOs
 {
@@ -14,7 +15,7 @@ namespace API.DTOs
         public bool TwoFactorEnabled { get; set; }
         public string Token { get; set; }
         public string Username { get; set; }
-        public string Image { get; set; }
+        public Image Avatar { get; set; }
         public ICollection<ReviewDTO> Reviews { get; set; }
     }
 }

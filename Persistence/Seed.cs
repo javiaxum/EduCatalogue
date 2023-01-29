@@ -3882,7 +3882,6 @@ namespace Persistence
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
                         StudentCount = 5150,
                         StreetAddress = "вул. Пекарська, 69",
-                        TitleImage = null,
                         SiteURL = "new.meduniv.lviv.ua",
                         ContactInformation = "0231231028"
                     },
