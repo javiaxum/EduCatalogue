@@ -1,7 +1,8 @@
 import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { Button, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Button, Container, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
@@ -16,13 +17,22 @@ interface Props {
 
 export default observer(function InstitutionDetailsInfoForm({ institution }: Props) {
     const { institutionStore } = useStore();
-    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion, selectedInstitution } = institutionStore;
+    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion, selectedInstitution, setTitleImage, uploading } = institutionStore;
+    const { id } = useParams();
     const [files, setFiles] = useState<any>([]);
     const [cropper, setCropper] = useState<Cropper>();
 
-    function OnCrop() {
+    function HandleImageUpload(file: Blob) {
+        if (id)
+            setTitleImage(file, id).then(() => {
+                files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+                setFiles([]);
+            })
+    }
+
+    function onCrop() {
         if (cropper) {
-            cropper.getCroppedCanvas().toBlob(blob => console.log(blob))
+            cropper.getCroppedCanvas().toBlob(blob => HandleImageUpload(blob!))
         }
     }
 
@@ -34,7 +44,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
 
     const formik = useFormikContext();
     return (
-        <Grid>
+        <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={10}>
                 <Grid style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
@@ -109,14 +119,31 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 </Grid>
             </Grid.Column>
             <Grid.Column width={4}>
-                <ImageUploadWidgetDropzone
+                {files && files.length == 0 && <ImageUploadWidgetDropzone
                     setFiles={setFiles}
-                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />
-                {files && files.length > 0 && <ImageUploadWidgetCropper setCropper={setCropper} preview={files[0].preview} />}
-                {/* <Image
-                    avatar
-                    src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                    style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} /> */}
+                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />}
+                {files && files.length > 0 && <>
+                    <div className='img-preview' style={{ borderRadius: '30px', minHeight: '22rem', minWidth: '22rem', overflow: 'hidden', }} />
+                </>}
+                {files && files.length > 0 && <Container style={{ minHeight: '22rem', minWidth: '22rem', paddingTop: '3rem' }}>
+                    <Header as='h3' content='Image preview' />
+                    <ImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
+                    <Button.Group widths={2}>
+                        <Button
+                            positive
+                            type='button'
+                            icon='check'
+                            onClick={onCrop}
+                            loading={uploading}
+                        />
+                        <Button
+                            onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
+                            type='button'
+                            icon='cancel'
+                            disabled={uploading}
+                        />
+                    </Button.Group>
+                </Container>}
             </Grid.Column>
         </Grid>
     )

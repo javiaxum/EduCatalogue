@@ -17,7 +17,7 @@ export default function InstitutionDetailsGallery() {
     const filteredImages = selectedInstitution?.images.slice().filter((x) => x.id === selectedInstitution.backgroundImageId || x.id === selectedInstitution.titleImageId);
 
     return (
-        <Grid >
+        <Grid>
             {filteredImages.length === 0
                 ? <Segment style={{ color: '#444', width: '300px' }}>There are no images available...</Segment>
                 : (

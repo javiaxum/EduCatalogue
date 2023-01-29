@@ -9,7 +9,7 @@ import { Region } from "../models/region";
 import { ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
-import { Profile } from "../models/profile";
+import { Image, Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 
@@ -90,6 +90,13 @@ const Institutions = {
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
     listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", {params}).then(responseBody),
     listRegions: () => requests.get<Region[]>("/institutions/regions"),
+    setTitleImage: (file: Blob, id: string) => {
+        let formData = new FormData();
+        formData.append('File', file)
+        return axios.post<Image>(`/images/institutions/${id}?isTitleImage=true`, formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+        })
+    }
 }
 
 const Reviews = {

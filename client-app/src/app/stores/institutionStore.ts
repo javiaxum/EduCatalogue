@@ -18,6 +18,7 @@ export default class InstitutionStore {
     selectedInstitution: Institution | undefined = undefined;
     selectedRegion: Region | undefined = undefined;
     loading: boolean = false;
+    uploading: boolean = false;
     reviewForm: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
@@ -100,6 +101,26 @@ export default class InstitutionStore {
             this.setReview(institutionId, newReview);
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    setTitleImage = async (file: Blob, id: string) => {
+        this.uploading = true;
+        try {
+            const response = await agent.Institutions.setTitleImage(file, id);
+            const titleImage = response.data;
+            runInAction(() => {
+                if (this.selectedInstitution) {
+                    this.selectedInstitution.titleImageUrl = titleImage.url;
+                    this.institutionsRegistry.set(this.selectedInstitution.id, this.selectedInstitution);
+                }
+                this.uploading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.uploading = false;
+            })
         }
     }
 
@@ -242,7 +263,6 @@ export default class InstitutionStore {
     private setInstitution = (institution: Institution) => {
         institution.reviews.forEach((x) => {
             x.createdAt = new Date(x.createdAt);
-
         })
         this.institutionsRegistry.set(institution.id, institution);
     }

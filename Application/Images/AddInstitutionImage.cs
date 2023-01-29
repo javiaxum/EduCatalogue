@@ -39,6 +39,16 @@ namespace Application.Images
 
                 if (institution == null) return null;
 
+                string deleteResult = "";
+                if (!String.IsNullOrEmpty(institution.TitleImageId))
+                    deleteResult = await _imageAccessor.DeleteImage(institution.TitleImageId);
+
+                if (!String.IsNullOrEmpty(institution.BackgroundImageId))
+                    deleteResult = await _imageAccessor.DeleteImage(institution.BackgroundImageId);
+
+                if (deleteResult == null)
+                    return Result<Image>.Failure("An error has occured while saving an image");
+
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
                 var image = new Image
