@@ -1,12 +1,13 @@
 import { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
-import { Button, Icon } from "semantic-ui-react";
+import { Button, Icon, Image } from "semantic-ui-react";
 
 interface Props {
     setFiles: (files: any) => void;
+    imageUrl: string;
 }
 
-export default function ImageUploadWidgetDropzone({ setFiles }: Props) {
+export default function ImageUploadWidgetDropzone({ setFiles, imageUrl }: Props) {
     const onDrop = useCallback((acceptedFiles: any) => {
         setFiles(acceptedFiles.map((file: any) => Object.assign(file, {
             preview: URL.createObjectURL(file)
@@ -17,27 +18,25 @@ export default function ImageUploadWidgetDropzone({ setFiles }: Props) {
     const style = {
         border: 'dashed 3px #eee',
         borderColor: '#eee',
-        borderRadius: '5px',
-        paddingTop: '30px',
+        borderRadius: '30px',
         textAlign: 'center' as 'center',
-        height: 200
+        minHeight: '22rem',
+        minWidth: '22rem',
+        // height: 200
     }
     const activeStyle = {
-        borderColor: 'green'
+        borderColor: 'green',
+        backgroundColor: '#eee'
     }
 
     return (
         <div {...getRootProps()} style={isDragActive ? { ...style, ...activeStyle } : style}>
             <input {...getInputProps()} />
             {
-                <Button
-                    fluid
-                    style={{ color: '#999', alignItems: 'center', display: 'flex' }}
-                    className='specialtyCard'
-                    type='button'
-                >
-                    <Icon name='plus' size='large' style={{ width: '100%' }} />
-                </Button>
+                <Image
+                    avatar
+                    src={imageUrl}
+                    style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
             }
         </div>
     )

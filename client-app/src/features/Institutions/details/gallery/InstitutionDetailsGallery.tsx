@@ -1,5 +1,6 @@
 import React from 'react';
 import { Grid, Segment } from 'semantic-ui-react';
+import ImageUploadWidgetDropzone from '../../../../app/common/imageUpload/ImageUploadWidgetDropzone';
 import { useStore } from '../../../../app/stores/store';
 import GalleryAddNewImage from './GalleryAddNewImage';
 import GalleryImage from './GalleryImage';
@@ -28,8 +29,10 @@ export default function InstitutionDetailsGallery() {
                         ))}
                     </>
                 )}
-            {editMode && <GalleryAddNewImage />
-            }
+            {/* {editMode && <Grid.Column style={{ width: '245px' }}>
+                <ImageUploadWidgetDropzone setFiles={ } />
+            </Grid.Column>
+            } */}
         </Grid>
     )
 }

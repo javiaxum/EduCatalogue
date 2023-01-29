@@ -1,10 +1,12 @@
 import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
+import ImageUploadWidgetCropper from '../../../app/common/imageUpload/ImageUploadWidgetCropper';
+import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/ImageUploadWidgetDropzone';
 import { InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 
@@ -15,6 +17,21 @@ interface Props {
 export default observer(function InstitutionDetailsInfoForm({ institution }: Props) {
     const { institutionStore } = useStore();
     const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion, selectedInstitution } = institutionStore;
+    const [files, setFiles] = useState<any>([]);
+    const [cropper, setCropper] = useState<Cropper>();
+
+    function OnCrop() {
+        if (cropper) {
+            cropper.getCroppedCanvas().toBlob(blob => console.log(blob))
+        }
+    }
+
+    useEffect(() => {
+        return (() => {
+            files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+        })
+    }, [files])
+
     const formik = useFormikContext();
     return (
         <Grid>
@@ -91,14 +108,15 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                     </Grid.Row>
                 </Grid>
             </Grid.Column>
-            <Grid.Column width={6}>
-                <Button type='button' style={{ position: 'absolute', opacity: '90%', height: '3rem', top: '20em', zIndex: '1000' }}>
-                    Set title image<Icon name='image' style={{ padding: '0 0 0 0.3rem', margin: '0' }} />
-                </Button>
-                <Image
+            <Grid.Column width={4}>
+                <ImageUploadWidgetDropzone
+                    setFiles={setFiles}
+                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />
+                {files && files.length > 0 && <ImageUploadWidgetCropper setCropper={setCropper} preview={files[0].preview} />}
+                {/* <Image
                     avatar
                     src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                    style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
+                    style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} /> */}
             </Grid.Column>
         </Grid>
     )
