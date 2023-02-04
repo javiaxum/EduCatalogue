@@ -82,7 +82,7 @@ export default observer(function InstitutionDetailsInfo() {
                     <Image
                         avatar
                         src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                        style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
+                        style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
                 </Grid.Column>
             </Grid>
         </>

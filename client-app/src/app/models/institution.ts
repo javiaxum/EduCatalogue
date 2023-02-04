@@ -1,8 +1,10 @@
 import { City } from "./city";
-import { Image, Profile } from "./profile";
+import { Profile } from "./profile";
 import { Region } from "./region";
 import { Review } from "./review";
 import { Specialty } from "./specialty";
+import { Image } from "./image";
+
 
 export interface Institution {
     id: string;

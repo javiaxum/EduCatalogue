@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
+import ProfileManagedInstitutions from './ProfileManagedInstitutions';
 import ProfileReviews from './ProfileReviews';
 import ProfileSettings from './ProfileSettings';
 
@@ -28,8 +29,8 @@ export default observer(function ProfileOptions({ profile }: Props) {
                     />
                     <Menu.Item
                         name='Managed institution'
-                        active={menuItem === 'Managed institution'}
-                        onClick={() => setMenuItem('Managed institution')}
+                        active={menuItem === 'Managed institutions'}
+                        onClick={() => setMenuItem('Managed institutions')}
                     />
                     <Menu.Item
                         name='Pending changes'
@@ -46,6 +47,8 @@ export default observer(function ProfileOptions({ profile }: Props) {
                     {menuItem === 'Profile' && <ProfileSettings profile={profile} />}
                     {(menuItem === 'Reviews' && profile.reviews)
                         && <ProfileReviews reviews={profile.reviews} />}
+                    {(menuItem === 'Managed institutions' && profile.reviews)
+                        && <ProfileManagedInstitutions institutions={profile.managedInstitutions} />}
                 </Segment>
             </Grid.Column>
         </Grid>

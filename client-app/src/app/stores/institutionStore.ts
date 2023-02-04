@@ -111,7 +111,33 @@ export default class InstitutionStore {
             const titleImage = response.data;
             runInAction(() => {
                 if (this.selectedInstitution) {
+                    this.selectedInstitution.images.filter((x) => x.id === this.selectedInstitution?.titleImageId);
                     this.selectedInstitution.titleImageUrl = titleImage.url;
+                    this.selectedInstitution.titleImageId = titleImage.id;
+                    this.selectedInstitution.images.push(titleImage);
+                    this.institutionsRegistry.set(this.selectedInstitution.id, this.selectedInstitution);
+                }
+                this.uploading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.uploading = false;
+            })
+        }
+    }
+
+    setBackgroundImage = async (file: Blob, id: string) => {
+        this.uploading = true;
+        try {
+            const response = await agent.Institutions.setBackgroundImage(file, id);
+            const titleImage = response.data;
+            runInAction(() => {
+                if (this.selectedInstitution) {
+                    this.selectedInstitution.images.filter((x) => x.id === this.selectedInstitution?.titleImageId);
+                    this.selectedInstitution.backgroundImageUrl = titleImage.url;
+                    this.selectedInstitution.backgroundImageId = titleImage.id;
+                    this.selectedInstitution.images.push(titleImage);
                     this.institutionsRegistry.set(this.selectedInstitution.id, this.selectedInstitution);
                 }
                 this.uploading = false;

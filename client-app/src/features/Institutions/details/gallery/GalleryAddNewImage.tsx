@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Card, Grid, Icon, Image as ImageSU } from 'semantic-ui-react';
-import ImageUploadWidgetDropzone from '../../../../app/common/imageUpload/ImageUploadWidgetDropzone';
 
 export default function GalleryAddNewImage() {
 

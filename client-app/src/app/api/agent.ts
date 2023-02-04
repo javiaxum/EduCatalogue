@@ -9,9 +9,11 @@ import { Region } from "../models/region";
 import { ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
-import { Image, Profile } from "../models/profile";
+import { Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
+import { Image } from '../../app/models/image';
+
 
 axios.defaults.baseURL = 'http://localhost:5172/api';
 
@@ -83,18 +85,25 @@ const requests = {
 }
 
 const Institutions = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", {params}).then(responseBody),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", { params }).then(responseBody),
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
-    listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", {params}).then(responseBody),
+    listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", { params }).then(responseBody),
     listRegions: () => requests.get<Region[]>("/institutions/regions"),
     setTitleImage: (file: Blob, id: string) => {
         let formData = new FormData();
         formData.append('File', file)
         return axios.post<Image>(`/images/institutions/${id}?isTitleImage=true`, formData, {
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    },
+    setBackgroundImage: (file: Blob, id: string) => {
+        let formData = new FormData();
+        formData.append('File', file)
+        return axios.post<Image>(`/images/institutions/${id}?isBackgroundImage=true`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
         })
     }
 }
@@ -120,6 +129,13 @@ const Account = {
 
 const Profiles = {
     get: () => requests.get<Profile>(`/profile`),
+    setProfileImage: (file: Blob) => {
+        let formData = new FormData();
+        formData.append('File', file)
+        return axios.post<Image>('/images/profileImage', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
+    }
 }
 
 const agent = {

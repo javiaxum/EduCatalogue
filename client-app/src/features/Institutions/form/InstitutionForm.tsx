@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Container, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
+import { Button, Container, Dimmer, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -15,6 +15,8 @@ import InstitutionDetailsSpecialtiesList from '../details/specialties/Institutio
 import InstitutionDetailsInfoForm from './InstitutionDetailsInfoForm';
 import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetailsReviewsList';
 import InstitutionDetailsGallery from '../details/gallery/InstitutionDetailsGallery';
+import BackgroundUploadWidgetDropzone from '../../../app/common/imageUpload/backgroundImage/BackgroundUploadWidgetDropzone';
+import BackgroundImageUploadWidgetCropper from '../../../app/common/imageUpload/backgroundImage/BackgroundImageUploadWidgetCropper';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
@@ -28,11 +30,30 @@ export default observer(function InstitutionForm() {
         setLoadingInitial,
         detailsMenuActiveItem,
         loading,
-        loadRegionsWithCities } = institutionStore;
+        loadRegionsWithCities,
+        selectedInstitution,
+        uploading,
+        setBackgroundImage } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
     const [institution, setInstitution] = useState<InstitutionFormValues>(new InstitutionFormValues())
+    const [files, setFiles] = useState<any>([]);
+    const [cropper, setCropper] = useState<Cropper>();
+
+    function HandleImageUpload(file: Blob) {
+        if (id)
+            setBackgroundImage(file, id).then(() => {
+                files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+                setFiles([]);
+            })
+    }
+
+    function onCrop() {
+        if (cropper) {
+            cropper.getCroppedCanvas().toBlob(blob => HandleImageUpload(blob!))
+        }
+    }
 
     const validationSchema = Yup.object({
         name: Yup.string().required('Institution name is required'),
@@ -56,9 +77,12 @@ export default observer(function InstitutionForm() {
         else {
             setLoadingInitial(false);
         }
-
         setEditMode(true);
-    }, [loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities])
+
+        return (() => {
+            files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+        })
+    }, [files, loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
         if (!institution.id) {
@@ -83,8 +107,15 @@ export default observer(function InstitutionForm() {
                     <Grid>
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                                <Image src={'/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover', minWidth: '1000px'}} />
+                                {files && files.length == 0 && <BackgroundUploadWidgetDropzone
+                                    setFiles={setFiles}
+                                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'} />}
+                                {files && files.length > 0 && <>
+                                    <div className='bkgr-img-preview' style={{ height: '224px', overflow: 'hidden' }} />
+                                </>}
                             </Segment>
+                        </Grid.Column>
+                        <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
                                 top: '-4em',
@@ -97,6 +128,26 @@ export default observer(function InstitutionForm() {
                                 border: 'none',
                                 minWidth: '1000px'
                             }}>
+                                {files && files.length > 0 &&
+                                    <Segment style={{ padding: '1rem 0 1rem 0' }} clearing>
+                                        <Header as='h3' content='Background preview' style={{ paddingLeft: '40px' }} />
+                                        <BackgroundImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
+                                        <Button.Group widths={2}>
+                                            <Button
+                                                positive
+                                                type='button'
+                                                icon='check'
+                                                onClick={onCrop}
+                                                loading={uploading}
+                                            />
+                                            <Button
+                                                onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
+                                                type='button'
+                                                icon='cancel'
+                                                disabled={uploading}
+                                            />
+                                        </Button.Group>
+                                    </Segment>}
                                 <Item.Group>
                                     <Item>
                                         <Item.Content>

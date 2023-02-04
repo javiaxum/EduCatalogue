@@ -6,8 +6,8 @@ import { Button, Container, DropdownProps, Grid, Header, Icon, Image, Input, Sea
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
-import ImageUploadWidgetCropper from '../../../app/common/imageUpload/ImageUploadWidgetCropper';
-import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/ImageUploadWidgetDropzone';
+import ImageUploadWidgetCropper from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetCropper';
+import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetDropzone';
 import { InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 
@@ -38,7 +38,8 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
 
     useEffect(() => {
         return (() => {
-            files.forEach((file: any) => URL.revokeObjectURL(file.preview));
+            files.forEach((file: any) =>
+             URL.revokeObjectURL(file.preview));
         })
     }, [files])
 
@@ -125,25 +126,26 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 {files && files.length > 0 && <>
                     <div className='img-preview' style={{ borderRadius: '30px', minHeight: '22rem', minWidth: '22rem', overflow: 'hidden', }} />
                 </>}
-                {files && files.length > 0 && <Container style={{ minHeight: '22rem', minWidth: '22rem', paddingTop: '3rem' }}>
-                    <Header as='h3' content='Image preview' />
-                    <ImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
-                    <Button.Group widths={2}>
-                        <Button
-                            positive
-                            type='button'
-                            icon='check'
-                            onClick={onCrop}
-                            loading={uploading}
-                        />
-                        <Button
-                            onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
-                            type='button'
-                            icon='cancel'
-                            disabled={uploading}
-                        />
-                    </Button.Group>
-                </Container>}
+                {files && files.length > 0 &&
+                    <Container style={{ minHeight: '22rem', minWidth: '22rem', paddingTop: '3rem' }}>
+                        <Header as='h3' content='Image preview' />
+                        <ImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
+                        <Button.Group widths={2}>
+                            <Button
+                                positive
+                                type='button'
+                                icon='check'
+                                onClick={onCrop}
+                                loading={uploading}
+                            />
+                            <Button
+                                onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
+                                type='button'
+                                icon='cancel'
+                                disabled={uploading}
+                            />
+                        </Button.Group>
+                    </Container>}
             </Grid.Column>
         </Grid>
     )

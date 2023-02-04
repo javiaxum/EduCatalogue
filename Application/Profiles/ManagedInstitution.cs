@@ -11,5 +11,6 @@ namespace Application.Profiles
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public string TitleImageUrl { get; set; }
     }
 }

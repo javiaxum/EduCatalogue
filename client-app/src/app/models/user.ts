@@ -1,10 +1,11 @@
 import { Review } from "./review";
+import { Image } from "./image";
 
 export interface User {
     username: string;
     displayName: string;
     token: string;
-    image?: string;
+    image?: Image;
 }
 
 export interface UserFormValues {

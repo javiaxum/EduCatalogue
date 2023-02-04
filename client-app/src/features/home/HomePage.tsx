@@ -15,14 +15,12 @@ export default observer(function HomePage() {
                     <Image src='/assets/logo.png' alt='logo' verticalAlign="bottom" style={{ marginBottom: 5, width: '1.1em'}} />
                     EduCatalogue
                 </Header>
-
                 {userStore.isLoggedIn
                     ? (<Button as={Link} to={`/institutions`} content='To Institutions' />)
                     : (<>
                         <Button size='big' style={{width: '7em'}} inverted onClick={() => modalStore.openModal(<LoginForm />)} content='Login' />
                         <Button size='big' style={{width: '7em'}} inverted onClick={() => modalStore.openModal(<RegisterForm />)} content='Register' />
                     </>)}
-
             </Container>
         </Segment>
     )

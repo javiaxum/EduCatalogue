@@ -7,6 +7,8 @@ export default class ProfileStore {
 
     profile: Profile | undefined = undefined;
     loading: boolean = false;
+    uploading: boolean = false;
+    
 
     constructor() {
         makeAutoObservable(this);
@@ -34,6 +36,25 @@ export default class ProfileStore {
             console.log(error);
             runInAction(() => {
                 this.loading = false;
+            })
+        }
+    }
+
+    setProfileImage = async (file: Blob, id: string) => {
+        this.uploading = true;
+        try {
+            const response = await agent.Institutions.setBackgroundImage(file, id);
+            const profileAvatar = response.data;
+            runInAction(() => {
+                if (this.profile) {
+                    this.profile.image = profileAvatar;
+                }
+                this.uploading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.uploading = false;
             })
         }
     }

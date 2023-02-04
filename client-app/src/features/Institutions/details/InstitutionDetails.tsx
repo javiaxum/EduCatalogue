@@ -41,7 +41,9 @@ export default observer(function InstitutionDetails() {
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                    <Image src={selectedInstitution.backgroundImageUrl || '/assets/YFCNU.jpg'} fluid style={{ filter: 'brightness(50%)', height: '16em', objectFit: 'cover', minWidth: '1000px' }} />
+                    <Image
+                        src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
+                        style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px' }} />
                 </Segment>
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
@@ -76,7 +78,7 @@ export default observer(function InstitutionDetails() {
                     </Item.Group>
                 </Segment>
             </Grid.Column>
-            <Grid.Column style={{minWidth: '1000px', width: '70%', left: '15%', top: '-80px' }}>
+            <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
                     <InstitutionDetailsInfo />}

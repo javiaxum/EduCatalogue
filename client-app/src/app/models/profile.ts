@@ -1,3 +1,4 @@
+import { Image } from "./image";
 import { Review } from "./review";
 import { User } from "./user";
 
@@ -7,8 +8,7 @@ export interface Profile {
     email: string;
     emailConfirmed: boolean
     twoFactorEnabled: boolean;
-    image?: string;
-    images?: Image[];
+    image?: Image;
     reviews: Review[];
     managedInstitutions: ManagedInstitution[];
 }
@@ -21,12 +21,8 @@ export class Profile implements Profile {
     }
 }
 
-export interface Image {
-    id: string,
-    url: string,
-}
-
 export interface ManagedInstitution {
     id: string,
     name: string,
+    titleImageUrl: string,
 }

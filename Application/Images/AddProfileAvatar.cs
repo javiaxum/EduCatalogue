@@ -39,6 +39,11 @@ namespace Application.Images
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
+                var deleteResult = await _imageAccessor.DeleteImage(user.Avatar.Id);
+
+                if (deleteResult == null)
+                    return Result<Image>.Failure("An error has occured while saving an image");
+
                 var image = new Image
                 {
                     Url = imageUploadResult.Url,

@@ -47,7 +47,7 @@ namespace Application.Images
                     deleteResult = await _imageAccessor.DeleteImage(institution.BackgroundImageId);
 
                 if (deleteResult == null)
-                    return Result<Image>.Failure("An error has occured while saving an image");
+                    return Result<Image>.Failure("An error has occured while deleting an image");
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
@@ -67,7 +67,7 @@ namespace Application.Images
 
                 if (result) return Result<Image>.Success(image);
 
-                return Result<Image>.Failure("An error has occured while saving an image");
+                return Result<Image>.Failure("An error has occured while deleting an image");
             }
         }
     }
