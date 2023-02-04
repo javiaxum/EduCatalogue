@@ -48,12 +48,6 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
         }
         [AllowAnonymous]
-        [HttpGet("{id}/specialties")]
-        public async Task<IActionResult> GetInstitutionSpecialties(Guid id)
-        {
-            return HandleResult(await Mediator.Send(new ListInstitutionSpecialties.Query { Id = id }));
-        }
-        [AllowAnonymous]
         [HttpGet("cities")]
         public async Task<IActionResult> GetCities([FromQuery] CitiesParams param)
         {

@@ -20,10 +20,10 @@ export default observer(function ProfilePage() {
 
 
     return (
-        <Grid style={{minWidth: '1000px'}}>
+        <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={3} />
             <Grid.Column width={10}>
-                {profile && <ProfileHeader profile={profile} />}
+                {profile && <ProfileHeader />}
             </Grid.Column>
             <Grid.Column width={3} />
             <Grid.Column width={3} />
