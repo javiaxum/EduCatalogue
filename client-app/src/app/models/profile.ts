@@ -8,7 +8,7 @@ export interface Profile {
     email: string;
     emailConfirmed: boolean
     twoFactorEnabled: boolean;
-    image?: Image;
+    avatar?: Image;
     reviews: Review[];
     managedInstitutions: ManagedInstitution[];
 }
@@ -17,7 +17,7 @@ export class Profile implements Profile {
     constructor(user: User) {
         this.username = user.username;
         this.displayName = user.displayName;
-        this.image = user.image;
+        this.avatar = user.avatar;
     }
 }
 

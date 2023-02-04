@@ -40,14 +40,13 @@ export default class ProfileStore {
         }
     }
 
-    setProfileImage = async (file: Blob, id: string) => {
+    setProfileImage = async (file: Blob) => {
         this.uploading = true;
         try {
-            const response = await agent.Institutions.setBackgroundImage(file, id);
-            const profileAvatar = response.data;
+            const response = await agent.Profiles.setProfileImage(file);
             runInAction(() => {
                 if (this.profile) {
-                    this.profile.image = profileAvatar;
+                    this.profile.avatar = response.data;
                 }
                 this.uploading = false;
             })

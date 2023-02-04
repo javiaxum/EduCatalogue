@@ -134,7 +134,7 @@ const Profiles = {
         formData.append('File', file)
         return axios.post<Image>('/images/profileImage', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        });
     }
 }
 

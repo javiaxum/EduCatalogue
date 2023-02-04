@@ -24,7 +24,7 @@ export default function ReviewListItem({ review }: Props) {
             <Item.Content>
                 <Grid>
                     <Grid.Column style={{ minWidth: '200px' }}>
-                        <Item.Header as='h5'><Image src={review.author.image || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
+                        <Item.Header as='h5'><Image src={review.author.avatar || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
                     </Grid.Column>
                     <Grid.Column width={4}>
                         {elements}

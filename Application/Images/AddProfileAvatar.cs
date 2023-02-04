@@ -32,17 +32,20 @@ namespace Application.Images
 
             public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users
+                var user = await _context.Users.Include(a => a.Avatar)
                     .FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
 
                 if (user == null) return null;
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
-                var deleteResult = await _imageAccessor.DeleteImage(user.Avatar.Id);
+                if (user.Avatar != null)
+                {
+                    var deleteResult = await _imageAccessor.DeleteImage(user.Avatar.Id);
 
-                if (deleteResult == null)
-                    return Result<Image>.Failure("An error has occured while saving an image");
+                    if (deleteResult == null)
+                        return Result<Image>.Failure("An error has occured while saving an image");
+                }
 
                 var image = new Image
                 {

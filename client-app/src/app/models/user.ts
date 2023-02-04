@@ -5,7 +5,7 @@ export interface User {
     username: string;
     displayName: string;
     token: string;
-    image?: Image;
+    avatar?: Image;
 }
 
 export interface UserFormValues {

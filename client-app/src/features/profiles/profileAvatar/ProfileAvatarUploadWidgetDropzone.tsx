@@ -22,7 +22,7 @@ export default function ProfileAvatarUploadWidgetDropzone({ setFiles, imageUrl }
         minHeight: '13rem',
         height: '13rem',
         minWidth: '13rem',
-        width: '13rem',
+        width: '13rem'
     }
     const activeStyle = {
         borderColor: 'green',
@@ -34,7 +34,7 @@ export default function ProfileAvatarUploadWidgetDropzone({ setFiles, imageUrl }
             <Image
                 avatar
                 src={imageUrl}
-                style={{ filter: 'brightness(30%)', objectFit: 'cover', minHeight: '12rem', minWidth: '12rem', borderRadius: '12rem', top: '0.25rem', left: '0.05rem', margin: '0' }} />
+                style={{ filter: 'brightness(70%)', objectFit: 'cover', minHeight: '12rem', minWidth: '12rem', borderRadius: '12rem', top: '0.35rem', margin: '0' }} />
             <Icon name='plus' size='big' style={{ position: 'absolute', left: '6.25rem', top: '6rem', color: '#fff', margin: '0'}} />
             <Header as='h4' inverted content='Click to choose or drag a file here' style={{ position: 'absolute', top: '6rem', left: '3rem', width: '9rem' }} />
         </div>

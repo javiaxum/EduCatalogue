@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { observer } from 'mobx-react-lite';
 import { useStore } from '../../app/stores/store';
-import { User } from '../../app/models/user';
 
 interface Props {
     profile: Profile

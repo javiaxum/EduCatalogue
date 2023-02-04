@@ -7,7 +7,7 @@ import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
-    const { modalStore, userStore } = useStore()
+    const { modalStore, userStore, profileStore } = useStore()
     return (
         <Menu inverted style={{ borderRadius: '0px' }}>
             <Container>
@@ -21,7 +21,7 @@ export default observer(function NavBar() {
                 {!userStore.isLoggedIn
                     ? (<Menu.Item onClick={() => modalStore.openModal(<LoginForm />)} position='right' name='Profile'></Menu.Item>)
                     : (<Menu.Item position='right' name='Profile'>
-                        <Image src={userStore.user?.image || '/assets/user.png'} avatar spaced='right' />
+                        <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
                         <Dropdown pointing='top left' text={userStore.user?.displayName} >
                             <Dropdown.Menu>
                                 <Dropdown.Item as={Link} to={`/profiles/${userStore.user?.username}`} text='My profile' icon='user' />
