@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
-import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import { institutionSortingOptions } from '../../../app/common/options/institutionSortingOptions';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
@@ -9,8 +8,12 @@ import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
 
 export default observer(function InstitutionsList() {
     const { institutionStore } = useStore();
-    const { pagination } = institutionStore;
+    const { pagination, pagingParams } = institutionStore;
 
+    let placeholders = [];
+    for (let i = 0; i < pagingParams.pageSize; i++) {
+        placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
+    }
     return (
         <>
             <Header as='h2' content="Institutions" style={{ display: 'inline' }} />
@@ -31,11 +34,7 @@ export default observer(function InstitutionsList() {
             <Item.Group divided>
                 {institutionStore.loadingInitial || institutionStore.loading ? (
                     <>
-                        <InstitutionsListItemPlaceholder />
-                        <InstitutionsListItemPlaceholder />
-                        <InstitutionsListItemPlaceholder />
-                        <InstitutionsListItemPlaceholder />
-                        <InstitutionsListItemPlaceholder />
+                        {placeholders}
                     </>
                 ) : (
                     <>

@@ -17,25 +17,23 @@ namespace API.Controllers
 {
     public class InstitutionsController : BaseAPIController
     {
-        [AllowAnonymous]
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IActionResult> GetInstitutions([FromQuery] InstitutionParams param)
         {
             return HandlePagedResult(await Mediator.Send(new Application.Institutions.List.Query { Params = param }));
         }
-        [AllowAnonymous]
+        [Authorize(Policy = "IsOperator")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInstitution(Guid id)
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.Details.Query { Id = id }));
         }
-        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult> CreateInstitution(InstitutionDTO institution)
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.Create.Command { Institution = institution }));
         }
-        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditInstitution(Guid id, InstitutionDTO institution)
         {
@@ -53,7 +51,6 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListCities.Query { Params = param }));
         }
-        [AllowAnonymous]
         [HttpPost("{id}/specialties")]
         public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDTO specialty)
         {
@@ -63,7 +60,6 @@ namespace API.Controllers
                 Specialty = specialty
             }));
         }
-        [AllowAnonymous]
         [HttpPost("{id}/reviews")]
         public async Task<ActionResult> CreateReview(Guid id, Review review)
         {

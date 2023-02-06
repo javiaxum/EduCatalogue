@@ -87,7 +87,12 @@ internal class Program
             {
                 policy.Requirements.Add(new IsManagerRequirement());
             });
+            opt.AddPolicy("IsOperator", policy =>
+            {
+                policy.Requirements.Add(new IsOperatorRequirement());
+            });
         });
+        builder.Services.AddTransient<IAuthorizationHandler, IsOperatorRequirementHandler>();
         builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
 

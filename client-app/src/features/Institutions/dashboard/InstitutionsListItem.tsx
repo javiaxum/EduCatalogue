@@ -9,7 +9,7 @@ interface Props {
 
 export default function InstitutionsListItem({ institution }: Props) {
     return (
-        <Item>
+        <Item style={{ minHeight: 110, paddingTop: 10 }}>
             <Item.Content>
                 <Item.Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Item.Header>
                 <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>

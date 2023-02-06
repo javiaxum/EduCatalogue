@@ -26,7 +26,6 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListBranches.Query { }));
         }
-        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSpecialty(Guid id)
         {

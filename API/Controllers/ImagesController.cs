@@ -13,13 +13,11 @@ namespace API.Controllers
 {
     public class ImagesController : BaseAPIController
     {
-        [AllowAnonymous]
         [HttpPost("profileImage")]
         public async Task<ActionResult> Add([FromForm] AddProfileAvatar.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }
-        [AllowAnonymous]
         [HttpPost("institutions/{id}")]
         public async Task<ActionResult> AddInstitutionImage([FromForm] AddInstitutionImage.Command command, Guid id, [FromQuery] ImageParams param)
         {
@@ -27,7 +25,6 @@ namespace API.Controllers
             command.Params = param;
             return HandleResult(await Mediator.Send(command));
         }
-        [AllowAnonymous]
         [HttpDelete("profileImage/{id}")]
         public async Task<ActionResult> Delete(string id)
         {

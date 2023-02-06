@@ -4132,6 +4132,7 @@ namespace Persistence
 
                 // Seed managers
                 var usermanager = await userManager.FindByEmailAsync("EduCatalogue@service.com");
+                var usermanager2 = await userManager.FindByEmailAsync("EduCatalogue@service.com");
                 var institution = await context.Institutions.FindAsync(Institutions[0].Id);
 
                 var manager = new AppUserInstitution

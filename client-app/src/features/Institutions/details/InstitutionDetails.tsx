@@ -43,7 +43,7 @@ export default observer(function InstitutionDetails() {
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                     <Image
                         src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
-                        style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px' }} />
+                        style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px', width: '100%', overflow: 'hidden' }} />
                 </Segment>
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
