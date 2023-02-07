@@ -35,9 +35,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     label={'min'}
                     placeholder="0"
-                    min={0}
                     name="min"
-                    type="number"
                     style={{ width: '30%', padding: '2px' }}
                     value={minPrice}
                     onChange={(e, d) => {
@@ -46,9 +44,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     label={'max'}
                     placeholder="0"
-                    min={0}
                     name="max"
-                    type="number"
                     style={{ width: '30%', marginLeft: '50px' }}
                     value={maxPrice}
                     onChange={(e, d) => {

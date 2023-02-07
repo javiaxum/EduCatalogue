@@ -7,7 +7,7 @@ namespace Domain
 {
     public class Region
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<City> Cities { get; set; }
     }

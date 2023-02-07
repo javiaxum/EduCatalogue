@@ -83,9 +83,9 @@ internal class Program
         });
         builder.Services.AddAuthorization(opt =>
         {
-            opt.AddPolicy("IsInstitutionManager", policy =>
+            opt.AddPolicy("IsInstitutionManagerOrOperator", policy =>
             {
-                policy.Requirements.Add(new IsManagerRequirement());
+                policy.Requirements.Add(new IsManagerOrOperatorRequirement());
             });
             opt.AddPolicy("IsOperator", policy =>
             {
@@ -93,7 +93,7 @@ internal class Program
             });
         });
         builder.Services.AddTransient<IAuthorizationHandler, IsOperatorRequirementHandler>();
-        builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
+        builder.Services.AddTransient<IAuthorizationHandler, IsManagerOrOperatorRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
 
         var app = builder.Build();

@@ -25,9 +25,9 @@ namespace Application.Core
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.CityName, o => o.MapFrom(s => s.City.Name))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
-
+            
             CreateMap<Institution, InstitutionDetailedDTO>()
-            .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
+            .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id.ToString()))
             .ForMember(d => d.CityName, o => o.MapFrom(s => s.City.Name));
 
             // CreateMap<AppUserInstitution, Profiles.Profile>()

@@ -3869,7 +3869,7 @@ namespace Persistence
             {
                 var createPowerUser = await userManager.CreateAsync(powerUser, userPassword);
             }
-
+            await context.SaveChangesAsync();
             // check for institutions and seed if none was found
             if (!context.Institutions.Any())
             {
@@ -4129,19 +4129,23 @@ namespace Persistence
                 await context.Institutions.AddRangeAsync(Institutions);
                 await context.SaveChangesAsync();
 
-
                 // Seed managers
-                var usermanager = await userManager.FindByEmailAsync("EduCatalogue@service.com");
-                var usermanager2 = await userManager.FindByEmailAsync("EduCatalogue@service.com");
-                var institution = await context.Institutions.FindAsync(Institutions[0].Id);
-
-                var manager = new AppUserInstitution
+                for (int i = 1; i < 12; i++)
                 {
-                    Manager = usermanager,
-                    Institution = institution,
-                };
-
-                institution.Managers.Add(manager);
+                    var institution = await context.Institutions.FindAsync(Institutions[i].Id);
+                    var startIndex = new Random().Next(1, 8);
+                    var endIndex = startIndex + new Random().Next(0, 7 - startIndex);
+                    for (; startIndex <= endIndex; startIndex++)
+                    {
+                        var manager = new AppUserInstitution
+                        {
+                            Manager = await userManager.FindByEmailAsync($"testmail{startIndex}@test.com"),
+                            Institution = institution,
+                        };
+                        institution.Managers.Add(manager);
+                    }
+                    await context.SaveChangesAsync();
+                }
 
                 // Seed Components
                 var componentsCores = new List<ComponentCore>

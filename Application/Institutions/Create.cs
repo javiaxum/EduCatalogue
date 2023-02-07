@@ -45,7 +45,7 @@ namespace Application.Institutions
                 var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
                 var newInstitution = new Institution();
                 _mapper.Map(request.Institution, newInstitution);
-                newInstitution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == new Guid(request.Institution.CityId));
+                newInstitution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == int.Parse(request.Institution.CityId));
 
                 var manager = new AppUserInstitution
                 {

@@ -8,7 +8,7 @@ namespace Application.Institutions
 {
     public class RegionDTO
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<CityDTO> Cities { get; set; }
     }

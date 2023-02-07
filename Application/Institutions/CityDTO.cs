@@ -7,9 +7,9 @@ namespace Application.Institutions
 {
     public class CityDTO
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public Guid RegionId { get; set; }
+        public int RegionId { get; set; }
         public int InstitutionsCount { get; set; }
     }
 }

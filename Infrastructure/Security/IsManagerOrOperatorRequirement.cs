@@ -10,22 +10,22 @@ using Persistence;
 
 namespace Infrastructure.Security
 {
-    public class IsManagerRequirement : IAuthorizationRequirement
+    public class IsManagerOrOperatorRequirement : IAuthorizationRequirement
     {
 
     }
 
-    public class IsManagerRequirementHandler : AuthorizationHandler<IsManagerRequirement>
+    public class IsManagerOrOperatorRequirementHandler : AuthorizationHandler<IsManagerOrOperatorRequirement>
     {
         private readonly DataContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public IsManagerRequirementHandler(DataContext dbContext, IHttpContextAccessor httpContextAccessor)
+        public IsManagerOrOperatorRequirementHandler(DataContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
             _dbContext = dbContext;
         }
 
-        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsManagerRequirement requirement)
+        protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsManagerOrOperatorRequirement requirement)
         {
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Task.CompletedTask;
@@ -38,7 +38,9 @@ namespace Infrastructure.Security
                 .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == institutionId)
                 .Result;
 
-            if(IsManager == null) return Task.CompletedTask;
+            var IsOperator = _dbContext.Users.FirstOrDefaultAsync(x => x.Email == "EduCatalogue@service.com").Result;
+
+            if (IsManager == null && IsOperator.Id != userId) return Task.CompletedTask;
 
             context.Succeed(requirement);
             return Task.CompletedTask;

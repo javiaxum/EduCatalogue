@@ -31,10 +31,11 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-        [HttpPut("{id}")]
-        public async Task<IActionResult> EditSpecialty(Guid id, SpecialtyDTO specialty)
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]   
+        [HttpPut("{id}/specialty/{specialtyId}")]
+        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyDTO specialty)
         {
-            specialty.Id = id;
+            specialty.Id = specialtyId;
             return HandleResult(await Mediator.Send(new Edit.Command {Specialty = specialty}));
         }
         // [HttpDelete("{id}")]
