@@ -143,9 +143,9 @@ export default class SpecialtyStore {
             console.log(error);
         }
     }
-    editSpecialty = async (specialty: SpecialtyFormValues) => {
+    editSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {
         try {
-            await agent.Specialties.update(new SpecialtyFormValues(specialty));
+            await agent.Specialties.update(new SpecialtyFormValues(specialty), institutionId);
             runInAction(() => {
                 if (specialty.id) {
                     let editedSpecialty = { ...this.getSpecialty(specialty.id), ...specialty };

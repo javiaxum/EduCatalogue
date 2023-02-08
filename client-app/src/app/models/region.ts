@@ -1,7 +1,7 @@
 import { City } from "./city";
 
 export interface Region {
-    id: string;
+    id: number;
     name: string;
     cities: City[];
 }

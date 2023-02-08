@@ -13,7 +13,7 @@ import { Specialty } from "../models/specialty";
 export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
-    populatedCityRegistry = new Map<string, City>();
+    populatedCityRegistry = new Map<number, City>();
     regionRegistry = new Array<Region>();
     selectedInstitution: Institution | undefined = undefined;
     selectedRegion: Region | undefined = undefined;
@@ -25,6 +25,7 @@ export default class InstitutionStore {
     pagination: Pagination | null = null;
     pagingParams: PagingParams = new PagingParams();
     specialtyPredicate = new Map();
+    degree = '';
     branchPredicate = new Map();
     citiesPredicate = new Map();
     cityNameFilter: string = '';
@@ -41,40 +42,42 @@ export default class InstitutionStore {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
                 this.loadInstitutions();
-            },
-        )
+            },)
         reaction(
             () => this.branchPredicate.keys(),
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
                 this.loadInstitutions();
-            },
-        )
+            },)
         reaction(
             () => this.citiesPredicate.keys(),
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
                 this.loadInstitutions();
-            },
-        )
+            },)
         reaction(
             () => this.maxPrice,
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
                 this.loadInstitutions();
-            },
-        )
+            },)
         reaction(
             () => this.minPrice,
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
                 this.loadInstitutions();
-            },
-        )
+            },)
+        reaction(
+            () => this.degree,
+            () => {
+                this.pagingParams = new PagingParams();
+                this.institutionsRegistry.clear();
+                this.loadInstitutions();
+            },)
     }
 
     get isInstitutionManager() {
@@ -224,11 +227,15 @@ export default class InstitutionStore {
 
     }
 
-    getRegionByCityId = (cityId: string) => {
+    setDegreePredicate = (degree: string) => {
+        this.degree = degree;
+    }
+
+    getRegionByCityId = (cityId: number) => {
         return this.regionRegistry.find((x) => x.cities.find((x) => x.id === cityId));
     }
 
-    getCityById = (cityId: string, regionId: string) => {
+    getCityById = (cityId: number, regionId: number) => {
         return this.regionRegistry.find((x) => x.id == regionId)?.cities.find((x) => x.id == cityId);
     }
 
@@ -236,21 +243,21 @@ export default class InstitutionStore {
         this.pagingParams = pagingParams;
     }
 
-    toggleSpecialtyPredicateParam = (key: string, value: boolean) => {
+    toggleSpecialtyPredicateParam = (key: string | number, value: boolean) => {
         if (this.specialtyPredicate.get(key))
             this.specialtyPredicate.delete(key);
         else
             this.specialtyPredicate.set(key, value);
     }
 
-    toggleBranchPredicateParam = (key: string, value: boolean) => {
+    toggleBranchPredicateParam = (key: string | number, value: boolean) => {
         if (this.branchPredicate.get(key))
             this.branchPredicate.delete(key);
         else
             this.branchPredicate.set(key, value);
     }
 
-    toggleCityPredicateParam = (key: string, value: boolean) => {
+    toggleCityPredicateParam = (key: string | number, value: boolean) => {
         if (this.citiesPredicate.get(key))
             this.citiesPredicate.delete(key);
         else
@@ -277,8 +284,8 @@ export default class InstitutionStore {
         params.append('branchesPredicate', branchesPredicate);
         params.append('citiesPredicate', citiesPredicate);
         params.append('minPrice', this.minPrice.toString());
-        if (this.maxPrice && parseInt(this.maxPrice) != 0)
-            params.append('maxPrice', this.maxPrice.toString());
+        params.append('degree', this.degree.toString());
+        params.append('maxPrice', this.maxPrice.toString());
         return params;
     }
 
@@ -306,7 +313,7 @@ export default class InstitutionStore {
             const result = await agent.Institutions.list(this.axiosParams);
             runInAction(() => {
                 result.data.forEach(institution => {
-                    institution.cityId = institution.cityId ? institution.cityId.toLocaleLowerCase() : '';
+                    // institution.cityId = institution.cityId ? institution.cityId.toLocaleLowerCase() : '';
                     this.institutionsRegistry.set(institution.id, institution)
                 });
             })
@@ -341,10 +348,11 @@ export default class InstitutionStore {
                     institution.reviews.forEach((x) => {
                         x.createdAt = new Date(x.createdAt);
                     })
-                    institution.cityId = institution.cityId.toLocaleLowerCase();
+                    institution.titleImageUrl = this.institutionsRegistry.get(institution.id)?.titleImageUrl!;
+                    institution.rating = this.institutionsRegistry.get(institution.id)?.rating!;
                     this.selectedInstitution = institution;
+                    this.institutionsRegistry.set(institution.id, institution);
                 })
-                this.setInstitution(institution);
                 this.setLoadingInitial(false);
                 this.setLoading(false);
                 return institution;

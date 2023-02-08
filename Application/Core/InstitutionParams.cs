@@ -12,7 +12,7 @@ namespace Application.Core
         public string CitiesPredicate { get; set; } = "";
         public string MinPrice { get; set; } = "";
         public string MaxPrice { get; set; } = "";
-        public string City { get; set; }
+        public string Degree { get; set; } = "";
         public int StudentCount { get; set; }
     }
 

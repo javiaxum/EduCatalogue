@@ -11,7 +11,7 @@ export interface Institution {
     name: string;
     description: string;
     studentCount: number;
-    cityId: string;
+    cityId: number;
     cityName: string;
     streetAddress: string;
     siteURL: string;
@@ -20,6 +20,7 @@ export interface Institution {
     titleImageUrl: string;
     backgroundImageUrl: string;
     contactInformation: string;
+    rating: number;
     managers: Profile[];
     specialties: Specialty[];
     reviews: Review[];
@@ -37,8 +38,8 @@ export class InstitutionFormValues {
     name: string = '';
     description: string = '';
     studentCount: number = 0;
-    cityId: string = '';
-    regionId?: string = '';
+    cityId: number = 0;
+    regionId?: number = 0;
     streetAddress: string = '';
     titleImageId: string = '';
     backgroundImageId: string = '';

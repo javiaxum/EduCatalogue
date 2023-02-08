@@ -37,6 +37,7 @@ namespace Application.Institutions
                 var IsCitiesPredicate = !String.IsNullOrEmpty(request.Params.CitiesPredicate);
                 var IsMaxPrice = int.TryParse(request.Params.MaxPrice, out int MaxPrice);
                 var IsMinPrice = int.TryParse(request.Params.MinPrice, out int MinPrice);
+                var IsDegree = !String.IsNullOrEmpty(request.Params.Degree);
 
                 string[] CitiesPredicate;
                 if (IsCitiesPredicate)
@@ -48,9 +49,10 @@ namespace Application.Institutions
                     (!IsCitiesPredicate || CitiesPredicate.Contains(x.City.Id.ToString()))
                     && x.Specialties.Any(s =>
                         (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
-                        && (!IsBranchesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
+                        && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
-                        && (!IsMinPrice || s.PriceUAH >= MinPrice)));
+                        && (!IsMinPrice || s.PriceUAH >= MinPrice)
+                        && (!IsDegree || s.Degree == request.Params.Degree)));
 
                 var result = query.OrderBy(x => x.Name)
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider);

@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import react from "react";
 import { Divider, Grid, Header, Input, Search, Select } from "semantic-ui-react";
+import CustomSelectInput from "../../../app/common/form/CustomSelectInput";
 import { degreeOptions } from "../../../app/common/options/degreeOptions";
 import { Branch } from "../../../app/models/branch";
 import { SpecialtyCore } from "../../../app/models/specialtyCore";
@@ -25,7 +26,8 @@ export default observer(function SearchParamsList() {
         minPrice,
         setMaxPrice,
         setMinPrice,
-        pagination } = institutionStore;
+        pagination,
+        setDegreePredicate } = institutionStore;
 
 
     function compareFnSC(a: SpecialtyCore, b: SpecialtyCore) {
@@ -34,6 +36,7 @@ export default observer(function SearchParamsList() {
     function compareFnBr(a: Branch, b: Branch) {
         return !institutionStore.branchPredicate.has(a.id) ? !institutionStore.branchPredicate.has(b.id) ? 0 : 1 : !institutionStore.branchPredicate.has(b) ? -1 : 0;
     }
+
     return (
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content='Price' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
@@ -73,7 +76,7 @@ export default observer(function SearchParamsList() {
             </Grid.Column>
             <Header as='h4' content='Specialties' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
-                {specialtyStore.specialtyCoresById.sort(compareFnSC).map((specialtyCore) => (
+                {specialtyStore.specialtyCoresById.filter((s) => branchPredicate.size === 0 || branchPredicate.has(s.id.slice(0, 2))).sort(compareFnSC).map((specialtyCore) => (
                     <SearchParamItem
                         id={specialtyCore.id}
                         name={`${specialtyCore.id} ${specialtyCore.name}`}
@@ -98,9 +101,14 @@ export default observer(function SearchParamsList() {
                 ))}
             </Grid.Column>
             <Header as='h4' content='Degree' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Select
-                options={degreeOptions}
-            />
+            <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
+                <Select
+                    clearable
+                    placeholder={'Select degree'}
+                    name='degree'
+                    options={degreeOptions}
+                    onChange={(e, d) => setDegreePredicate(d.value as string)} />
+            </Grid.Column>
         </Grid>
     )
 })

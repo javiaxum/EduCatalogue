@@ -20,6 +20,12 @@ export default class ProfileStore {
         }
         return false;
     }
+    get isOperator() {
+        if(store.userStore.user && this.profile) {
+            return this.profile.username === 'CatalogueOperator';
+        }
+        return false;
+    }
 
     loadProfile = async () => {
         this.loading = true;

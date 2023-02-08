@@ -4,13 +4,15 @@ import { Checkbox, GridColumn } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
-    id: string;
+    id: number | string;
     name?: string;
-    togglePredicateParam: (predicate: string, value: boolean) => void;
+    disabled?: boolean
+    isSpecialtyParam?: boolean;
+    togglePredicateParam: (predicate: string | number, value: boolean) => void;
     checked: boolean;
 }
 
-export default observer(function SearchParamItem({ id, name, togglePredicateParam, checked }: Props) {
+export default observer(function SearchParamItem({ id, name, togglePredicateParam, checked, disabled, isSpecialtyParam }: Props) {
 
     const { institutionStore, specialtyStore } = useStore();
 
@@ -20,10 +22,11 @@ export default observer(function SearchParamItem({ id, name, togglePredicatePara
                 key={id}
                 checked={checked}
                 label={name}
-                disabled={(
-                    id.length === 3
-                    && !institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2 && x === id.slice(0, 2)))
-                    && institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2)}
+                disabled={disabled || false}
+                // disabled={(
+                //     isSpecialtyParam
+                //     && !institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2 && x === id.slice(0, 2)))
+                //     && institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2)}
                 onChange={() => {
                     togglePredicateParam(id, !checked)
                 }}

@@ -74,7 +74,7 @@ export default observer(function SpecialtyForm() {
                 router.navigate(`/specialties/${specialty.id}`)
             });
         } else if (id1 && id2) {
-            editSpecialty(specialty).then(() => {
+            editSpecialty(specialty, id1).then(() => {
                 institutionStore.setSpecialty(getSpecialty(specialty.id!)!, id1);
                 router.navigate(`/specialties/${id2}`)
             });

@@ -9,16 +9,11 @@ interface Props {
 
 export default function ProfileManagedInstitutions({ institutions }: Props) {
 
-
-    useEffect(() => {
-        console.log(institutions[0].titleImageUrl);
-    })
-
     return (
-        <Item.Group>
-            {institutions.map((institution) =>
+        <>
+            {!institutions || institutions.length === 0 ? <Segment basic content='There are no institutions you have been added to...' /> : <>{institutions.map((institution) =>
                 <Segment.Group>
-                    <Card key={institution.id} as={Link} to={`/institutions/${institution.id}`} style={{width: '100%', height: '7rem', padding: '1.5rem 0 0 0'}}>
+                    <Card key={institution.id} as={Link} to={`/institutions/${institution.id}`} style={{ width: '100%', height: '7rem', padding: '1.5rem 0 0 0' }}>
                         <Grid>
                             <Grid.Column width={2} style={{ padding: '0.5rem 1rem 1rem 3rem' }}>
                                 <Image src={institution.titleImageUrl || '/assets/user.png'} avatar style={{ minHeight: '5rem', minWidth: '5rem' }} spaced='right' />
@@ -29,7 +24,7 @@ export default function ProfileManagedInstitutions({ institutions }: Props) {
                         </Grid>
                     </Card>
                 </Segment.Group>
-            )}
-        </Item.Group>
+            )}</>}
+        </>
     )
 }

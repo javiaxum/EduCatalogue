@@ -69,7 +69,7 @@ export default observer(function InstitutionForm() {
         if (id) loadInstitution(id)
             .then(institution => {
                 let formValues = new InstitutionFormValues(institution);
-                const region = getRegionByCityId(institution?.cityId.toLocaleLowerCase()!)
+                const region = getRegionByCityId(institution?.cityId!)
                 formValues.regionId = region?.id;
                 setInstitution(formValues);
                 setSelectedRegion(region);

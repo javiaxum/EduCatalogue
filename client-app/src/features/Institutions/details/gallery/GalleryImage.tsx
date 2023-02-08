@@ -16,7 +16,7 @@ export default function GalleryImage({ image }: Props) {
         <Grid.Column style={{ width: '245px' }}>
             <ImageSU
                 src={image.url || '/assets/institutionTitleImagePlaceholder.png'}
-                style={{ filter: 'brightness(50%)', objectFit: 'cover' }}
+                style={{ objectFit: 'cover' }}
             />
         </Grid.Column>
     )

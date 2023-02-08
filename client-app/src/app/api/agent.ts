@@ -117,7 +117,7 @@ const Specialties = {
     listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
     listBranches: () => requests.get<Branch[]>("/specialties/branches"),
     create: (specialty: SpecialtyFormValues, institutionId: string) => requests.post<void>(`/institutions/${institutionId}/specialties`, specialty),
-    update: (specialty: SpecialtyFormValues) => requests.put<void>(`/specialties/${specialty.id}`, specialty),
+    update: (specialty: SpecialtyFormValues, institutionId: string) => requests.put<void>(`/specialties/${institutionId}/specialty/${specialty.id}`, specialty),
     delete: (id: string) => requests.delete<void>(`/specialties/${id}`)
 }
 

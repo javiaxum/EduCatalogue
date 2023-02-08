@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Button, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Image, Item, Placeholder, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
@@ -17,7 +17,7 @@ import { router } from '../../routers/Routes';
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 
 export default observer(function InstitutionDetails() {
-    const { institutionStore, commonStore } = useStore();
+    const { institutionStore, commonStore, profileStore } = useStore();
     const {
         loadingInitial,
         loadInstitution,
@@ -60,12 +60,18 @@ export default observer(function InstitutionDetails() {
                     <Item.Group>
                         <Item>
                             <Item.Content>
-                                <Header
-                                    size='huge'
-                                    content={selectedInstitution.name}
-                                    style={{ color: '#444' }}
-                                />
-                                {isInstitutionManager && <Button
+                                {loading
+                                    ? <Placeholder>
+                                        <Placeholder.Header>
+                                            <Placeholder.Line />
+                                        </Placeholder.Header>
+                                    </Placeholder>
+                                    : <Header
+                                        size='huge'
+                                        content={selectedInstitution.name}
+                                        style={{ color: '#444' }}
+                                    />}
+                                {isInstitutionManager || profileStore.isOperator && <Button
                                     onClick={() => setEditMode(!editMode)}
                                     as={Link}
                                     to={`/manage/${selectedInstitution.id}`}

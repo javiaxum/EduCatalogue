@@ -23,7 +23,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     for (let i = 1; i <= 5; i++) {
         let icons = [];
         for (let j = 1; j <= 5 - i + 1; j++) {
-            icons.push((<Icon color='yellow' name='star' key={`${i + 1 - j}sB${i}`} />))
+            icons.push((<Icon color='yellow' name='star' key={`${i + 1 - j}sB${i}w`} />))
         }
         for (let k = 1; k <= i - 1; k++) {
             icons.push((<Icon color='yellow' name='star outline' key={`${i - 1 + k}soB${i}`} />))

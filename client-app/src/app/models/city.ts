@@ -1,7 +1,7 @@
 export interface City {
-    id: string;
+    id: number;
     name: string;
-    regionId: string;
+    regionId: number;
     institutionsCount: number;
 }
 

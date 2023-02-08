@@ -20,7 +20,8 @@ export default observer(function SearchParamsList() {
         maxPrice,
         minPrice,
         setMaxPrice,
-        setMinPrice } = institutionStore;
+        setMinPrice,
+        setDegreePredicate } = institutionStore;
 
     function compareFnSC(a: SpecialtyCore, b: SpecialtyCore) {
         return !institutionStore.specialtyPredicate.has(a.id) ? !institutionStore.specialtyPredicate.has(b.id) ? 0 : 1 : !institutionStore.specialtyPredicate.has(b) ? -1 : 0;
@@ -80,9 +81,13 @@ export default observer(function SearchParamsList() {
                 <Divider />
             </Grid.Column>
             <Header as='h4' content='Degree' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column width={16} style={{ padding: '0' }}>
+            <Grid.Column style={{ padding: '0.4rem', height: '200px', overflowX: 'hidden' }} width={16}>
                 <Select
-                    options={degreeOptions} />
+                    clearable
+                    placeholder={'Select degree'}
+                    name='degree'
+                    options={degreeOptions}
+                    onChange={(e, d) => setDegreePredicate(d.value as string)} />
             </Grid.Column>
         </Grid>
     )
