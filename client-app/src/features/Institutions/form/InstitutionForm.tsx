@@ -23,7 +23,8 @@ export default observer(function InstitutionForm() {
     const {
         loadInstitution,
         loadingInitial,
-        getRegionByCityId,
+        getCityById,
+        getRegionById,
         setSelectedRegion,
         createInstitution,
         editInstitution,
@@ -70,13 +71,11 @@ export default observer(function InstitutionForm() {
         if (id) loadInstitution(id)
             .then(institution => {
                 let formValues = new InstitutionFormValues(institution);
-                let region = getRegionByCityId(institution?.cityId!);
-                console.log(institution?.cityId!)
-                console.log(region)                
-                console.log(regionRegistry)                
-                formValues.regionId = region?.id;
+                // let region = getRegionByCityId(institution?.cityId!);
+                // let city = getCity
+                // formValues.regionId = region?.id;
                 setInstitution(formValues);
-                setSelectedRegion(region);
+                setSelectedRegion(getRegionById(formValues.regionId!));
             });
         else {
             setLoadingInitial(false);

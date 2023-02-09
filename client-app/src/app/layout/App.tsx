@@ -13,7 +13,7 @@ import CustomFooter from './CustomFooter';
 export default observer(function App() {
   const location = useLocation();
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
-  const { loadCitiesWithInstitutions, loadInstitutions, loadRegionsWithCities } = institutionStore;
+  const { loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
   const { loadSpecialtyCores, loadBranches } = specialtyStore;
   useEffect(() => {
     if (commonStore.token) {
@@ -26,10 +26,9 @@ export default observer(function App() {
     loadInstitutions();
     loadSpecialtyCores();
     loadBranches();
-    loadCitiesWithInstitutions();
     loadRegionsWithCities();
     loadProfile();
-  }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutions, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
+  }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
 
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 

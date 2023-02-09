@@ -20,7 +20,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
     const { institutionStore } = useStore();
     const {
         regionRegistry,
-        getRegionByCityId,
+        getRegionById,
         setSelectedRegion,
         selectedRegion,
         selectedInstitution,
@@ -81,12 +81,12 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             Region:
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    setSelectedRegion(regionRegistry.find((x) => x.id == data.value));
+                                    setSelectedRegion(getRegionById(data.value as number));
                                     formik.getFieldHelpers('cityId').setValue('')
                                 }}
                                 placeholder={'Select region'}
                                 name='regionId'
-                                options={regionRegistry.map(element => ({ text: element.name, value: element.id }))} />
+                                options={Array.from(regionRegistry.values()).map(element => ({ text: element.name, value: element.id }))} />
                         </Grid.Column>
                         <Grid.Column width={8}>
                             City:

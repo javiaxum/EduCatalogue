@@ -14,9 +14,9 @@ export default class InstitutionStore {
 
     institutionsRegistry = new Map<string, Institution>();
     populatedCityRegistry = new Map<number, City>();
-    regionRegistry = new Array<Region>();
+    regionRegistry = new Map<number, Region>();
     selectedInstitution: Institution | undefined = undefined;
-    selectedRegion: Region | undefined = undefined;
+    // selectedRegion: Region | undefined = undefined;
     loading: boolean = false;
     uploading: boolean = false;
     reviewForm: boolean = false;
@@ -25,10 +25,10 @@ export default class InstitutionStore {
     pagination: Pagination | null = null;
     pagingParams: PagingParams = new PagingParams();
     specialtyPredicate = new Map();
-    degree = '';
+    degree: string = '';
     branchPredicate = new Map();
     citiesPredicate = new Map();
-    cityNameFilter: string = '';
+    cityNameSearchValue: string = '';
     minPrice: string = '';
     maxPrice: string = '';
 
@@ -177,7 +177,7 @@ export default class InstitutionStore {
     }
 
     setCityNameFilter = (value: string) => {
-        this.cityNameFilter = value;
+        this.cityNameSearchValue = value;
     }
 
     get specialtyAndBranchPredicates() {
@@ -216,7 +216,7 @@ export default class InstitutionStore {
             const regions = await agent.Institutions.listRegions();
             runInAction(() => {
                 regions.forEach(region => {
-                    this.regionRegistry.push(region);
+                    this.regionRegistry.set(region.id, region);
                 });
             })
             this.setLoadingInitial(false);
@@ -233,12 +233,12 @@ export default class InstitutionStore {
         this.degree = degree;
     }
 
-    getRegionByCityId = (cityId: number) => {
-        return this.regionRegistry.find((x) => x.cities.find((y) => y.id === cityId));
+    getRegionById = (regionId: number) => {
+        return this.regionRegistry.get(regionId);
     }
 
     getCityById = (cityId: number, regionId: number) => {
-        return this.regionRegistry.find((x) => x.id == regionId)?.cities.find((x) => x.id == cityId);
+        return this.regionRegistry.get(regionId)?.cities.find((x) => x.id == cityId);
     }
 
     setPagingParams = (pagingParams: PagingParams) => {
@@ -386,7 +386,7 @@ export default class InstitutionStore {
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };
-                    editedInstitution.cityName = this.getCityById(institution.cityId, institution.regionId!)!.name;
+                    // editedInstitution.cityzName = this.getCityById(institution.cityId, institution.regionId!)!.name;
                     this.institutionsRegistry.set(institution.id, editedInstitution as Institution);
                     this.selectedInstitution = editedInstitution as Institution;
                 }

@@ -12,6 +12,7 @@ export default observer(function InstitutionDetailsInfo() {
     const {
         loadingInitial,
         loadInstitution,
+        getCityById,
         detailsMenuActiveItem,
         regionRegistry,
         selectedInstitution, loading } = institutionStore;
@@ -51,7 +52,7 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={6}>
                                     City:
-                                    {selectedInstitution.cityName}
+                                    {getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                                 </Grid.Column>
                                 <Grid.Column width={1}>
                                     <Icon name='home' size='large' color='blue' />

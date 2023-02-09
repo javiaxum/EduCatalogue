@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Grid, Item, Image, Header, Icon } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
+import { useStore } from '../../../app/stores/store';
 
 interface Props {
     institution: Institution
@@ -16,6 +17,7 @@ export default function InstitutionsListItem({ institution }: Props) {
         elements.push((<Icon color='yellow' name='star outline' key={5 - i + 1} />))
     }
 
+    const { institutionStore } = useStore();
 
     return (
         <Item style={{ minHeight: 110, paddingTop: 10 }}>
@@ -33,7 +35,7 @@ export default function InstitutionsListItem({ institution }: Props) {
                 </Grid.Column>
                 <Grid.Column style={{ width: '100%' }}>
                     <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>
-                    <Item.Meta>{institution.cityName}, {institution.streetAddress}</Item.Meta>
+                    <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
                 </Grid.Column>
             </Grid>
         </Item>

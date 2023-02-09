@@ -16,8 +16,8 @@ namespace Application
         public string Name { get; set; }
         public string Description { get; set; }
         public int StudentCount { get; set; }
-        public string CityId { get; set; }
-        public string CityName { get; set; }
+        public int CityId { get; set; }
+        public int RegionId { get; set; }
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
         public string TitleImageId { get; set; }

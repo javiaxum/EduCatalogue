@@ -43,7 +43,7 @@ namespace Application.Institutions
                 if (institution == null) return null;
                 
                 _mapper.Map(request.Institution, institution);
-                institution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == int.Parse(request.Institution.CityId));
+                institution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == request.Institution.CityId);
 
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("An error has occured while updating an institution");

@@ -12,7 +12,7 @@ export interface Institution {
     description: string;
     studentCount: number;
     cityId: number;
-    cityName: string;
+    regionId: number;
     streetAddress: string;
     siteURL: string;
     titleImageId: string;
@@ -53,6 +53,7 @@ export class InstitutionFormValues {
             this.description = institution.description;
             this.studentCount = institution.studentCount;
             this.cityId = institution.cityId;
+            this.regionId = institution.regionId;
             this.streetAddress = institution.streetAddress;
             this.titleImageId = institution.titleImageId;
             this.backgroundImageId = institution.backgroundImageId;

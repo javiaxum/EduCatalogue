@@ -1,5 +1,6 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { ServerError } from "../models/serverError";
+import { store } from "./store";
 
 export default class CommonStore {
 
@@ -7,7 +8,7 @@ export default class CommonStore {
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
     editMode: boolean = false;
-    
+
     setEditMode = (state: boolean) => {
         this.editMode = state;
     }
@@ -23,7 +24,7 @@ export default class CommonStore {
             }
         )
     }
-
+    
     setServerError(error: ServerError) {
         this.error = error;
     }
