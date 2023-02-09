@@ -3,6 +3,7 @@ import { observer } from 'mobx-react-lite';
 import React, { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Container, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
+import { number } from 'yup';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
@@ -17,7 +18,14 @@ interface Props {
 
 export default observer(function InstitutionDetailsInfoForm({ institution }: Props) {
     const { institutionStore } = useStore();
-    const { regionRegistry, getRegionByCityId, setSelectedRegion, selectedRegion, selectedInstitution, setTitleImage, uploading } = institutionStore;
+    const {
+        regionRegistry,
+        getRegionByCityId,
+        setSelectedRegion,
+        selectedRegion,
+        selectedInstitution,
+        setTitleImage,
+        uploading } = institutionStore;
     const { id } = useParams();
     const [files, setFiles] = useState<any>([]);
     const [cropper, setCropper] = useState<Cropper>();
@@ -35,11 +43,10 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
             cropper.getCroppedCanvas().toBlob(blob => HandleImageUpload(blob!))
         }
     }
-
     useEffect(() => {
         return (() => {
             files.forEach((file: any) =>
-             URL.revokeObjectURL(file.preview));
+                URL.revokeObjectURL(file.preview));
         })
     }, [files])
 
@@ -79,8 +86,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                                 }}
                                 placeholder={'Select region'}
                                 name='regionId'
-                                options={regionRegistry.map(element => ({ text: element.name, value: element.id }))
-                                } />
+                                options={regionRegistry.map(element => ({ text: element.name, value: element.id }))} />
                         </Grid.Column>
                         <Grid.Column width={8}>
                             City:
@@ -89,7 +95,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                                 name='cityId'
                                 disabled={!!!selectedRegion}
                                 options={selectedRegion?.cities.map(element => ({ text: element.name, value: element.id }))
-                                    .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: '' }]} />
+                                    .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
                         </Grid.Column>
                         <Grid.Column width={1}>
                             <Icon name='home' size='large' color='blue' />

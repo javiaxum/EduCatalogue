@@ -52,7 +52,7 @@ namespace Application.Institutions
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
                         && (!IsMinPrice || s.PriceUAH >= MinPrice)
-                        && (!IsDegree || s.Degree == request.Params.Degree)));
+                        && (!IsDegree || s.Degree ==  request.Params.Degree)));
 
                 var result = query.OrderBy(x => x.Name)
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider);

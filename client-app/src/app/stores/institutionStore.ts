@@ -215,7 +215,9 @@ export default class InstitutionStore {
         try {
             const regions = await agent.Institutions.listRegions();
             runInAction(() => {
-                this.regionRegistry = regions;
+                regions.forEach(region => {
+                    this.regionRegistry.push(region);
+                });
             })
             this.setLoadingInitial(false);
             this.setLoading(false);
@@ -232,7 +234,7 @@ export default class InstitutionStore {
     }
 
     getRegionByCityId = (cityId: number) => {
-        return this.regionRegistry.find((x) => x.cities.find((x) => x.id === cityId));
+        return this.regionRegistry.find((x) => x.cities.find((y) => y.id === cityId));
     }
 
     getCityById = (cityId: number, regionId: number) => {

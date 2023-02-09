@@ -33,7 +33,8 @@ export default observer(function InstitutionForm() {
         loadRegionsWithCities,
         selectedInstitution,
         uploading,
-        setBackgroundImage } = institutionStore;
+        regionRegistry,
+        setBackgroundImage, selectedRegion } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -69,7 +70,10 @@ export default observer(function InstitutionForm() {
         if (id) loadInstitution(id)
             .then(institution => {
                 let formValues = new InstitutionFormValues(institution);
-                const region = getRegionByCityId(institution?.cityId!)
+                let region = getRegionByCityId(institution?.cityId!);
+                console.log(institution?.cityId!)
+                console.log(region)                
+                console.log(regionRegistry)                
                 formValues.regionId = region?.id;
                 setInstitution(formValues);
                 setSelectedRegion(region);
