@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Grid, Item, Image, Header, Icon } from 'semantic-ui-react';
+import { Button, Grid, Item, Image, Header, Icon, Container } from 'semantic-ui-react';
 import { Institution } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 
@@ -22,16 +22,20 @@ export default function InstitutionsListItem({ institution }: Props) {
     return (
         <Item style={{ minHeight: 110, paddingTop: 10 }}>
             <Grid>
-                <Grid.Column style={{ width: '25%' }}>
+                <Grid.Column style={{ width: '13rem', minWidth: '13rem' }}>
                     <Image
                         src={institution.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
                         style={{ objectFit: 'cover', minHeight: '12rem', minWidth: '12rem', height: '12rem', width: '12rem', borderRadius: '30px' }} />
                 </Grid.Column>
-                <Grid.Column style={{ width: '55%' }}>
-                    <Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Header>
-                </Grid.Column>
-                <Grid.Column style={{ width: '20%' }}>
-                    {elements}
+                <Grid.Column style={{ width: 'calc(100% - 14rem)' }}>
+                    <Grid style={{ width: '100%', padding: '0 0 0 5%' }}>
+                        <Grid.Row >
+                            <Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Header>
+                        </Grid.Row>
+                        <Grid.Row style={{padding: '0 0 1rem 0'}} >
+                            {elements}
+                        </Grid.Row>
+                    </Grid>
                 </Grid.Column>
                 <Grid.Column style={{ width: '100%' }}>
                     <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>

@@ -13,6 +13,7 @@ export default class CommonStore {
         await Promise.all([store.institutionStore.loadInstitutions(),
             store.specialtyStore.loadSpecialtyCores(),
             store.specialtyStore.loadBranches(),
+            store.institutionStore.loadCitiesWithInstitutions(),
             store.institutionStore.loadRegionsWithCities(),
             store.profileStore.loadProfile()]).then(() => this.appLoaded = true)
     }

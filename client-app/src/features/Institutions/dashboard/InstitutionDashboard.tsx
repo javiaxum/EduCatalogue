@@ -18,11 +18,11 @@ export default observer(function InstitutionDashboard() {
 
     // if ((institutionStore.loadingInitial || institutionStore.loading))  return <LoadingComponent content='Loading institutions...' />
     return (
-        <Segment style={{ borderRadius: '0px', border: 'none', minWidth: '1300px' }}>
-            <Grid style={{border: '0', margin: '0', minWidth: '1400px'}}>
-                <Grid.Column style={{minWidth: '50px', width: '20%'}} stretched>
+        <Segment style={{ borderRadius: '0px', border: 'none', minWidth: '60em' }}>
+            <Grid style={{border: '0', margin: '0', minWidth: '60em'}}>
+                <Grid.Column style={{minWidth: '50px', width: '16%'}} stretched>
                 </Grid.Column>
-                <Grid.Column style={{minWidth: '500px', width: '52%'}}>
+                <Grid.Column style={{minWidth: '500px', width: '56%'}}>
                     <InstitutionsList />
                     <PaginationBar />
                 </Grid.Column>
