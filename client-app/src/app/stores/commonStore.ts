@@ -9,6 +9,14 @@ export default class CommonStore {
     appLoaded: boolean = false;
     editMode: boolean = false;
 
+    loadAppData = async () => {
+        await Promise.all([store.institutionStore.loadInstitutions(),
+            store.specialtyStore.loadSpecialtyCores(),
+            store.specialtyStore.loadBranches(),
+            store.institutionStore.loadRegionsWithCities(),
+            store.profileStore.loadProfile()]).then(() => this.appLoaded = true)
+    }
+
     setEditMode = (state: boolean) => {
         this.editMode = state;
     }
@@ -24,7 +32,7 @@ export default class CommonStore {
             }
         )
     }
-    
+
     setServerError(error: ServerError) {
         this.error = error;
     }

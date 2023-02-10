@@ -10,6 +10,7 @@ import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import ImageUploadWidgetCropper from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetCropper';
 import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetDropzone';
 import { InstitutionFormValues } from '../../../app/models/institution';
+import { Region } from '../../../app/models/region';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
@@ -21,8 +22,6 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
     const {
         regionRegistry,
         getRegionById,
-        setSelectedRegion,
-        selectedRegion,
         selectedInstitution,
         setTitleImage,
         uploading } = institutionStore;
@@ -51,6 +50,8 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
     }, [files])
 
     const formik = useFormikContext();
+    const [selectedRegion, setSelectedRegion] = useState<Region | undefined>(undefined);
+
     return (
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={10}>
@@ -81,7 +82,6 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             Region:
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    setSelectedRegion(getRegionById(data.value as number));
                                     formik.getFieldHelpers('cityId').setValue('')
                                 }}
                                 placeholder={'Select region'}
@@ -93,8 +93,8 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             <CustomSelectInput
                                 placeholder={'Select city'}
                                 name='cityId'
-                                disabled={!!!selectedRegion}
-                                options={selectedRegion?.cities.map(element => ({ text: element.name, value: element.id }))
+                                disabled={!!!formik.getFieldProps('regionId').value}
+                                options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
                         </Grid.Column>
                         <Grid.Column width={1}>

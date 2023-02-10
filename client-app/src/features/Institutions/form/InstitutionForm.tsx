@@ -25,7 +25,6 @@ export default observer(function InstitutionForm() {
         loadingInitial,
         getCityById,
         getRegionById,
-        setSelectedRegion,
         createInstitution,
         editInstitution,
         setLoadingInitial,
@@ -35,7 +34,7 @@ export default observer(function InstitutionForm() {
         selectedInstitution,
         uploading,
         regionRegistry,
-        setBackgroundImage, selectedRegion } = institutionStore;
+        setBackgroundImage } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -75,7 +74,7 @@ export default observer(function InstitutionForm() {
                 // let city = getCity
                 // formValues.regionId = region?.id;
                 setInstitution(formValues);
-                setSelectedRegion(getRegionById(formValues.regionId!));
+                // setSelectedRegion(getRegionById(formValues.regionId!));
             });
         else {
             setLoadingInitial(false);

@@ -15,19 +15,15 @@ export default observer(function App() {
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
   const { loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
   const { loadSpecialtyCores, loadBranches } = specialtyStore;
+
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().finally(() => {
-        commonStore.setAppLoaded()
+        commonStore.loadAppData();
       })
     } else {
-      commonStore.setAppLoaded();
+      commonStore.loadAppData();
     }
-    loadInstitutions();
-    loadSpecialtyCores();
-    loadBranches();
-    loadRegionsWithCities();
-    loadProfile();
   }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
 
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />

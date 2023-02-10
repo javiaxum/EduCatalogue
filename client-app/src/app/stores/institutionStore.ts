@@ -89,9 +89,9 @@ export default class InstitutionStore {
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }
-    setSelectedRegion = (selectedRegion: Region | undefined) => {
-        this.selectedRegion = selectedRegion;
-    }
+    // setSelectedRegion = (selectedRegion: Region | undefined) => {
+    //     this.selectedRegion = selectedRegion;
+    // }
 
     createReview = async (review: ReviewFormValues, institutionId: string) => {
         const user = store.userStore.user;
