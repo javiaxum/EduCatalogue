@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import react from "react";
-import { Divider, Grid, Header, Input, Search, Select } from "semantic-ui-react";
+import { Divider, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
 import { degreeOptions } from "../../../app/common/options/degreeOptions";
 import { Branch } from "../../../app/models/branch";
 import { SpecialtyCore } from "../../../app/models/specialtyCore";
@@ -33,20 +33,22 @@ export default observer(function SearchParamsList() {
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content='Price' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column width={16} style={{ padding: '0' }}>
+                <Label
+                    content='from' style={{ padding: '12px' }} />
                 <Input
-                    label={'min'}
                     placeholder="0"
                     name="min"
-                    style={{ width: '30%', padding: '2px' }}
+                    style={{ width: '7rem' }}
                     value={minPrice}
                     onChange={(e, d) => {
                         setMinPrice(d.value);
                     }} />
+                <Label
+                    content='till' style={{ padding: '12px' }} />
                 <Input
-                    label={'max'}
                     placeholder="0"
                     name="max"
-                    style={{ width: '30%', marginLeft: '50px' }}
+                    style={{ width: '7rem' }}
                     value={maxPrice}
                     onChange={(e, d) => {
                         setMaxPrice(d.value);

@@ -70,11 +70,7 @@ export default observer(function InstitutionForm() {
         if (id) loadInstitution(id)
             .then(institution => {
                 let formValues = new InstitutionFormValues(institution);
-                // let region = getRegionByCityId(institution?.cityId!);
-                // let city = getCity
-                // formValues.regionId = region?.id;
                 setInstitution(formValues);
-                // setSelectedRegion(getRegionById(formValues.regionId!));
             });
         else {
             setLoadingInitial(false);
@@ -128,7 +124,7 @@ export default observer(function InstitutionForm() {
                                 borderRadius: '0px',
                                 boxShadow: 'none',
                                 border: 'none',
-                                minWidth: '1000px'
+                                minWidth: '70vh'
                             }}>
                                 {files && files.length > 0 &&
                                     <Segment style={{ padding: '1rem 0 1rem 0' }} clearing>
@@ -179,7 +175,7 @@ export default observer(function InstitutionForm() {
                                 </Item.Group>
                             </Segment>
                         </Grid.Column>
-                        <Grid.Column style={{ width: '70%', left: '15%', top: '-80px' }}>
+                        <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-80px' }}>
                             <InstitutionDetailsMenu />
                             {detailsMenuActiveItem === 'About' &&
                                 <InstitutionDetailsInfoForm institution={institution} />}

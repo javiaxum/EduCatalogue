@@ -34,16 +34,21 @@ export default observer(function InstitutionDetails() {
     }, [loadInstitution, id]);
 
 
-    if (loadingInitial) return <LoadingComponent />
-    if (!selectedInstitution) return (<></>);
+    // if (loadingInitial) return <LoadingComponent />
+    // if (!selectedInstitution) return (<></>);
 
     return (
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                    <Image
-                        src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
-                        style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px', width: '100%', overflow: 'hidden' }} />
+                    {loading
+                        ? <Placeholder>
+                            <Placeholder.Image style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', width: '100%', overflow: 'hidden' }} />
+                        </Placeholder>
+                        : <Image
+                            src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
+                            style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px', width: '100%', overflow: 'hidden' }} />}
+
                 </Segment>
                 <Segment style={{
                     padding: '1em 3em 1em 3em',
@@ -55,7 +60,7 @@ export default observer(function InstitutionDetails() {
                     borderRadius: '0px',
                     boxShadow: 'none',
                     border: 'none',
-                    minWidth: '1000px'
+                    minWidth: '70vh'
                 }}>
                     <Item.Group>
                         <Item>
@@ -68,13 +73,13 @@ export default observer(function InstitutionDetails() {
                                     </Placeholder>
                                     : <Header
                                         size='huge'
-                                        content={selectedInstitution.name}
+                                        content={selectedInstitution?.name}
                                         style={{ color: '#444' }}
                                     />}
                                 {isInstitutionManager || profileStore.isOperator && <Button
                                     onClick={() => setEditMode(!editMode)}
                                     as={Link}
-                                    to={`/manage/${selectedInstitution.id}`}
+                                    to={`/manage/${selectedInstitution?.id}`}
                                     floated='right'
                                     style={{ width: '12rem' }}
                                     content={'Manage Institution'}

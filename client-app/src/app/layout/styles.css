@@ -3,7 +3,7 @@ body {
 }
 
 .root {
-  overflow: auto;
+  overflow: scroll;
 }
 
 .footer {
