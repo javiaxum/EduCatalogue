@@ -42,7 +42,7 @@ namespace Application.Institutions
                 string[] CitiesPredicate;
                 if (IsCitiesPredicate)
                     CitiesPredicate = request.Params.CitiesPredicate.Split('-');
-                else 
+                else
                     CitiesPredicate = new string[0];
 
                 var query = _context.Institutions.Where(x =>
@@ -52,9 +52,15 @@ namespace Application.Institutions
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
                         && (!IsMinPrice || s.PriceUAH >= MinPrice)
-                        && (!IsDegree || s.Degree ==  request.Params.Degree)));
+                        && (!IsDegree || s.Degree == request.Params.Degree)));
 
-                var result = query.OrderBy(x => x.Name)
+                var sortedQuery = 
+                request.Params.Sort == "za"
+                ? query.OrderByDescending(x => x.Name)
+                : request.Params.Sort == "hr"
+                ? query.OrderByDescending(x => x.Reviews.Select(x => x.Rating).Average())
+                : query.OrderBy(x => x.Name);
+                var result = sortedQuery
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider);
                 return Result<PagedList<InstitutionDTO>>.Success(
                     await PagedList<InstitutionDTO>.CreateAsync(result, request.Params.PageNumber, request.Params.PageSize)

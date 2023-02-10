@@ -17,7 +17,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     const [selectedRating, setSelectedRating] = useState<number | undefined>(undefined);
     const [sorting, setSorting] = useState<string>(reviewSortingOptions[0].text);
 
-    if(!selectedInstitution || !selectedInstitution.reviews) return <></>
+    if (!selectedInstitution || !selectedInstitution.reviews) return <></>
 
     let buttons = [];
     for (let i = 1; i <= 5; i++) {
@@ -98,7 +98,9 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                 </Grid>
             </Grid.Column>
             <Grid.Column width={6}>
-                <Image src={'/assets/institutionTitleImagePlaceholder.png'} style={{ filter: 'brightness(50%)', height: '22em', objectFit: 'cover', right: '-200px' }} />
+                <Image
+                    src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
+                    style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
             </Grid.Column>
         </Grid>
     )

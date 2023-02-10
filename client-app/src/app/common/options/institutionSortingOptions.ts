@@ -1,6 +1,5 @@
 export const institutionSortingOptions = [
-    {text: "A-Z", value: "A-Z"},
-    {text: "Z-A", value: "Z-A"},
-    {text: "Highest rating", value: "Highest rating"},
-    {text: "Most popular", value: "Most popular"},
+    {text: "A-Z", value: "az"},
+    {text: "Z-A", value: "za"},
+    {text: "Highest rating", value: "hr"},
 ]

@@ -33,7 +33,7 @@ export default function InstitutionsListItem({ institution }: Props) {
                             <Header as={Link} to={`/institutions/${institution.id}`}>{institution.name}</Header>
                         </Grid.Row>
                         <Grid.Row style={{padding: '0 0 1rem 0'}} >
-                            {elements}
+                            {elements}: RATING: {institution.rating}
                         </Grid.Row>
                     </Grid>
                 </Grid.Column>

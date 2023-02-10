@@ -8,16 +8,18 @@ import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
 
 export default observer(function InstitutionsList() {
     const { institutionStore } = useStore();
-    const { pagination, pagingParams } = institutionStore;
+    const { pagination, pagingParams, setInstitutionsSearchSort, institutionSearchSort, loading, instititutionsByName, institutionsRegistry, loadingInitial } = institutionStore;
 
     let placeholders = [];
     for (let i = 0; i < pagingParams.pageSize; i++) {
         placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
     }
+    const sortedInstitutions = institutionSearchSort == 'hr' ? instititutionsByName.slice().sort((a, b) => b.rating - a.rating) : instititutionsByName;
+
     return (
         <>
             <Header as='h2' content="Institutions" style={{ display: 'inline' }} />
-            {!institutionStore.loading
+            {!loading
                 &&
                 <Header
                     as='h5'
@@ -28,22 +30,23 @@ export default observer(function InstitutionsList() {
                 <Select
                     style={{ left: '0px' }}
                     options={institutionSortingOptions}
-                    min={0}
+                    value={institutionSearchSort}
+                    onChange={(e, d) => setInstitutionsSearchSort(d.value as string)}
                 />
             </Divider>
             <Item.Group divided>
-                {institutionStore.loadingInitial || institutionStore.loading ? (
+                {loadingInitial || loading ? (
                     <>
                         {placeholders}
                     </>
                 ) : (
                     <>
-                        {institutionStore.institutionsRegistry.size === 0
+                        {institutionsRegistry.size === 0
                             ? (<>
                                 <Segment>No results were found...</Segment>
                             </>)
                             : (<>
-                                {institutionStore.instititutionsByName.map((institution) => (
+                                {sortedInstitutions.map((institution) => (
                                     <InstitutionsListItem institution={institution} key={institution.id} />
                                 ))}
                             </>)}

@@ -84,7 +84,6 @@ export default observer(function InstitutionDetailsInfo() {
                     </Grid.Column>
                     <Grid.Column width={6}>
                         <Image
-                            avatar
                             src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
                             style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
                     </Grid.Column>

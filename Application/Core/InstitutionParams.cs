@@ -13,6 +13,7 @@ namespace Application.Core
         public string MinPrice { get; set; } = "";
         public string MaxPrice { get; set; } = "";
         public string Degree { get; set; } = "";
+        public string Sort { get; set; } = "az";
         public int StudentCount { get; set; }
     }
 

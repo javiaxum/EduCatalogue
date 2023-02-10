@@ -102,7 +102,7 @@ export default observer(function InstitutionForm() {
             onSubmit={values => handleInstitutionFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Grid>
+                    <Grid style={{ minWidth: '1000px' }}>
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                                 {files && files.length == 0 && <BackgroundUploadWidgetDropzone
@@ -116,7 +116,7 @@ export default observer(function InstitutionForm() {
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
-                                top: '-4em',
+                                top: '-5em',
                                 left: '15%',
                                 width: '70%',
                                 height: 'auto',

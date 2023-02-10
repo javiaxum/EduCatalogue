@@ -16,7 +16,6 @@ export default class InstitutionStore {
     populatedCityRegistry = new Map<number, City>();
     regionRegistry = new Map<number, Region>();
     selectedInstitution: Institution | undefined = undefined;
-    // selectedRegion: Region | undefined = undefined;
     loading: boolean = false;
     uploading: boolean = false;
     reviewForm: boolean = false;
@@ -29,6 +28,7 @@ export default class InstitutionStore {
     branchPredicate = new Map();
     citiesPredicate = new Map();
     cityNameSearchValue: string = '';
+    institutionSearchSort: string = 'az';
     minPrice: string = '';
     maxPrice: string = '';
 
@@ -37,7 +37,7 @@ export default class InstitutionStore {
         makeAutoObservable(this);
 
         reaction(
-            () => this.specialtyPredicate.keys(),
+            () => [this.specialtyPredicate.keys(), this.institutionSearchSort],
             () => {
                 this.pagingParams = new PagingParams();
                 this.institutionsRegistry.clear();
@@ -89,9 +89,10 @@ export default class InstitutionStore {
     setReviewForm = (state: boolean) => {
         this.reviewForm = state;
     }
-    // setSelectedRegion = (selectedRegion: Region | undefined) => {
-    //     this.selectedRegion = selectedRegion;
-    // }
+
+    setInstitutionsSearchSort = (institutionSearchSort: string) => {
+        this.institutionSearchSort = institutionSearchSort;
+    }
 
     createReview = async (review: ReviewFormValues, institutionId: string) => {
         const user = store.userStore.user;
@@ -286,8 +287,9 @@ export default class InstitutionStore {
         params.append('branchesPredicate', branchesPredicate);
         params.append('citiesPredicate', citiesPredicate);
         params.append('minPrice', this.minPrice.toString());
-        params.append('degree', this.degree.toString());
         params.append('maxPrice', this.maxPrice.toString());
+        params.append('degree', this.degree);
+        params.append('sort', this.institutionSearchSort);
         return params;
     }
 
