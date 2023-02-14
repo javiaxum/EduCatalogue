@@ -17,8 +17,7 @@ export default observer(function InstitutionDetailsInfo() {
         regionRegistry,
         selectedInstitution, loading } = institutionStore;
 
-    if (!selectedInstitution || !regionRegistry) return <></>
-
+    // if (!selectedInstitution || !regionRegistry) return <></>
     // const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
     // add region name to the institution details info
     return (
@@ -34,7 +33,7 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={14}>
                                     Description:
-                                    <p>{selectedInstitution.description}</p>
+                                    <p>{selectedInstitution?.description}</p>
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -43,7 +42,7 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={5}>
                                     Student count:
-                                    {selectedInstitution.studentCount}
+                                    {selectedInstitution?.studentCount}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -52,14 +51,14 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={6}>
                                     City:
-                                    {getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
+                                    {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                                 </Grid.Column>
                                 <Grid.Column width={1}>
                                     <Icon name='home' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={7}>
                                     Address:
-                                    {selectedInstitution.streetAddress}
+                                    {selectedInstitution?.streetAddress}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -68,7 +67,7 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={14}>
                                     Homepage:
-                                    <a href={`https://${selectedInstitution.siteURL}`} target="_blank">  {selectedInstitution.siteURL}</a>
+                                    {selectedInstitution && <a href={`https://${selectedInstitution.siteURL}`} target="_blank">  {selectedInstitution.siteURL}</a>}
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
@@ -77,15 +76,15 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                                 <Grid.Column width={14}>
                                     Contact information:
-                                    {selectedInstitution.contactInformation}
+                                    {selectedInstitution?.contactInformation}
                                 </Grid.Column>
                             </Grid.Row>
                         </Grid>
                     </Grid.Column>
                     <Grid.Column width={6}>
-                        <Image
+                        {selectedInstitution && <Image
                             src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                            style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
+                            style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />}
                     </Grid.Column>
                 </Grid>}
         </>

@@ -25,15 +25,14 @@ export default observer(function InstitutionsList() {
                     as='h5'
                     color='grey'
                     content={`found ${pagination?.totalItems} ${pagination?.totalItems === 1 ? 'item' : 'items'}`}
-                    style={{ display: 'inline', marginLeft: '20px' }} />}
-            <Divider horizontal>
-                <Select
-                    style={{ left: '0px' }}
-                    options={institutionSortingOptions}
-                    value={institutionSearchSort}
-                    onChange={(e, d) => setInstitutionsSearchSort(d.value as string)}
-                />
-            </Divider>
+                    style={{ display: 'inline', marginLeft: '20px' }} />}<br></br>
+            <Select
+                style={{ left: '0px', marginTop: '1rem', display: 'inline-block' }}
+                options={institutionSortingOptions}
+                value={institutionSearchSort}
+                onChange={(e, d) => setInstitutionsSearchSort(d.value as string)}
+            />
+            <Divider style={{ width: 'calc(100% - 15rem)', display: 'inline-block', margin: '1rem 0 0 1rem' }} />
             <Item.Group divided>
                 {loadingInitial || loading ? (
                     <>

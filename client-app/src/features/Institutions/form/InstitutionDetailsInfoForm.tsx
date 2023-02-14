@@ -50,8 +50,6 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
     }, [files])
 
     const formik = useFormikContext();
-    const [selectedRegion, setSelectedRegion] = useState<Region | undefined>(undefined);
-
     return (
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={10}>

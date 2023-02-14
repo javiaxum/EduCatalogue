@@ -17,6 +17,7 @@ import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetails
 import InstitutionDetailsGallery from '../details/gallery/InstitutionDetailsGallery';
 import BackgroundUploadWidgetDropzone from '../../../app/common/imageUpload/backgroundImage/BackgroundUploadWidgetDropzone';
 import BackgroundImageUploadWidgetCropper from '../../../app/common/imageUpload/backgroundImage/BackgroundImageUploadWidgetCropper';
+import InstitutionDetailsLocation from '../details/location/InstitutionDetailsLocation';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
@@ -181,6 +182,8 @@ export default observer(function InstitutionForm() {
                                 <InstitutionDetailsInfoForm institution={institution} />}
                             {detailsMenuActiveItem === 'Specialties' &&
                                 <InstitutionDetailsSpecialtiesList />}
+                            {detailsMenuActiveItem === 'Location' &&
+                                <InstitutionDetailsLocation />}
                             {detailsMenuActiveItem === 'Reviews' &&
                                 <InstitutionDetailsReviewsList />}
                             {detailsMenuActiveItem === 'Gallery' &&

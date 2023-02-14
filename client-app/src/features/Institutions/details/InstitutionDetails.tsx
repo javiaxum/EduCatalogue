@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
 import { router } from '../../routers/Routes';
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
+import InstitutionDetailsLocation from './location/InstitutionDetailsLocation';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore, profileStore } = useStore();
@@ -42,8 +43,8 @@ export default observer(function InstitutionDetails() {
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                     {loading
-                        ? <Placeholder>
-                            <Placeholder.Image style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', width: '100%', overflow: 'hidden' }} />
+                        ? <Placeholder style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '100vw', width: '100%' }}>
+                            <Placeholder.Image  />
                         </Placeholder>
                         : <Image
                             src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
@@ -97,9 +98,11 @@ export default observer(function InstitutionDetails() {
                     <InstitutionDetailsSpecialtiesList />}
                 {detailsMenuActiveItem === 'Reviews' &&
                     <InstitutionDetailsReviewsList />}
+                {detailsMenuActiveItem === 'Location' &&
+                    <InstitutionDetailsLocation />}
                 {detailsMenuActiveItem === 'Gallery' &&
                     <InstitutionDetailsGallery />}
             </Grid.Column>
         </Grid>
     )
-})
+})  

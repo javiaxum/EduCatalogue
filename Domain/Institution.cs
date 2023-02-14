@@ -12,6 +12,7 @@ namespace Domain
         public string Description { get; set; }
         public int StudentCount { get; set; }
         public City City { get; set; }
+        public Coordinates Coordinates { get; set; }
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
         public string TitleImageId { get; set; } 

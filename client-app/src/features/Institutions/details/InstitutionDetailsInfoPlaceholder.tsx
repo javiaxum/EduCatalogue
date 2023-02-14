@@ -7,18 +7,6 @@ import { useStore } from '../../../app/stores/store';
 
 export default observer(function InstitutionDetailsInfoPlaceholder() {
 
-    const { institutionStore, commonStore } = useStore();
-    const {
-        loadingInitial,
-        loadInstitution,
-        detailsMenuActiveItem,
-        regionRegistry,
-        selectedInstitution } = institutionStore;
-
-    if (!selectedInstitution || !regionRegistry) return <></>
-
-    // const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
-    // add region name to the institution details info
     return (
         <>
             <Grid>
