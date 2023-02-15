@@ -22,6 +22,7 @@ export default class UserStore {
             runInAction(() => this.user = user);
             router.navigate('/institutions');
             store.modalStore.closeModal();
+            store.profileStore.loadProfile();
         } catch (error) {
             throw error;
         }

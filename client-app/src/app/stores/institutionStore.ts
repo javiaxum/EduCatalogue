@@ -9,6 +9,7 @@ import { City } from "../models/city";
 import { Review, ReviewFormValues } from "../models/review";
 import { Region } from "../models/region";
 import { Specialty } from "../models/specialty";
+import { debounce } from "lodash";
 
 export default class InstitutionStore {
 
@@ -37,47 +38,17 @@ export default class InstitutionStore {
         makeAutoObservable(this);
 
         reaction(
-            () => [this.specialtyPredicate.keys(), this.institutionSearchSort],
+            () => [
+                this.specialtyPredicate.keys(),
+                this.institutionSearchSort,
+                this.branchPredicate.keys(),
+                this.citiesPredicate.keys(),
+                this.maxPrice,
+                this.minPrice,
+                this.degree],
             () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
-        reaction(
-            () => this.branchPredicate.keys(),
-            () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
-        reaction(
-            () => this.citiesPredicate.keys(),
-            () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
-        reaction(
-            () => this.maxPrice,
-            () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
-        reaction(
-            () => this.minPrice,
-            () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
-        reaction(
-            () => this.degree,
-            () => {
-                this.pagingParams = new PagingParams();
-                this.institutionsRegistry.clear();
-                this.loadInstitutions();
-            },)
+                this.debouncedLoadInstitutions();
+            })
     }
 
     get isInstitutionManager() {
@@ -294,7 +265,16 @@ export default class InstitutionStore {
     }
 
     get instititutionsByName() {
-        return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name)); // possibly not sorting by name
+        return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    get instititutionsBySelectedSort() {
+        const institutions = Array.from(this.institutionsRegistry.values());
+        if (this.institutionSearchSort == 'hr')
+            return institutions.sort((a, b) => b.rating - a.rating)
+        if (this.institutionSearchSort == 'za')
+            return institutions.sort((a, b) => b.name.localeCompare(a.name));
+        return institutions.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     private setInstitution = (institution: Institution) => {
@@ -310,6 +290,12 @@ export default class InstitutionStore {
     setActiveMenuItem = (itemName: string) => {
         this.detailsMenuActiveItem = itemName;
     }
+
+    debouncedLoadInstitutions = debounce(() => {
+        this.pagingParams = new PagingParams();
+        this.institutionsRegistry.clear();
+        this.loadInstitutions()
+    }, 800);
 
     loadInstitutions = async () => {
         this.setLoading(true);
@@ -335,7 +321,6 @@ export default class InstitutionStore {
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
     }
-
     loadInstitution = async (id: string) => {
         this.setLoading(true);
         let institution = this.institutionsRegistry.get(id);

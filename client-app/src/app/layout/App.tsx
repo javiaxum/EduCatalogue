@@ -18,7 +18,7 @@ export default observer(function App() {
 
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getUser().finally(() => {
+      userStore.getUser().catch(() => userStore.logout()).finally(() => { // logic for re-authentication in case of existing token expiry
         commonStore.loadAppData();
       })
     } else {

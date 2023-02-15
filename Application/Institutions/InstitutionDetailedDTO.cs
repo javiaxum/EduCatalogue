@@ -18,6 +18,8 @@ namespace Application
         public int StudentCount { get; set; }
         public int CityId { get; set; }
         public int RegionId { get; set; }
+        public string Latitude { get; set; }
+        public string Longtitude { get; set; }
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
         public string TitleImageId { get; set; }

@@ -17,7 +17,8 @@ namespace Application.Core
         {
             CreateMap<Institution, Institution>();
 
-            CreateMap<InstitutionDTO, Institution>();
+            CreateMap<InstitutionDTO, Institution>()
+            .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates {Latitude = double.Parse(s.Latitude), Longitude = double.Parse(s.Longtitude)}));
 
             CreateMap<Institution, InstitutionDTO>()
             .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))
@@ -27,6 +28,8 @@ namespace Application.Core
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
             
             CreateMap<Institution, InstitutionDetailedDTO>()
+            .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
+            .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id));
 

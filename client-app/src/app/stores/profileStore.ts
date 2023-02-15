@@ -8,20 +8,20 @@ export default class ProfileStore {
     profile: Profile | undefined = undefined;
     loading: boolean = false;
     uploading: boolean = false;
-    
+
 
     constructor() {
         makeAutoObservable(this);
     }
 
     get isCurrentUser() {
-        if(store.userStore.user && this.profile) {
+        if (store.userStore.user && this.profile) {
             return this.profile.username === store.userStore.user.username;
         }
         return false;
     }
     get isOperator() {
-        if(store.userStore.user && this.profile) {
+        if (store.userStore.user && this.profile) {
             return this.profile.username === 'CatalogueOperator';
         }
         return false;
@@ -29,21 +29,24 @@ export default class ProfileStore {
 
     loadProfile = async () => {
         this.loading = true;
-        try {
-            const profile = await agent.Profiles.get();
-            runInAction(() => {
-                profile.reviews.forEach((x) => {
-                    x.createdAt = new Date(x.createdAt);
+        if (store.userStore.isLoggedIn)
+            try {
+                const profile = await agent.Profiles.get();
+                runInAction(() => {
+                    profile.reviews.forEach((x) => {
+                        x.createdAt = new Date(x.createdAt);
+                    })
+                    this.profile = profile;
+                    this.loading = false;
                 })
-                this.profile = profile;
-                this.loading = false;
-            })
-        } catch (error) {
-            console.log(error);
-            runInAction(() => {
-                this.loading = false;
-            })
-        }
+            } catch (error) {
+                console.log(error);
+                runInAction(() => {
+                    this.loading = false;
+                })
+            }
+        else
+            this.loading = false;
     }
 
     setProfileImage = async (file: Blob) => {

@@ -26,7 +26,6 @@ export default observer(function SearchParamsList() {
         minPrice,
         setMaxPrice,
         setMinPrice,
-        pagination,
         setDegreePredicate } = institutionStore;
 
 

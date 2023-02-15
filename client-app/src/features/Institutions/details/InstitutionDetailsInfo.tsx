@@ -18,7 +18,7 @@ export default observer(function InstitutionDetailsInfo() {
         selectedInstitution, loading } = institutionStore;
 
     // if (!selectedInstitution || !regionRegistry) return <></>
-    // const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
+// const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
     // add region name to the institution details info
     return (
         <>

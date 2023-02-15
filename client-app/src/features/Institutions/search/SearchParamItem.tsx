@@ -7,14 +7,11 @@ interface Props {
     id: number | string;
     name?: string;
     disabled?: boolean
-    isSpecialtyParam?: boolean;
     togglePredicateParam: (predicate: string | number, value: boolean) => void;
     checked: boolean;
 }
 
-export default observer(function SearchParamItem({ id, name, togglePredicateParam, checked, disabled, isSpecialtyParam }: Props) {
-
-    const { institutionStore, specialtyStore } = useStore();
+export default observer(function SearchParamItem({ id, name, togglePredicateParam, checked, disabled }: Props) {
 
     return (
         <GridColumn width={16} style={{ padding: '0.2rem' }}>
@@ -23,10 +20,6 @@ export default observer(function SearchParamItem({ id, name, togglePredicatePara
                 checked={checked}
                 label={name}
                 disabled={disabled || false}
-                // disabled={(
-                //     isSpecialtyParam
-                //     && !institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2 && x === id.slice(0, 2)))
-                //     && institutionStore.specialtyAndBranchPredicates.find((x) => x.length === 2)}
                 onChange={() => {
                     togglePredicateParam(id, !checked)
                 }}
