@@ -21,7 +21,7 @@ namespace API.Services
             _config = config;
         }
 
-        public string CreateToken(AppUser appUser)
+        public string CreateToken(AppUser appUser, bool rememberMe)
         {
             var claims = new List<Claim>
             {
@@ -35,7 +35,7 @@ namespace API.Services
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
+                Expires = rememberMe ? DateTime.Now.AddDays(7) : DateTime.Now.AddDays(1),
                 SigningCredentials = credentials
             };
             var tokenHandler = new JwtSecurityTokenHandler();

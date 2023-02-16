@@ -18,7 +18,7 @@ namespace Application.Core
             CreateMap<Institution, Institution>();
 
             CreateMap<InstitutionDTO, Institution>()
-            .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates {Latitude = double.Parse(s.Latitude), Longitude = double.Parse(s.Longtitude)}));
+            .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates {Latitude = s.Latitude, Longitude = s.Longtitude}));
 
             CreateMap<Institution, InstitutionDTO>()
             .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))

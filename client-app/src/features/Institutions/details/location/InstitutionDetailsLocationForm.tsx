@@ -12,7 +12,7 @@ import { useStore } from '../../../../app/stores/store';
 import * as GeoSearch from 'leaflet-geosearch';
 import LeafletControlGeocoder from './LeafletControlGeocoder';
 import { geocoders } from 'leaflet-control-geocoder';
-import { debounce } from 'lodash';
+import { debounce, result } from 'lodash';
 
 export default function InstitutionDetailsLocationForm() {
 
@@ -26,10 +26,18 @@ export default function InstitutionDetailsLocationForm() {
         uploading } = institutionStore;
 
     const formik = useFormikContext();
-    const [center, setCenter] = useState<any>({lat: 50, lng: 30});
+    const [center, setCenter] = useState<any>({ lat: selectedInstitution?.latitude, lng: selectedInstitution?.longtitude });
+    console.log('LAT: ' + selectedInstitution?.latitude + ' LNG: ' + selectedInstitution?.longtitude)
+    console.log('LAT: ' + center.lat + ' LNG: ' + center.lng)
     const geocoder = new geocoders.Nominatim();
     const debouncedPerformGeocodingQuery = debounce((city: string, street: string) => {
-        geocoder.geocode(`Ukraine, ${city}, ${street}`, (result) => { setCenter(result[0].center) }) //
+        geocoder.geocode(`Ukraine, ${city}, ${street}`, (result) => {
+            if (result[0]) {
+                setCenter(result[0].center);
+                formik.getFieldHelpers('latitude').setValue(result[0].center.lat)
+                formik.getFieldHelpers('longtitude').setValue(result[0].center.lng)
+            }
+        })
     }, 1000)
     return (
         <Grid>
@@ -53,7 +61,6 @@ export default function InstitutionDetailsLocationForm() {
                             City:
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    console.log(data.value as number);
                                     debouncedPerformGeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)
                                 }}
                                 placeholder={'Select city'}
@@ -67,13 +74,17 @@ export default function InstitutionDetailsLocationForm() {
                         </Grid.Column>
                         <Grid.Column width={15}>
                             Address:
-                            <CustomTextInput placeholder='Address' name='streetAddress' />
+                            <CustomTextInput placeholder='Address' name='streetAddress'
+                                onChange={(e) => {
+                                    formik.getFieldHelpers('streetAddress').setValue(e.currentTarget.value);
+                                    debouncedPerformGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, e.currentTarget.value)
+                                }} />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
             </Grid.Column>
             <Grid.Column width={8}>
-                <MapContainer center={center} zoom={13} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '440px' }}>
+                <MapContainer center={center} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '440px' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -82,11 +93,9 @@ export default function InstitutionDetailsLocationForm() {
                         <LeafletControlGeocoder
                             street={selectedInstitution?.streetAddress!}
                             city={getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name!}
-                            callback={(e) => {
-                                formik.getFieldHelpers('latitude').setValue(e.geocode.center.lat)
-                                formik.getFieldHelpers('longtitude').setValue(e.geocode.center.lng)
-                            }}
-                            geocoder={geocoder} />}
+                            geocoder={geocoder}
+                            center={center}
+                        />}
                     <Marker position={center}>
                         <Popup>
                             A pretty CSS3 popup. <br /> Easily customizable.

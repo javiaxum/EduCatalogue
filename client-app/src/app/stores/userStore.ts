@@ -6,6 +6,7 @@ import { store } from "./store";
 
 export default class UserStore {
     user: User | null = null;
+    rememberMeSwitch: boolean = false;
 
     constructor() {
         makeAutoObservable(this);

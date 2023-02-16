@@ -13,4 +13,5 @@ export interface UserFormValues {
     password: string;
     username?: string;
     displayName?: string;
+    rememberMe?: boolean;
 }

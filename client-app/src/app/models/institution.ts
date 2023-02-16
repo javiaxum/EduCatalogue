@@ -13,8 +13,8 @@ export interface Institution {
     studentCount: number;
     cityId: number;
     regionId: number;
-    latitude: string;
-    longtitude: string;
+    latitude: number;
+    longtitude: number;
     streetAddress: string;
     siteURL: string;
     titleImageId: string;
@@ -42,8 +42,8 @@ export class InstitutionFormValues {
     studentCount: number = 0;
     cityId: number = 0;
     regionId?: number = 0;
-    latitude: string = '';
-    longtitude: string = '';
+    latitude: number = 0;
+    longtitude: number = 0;
     streetAddress: string = '';
     titleImageId: string = '';
     backgroundImageId: string = '';

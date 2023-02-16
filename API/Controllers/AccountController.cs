@@ -34,16 +34,16 @@ namespace API.Controllers
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
-            if (user == null) return Unauthorized("An error occured while authorizing user");
+            if (user == null) return Unauthorized("An error has occured while authorizing user");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
             if (result.Succeeded)
             {
-                return CreateUserDTO(user);
+                return CreateUserDTO(user, loginDTO.RememberMeSwitch);
             }
 
-            return Unauthorized("An error occured while authorizing user");
+            return Unauthorized("An error has occured while authorizing user");
         }
         [HttpPost]
         [Route("register")]
@@ -71,10 +71,10 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
-                return CreateUserDTO(user);
+                return CreateUserDTO(user, false);
             }
 
-            return BadRequest("An error occured while registering user");
+            return BadRequest("An error has occured while registering user");
         }
         [Authorize]
         [HttpGet]
@@ -82,16 +82,17 @@ namespace API.Controllers
         {
             var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-
-            return CreateUserDTO(user);
+            if (user == null)
+                return BadRequest("An error has occured while getting user");
+            return CreateUserDTO(user, false);
         }
 
-        private AppUserDTO CreateUserDTO(AppUser appUser)
+        private AppUserDTO CreateUserDTO(AppUser appUser, bool rememberMe)
         {
             return new AppUserDTO
             {
                 DisplayName = appUser.DisplayName,
-                Token = _tokenService.CreateToken(appUser),
+                Token = _tokenService.CreateToken(appUser, rememberMe),
                 Username = appUser.UserName,
             };
         }

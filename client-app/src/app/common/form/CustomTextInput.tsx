@@ -9,13 +9,18 @@ interface Props {
     label?: string;
     type?: string;
     padding?: string;
+    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
-    export default function CustomTextInput(props: Props) {
+export default function CustomTextInput(props: Props) {
     const [field, meta] = useField(props.name);
     return (
         <Form.Field error={meta.touched && !!meta.error}>
-            <label style={{margin: '0'}}>{props.label}</label>
-            <input {...field} {...props} style={{padding: props.padding}} />
+            <label style={{ margin: '0' }}>{props.label}</label>
+            <input
+                {...field}
+                {...props}
+                style={{ padding: props.padding }}
+                />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
             ) : (null)}

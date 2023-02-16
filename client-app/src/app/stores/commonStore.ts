@@ -15,7 +15,7 @@ export default class CommonStore {
             store.specialtyStore.loadBranches(),
             store.institutionStore.loadCitiesWithInstitutions(),
             store.institutionStore.loadRegionsWithCities(),
-            store.profileStore.loadProfile()]).then(() => this.appLoaded = true)
+            store.profileStore.loadProfile()]).then(() => this.setAppLoaded())
     }
 
     setEditMode = (state: boolean) => {
