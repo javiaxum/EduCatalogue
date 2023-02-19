@@ -11,11 +11,11 @@ export default class CommonStore {
 
     loadAppData = async () => {
         await Promise.all([store.institutionStore.loadInstitutions(),
-            store.specialtyStore.loadSpecialtyCores(),
-            store.specialtyStore.loadBranches(),
-            store.institutionStore.loadCitiesWithInstitutions(),
-            store.institutionStore.loadRegionsWithCities(),
-            store.profileStore.loadProfile()]).then(() => this.setAppLoaded())
+        store.specialtyStore.loadSpecialtyCores(),
+        store.specialtyStore.loadBranches(),
+        store.institutionStore.loadCitiesWithInstitutions(),
+        store.institutionStore.loadRegionsWithCities()])
+        this.setAppLoaded();
     }
 
     setEditMode = (state: boolean) => {

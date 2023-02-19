@@ -24,7 +24,7 @@ export default function InstitutionDetailsLocation() {
 
     return (
         <Grid>
-            <Grid.Column width={8}>
+            <Grid.Column width={6}>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={1}>
@@ -34,6 +34,8 @@ export default function InstitutionDetailsLocation() {
                             City:
                             {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                         </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row>
                         <Grid.Column width={1}>
                             <Icon name='home' size='large' color='blue' />
                         </Grid.Column>
@@ -61,6 +63,7 @@ export default function InstitutionDetailsLocation() {
                     </Marker>
                 </MapContainer>
             </Grid.Column>
+            <Grid.Column width={2}/>
         </Grid>
     )
 }

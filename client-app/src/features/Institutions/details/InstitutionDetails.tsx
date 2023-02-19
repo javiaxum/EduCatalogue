@@ -34,10 +34,6 @@ export default observer(function InstitutionDetails() {
         setEditMode(false);
     }, [loadInstitution, id]);
 
-
-    // if (loadingInitial) return <LoadingComponent />
-    // if (!selectedInstitution) return (<></>);
-
     return (
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>

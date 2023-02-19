@@ -22,7 +22,7 @@ export default observer(function InstitutionsList() {
     for (let i = 0; i < pagingParams.pageSize; i++) {
         placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
     }
-    
+
 
     return (
         <>

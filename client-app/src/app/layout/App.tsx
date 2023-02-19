@@ -18,10 +18,10 @@ export default observer(function App() {
 
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getUser().then(() => commonStore.loadAppData(), () => userStore.logout());
+      userStore.getUser().then(() => loadProfile(), () => userStore.logout());
     }
+    commonStore.loadAppData()
   }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
-
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (

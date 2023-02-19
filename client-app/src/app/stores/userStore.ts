@@ -43,7 +43,6 @@ export default class UserStore {
     logout = () => {
         store.commonStore.setToken(null);
         this.user = null;
-        router.navigate('/');
         store.modalStore.closeModal();
     }
 

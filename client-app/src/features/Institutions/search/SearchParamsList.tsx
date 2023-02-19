@@ -28,7 +28,6 @@ export default observer(function SearchParamsList() {
         setMinPrice,
         setDegreePredicate } = institutionStore;
 
-
     function compareFnSC(a: SpecialtyCore, b: SpecialtyCore) {
         return !institutionStore.specialtyPredicate.has(a.id) ? !institutionStore.specialtyPredicate.has(b.id) ? 0 : 1 : !institutionStore.specialtyPredicate.has(b) ? -1 : 0;
     }

@@ -5,7 +5,7 @@ import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { env } from 'process';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { DropdownProps, Grid, Icon } from 'semantic-ui-react';
+import { DropdownProps, Grid, Icon, Search } from 'semantic-ui-react';
 import CustomSelectInput from '../../../../app/common/form/CustomSelectInput';
 import CustomTextInput from '../../../../app/common/form/CustomTextInput';
 import { useStore } from '../../../../app/stores/store';
@@ -27,21 +27,32 @@ export default function InstitutionDetailsLocationForm() {
 
     const formik = useFormikContext();
     const [center, setCenter] = useState<any>({ lat: selectedInstitution?.latitude, lng: selectedInstitution?.longtitude });
-    console.log('LAT: ' + selectedInstitution?.latitude + ' LNG: ' + selectedInstitution?.longtitude)
+    const [results, setResults] = useState<geocoders.GeocodingResult>();
+
     console.log('LAT: ' + center.lat + ' LNG: ' + center.lng)
-    const geocoder = new geocoders.Nominatim();
-    const debouncedPerformGeocodingQuery = debounce((city: string, street: string) => {
+    const geocoder = new geocoders.Nominatim({
+        geocodingQueryParams: {
+            country: 'Ukraine',
+        }
+    });
+
+    const debouncedSetResults = debounce((results: any) => setResults(results), 2400)
+    const debouncedSetCenter = debounce((center: any) => {
+        setCenter(center);
+        formik.getFieldHelpers('latitude').setValue(center.lat);
+        formik.getFieldHelpers('longtitude').setValue(center.lng);
+    }, 2400)
+
+    const debouncedGeocodingQuery = debounce((city: string, street: string) => {
         geocoder.geocode(`Ukraine, ${city}, ${street}`, (result) => {
-            if (result[0]) {
-                setCenter(result[0].center);
-                formik.getFieldHelpers('latitude').setValue(result[0].center.lat)
-                formik.getFieldHelpers('longtitude').setValue(result[0].center.lng)
-            }
+            debouncedSetResults(result);
+            debouncedSetCenter(result[0].center);
         })
-    }, 1000)
+    }, 2400)
+
     return (
         <Grid>
-            <Grid.Column width={8}>
+            <Grid.Column width={6}>
                 <Grid>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
                         <Grid.Column width={1}>
@@ -61,7 +72,7 @@ export default function InstitutionDetailsLocationForm() {
                             City:
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    debouncedPerformGeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)
+                                    debouncedGeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)
                                 }}
                                 placeholder={'Select city'}
                                 name='cityId'
@@ -69,6 +80,9 @@ export default function InstitutionDetailsLocationForm() {
                                 options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
                                     .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
                         </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
+
                         <Grid.Column width={1}>
                             <Icon name='home' size='large' color='blue' />
                         </Grid.Column>
@@ -76,8 +90,16 @@ export default function InstitutionDetailsLocationForm() {
                             Address:
                             <CustomTextInput placeholder='Address' name='streetAddress'
                                 onChange={(e) => {
-                                    formik.getFieldHelpers('streetAddress').setValue(e.currentTarget.value);
-                                    debouncedPerformGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, e.currentTarget.value)
+                                    formik.getFieldHelpers('streetAddress').setValue(e.currentTarget.value);ol
+                                    debouncedGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, e.currentTarget.value)
+                                }} />
+                            <Search
+                                value={formik.getFieldProps('streetAddress').value}
+                                results={results}
+                                onSearchChange={(e, d) => {
+                                    console.log(d.value)
+                                    formik.getFieldHelpers('streetAddress').setValue(d.value)
+                                    debouncedGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, d.value!)
                                 }} />
                         </Grid.Column>
                     </Grid.Row>
@@ -91,8 +113,6 @@ export default function InstitutionDetailsLocationForm() {
                     />
                     {editMode &&
                         <LeafletControlGeocoder
-                            street={selectedInstitution?.streetAddress!}
-                            city={getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name!}
                             geocoder={geocoder}
                             center={center}
                         />}
@@ -103,6 +123,7 @@ export default function InstitutionDetailsLocationForm() {
                     </Marker>
                 </MapContainer>
             </Grid.Column>
+            <Grid.Column width={2} />
         </Grid>
     )
 }
