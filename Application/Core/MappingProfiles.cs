@@ -55,6 +55,7 @@ namespace Application.Core
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<SpecialtyDTO, Specialty>();
+            
 
             CreateMap<Specialty, SpecialtyComponentsDTO>()
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));

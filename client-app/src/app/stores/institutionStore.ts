@@ -24,14 +24,8 @@ export default class InstitutionStore {
     detailsMenuActiveItem: string = 'About';
     pagination: Pagination | null = null;
     pagingParams: PagingParams = new PagingParams();
-    specialtyPredicate = new Map();
-    degree: string = '';
-    branchPredicate = new Map();
-    citiesPredicate = new Map();
-    cityNameSearchValue: string = '';
-    institutionSearchSort: string = 'az';
-    minPrice: string = '';
-    maxPrice: string = '';
+    selectedCities: number[] = [];
+    selectedInstitutionsSort: string = 'az';
 
 
     constructor() {
@@ -39,17 +33,49 @@ export default class InstitutionStore {
 
         reaction(
             () => [
-                this.specialtyPredicate.keys(),
-                this.institutionSearchSort,
-                this.branchPredicate.keys(),
-                this.citiesPredicate.keys(),
-                this.maxPrice,
-                this.minPrice,
-                this.degree],
+                this.selectedInstitutionsSort,
+                this.selectedCities],
             () => {
                 this.debouncedLoadInstitutions();
             })
     }
+
+    setSelectedCities = (value: number[]) => {
+        this.selectedCities = value;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+
+        let branchesPredicate = store.specialtyStore.selectedBranches.join('-');
+        let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
+        let citiesPredicate = this.selectedCities.join('-');
+        params.append('specialtiesPredicate', specialtiesPredicate);
+        params.append('branchesPredicate', branchesPredicate);
+        params.append('citiesPredicate', citiesPredicate);
+        
+        params.append('minPrice', store.specialtyStore.minPrice.toString());
+        params.append('maxPrice', store.specialtyStore.maxPrice.toString());
+        params.append('degree', store.specialtyStore.selectedDegree);
+        params.append('sort', this.selectedInstitutionsSort);
+        return params;
+    }
+
+    get instititutionsByName() {
+        return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    get instititutionsBySelectedSort() {
+        const institutions = Array.from(this.institutionsRegistry.values());
+        if (this.selectedInstitutionsSort == 'hr')
+            return institutions.sort((a, b) => b.rating - a.rating)
+        if (this.selectedInstitutionsSort == 'za')
+            return institutions.sort((a, b) => b.name.localeCompare(a.name));
+        return institutions.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
 
     get isInstitutionManager() {
         if (store.userStore.isLoggedIn && store.profileStore.profile)
@@ -61,8 +87,8 @@ export default class InstitutionStore {
         this.reviewForm = state;
     }
 
-    setInstitutionsSearchSort = (institutionSearchSort: string) => {
-        this.institutionSearchSort = institutionSearchSort;
+    setInstitutionsSearchSort = (selectedInstitutionsSort: string) => {
+        this.selectedInstitutionsSort = selectedInstitutionsSort;
     }
 
     createReview = async (review: ReviewFormValues, institutionId: string) => {
@@ -140,22 +166,7 @@ export default class InstitutionStore {
         this.selectedInstitution!.specialties = newSpecialties;
     }
 
-    setMaxPrice = (value: string) => {
-        this.maxPrice = value;
-    }
-
-    setMinPrice = (value: string) => {
-        this.minPrice = value;
-    }
-
-    setCityNameFilter = (value: string) => {
-        this.cityNameSearchValue = value;
-    }
-
-    get specialtyAndBranchPredicates() {
-        return Array.from(this.specialtyPredicate.keys()).concat(Array.from(this.branchPredicate.keys()));
-    }
-
+  
 
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
@@ -201,9 +212,6 @@ export default class InstitutionStore {
 
     }
 
-    setDegreePredicate = (degree: string) => {
-        this.degree = degree;
-    }
 
     getRegionById = (regionId: number) => {
         return this.regionRegistry.get(regionId);
@@ -217,66 +225,7 @@ export default class InstitutionStore {
         this.pagingParams = pagingParams;
     }
 
-    toggleSpecialtyPredicateParam = (key: string | number, value: boolean) => {
-        if (this.specialtyPredicate.get(key))
-            this.specialtyPredicate.delete(key);
-        else
-            this.specialtyPredicate.set(key, value);
-    }
-
-    toggleBranchPredicateParam = (key: string | number, value: boolean) => {
-        if (this.branchPredicate.get(key))
-            this.branchPredicate.delete(key);
-        else
-            this.branchPredicate.set(key, value);
-    }
-
-    toggleCityPredicateParam = (key: string | number, value: boolean) => {
-        if (this.citiesPredicate.get(key))
-            this.citiesPredicate.delete(key);
-        else
-            this.citiesPredicate.set(key, value);
-    }
-
-    get axiosParams() {
-        const params = new URLSearchParams();
-        params.append('pageNumber', this.pagingParams.pageNumber.toString());
-        params.append('pageSize', this.pagingParams.pageSize.toString());
-        let branchesPredicate = '';
-        let specialtiesPredicate = '';
-        let citiesPredicate = '';
-        this.specialtyPredicate.forEach((value, key: string) => {
-            specialtiesPredicate += `-${key}`
-        })
-        this.branchPredicate.forEach((value, key: string) => {
-            branchesPredicate += `-${key}`
-        })
-        this.citiesPredicate.forEach((value, key: string) => {
-            citiesPredicate += `-${key}`
-        })
-        params.append('specialtiesPredicate', specialtiesPredicate);
-        params.append('branchesPredicate', branchesPredicate);
-        params.append('citiesPredicate', citiesPredicate);
-        params.append('minPrice', this.minPrice.toString());
-        params.append('maxPrice', this.maxPrice.toString());
-        params.append('degree', this.degree);
-        params.append('sort', this.institutionSearchSort);
-        return params;
-    }
-
-    get instititutionsByName() {
-        return Array.from(this.institutionsRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
-    }
-
-    get instititutionsBySelectedSort() {
-        const institutions = Array.from(this.institutionsRegistry.values());
-        if (this.institutionSearchSort == 'hr')
-            return institutions.sort((a, b) => b.rating - a.rating)
-        if (this.institutionSearchSort == 'za')
-            return institutions.sort((a, b) => b.name.localeCompare(a.name));
-        return institutions.sort((a, b) => a.name.localeCompare(b.name));
-    }
-
+    
     private setInstitution = (institution: Institution) => {
         institution.reviews.forEach((x) => {
             x.createdAt = new Date(x.createdAt);
@@ -301,9 +250,9 @@ export default class InstitutionStore {
         this.setLoading(true);
         try {
             const result = await agent.Institutions.list(this.axiosParams);
+            console.log(result.pagination);
             runInAction(() => {
                 result.data.forEach(institution => {
-                    // institution.cityId = institution.cityId ? institution.cityId.toLocaleLowerCase() : '';
                     this.institutionsRegistry.set(institution.id, institution)
                 });
             })

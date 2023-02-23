@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
-import { institutionSortingOptions } from '../../../app/common/options/institutionSortingOptions';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
@@ -12,7 +12,8 @@ export default observer(function InstitutionsList() {
         pagination,
         pagingParams,
         setInstitutionsSearchSort,
-        institutionSearchSort,
+        setLoading,
+        selectedInstitutionsSort,
         loading,
         instititutionsBySelectedSort,
         institutionsRegistry,
@@ -22,11 +23,14 @@ export default observer(function InstitutionsList() {
     for (let i = 0; i < pagingParams.pageSize; i++) {
         placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
     }
+    
+    const { t } = useTranslation();
 
+    let placeholdersComponent = <>{placeholders}</>
 
     return (
         <>
-            <Header as='h2' content="Institutions" style={{ display: 'inline' }} />
+            <Header as='h2' content={t("Institutions")} style={{ display: 'inline' }} />
             {!loading &&
                 <Header
                     as='h5'
@@ -35,18 +39,15 @@ export default observer(function InstitutionsList() {
                     style={{ display: 'inline', marginLeft: '20px' }} />}<br></br>
             <Select
                 style={{ left: '0px', marginTop: '1rem', display: 'inline-block' }}
-                options={institutionSortingOptions}
-                value={institutionSearchSort}
-                onChange={(e, d) => setInstitutionsSearchSort(d.value as string)}
+                options={t("institutionSortingOptions", { returnObjects: true })}
+                value={selectedInstitutionsSort}
+                onChange={(e, d) => { setInstitutionsSearchSort(d.value as string); setLoading(true) }}
             />
             <Divider style={{ width: 'calc(100% - 17rem)', display: 'inline-block', margin: '0rem 0 0 1rem', position: 'absolute', top: '6.9rem' }} />
             <Item.Group divided>
                 {loadingInitial || loading
-                    ? (
-                        <>
-                            {placeholders}
-                        </>
-                    ) : (
+                    ? (placeholdersComponent)
+                    : (
                         <>
                             {institutionsRegistry.size === 0
                                 ? (<>
@@ -57,8 +58,7 @@ export default observer(function InstitutionsList() {
                                         <InstitutionsListItem institution={institution} key={institution.id} />
                                     ))}
                                 </>)}
-                        </>
-                    )}
+                        </>)}
             </Item.Group>
         </>
     )

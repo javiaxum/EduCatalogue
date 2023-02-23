@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Grid, Item, Segment, Image, Button, Icon, Divider, Select } from 'semantic-ui-react';
-import { reviewSortingOptions } from '../../../../app/common/options/reviewSortingOptions';
 import { Institution, InstitutionFormValues } from '../../../../app/models/institution';
 import { Review } from '../../../../app/models/review';
 import { useStore } from '../../../../app/stores/store';
@@ -11,11 +11,11 @@ import ReviewListItem from './ReviewListItem';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
     const { institutionStore, commonStore, specialtyStore, userStore } = useStore();
-    const { getSpecialtyCore, getSpecialtyCoreISCEDString } = specialtyStore;
-    const { specialtyPredicate, reviewForm, setReviewForm, selectedInstitution } = institutionStore;
+    const { reviewForm, setReviewForm, selectedInstitution } = institutionStore;
     const { editMode } = commonStore;
     const [selectedRating, setSelectedRating] = useState<number | undefined>(undefined);
-    const [sorting, setSorting] = useState<string>(reviewSortingOptions[0].text);
+    const { t } = useTranslation();
+    const [sorting, setSorting] = useState<string>("mr");
 
     if (!selectedInstitution || !selectedInstitution.reviews) return <></>
 
@@ -49,9 +49,9 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
         return b.rating - a.rating;
     }
 
-    let sortedReviews = sorting === reviewSortingOptions[0].text
+    let sortedReviews = sorting === "mr"
         ? selectedInstitution.reviews.slice().sort(compareReviewByDate)
-        : sorting === reviewSortingOptions[1].text
+        : sorting === "hrf"
             ? selectedInstitution.reviews.slice().sort(compareReviewByRating)
             : selectedInstitution.reviews.slice().sort(compareReviewByRatingDescending);
 
@@ -60,7 +60,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
             {!reviewForm && <Grid.Column width={16} style={{ padding: '0' }}>
                 {buttons}
                 <Select
-                    options={reviewSortingOptions}
+                    options={t("reviewSortingOptions", { returnObjects: true })}
                     value={sorting}
                     onChange={(e, d) => {
                         setSorting(d.value as string)
@@ -77,7 +77,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                     !!!selectedInstitution.reviews.find((x) => x.author.username === userStore.user?.username) && <>
                                         {!reviewForm ? <Button
                                             positive
-                                            content='Add review'
+                                            content={t('Add review')}
                                             style={{ marginLeft: '', backgroundColor: 'rgb(30, 71, 160)' }}
                                             onClick={() => setReviewForm(true)} />
                                             : <ReviewForm />}

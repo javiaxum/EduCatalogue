@@ -8,20 +8,19 @@ import SpecialtyListItem from './SpecialtyListItem';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
     const { institutionStore, commonStore, specialtyStore } = useStore();
-    const { getSpecialtyCore, getSpecialtyCoreISCEDString } = specialtyStore;
-    const { selectedInstitution, specialtyPredicate, branchPredicate } = institutionStore;
+    const { getSpecialtyCore, getSpecialtyCoreISCEDString, selectedBranches, selectedSpecialties } = specialtyStore;
+    const { selectedInstitution } = institutionStore;
     const { editMode } = commonStore;
 
     if (!selectedInstitution || !selectedInstitution.specialties) return <></>;
 
     let filteredSpecialties = selectedInstitution.specialties;
-    if (branchPredicate.size !== 0)
-        filteredSpecialties = filteredSpecialties.filter((x) =>
-            branchPredicate.has(x.localSpecialtyCode.slice(0, 2)));
-    if (specialtyPredicate.size !== 0)
-        filteredSpecialties = filteredSpecialties.filter((x) =>
-            specialtyPredicate.has(x.localSpecialtyCode));
-
+    if (selectedBranches.length !== 0)
+        filteredSpecialties = filteredSpecialties.filter((specialty) =>
+            selectedBranches.includes(specialty.localSpecialtyCode.slice(0, 2)))
+    if (selectedSpecialties.length !== 0)
+        filteredSpecialties = filteredSpecialties.filter((specialty) =>
+            selectedSpecialties.includes(specialty.localSpecialtyCode.slice(0, 2)))
     return (
         <Grid style={{ padding: '10px' }}>
             <Grid.Column width={12}>

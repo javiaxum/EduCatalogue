@@ -16,6 +16,7 @@ import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsLi
 import { router } from '../../routers/Routes';
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 import InstitutionDetailsLocation from './location/InstitutionDetailsLocation';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore, profileStore } = useStore();
@@ -33,6 +34,8 @@ export default observer(function InstitutionDetails() {
         if (id) loadInstitution(id);
         setEditMode(false);
     }, [loadInstitution, id]);
+
+    const {t, i18n} = useTranslation();
 
     return (
         <Grid style={{ minWidth: '1000px' }}>
@@ -79,7 +82,7 @@ export default observer(function InstitutionDetails() {
                                     to={`/manage/${selectedInstitution?.id}`}
                                     floated='right'
                                     style={{ width: '12rem' }}
-                                    content={'Manage Institution'}
+                                    content={t('Manage Institution')}
                                 />}
                             </Item.Content>
                         </Item>

@@ -9,7 +9,7 @@ import GalleryImage from './GalleryImage';
 export default function InstitutionDetailsGallery() {
     const { institutionStore, commonStore, specialtyStore } = useStore();
     const { getSpecialtyCore, getSpecialtyCoreISCEDString } = specialtyStore;
-    const { selectedInstitution, specialtyPredicate, branchPredicate } = institutionStore;
+    const { selectedInstitution } = institutionStore;
     const { editMode } = commonStore;
 
     if (!selectedInstitution || !selectedInstitution.images) return <></>;

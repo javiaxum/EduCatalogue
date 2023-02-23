@@ -39,11 +39,15 @@ namespace Application.Specialties
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var specialty = await _context.Specialties.FindAsync(request.Specialty.Id);
+                var specialty = await _context.Specialties.Include(x => x.SpecialtyCore).FirstOrDefaultAsync(x => x.Id == request.Specialty.Id);
                 if (specialty == null) return null;
-                
+
                 _mapper.Map(request.Specialty, specialty);
+                var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync((x) => x.Id == request.Specialty.LocalSpecialtyCode);
                 
+                if (specialtyCore.Id != specialty.SpecialtyCore.Id)
+                    specialty.SpecialtyCore = specialtyCore;
+
                 var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("An error has occured while updating an institution");
                 return Result<Unit>.Success(Unit.Value);

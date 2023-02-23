@@ -13,9 +13,9 @@ import { SpecialtyFormValues } from '../../../app/models/specialty';
 import { router } from '../../routers/Routes';
 import SpecialtyDetailsComponentList from '../details/educationalComponent/SpecialtyDetailsComponentList';
 import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
-import { degreeOptions } from '../../../app/common/options/degreeOptions';
 import CustomCheckboxInput from '../../../app/common/form/CustomCheckboxInput';
 import { SpecialtyCore } from '../../../app/models/specialtyCore';
+import { useTranslation } from 'react-i18next';
 
 
 export default observer(function SpecialtyForm() {
@@ -32,13 +32,18 @@ export default observer(function SpecialtyForm() {
         loadingInitial,
         setLoadingInitial,
         getSpecialtyCoreISCEDString,
-        specialtyCoresByNameSelectInput } = specialtyStore;
+        specialtyCoresById} = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
     const [specialtyCore, setSpecialtyCore] = useState<SpecialtyCore>(new SpecialtyCore());
+
+    const specialtyOptions: any[] = specialtyCoresById.map(specialty => ({
+        text: `${specialty.id} ${specialty.name}`,
+        value: specialty.id,
+    }));
 
     const validationSchema = Yup.object({
         localSpecialtyCode: Yup.string().required(),
@@ -50,6 +55,9 @@ export default observer(function SpecialtyForm() {
         startYear: Yup.number().required(),
         endYear: Yup.number().required(),
     })
+
+    const { t } = useTranslation();
+
     useEffect(() => {
         if (id2) {
             loadSpecialty(id2)
@@ -106,7 +114,7 @@ export default observer(function SpecialtyForm() {
                                     onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                         setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)));
                                     }}
-                                    options={specialtyCoresByNameSelectInput}
+                                    options={specialtyOptions}
                                     placeholder='Select specialty'
                                     name='localSpecialtyCode' />
                                 <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
@@ -147,7 +155,7 @@ export default observer(function SpecialtyForm() {
                                                     </Grid.Column>
                                                     <Grid.Column style={{ width: '15rem', paddingLeft: '0' }}>
                                                         <CustomSelectInput
-                                                            options={degreeOptions}
+                                                            options={t("degreeOptions", { returnObjects: true })}
                                                             placeholder='Degree'
                                                             name='degree' />
                                                     </Grid.Column>

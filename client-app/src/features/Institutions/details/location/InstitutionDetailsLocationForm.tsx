@@ -16,7 +16,7 @@ import { debounce, result } from 'lodash';
 
 export default function InstitutionDetailsLocationForm() {
 
-    const { commonStore: { editMode }, institutionStore } = useStore();
+    const { commonStore, institutionStore } = useStore();
     const {
         regionRegistry,
         getRegionById,
@@ -27,7 +27,7 @@ export default function InstitutionDetailsLocationForm() {
 
     const formik = useFormikContext();
     const [center, setCenter] = useState<any>({ lat: selectedInstitution?.latitude, lng: selectedInstitution?.longtitude });
-    const [results, setResults] = useState<geocoders.GeocodingResult>();
+    const [results, setResults] = useState<any>();
 
     console.log('LAT: ' + center.lat + ' LNG: ' + center.lng)
     const geocoder = new geocoders.Nominatim({
@@ -35,20 +35,14 @@ export default function InstitutionDetailsLocationForm() {
             country: 'Ukraine',
         }
     });
-
-    const debouncedSetResults = debounce((results: any) => setResults(results), 2400)
-    const debouncedSetCenter = debounce((center: any) => {
-        setCenter(center);
-        formik.getFieldHelpers('latitude').setValue(center.lat);
-        formik.getFieldHelpers('longtitude').setValue(center.lng);
-    }, 2400)
-
-    const debouncedGeocodingQuery = debounce((city: string, street: string) => {
-        geocoder.geocode(`Ukraine, ${city}, ${street}`, (result) => {
-            debouncedSetResults(result);
-            debouncedSetCenter(result[0].center);
+    const GeocodingQuery = (city: string, street: string) => {
+        geocoder.geocode(`${city}, ${street}`, (result) => {
+            setResults(result);
+            setCenter(result[0].center);
+            formik.getFieldHelpers('latitude').setValue(result[0].center.lat);
+            formik.getFieldHelpers('longtitude').setValue(result[0].center.lng);
         })
-    }, 2400)
+    }
 
     return (
         <Grid>
@@ -71,9 +65,9 @@ export default function InstitutionDetailsLocationForm() {
                         <Grid.Column width={8}>
                             City:
                             <CustomSelectInput
-                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    debouncedGeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)
-                                }}
+                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) =>
+                                    debounce(() => GeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)!, 2400)
+                                }
                                 placeholder={'Select city'}
                                 name='cityId'
                                 disabled={!!!formik.getFieldProps('regionId').value}
@@ -82,25 +76,19 @@ export default function InstitutionDetailsLocationForm() {
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-
                         <Grid.Column width={1}>
                             <Icon name='home' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={15}>
                             Address:
-                            <CustomTextInput placeholder='Address' name='streetAddress'
-                                onChange={(e) => {
-                                    formik.getFieldHelpers('streetAddress').setValue(e.currentTarget.value);ol
-                                    debouncedGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, e.currentTarget.value)
-                                }} />
                             <Search
                                 value={formik.getFieldProps('streetAddress').value}
                                 results={results}
                                 onSearchChange={(e, d) => {
-                                    console.log(d.value)
-                                    formik.getFieldHelpers('streetAddress').setValue(d.value)
-                                    debouncedGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, d.value!)
-                                }} />
+                                    formik.getFieldHelpers('streetAddress').setValue(d.value);
+                                    debounce(() => GeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, d.value!), 2400)
+                                }}
+                                showNoResults={false} />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -111,13 +99,13 @@ export default function InstitutionDetailsLocationForm() {
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    {editMode &&
+                    {commonStore.editMode &&
                         <LeafletControlGeocoder
                             geocoder={geocoder}
                             center={center}
                         />}
                     <Marker position={center}>
-                        <Popup>
+                        <Popup interactive>
                             A pretty CSS3 popup. <br /> Easily customizable.
                         </Popup>
                     </Marker>

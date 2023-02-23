@@ -1,7 +1,7 @@
 import { useField } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { DropdownProps, Form, Label, Select } from 'semantic-ui-react';
+import { Dropdown, DropdownProps, Form, Label, Select } from 'semantic-ui-react';
 
 interface Props {
     placeholder: string;
@@ -18,7 +18,9 @@ export default observer(function CustomSelectInput(props: Props) {
     return (
         <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0' }}>
             <label style={{ margin: '0' }}>{props.label}</label>
-            <Select
+            <Dropdown
+                search
+                selection
                 clearable
                 disabled={props.disabled}
                 options={props.options}
@@ -29,7 +31,6 @@ export default observer(function CustomSelectInput(props: Props) {
                 }}
                 onBlur={() => helpers.setTouched(true)}
                 placeholder={props.placeholder}
-                style={{ height: 'auto', minHeight: 'auto', padding: '.4rem 1.2rem .4rem .4rem' }}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>

@@ -1,0 +1,36 @@
+{
+    "Specialty": "Спеціальність",
+    "City": "Місто",
+    "Branch": "Галузь знань",
+    "Degree": "Освітній ступінь",
+    "Price": "Вартість",
+    "Filtering Options": "Фільтри",
+    "Institutions": "Навчальні Заклади",
+    "from": "від",
+    "to": "до",
+    "My Profile": "Мій профіль",
+    "Logout": "Вийти",
+    "Main": "Головна",
+    "General info": "Загальна інформація",
+    "Available Specialties": "Доступні Спеціальності",
+    "Reviews": "Відгуки",
+    "Add review": "Додати відгук",
+    "Gallery": "Галерея",
+    "Location": "Розташування",
+    "Select degree": "Обрати освітній ступінь",
+    "degreeOptions": [
+        { "text": "Бакалавр", "value": "Bachelor" },
+        { "text": "Магістр", "value": "Master" },
+        { "text": "Ph.D.", "value": "Ph.D." }
+    ],
+    "institutionSortingOptions": [
+        {"text": "За назвою", "value": "az"},
+        {"text": "За назвою (я-а)", "value": "za"},
+        {"text": "За рейтингом", "value": "hr"}
+    ],
+    "reviewSortingOptions": [
+        { "text": "Найновіші", "value": "mr" },
+        { "text": "Найвищий рейтинг", "value": "hrf" },
+        { "text": "Найнижчий рейтинг", "value": "lrf" }
+      ]
+}

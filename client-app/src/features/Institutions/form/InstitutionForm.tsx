@@ -74,6 +74,9 @@ export default observer(function InstitutionForm() {
                 setInstitution(formValues);
             });
         else {
+            console.log('SET')
+            let formValues = new InstitutionFormValues(institution);
+            setInstitution(formValues)
             setLoadingInitial(false);
         }
         setEditMode(true);

@@ -1,4 +1,5 @@
 import { makeAutoObservable, reaction, runInAction } from "mobx";
+import { DropdownItemProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { Branch } from "../models/branch";
 import { Profile } from "../models/profile";
@@ -14,16 +15,51 @@ export default class SpecialtyStore {
     branchRegistry = new Map<string, Branch>();
     loadingInitial: boolean = true;
     loading: boolean = false;
+    selectedSpecialties: string[] = [];
+    selectedBranches: string[] = [];
+    minPrice: string = '';
+    maxPrice: string = '';
+    selectedDegree: string = '';
+
 
     constructor() {
         makeAutoObservable(this);
+
+        reaction(
+            () => [
+                this.selectedSpecialties,
+                this.selectedBranches,
+                this.maxPrice,
+                this.minPrice,
+                this.selectedDegree],
+            () => {
+                store.institutionStore.debouncedLoadInstitutions();
+            })
     }
 
-    get specialtyCoresByNameSelectInput() {
-        return Array.from(this.specialtyCoreRegistry.values())
-            .sort((a, b) => a.id.localeCompare(b.id))
-            .map(element => ({ text: `${element.id} ${element.name}`, value: element.id }))
+    setDegreePredicate = (degree: string) => {
+        this.selectedDegree = degree;
+    }
 
+    setMaxPrice = (value: string) => {
+        this.maxPrice = value;
+    }
+
+    setMinPrice = (value: string) => {
+        this.minPrice = value;
+    }
+
+    setSelectedSpeialties = (value: string[]) => {
+        this.selectedSpecialties = value;
+    }
+
+    setSelectedBranches = (value: string[]) => {
+        this.selectedBranches = value;
+    }
+
+    get specialtyCoresByName() {
+        return Array.from(this.specialtyCoreRegistry.values())
+            .sort((a, b) => a.id.localeCompare(b.id));
     }
     get specialtyCoresById() {
         return Array.from(this.specialtyCoreRegistry.values())

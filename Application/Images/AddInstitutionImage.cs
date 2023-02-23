@@ -40,11 +40,25 @@ namespace Application.Images
                 if (institution == null) return null;
 
                 string deleteResult = "";
-                if (!String.IsNullOrEmpty(institution.TitleImageId))
-                    deleteResult = await _imageAccessor.DeleteImage(institution.TitleImageId);
+                if (!String.IsNullOrEmpty(institution.TitleImageId) && request.Params.isTitleImage)
+                    try
+                    {
+                        deleteResult = await _imageAccessor.DeleteImage(institution.TitleImageId);
+                    }
+                    catch (System.Exception)
+                    {
+                        deleteResult = "Ok";
+                    }
 
-                if (!String.IsNullOrEmpty(institution.BackgroundImageId))
-                    deleteResult = await _imageAccessor.DeleteImage(institution.BackgroundImageId);
+                if (!String.IsNullOrEmpty(institution.BackgroundImageId) && request.Params.isBackgroundImage)
+                    try
+                    {
+                        deleteResult = await _imageAccessor.DeleteImage(institution.BackgroundImageId);
+                    }
+                    catch (System.Exception)
+                    {
+                        deleteResult = "Ok";
+                    }
 
                 if (deleteResult == null)
                     return Result<Image>.Failure("An error has occured while deleting an image");

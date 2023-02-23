@@ -1,0 +1,35 @@
+{
+    "Specialty": "Specialty",
+    "City": "City",
+    "Branch": "Knowledge Branch",
+    "Degree": "Degree",
+    "Price": "Price",
+    "Filtering Options": "Filtering Options",
+    "Institutions": "Institutions",
+    "from": "from",
+    "to": "to",
+    "My Profile": "My Profile",
+    "Logout": "Logout",
+    "Main": "Main",
+    "Available Specialties": "Available Specialties",
+    "Reviews": "Reviews",
+    "Add review": "Add review",
+    "Gallery": "Gallery",
+    "Location": "Location",
+    "Select degree": "Select degree",
+    "degreeOptions": [
+        { "text": "Bachelor", "value": "Bachelor" },
+        { "text": "Master", "value": "Master" },
+        { "text": "Ph.D.", "value": "Ph.D." }
+    ],
+    "institutionSortingOptions": [
+        {"text": "A-Z", "value": "az"},
+        {"text": "Z-A", "value": "za"},
+        {"text": "Highest rating", "value": "hr"}
+    ],
+    "reviewSortingOptions": [
+        { "text": "Most recent", "value": "mr" },
+        { "text": "High rating first", "value": "hrf" },
+        { "text": "Low rating first", "value": "lrf" }
+      ]
+}
