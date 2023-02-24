@@ -12,7 +12,6 @@ import { Specialty } from "../models/specialty";
 import { debounce } from "lodash";
 
 export default class InstitutionStore {
-
     institutionsRegistry = new Map<string, Institution>();
     populatedCityRegistry = new Map<number, City>();
     regionRegistry = new Map<number, Region>();
@@ -322,7 +321,6 @@ export default class InstitutionStore {
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };
-                    // editedInstitution.cityzName = this.getCityById(institution.cityId, institution.regionId!)!.name;
                     this.institutionsRegistry.set(institution.id, editedInstitution as Institution);
                     this.selectedInstitution = editedInstitution as Institution;
                 }

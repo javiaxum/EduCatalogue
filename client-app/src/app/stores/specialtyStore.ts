@@ -52,6 +52,9 @@ export default class SpecialtyStore {
     setSelectedSpeialties = (value: string[]) => {
         this.selectedSpecialties = value;
     }
+    filterSpecialtiesBySelectedBranch = (value: string[]) => {
+        this.selectedSpecialties = value;
+    }
 
     setSelectedBranches = (value: string[]) => {
         this.selectedBranches = value;

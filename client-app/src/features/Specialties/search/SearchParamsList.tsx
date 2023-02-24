@@ -24,11 +24,11 @@ export default observer(function SearchParamsList() {
         setMinPrice,
         setDegreePredicate } = specialtyStore;
 
-    const filteredSpecialties = specialtyStore.specialtyCoresById
+    let filteredSpecialties = specialtyStore.specialtyCoresById
         .filter((specialty) => selectedBranches.length === 0 || selectedBranches.find((branchId) => branchId == specialty.id.slice(0, 2)))
 
 
-    const specialtyOptions: DropdownItemProps[] = filteredSpecialties.map(specialty => ({
+    let specialtyOptions: DropdownItemProps[] = filteredSpecialties.map(specialty => ({
         key: specialty.id,
         text: `${specialty.id} ${specialty.name}`,
         value: specialty.id,
@@ -79,7 +79,13 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedBranches}
                 options={branchOptions}
-                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedBranches(data.value)}
+                onChange={(e, data) => {
+                    setSelectedBranches(data.value as string[])
+                    if (selectedSpecialties?.length != 0 && selectedBranches.length != 0) {
+                        console.log(selectedBranches)
+                        setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
+                    }
+                }}
             />
             <Header as='h4' content={t('Specialty')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
@@ -91,7 +97,7 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedSpecialties}
                 options={specialtyOptions}
-                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSpeialties(data.value)}
+                onChange={(event, data: any) => setSelectedSpeialties(data.value)}
             />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0', height: '200px', overflowX: 'hidden' }} width={16}>

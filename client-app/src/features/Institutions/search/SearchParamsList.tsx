@@ -85,7 +85,13 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedBranches}
                 options={branchOptions}
-                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedBranches(data.value)}
+                onChange={(e, data) => {
+                    setSelectedBranches(data.value as string[])
+                    if (selectedSpecialties?.length != 0 && selectedBranches.length != 0) {
+                        console.log(selectedBranches)
+                        setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
+                    }
+                }}
             />
             <Header as='h4' content={t('Specialty')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
