@@ -11,39 +11,34 @@ export default observer(function InstitutionDetailsMenu() {
     return (
         <Menu widths={5} style={{ width: '50rem', boxShadow: 'none', border: '0 1px 0 1px' }} color='blue'>
             <Menu.Item
-                name={t('General info')!}
+                name={'About'}
                 active={detailsMenuActiveItem === 'About'}
-                onClick={(e, d) => setActiveMenuItem(d.name!)}
-            >
-                About
+                onClick={(e, d) => setActiveMenuItem('About')}>
+                {t('About')}
             </Menu.Item>
             <Menu.Item
-                name={t('Specialties')!}
+                name={'Specialties'}
                 active={detailsMenuActiveItem === 'Specialties'}
-                onClick={(e, d) => setActiveMenuItem(d.name!)}
-            >
-                Available Specialties
+                onClick={(e, d) => setActiveMenuItem('Specialties')}>
+                {t('Available Specialties')}
             </Menu.Item>
             <Menu.Item
-                name='Reviews'
+                name={'Reviews'}
                 active={detailsMenuActiveItem === 'Reviews'}
-                onClick={(e, d) => setActiveMenuItem(d.name!)}
-            >
-                Reviews
+                onClick={(e, d) => setActiveMenuItem('Reviews')}>
+                {t('Reviews')}
             </Menu.Item>
             <Menu.Item
-                name='Location'
+                name={'Location'}
                 active={detailsMenuActiveItem === 'Location'}
-                onClick={(e, d) => setActiveMenuItem(d.name!)}
-            >
-                Location on the map
+                onClick={(e, d) => setActiveMenuItem('Location')}>
+                {t('Location')}
             </Menu.Item>
             <Menu.Item
-                name='Gallery'
+                name={'Gallery'}
                 active={detailsMenuActiveItem === 'Gallery'}
-                onClick={(e, d) => setActiveMenuItem(d.name!)}
-            >
-                Gallery
+                onClick={(e, d) => setActiveMenuItem('Gallery')}>
+                {t('Gallery')}
             </Menu.Item>
         </Menu>
     )

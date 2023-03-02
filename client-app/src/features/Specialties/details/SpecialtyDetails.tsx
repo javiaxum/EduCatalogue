@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetailsComponentList';
@@ -12,6 +13,7 @@ export default observer(function SpecialtyDetails() {
     const { } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
+    const { t, i18n } = useTranslation();
 
     useEffect(() => {
         if (id) loadSpecialty(id).then();
@@ -34,20 +36,22 @@ export default observer(function SpecialtyDetails() {
                             content={`${selectedSpecialty.localSpecialtyCode} ${getSpecialtyCore(selectedSpecialty.localSpecialtyCode!)?.name}`}
                             style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
-                    <Button
-                        onClick={() => commonStore.setEditMode(false)}
-                        as={Link}
-                        to={`/institutions/${institutionStore.selectedInstitution?.id}`}
-                        style={{ width: '16rem', marginLeft: 'auto', height: '2.5rem' }}
-                        content={'To institution'}
-                    />
-                    <Button
-                        onClick={() => commonStore.setEditMode(true)}
-                        as={Link}
-                        to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
-                        style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
-                        content={'Manage Specialty'}
-                    />
+                    <div style={{marginLeft: 'auto'}}>
+                        <Button
+                            onClick={() => commonStore.setEditMode(false)}
+                            as={Link}
+                            to={`/institutions/${institutionStore.selectedInstitution?.id}`}
+                            style={{ width: '16rem', height: '2.5rem' }}
+                            content={'To institution'}
+                        />
+                        <Button
+                            onClick={() => commonStore.setEditMode(true)}
+                            as={Link}
+                            to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
+                            style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
+                            content={'Manage Specialty'}
+                        />
+                    </div>
                 </Grid.Row>
                 <Grid.Row>
                     <Grid style={{ width: '100%' }}>
@@ -55,7 +59,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`Specialty code (ISCED): ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
+                                        content={`${t('Specialty code (ISCED)')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
                                     />
                                 </Segment>
                                 <Segment>

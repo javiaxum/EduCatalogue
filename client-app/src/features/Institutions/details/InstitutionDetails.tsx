@@ -35,7 +35,7 @@ export default observer(function InstitutionDetails() {
         setEditMode(false);
     }, [loadInstitution, id]);
 
-    const {t, i18n} = useTranslation();
+    const { t, i18n } = useTranslation();
 
     return (
         <Grid style={{ minWidth: '1000px' }}>
@@ -43,7 +43,7 @@ export default observer(function InstitutionDetails() {
                 <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                     {loading
                         ? <Placeholder style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '100vw', width: '100%' }}>
-                            <Placeholder.Image  />
+                            <Placeholder.Image />
                         </Placeholder>
                         : <Image
                             src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
@@ -74,16 +74,17 @@ export default observer(function InstitutionDetails() {
                                     : <Header
                                         size='huge'
                                         content={selectedInstitution?.name}
-                                        style={{ color: '#444' }}
+                                        style={{ color: '#444', width: 'calc(100% - 14rem)'}}
                                     />}
-                                {isInstitutionManager || profileStore.isOperator && <Button
-                                    onClick={() => setEditMode(!editMode)}
-                                    as={Link}
-                                    to={`/manage/${selectedInstitution?.id}`}
-                                    floated='right'
-                                    style={{ width: '12rem' }}
-                                    content={t('Manage Institution')}
-                                />}
+                                {isInstitutionManager || profileStore.isOperator &&
+                                    <Button
+                                        onClick={() => setEditMode(!editMode)}
+                                        as={Link}
+                                        to={`/manage/${selectedInstitution?.id}`}
+                                        floated='right'
+                                        style={{ width: '12rem' }}
+                                        content={t('Manage Institution')}
+                                    />}
                             </Item.Content>
                         </Item>
                     </Item.Group>

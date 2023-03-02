@@ -43,10 +43,10 @@ export default observer(function SearchParamsList() {
 
     return (
         <Grid style={{ padding: '0.4rem' }}>
-            <Header as='h4' content='Price' style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column width={16} style={{ padding: '0' }}>
                 <Label
-                    content='from' style={{ padding: '12px' }} />
+                    content={t('from')} style={{ padding: '12px' }} />
                 <Input
                     placeholder="0"
                     name="min"
@@ -56,7 +56,7 @@ export default observer(function SearchParamsList() {
                         setMinPrice(d.value);
                     }} />
                 <Label
-                    content='to' style={{ padding: '12px' }} />
+                    content={t('to')} style={{ padding: '12px' }} />
                 <Input
                     placeholder="0"
                     name="max"
@@ -85,8 +85,7 @@ export default observer(function SearchParamsList() {
                         console.log(selectedBranches)
                         setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
                     }
-                }}
-            />
+                }} />
             <Header as='h4' content={t('Specialty')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
                 placeholder='State'
@@ -97,8 +96,7 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedSpecialties}
                 options={specialtyOptions}
-                onChange={(event, data: any) => setSelectedSpeialties(data.value)}
-            />
+                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSpeialties(data.value)} />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0', height: '200px', overflowX: 'hidden' }} width={16}>
                 <Select

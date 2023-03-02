@@ -1,16 +1,16 @@
 import { format } from 'date-fns';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Card, Container, Grid, Icon, Image, Item } from 'semantic-ui-react';
+import { Grid, Icon, Image, Item } from 'semantic-ui-react';
 import { Review } from '../../../../app/models/review';
-import { Specialty } from '../../../../app/models/specialty';
-import { SpecialtyCore } from '../../../../app/models/specialtyCore';
+import { uk, enUS } from 'date-fns/locale'
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     review: Review;
 }
 
 export default function ReviewListItem({ review }: Props) {
+
+    const {t, i18n} = useTranslation();
 
     let elements = [];
     for (let i = 1; i <= review.rating; i++) {
@@ -30,7 +30,7 @@ export default function ReviewListItem({ review }: Props) {
                         {elements}
                     </Grid.Column>
                     <Grid.Column width={3}>
-                        {format(review.createdAt, 'dd-MMM yyyy')}
+                        {format(review.createdAt, 'dd-MMM yyyy', { locale: i18n.language == 'ua' ? uk : enUS })}
                     </Grid.Column>
                 </Grid>
                 <Item.Description>{review.reviewMessage}</Item.Description>

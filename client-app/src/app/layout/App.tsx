@@ -9,14 +9,25 @@ import { observer } from 'mobx-react-lite';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
 import CustomFooter from './CustomFooter';
+import languageDetector from 'i18next-browser-languagedetector';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function App() {
   const location = useLocation();
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
   const { loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
   const { loadSpecialtyCores, loadBranches } = specialtyStore;
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
+    console.log(languageDetector)
+    i18n
+      .use(languageDetector)
+      .init({
+        debug: true,
+        fallbackLng: "en"
+      })
+
     if (commonStore.token) {
       userStore.getUser().then(() => loadProfile(), () => userStore.logout());
     }

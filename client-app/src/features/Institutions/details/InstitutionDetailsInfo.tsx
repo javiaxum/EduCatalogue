@@ -1,25 +1,16 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { Button, Grid, Header, Icon, Image, Segment } from 'semantic-ui-react';
-import { Institution, InstitutionFormValues } from '../../../app/models/institution';
+import { useTranslation } from 'react-i18next';
+import { Grid, Icon, Image } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionDetailsInfoPlaceholder from './InstitutionDetailsInfoPlaceholder';
 
 export default observer(function InstitutionDetailsInfo() {
 
-    const { institutionStore, commonStore } = useStore();
+    const { institutionStore } = useStore();
     const {
-        loadingInitial,
-        loadInstitution,
         getCityById,
-        detailsMenuActiveItem,
-        regionRegistry,
         selectedInstitution, loading } = institutionStore;
-
-    // if (!selectedInstitution || !regionRegistry) return <></>
-// const institutionRegion = regionRegistry.find((x) => x.cities.find((x) => x.id.toLocaleLowerCase() == institution.cityId.toLocaleLowerCase()));
-    // add region name to the institution details info
+    const { t, i18n } = useTranslation();
     return (
         <>
             {loading
@@ -32,7 +23,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon size='large' color='blue' name='info' />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
-                                    Description:
+                                    {t('Description') + ': '}
                                     <p>{selectedInstitution?.description}</p>
                                 </Grid.Column>
                             </Grid.Row>
@@ -41,7 +32,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon size='large' color='blue' name='graduation' />
                                 </Grid.Column>
                                 <Grid.Column width={5}>
-                                    Student count:
+                                    {t("Student count") + ': '}
                                     {selectedInstitution?.studentCount}
                                 </Grid.Column>
                             </Grid.Row>
@@ -50,14 +41,14 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='marker' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={6}>
-                                    City:
+                                    {t('City') + ': '} 
                                     {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                                 </Grid.Column>
                                 <Grid.Column width={1}>
                                     <Icon name='home' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={7}>
-                                    Address:
+                                    {t('Address') + ': '} 
                                     {selectedInstitution?.streetAddress}
                                 </Grid.Column>
                             </Grid.Row>
@@ -66,7 +57,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='chain' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
-                                    Homepage:
+                                    {t('Homepage') + ': '} 
                                     {selectedInstitution && <a href={`https://${selectedInstitution.siteURL}`} target="_blank">  {selectedInstitution.siteURL}</a>}
                                 </Grid.Column>
                             </Grid.Row>
@@ -75,7 +66,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='phone' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
-                                    Contact information:
+                                    {t('Contact information') + ': '} 
                                     {selectedInstitution?.contactInformation}
                                 </Grid.Column>
                             </Grid.Row>
