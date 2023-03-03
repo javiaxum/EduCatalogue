@@ -17,17 +17,8 @@ export default observer(function App() {
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
   const { loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
   const { loadSpecialtyCores, loadBranches } = specialtyStore;
-  const { t, i18n } = useTranslation();
 
   useEffect(() => {
-    console.log(languageDetector)
-    i18n
-      .use(languageDetector)
-      .init({
-        debug: true,
-        fallbackLng: "en"
-      })
-
     if (commonStore.token) {
       userStore.getUser().then(() => loadProfile(), () => userStore.logout());
     }

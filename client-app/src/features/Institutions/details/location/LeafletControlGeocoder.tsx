@@ -19,7 +19,5 @@ interface Props {
 export default observer(function LeafletControlGeocoder({ geocoder, center }: Props) {
   const map = useMap();
   map.flyTo(center);
-  console.log(center);
-
   return null;
 })

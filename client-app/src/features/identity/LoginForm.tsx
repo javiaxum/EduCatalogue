@@ -20,8 +20,8 @@ export default observer(function LoginForm() {
             {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h3' content='Login' textAlign='left' color='teal' />
-                    <CustomTextInput placeholder='Email' name='email' />
-                    <CustomTextInput placeholder='Password' name='password' type='password' />
+                    <CustomTextInput width='100%' placeholder='Email' name='email' />
+                    <CustomTextInput width='100%' placeholder='Password' name='password' type='password' />
                     <ErrorMessage
                         name='error'
                         render={() => <Label style={{ marginBottom: '1em', textAlign: 'left !important' }} basic color='red' content={errors.error} />}

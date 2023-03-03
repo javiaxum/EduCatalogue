@@ -31,25 +31,25 @@ export default observer(function SpecialtyDetails() {
                         size='large'
                         style={{ margin: '0', height: '35px' }}
                     >
-                        Code and specialty:<Label
+                        {t('Code and specialty')}:<Label
                             size='big'
                             content={`${selectedSpecialty.localSpecialtyCode} ${getSpecialtyCore(selectedSpecialty.localSpecialtyCode!)?.name}`}
                             style={{ padding: '0.5rem 0.5rem 0.5rem 0.5rem' }} />
                     </Header>
-                    <div style={{marginLeft: 'auto'}}>
+                    <div style={{ marginLeft: 'auto' }}>
                         <Button
                             onClick={() => commonStore.setEditMode(false)}
                             as={Link}
                             to={`/institutions/${institutionStore.selectedInstitution?.id}`}
                             style={{ width: '16rem', height: '2.5rem' }}
-                            content={'To institution'}
+                            content={t('To institution')}
                         />
                         <Button
                             onClick={() => commonStore.setEditMode(true)}
                             as={Link}
                             to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
                             style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
-                            content={'Manage Specialty'}
+                            content={t('Edit specialty')}
                         />
                     </div>
                 </Grid.Row>
@@ -59,7 +59,7 @@ export default observer(function SpecialtyDetails() {
                             <Segment.Group style={{ boxShadow: 'none' }}>
                                 <Segment>
                                     <Label
-                                        content={`${t('Specialty code (ISCED)')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
+                                        content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
                                     />
                                 </Segment>
                                 <Segment>
@@ -67,42 +67,42 @@ export default observer(function SpecialtyDetails() {
                                         name='graduation'
                                         size='big'
                                         color='blue' />
-                                    Degree: {selectedSpecialty.degree}
+                                    {t('Degree')}: {t(selectedSpecialty.degree)}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='clock'
                                         size='big'
                                         color='blue' />
-                                    ECTS credits: {selectedSpecialty.ectsCredits} credits
+                                    {t('ECTS credits')}: {selectedSpecialty.ectsCredits} {t('credits')}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='book'
                                         size='big'
                                         color='blue' />
-                                    Knowledge branch: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
+                                    {t('Knowledge branch')}: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='dollar'
                                         size='big'
                                         color='blue' />
-                                    Full price: {selectedSpecialty.priceUAH} UAH
-                                    {selectedSpecialty.nonPaidEducationAvailable && <Label content='Non paid education is available' />}
+                                    {t('Full price')}: {selectedSpecialty.priceUAH} UAH
+                                    {selectedSpecialty.nonPaidEducationAvailable && <Label content={t('Non paid education is available')} />}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
                                         name='flag'
                                         size='big'
                                         color='blue' />
-                                    Start year: {selectedSpecialty.startYear} End year: {selectedSpecialty.endYear}
+                                    {t('Education period')}: {selectedSpecialty.startYear} - {selectedSpecialty.endYear}
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>
                         <Grid.Column width={8} stretched>
                             <Segment style={{ boxShadow: 'none', padding: '30px' }}>
-                                <Header as='h4' content='Description' dividing />
+                                <Header as='h4' content={t('Description')} dividing />
                                 <Segment basic style={{ padding: '0 0 0 10px' }}>
                                     {selectedSpecialty.description}
                                 </Segment>
@@ -113,7 +113,7 @@ export default observer(function SpecialtyDetails() {
                 <Grid.Row>
                     <Divider />
                     <Header
-                        content={`Educational components:`}
+                        content={t('Educational components')+':'}
                         size='huge'
                         style={{ padding: '0 0 10px 0', color: '#444' }} />
                 </Grid.Row>

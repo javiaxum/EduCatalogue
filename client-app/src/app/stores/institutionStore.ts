@@ -26,7 +26,6 @@ export default class InstitutionStore {
     selectedCities: number[] = [];
     selectedInstitutionsSort: string = 'az';
 
-
     constructor() {
         makeAutoObservable(this);
 
@@ -165,8 +164,6 @@ export default class InstitutionStore {
         this.selectedInstitution!.specialties = newSpecialties;
     }
 
-  
-
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
     }
@@ -249,7 +246,6 @@ export default class InstitutionStore {
         this.setLoading(true);
         try {
             const result = await agent.Institutions.list(this.axiosParams);
-            console.log(result.pagination);
             runInAction(() => {
                 result.data.forEach(institution => {
                     this.institutionsRegistry.set(institution.id, institution)

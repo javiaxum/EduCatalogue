@@ -1,11 +1,6 @@
-import { geocoders } from "leaflet-control-geocoder";
-import { debounce } from "lodash";
-import { makeAutoObservable, reaction, runInAction } from "mobx";
+import { makeAutoObservable, reaction } from "mobx";
 import { ServerError } from "../models/serverError";
 import { store } from "./store";
-import React from "react";
-import { createRoot } from 'react-dom/client';
-import { useTranslation, initReactI18next } from "react-i18next";
 
 
 export default class CommonStore {
@@ -14,11 +9,6 @@ export default class CommonStore {
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
     editMode: boolean = false;
-    selectedLanguage: string = 'ua';
-
-    setLanguage = (languageCode: string) => {
-        this.selectedLanguage = languageCode;
-    }
 
     loadAppData = async () => {
         await Promise.all([store.institutionStore.loadInstitutions(),

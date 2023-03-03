@@ -1,4 +1,4 @@
-    import { ErrorMessage, Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Button, Header } from 'semantic-ui-react';
@@ -27,10 +27,10 @@ export default observer(function RegisterForm() {
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h3' content='Register' textAlign='left' color='teal' />
-                    <CustomTextInput placeholder='DisplayName' name='displayName' />
-                    <CustomTextInput placeholder='Username' name='username' />
-                    <CustomTextInput placeholder='Email' name='email' />
-                    <CustomTextInput placeholder='Password' name='password' type='password' />
+                    <CustomTextInput width='100%' placeholder='DisplayName' name='displayName' />
+                    <CustomTextInput width='100%' placeholder='Username' name='username' />
+                    <CustomTextInput width='100%' placeholder='Email' name='email' />
+                    <CustomTextInput width='100%' placeholder='Password' name='password' type='password' />
                     <ErrorMessage
                         name='error'
                         render={() => <ValidationErrors

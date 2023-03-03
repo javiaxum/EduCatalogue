@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Button, Container, Divider, Dropdown, Image, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Image, Menu } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
 
@@ -24,15 +23,15 @@ export default observer(function NavBar() {
                         <Button
                             className='languageToggler'
                             style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                            active={commonStore.selectedLanguage == 'en'}
-                            onClick={() => { commonStore.setLanguage('en'); i18n.changeLanguage('en'); console.log(i18n.language) }}>
+                            active={i18n.language == 'en'}
+                            onClick={() => { i18n.changeLanguage('en'); }}>
                             Eng
                         </Button>
                         <Button
                             className='languageToggler'
                             style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                            active={commonStore.selectedLanguage == 'ua'}
-                            onClick={() => { commonStore.setLanguage('ua'); i18n.changeLanguage('ua'); console.log(i18n.language) }}>
+                            active={i18n.language == 'ua'}
+                            onClick={() => { i18n.changeLanguage('ua'); }}>
                             Укр
                         </Button>
                     </Button.Group>

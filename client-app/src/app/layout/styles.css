@@ -13,7 +13,6 @@ body {
   right: 0;
 }
 
-
 .languageToggler {
   color: #999 !important;
 }
@@ -25,14 +24,6 @@ body {
 .ui.active.button.languageToggler {
   color: #fff !important;
 }
-
-.ui.selection.dropdown>.dropdown.icon {
-  top: auto !important;
-}
-
-/* .active.button.switch {
-  background-color: rgb(105, 105, 105) !important;
-} */
 
 .specialtyCard {
   height: 200px !important;

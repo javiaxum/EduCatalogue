@@ -1,74 +1,57 @@
-import { Wrapper } from '@googlemaps/react-wrapper';
 import { useFormikContext } from 'formik';
-import L from 'leaflet';
-import { GeoSearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { env } from 'process';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { DropdownProps, Grid, Icon, Search } from 'semantic-ui-react';
+import { Checkbox, DropdownProps, Grid, Icon, Search } from 'semantic-ui-react';
 import CustomSelectInput from '../../../../app/common/form/CustomSelectInput';
-import CustomTextInput from '../../../../app/common/form/CustomTextInput';
 import { useStore } from '../../../../app/stores/store';
-import * as GeoSearch from 'leaflet-geosearch';
 import LeafletControlGeocoder from './LeafletControlGeocoder';
 import { geocoders } from 'leaflet-control-geocoder';
-import { debounce, result } from 'lodash';
+import { debounce } from 'lodash';
+import { useTranslation } from 'react-i18next';
 
 export default function InstitutionDetailsLocationForm() {
 
-    const { commonStore, institutionStore } = useStore();
+    const { commonStore, institutionStore, mapStore } = useStore();
     const {
         regionRegistry,
         getRegionById,
         selectedInstitution,
-        setTitleImage,
-        getCityById,
-        uploading } = institutionStore;
+        getCityById } = institutionStore;
 
     const formik = useFormikContext();
+    const [draggable, setDraggable] = useState<boolean>(false);
     const [center, setCenter] = useState<any>({ lat: selectedInstitution?.latitude, lng: selectedInstitution?.longtitude });
-    const [results, setResults] = useState<any>();
-
-    console.log('LAT: ' + center.lat + ' LNG: ' + center.lng)
-    const geocoder = new geocoders.Nominatim({
-        geocodingQueryParams: {
-            country: 'Ukraine',
-        }
-    });
-    const GeocodingQuery = (city: string, street: string) => {
-        geocoder.geocode(`${city}, ${street}`, (result) => {
-            setResults(result);
-            setCenter(result[0].center);
-            formik.getFieldHelpers('latitude').setValue(result[0].center.lat);
-            formik.getFieldHelpers('longtitude').setValue(result[0].center.lng);
-        })
-    }
+    const handleMarkerDragEnd = (event: any) => {
+        setCenter({ lat: event.target._latlng.lat, lng: event.target._latlng.lng });
+    };
+    const { t, i18n } = useTranslation();
 
     return (
         <Grid>
-            <Grid.Column width={6}>
+            <Grid.Column width={8}>
                 <Grid>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
                         <Grid.Column width={1}>
                             <Icon name='marker' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={7}>
-                            Region:
+                            {t('Region') + ': '}
                             <CustomSelectInput
                                 onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                     formik.getFieldHelpers('cityId').setValue('')
                                 }}
-                                placeholder={'Select region'}
+                                placeholder={t('Select region')}
                                 name='regionId'
                                 options={Array.from(regionRegistry.values()).map(element => ({ text: element.name, value: element.id }))} />
                         </Grid.Column>
                         <Grid.Column width={8}>
-                            City:
+                            {t('City') + ': '}
                             <CustomSelectInput
-                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) =>
-                                    debounce(() => GeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)!, 2400)
-                                }
-                                placeholder={'Select city'}
+                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+                                    mapStore.PeformGeocodingQuery(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!, formik.getFieldProps('streetAddress').value)
+                                        .then((result) => console.log(result))
+                                }}
+                                placeholder={t('Select city')}
                                 name='cityId'
                                 disabled={!!!formik.getFieldProps('regionId').value}
                                 options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
@@ -80,15 +63,27 @@ export default function InstitutionDetailsLocationForm() {
                             <Icon name='home' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={15}>
-                            Address:
+                            {t('Address') + ': '}
                             <Search
+                                style={{ display: 'inline-block' }}
                                 value={formik.getFieldProps('streetAddress').value}
-                                results={results}
+                                results={mapStore.results && mapStore.results.map((x) => ({ title: x.name }))}
                                 onSearchChange={(e, d) => {
                                     formik.getFieldHelpers('streetAddress').setValue(d.value);
-                                    debounce(() => GeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, d.value!), 2400)
+                                    mapStore.PeformGeocodingQuery(getCityById(formik.getFieldProps('cityId').value as number, formik.getFieldProps('regionId').value)?.name!, d.value!)
+                                        .then((result) => {console.log(result);})
                                 }}
                                 showNoResults={false} />
+                        </Grid.Column>
+                    </Grid.Row>
+                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
+                        <Grid.Column width={1}>
+                            <Icon name='home' size='large' color='blue' />
+                        </Grid.Column>
+                        <Grid.Column width={15}>
+                            Зазначити координати самостійно:
+                            <Checkbox value={draggable ? 'true' : 'false'} toggle onChange={() => setDraggable(!draggable)} />
+                            Lat: {center.lat} Lng: {center.lng}
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
@@ -101,17 +96,22 @@ export default function InstitutionDetailsLocationForm() {
                     />
                     {commonStore.editMode &&
                         <LeafletControlGeocoder
-                            geocoder={geocoder}
+                            geocoder={mapStore.geocoder}
                             center={center}
                         />}
-                    <Marker position={center}>
+                    <Marker
+                        draggable={draggable}
+                        position={center}
+                        eventHandlers={{
+                            dragend: handleMarkerDragEnd,
+                        }}
+                    >
                         <Popup interactive>
                             A pretty CSS3 popup. <br /> Easily customizable.
                         </Popup>
                     </Marker>
                 </MapContainer>
             </Grid.Column>
-            <Grid.Column width={2} />
         </Grid>
     )
 }

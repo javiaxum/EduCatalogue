@@ -1,6 +1,7 @@
 import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { Fragment, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Container, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
 import { number } from 'yup';
@@ -10,7 +11,6 @@ import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import ImageUploadWidgetCropper from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetCropper';
 import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetDropzone';
 import { InstitutionFormValues } from '../../../app/models/institution';
-import { Region } from '../../../app/models/region';
 import { useStore } from '../../../app/stores/store';
 
 interface Props {
@@ -36,7 +36,6 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 setFiles([]);
             })
     }
-
     function onCrop() {
         if (cropper) {
             cropper.getCroppedCanvas().toBlob(blob => HandleImageUpload(blob!))
@@ -48,8 +47,9 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 URL.revokeObjectURL(file.preview));
         })
     }, [files])
-
+    const { t, i18n } = useTranslation();
     const formik = useFormikContext();
+
     return (
         <Grid style={{ minWidth: '1000px' }}>
             <Grid.Column width={10}>
@@ -59,7 +59,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             <Icon size='large' color='blue' name='info' />
                         </Grid.Column>
                         <Grid.Column width={14}>
-                            Description:
+                            {t('Description') + ': '}
                             <CustomTextArea rows={6} placeholder='Description' name='description' />
                         </Grid.Column>
                     </Grid.Row>
@@ -67,40 +67,9 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                         <Grid.Column width={1}>
                             <Icon size='large' color='blue' name='graduation' />
                         </Grid.Column>
-                        <Grid.Column width={5}>
-                            Student count:
+                        <Grid.Column width={14}>
+                            {t("Student count") + ': '}
                             <CustomTextInput type='number' placeholder='Student count' name='studentCount' />
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-                        <Grid.Column width={1}>
-                            <Icon name='marker' size='large' color='blue' />
-                        </Grid.Column>
-                        <Grid.Column width={7}>
-                            Region:
-                            <CustomSelectInput
-                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    formik.getFieldHelpers('cityId').setValue('')
-                                }}
-                                placeholder={'Select region'}
-                                name='regionId'
-                                options={Array.from(regionRegistry.values()).map(element => ({ text: element.name, value: element.id }))} />
-                        </Grid.Column>
-                        <Grid.Column width={8}>
-                            City:
-                            <CustomSelectInput
-                                placeholder={'Select city'}
-                                name='cityId'
-                                disabled={!!!formik.getFieldProps('regionId').value}
-                                options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
-                                    .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
-                        </Grid.Column>
-                        <Grid.Column width={1}>
-                            <Icon name='home' size='large' color='blue' />
-                        </Grid.Column>
-                        <Grid.Column width={15}>
-                            Address:
-                            <CustomTextInput placeholder='Address' name='streetAddress' />
                         </Grid.Column>
                     </Grid.Row>
                     <Grid.Row style={{ padding: '1rem 0 0 0' }}>
@@ -108,7 +77,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             <Icon name='chain' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={14}>
-                            Homepage:
+                            {t('Homepage') + ': '}
                             <CustomTextInput placeholder='SiteURL' name='siteURL' />
                         </Grid.Column>
                     </Grid.Row>
@@ -117,16 +86,17 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                             <Icon name='phone' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={14}>
-                            Contact information:
+                            {t('Contact information') + ': '}
                             <CustomTextInput placeholder='Contact Information' name='contactInformation' />
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
             </Grid.Column>
             <Grid.Column width={4}>
-                {files && files.length == 0 && <ImageUploadWidgetDropzone
-                    setFiles={setFiles}
-                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />}
+                {files && files.length == 0 &&
+                    <ImageUploadWidgetDropzone
+                        setFiles={setFiles}
+                        imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />}
                 {files && files.length > 0 && <>
                     <div className='img-preview' style={{ borderRadius: '30px', minHeight: '22rem', minWidth: '22rem', overflow: 'hidden', }} />
                 </>}

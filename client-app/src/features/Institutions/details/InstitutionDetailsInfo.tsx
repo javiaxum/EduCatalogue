@@ -10,7 +10,7 @@ export default observer(function InstitutionDetailsInfo() {
     const {
         getCityById,
         selectedInstitution, loading } = institutionStore;
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     return (
         <>
             {loading

@@ -32,10 +32,11 @@ export default observer(function SpecialtyForm() {
         loadingInitial,
         setLoadingInitial,
         getSpecialtyCoreISCEDString,
-        specialtyCoresById} = specialtyStore;
+        specialtyCoresById } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
+    const { t } = useTranslation();
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
     const [specialtyCore, setSpecialtyCore] = useState<SpecialtyCore>(new SpecialtyCore());
@@ -56,7 +57,6 @@ export default observer(function SpecialtyForm() {
         endYear: Yup.number().required(),
     })
 
-    const { t } = useTranslation();
 
     useEffect(() => {
         if (id2) {
@@ -102,26 +102,26 @@ export default observer(function SpecialtyForm() {
                     className='ui form'
                     onSubmit={handleSubmit}
                     autoComplete='off'>
-                    <Segment basic style={{ width: '80%', minWidth: '1000px', marginLeft: '10%' }}>
+                    <Segment basic style={{ width: '80%', minWidth: '1200px', marginLeft: '10%' }}>
                         <Grid style={{ padding: '20px 0 0 0', color: '#444' }}>
                             <Grid.Row style={{ height: '63px' }}>
                                 <Header
                                     size='large'
                                     style={{ margin: '0', height: '35px' }}>
-                                    Code and specialty:
+                                    {t('Code and specialty')}:
                                 </Header>
                                 <CustomSelectInput
                                     onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
                                         setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)));
                                     }}
                                     options={specialtyOptions}
-                                    placeholder='Select specialty'
+                                    placeholder={t('Select specialty')}
                                     name='localSpecialtyCode' />
                                 <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
                                     <Button
                                         positive
                                         type='submit'
-                                        content='Submit'
+                                        content={t('Submit')}
                                         loading={isSubmitting}
                                         disabled={!dirty || isSubmitting || !isValid}
                                     />
@@ -130,7 +130,7 @@ export default observer(function SpecialtyForm() {
                                         to={specialty.id ? `/specialties/${specialty.id}` : `/institutions/${id}`}
                                         onClick={() => setEditMode(false)}
                                         type='button'
-                                        content='Cancel'
+                                        content={t('Cancel')}
                                         disabled={isSubmitting}
                                     />
                                 </Button.Group>
@@ -140,98 +140,72 @@ export default observer(function SpecialtyForm() {
                                     <Grid.Column width={6}>
                                         <Segment.Group style={{ boxShadow: 'none' }}>
                                             <Segment>
-                                                <Label style={{ height: '26px' }}>
-                                                    Specialty code (ISCED): {specialtyCore.id && getSpecialtyCoreISCEDString(specialtyCore.id)}
-                                                </Label>
+                                                <Label
+                                                    content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`}
+                                                />
                                             </Segment>
                                             <Segment>
-                                                <Grid>
-                                                    <Grid.Column style={{ width: '7.2rem', paddingRight: '0' }}>
-                                                        <Icon
-                                                            name='graduation'
-                                                            size='big'
-                                                            color='blue' />
-                                                        Degree:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '15rem', paddingLeft: '0' }}>
-                                                        <CustomSelectInput
-                                                            options={t("degreeOptions", { returnObjects: true })}
-                                                            placeholder='Degree'
-                                                            name='degree' />
-                                                    </Grid.Column>
-                                                </Grid>
+                                                <Icon
+                                                    name='graduation'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Degree')}:
+                                                <CustomSelectInput
+                                                    width='14rem'
+                                                    options={t("degreeOptions", { returnObjects: true })}
+                                                    placeholder={t('Degree')}
+                                                    name='degree' />
                                             </Segment>
                                             <Segment basic>
-                                                <Grid>
-                                                    <Grid.Column style={{ width: '100%', paddingRight: '0' }}>
-                                                        <Icon
-                                                            name='book'
-                                                            size='big'
-                                                            color='blue' />
-                                                        Knowledge branch: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
-                                                    </Grid.Column>
-                                                </Grid>
+                                                <Icon
+                                                    name='clock'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('ECTS credits')}:
+                                                <CustomTextInput
+                                                    type='number'
+                                                    placeholder={t('ECTS credits')}
+                                                    name='ectsCredits' />
                                             </Segment>
                                             <Segment basic>
-                                                <Grid>
-                                                    <Grid.Column style={{ width: '10rem', paddingRight: '0' }}>
-                                                        <Icon
-                                                            name='clock'
-                                                            size='big'
-                                                            color='blue' />
-                                                        ECTS credits:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', height: '56px' }}>
-                                                        <CustomTextInput type='number' placeholder='ECTS credits' name='ectsCredits' padding='0.4em 0.2em 0.4em 0.2em' />
-                                                    </Grid.Column>
-                                                </Grid>
+                                                <Icon
+                                                    name='book'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
                                             </Segment>
                                             <Segment basic>
-                                                <Grid>
-                                                    <Grid.Column style={{ width: '8.2rem', paddingRight: '0' }}>
-                                                        <Icon
-                                                            name='dollar'
-                                                            size='big'
-                                                            color='blue' />
-                                                        Full price:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', height: '56px' }}>
-                                                        <CustomTextInput type='number' placeholder='0' name='priceUAH' padding='0.4em 0.2em 0.4em 0.2em' />
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '13.2rem', padding: '1.2rem 0 1rem 0', height: '56px' }}>
-                                                        Non paid education available:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '7rem', padding: '1.35rem 0 1rem 0', height: '56px' }}>
-                                                        <CustomCheckboxInput name='nonPaidEducationAvailable' />
-                                                    </Grid.Column>
-                                                </Grid>
+                                                <Icon
+                                                    name='dollar'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Full price')}: <CustomTextInput type='number' placeholder='0' name='priceUAH' padding='0.4em 0.2em 0.4em 0.2em' /> UAH <br></br>
+                                                {t('Non paid education is available') + ': '}
+                                                <CustomCheckboxInput name='nonPaidEducationAvailable' />
                                             </Segment>
                                             <Segment basic>
-                                                <Grid>
-                                                    <Grid.Column style={{ width: '8.6rem', paddingRight: '0' }}>
-                                                        <Icon
-                                                            name='flag'
-                                                            size='big'
-                                                            color='blue' />
-                                                        Start year:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', paddingRight: '0' }}>
-                                                        <CustomTextInput type='number' placeholder='0' name='startYear' padding='0.4em 0.2em 0.4em 0.2em' />
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '5.4rem', paddingRight: '0', paddingTop: '1.2rem' }}>
-                                                        End year:
-                                                    </Grid.Column>
-                                                    <Grid.Column style={{ width: '7rem', paddingLeft: '0', }}>
-                                                        <CustomTextInput type='number' placeholder='0' name='endYear' padding='0.4em 0.2em 0.4em 0.2em' />
-                                                    </Grid.Column>
-                                                </Grid>
+                                                <Icon
+                                                    name='flag'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Education period')}:
+                                                <CustomTextInput
+                                                    width='7rem'
+                                                    type='number'
+                                                    placeholder='0'
+                                                    name='startYear' />
+                                                {' - '} <CustomTextInput
+                                                    width='7rem'
+                                                    type='number'
+                                                    placeholder='0'
+                                                    name='endYear' />
                                             </Segment>
                                         </Segment.Group>
                                     </Grid.Column>
                                     <Grid.Column width={8} stretched>
                                         <Segment style={{ boxShadow: 'none', padding: '30px' }}>
-                                            <Header as='h4' content='Description' dividing style={{ marginBottom: '0' }} />
-                                            <CustomTextArea rows={4} placeholder='Description' name='description' />
+                                            <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
+                                            <CustomTextArea rows={4} placeholder={t('Description')} name='description' />
                                         </Segment>
                                     </Grid.Column>
                                 </Grid>

@@ -11,6 +11,7 @@ import CustomTextInput from '../../../../app/common/form/CustomTextInput';
 import { useStore } from '../../../../app/stores/store';
 import * as GeoSearch from 'leaflet-geosearch';
 import LeafletControlGeocoder from './LeafletControlGeocoder';
+import { useTranslation } from 'react-i18next';
 
 export default function InstitutionDetailsLocation() {
 
@@ -19,19 +20,18 @@ export default function InstitutionDetailsLocation() {
         selectedInstitution,
         getCityById,
     } = institutionStore;
-
-    console.log('LAT: ' + selectedInstitution?.latitude + ' LNG: ' + selectedInstitution?.longtitude)
+    const { t, i18n } = useTranslation();
 
     return (
         <Grid>
-            <Grid.Column width={6}>
+            <Grid.Column width={8}>
                 <Grid>
                     <Grid.Row>
                         <Grid.Column width={1}>
                             <Icon name='marker' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={6}>
-                            City:
+                            {t('City') + ': '}
                             {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                         </Grid.Column>
                     </Grid.Row>
@@ -40,7 +40,7 @@ export default function InstitutionDetailsLocation() {
                             <Icon name='home' size='large' color='blue' />
                         </Grid.Column>
                         <Grid.Column width={7}>
-                            Address:
+                            {t('Address') + ': '}
                             {selectedInstitution?.streetAddress}
                         </Grid.Column>
                     </Grid.Row>
@@ -63,7 +63,6 @@ export default function InstitutionDetailsLocation() {
                     </Marker>
                 </MapContainer>
             </Grid.Column>
-            <Grid.Column width={2}/>
         </Grid>
     )
 }

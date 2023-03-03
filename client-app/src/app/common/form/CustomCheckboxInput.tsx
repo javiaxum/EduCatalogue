@@ -13,7 +13,7 @@ interface Props {
 export default observer(function CustomSelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0' }}>
+        <Form.Field error={meta.touched && !!meta.error} style={{bottom: '-0.18rem', position: 'relative', display: 'inline-block', minHeight: 'auto', margin: '0' }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <Checkbox
                 disabled={props.disabled}

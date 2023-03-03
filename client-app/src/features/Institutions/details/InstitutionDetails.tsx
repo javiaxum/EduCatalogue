@@ -1,19 +1,13 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { Button, Grid, Header, Image, Item, Placeholder, Segment } from 'semantic-ui-react';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
-import { Institution, InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
-import InstitutionDetailsInfoForm from '../form/InstitutionDetailsInfoForm';
 import InstitutionDetailsInfo from './InstitutionDetailsInfo';
 import InstitutionDetailsMenu from './InstitutionDetailsMenu';
 import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsSpecialtiesList';
-import * as Yup from 'yup';
-import { Formik } from 'formik';
 import { Link } from 'react-router-dom';
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
-import { router } from '../../routers/Routes';
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 import InstitutionDetailsLocation from './location/InstitutionDetailsLocation';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +15,6 @@ import { useTranslation } from 'react-i18next';
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore, profileStore } = useStore();
     const {
-        loadingInitial,
         loadInstitution,
         detailsMenuActiveItem,
         loading,
@@ -35,7 +28,7 @@ export default observer(function InstitutionDetails() {
         setEditMode(false);
     }, [loadInstitution, id]);
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     return (
         <Grid style={{ minWidth: '1000px' }}>
@@ -74,7 +67,7 @@ export default observer(function InstitutionDetails() {
                                     : <Header
                                         size='huge'
                                         content={selectedInstitution?.name}
-                                        style={{ color: '#444', width: 'calc(100% - 14rem)'}}
+                                        style={{ color: '#444', width: 'calc(100% - 14rem)' }}
                                     />}
                                 {isInstitutionManager || profileStore.isOperator &&
                                     <Button

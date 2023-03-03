@@ -69,7 +69,7 @@ export default observer(function SearchParamsList() {
             <Grid.Column width={16} style={{ padding: '0' }}>
                 <Divider />
             </Grid.Column>
-            <Header as='h4' content={t('Branch')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Header as='h4' content={t('Knowledge branch')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
                 placeholder='State'
                 fluid
@@ -82,7 +82,6 @@ export default observer(function SearchParamsList() {
                 onChange={(e, data) => {
                     setSelectedBranches(data.value as string[])
                     if (selectedSpecialties?.length != 0 && selectedBranches.length != 0) {
-                        console.log(selectedBranches)
                         setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
                     }
                 }} />
@@ -100,6 +99,7 @@ export default observer(function SearchParamsList() {
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column style={{ padding: '0', height: '200px', overflowX: 'hidden' }} width={16}>
                 <Select
+                    fluid
                     clearable
                     placeholder={t('Select degree').toString()}
                     name='degree'

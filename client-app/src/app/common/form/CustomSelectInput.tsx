@@ -11,12 +11,13 @@ interface Props {
     value?: any;
     label?: string;
     onChange?: (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => void;
+    width?: string;
 }
 
 export default observer(function CustomSelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0' }}>
+        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0', width: props.width, display: 'inline-block' }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <Dropdown
                 search

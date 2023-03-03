@@ -1,14 +1,14 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Container, Dimmer, Grid, Header, Image, Item, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Item, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
-import { Institution, InstitutionFormValues } from '../../../app/models/institution';
+import { InstitutionFormValues } from '../../../app/models/institution';
 import { router } from '../../routers/Routes';
 import InstitutionDetailsMenu from '../details/InstitutionDetailsMenu';
 import InstitutionDetailsSpecialtiesList from '../details/specialties/InstitutionDetailsSpecialtiesList';
@@ -24,17 +24,13 @@ export default observer(function InstitutionForm() {
     const {
         loadInstitution,
         loadingInitial,
-        getCityById,
-        getRegionById,
         createInstitution,
         editInstitution,
         setLoadingInitial,
         detailsMenuActiveItem,
-        loading,
         loadRegionsWithCities,
         selectedInstitution,
         uploading,
-        regionRegistry,
         setBackgroundImage } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
@@ -74,7 +70,6 @@ export default observer(function InstitutionForm() {
                 setInstitution(formValues);
             });
         else {
-            console.log('SET')
             let formValues = new InstitutionFormValues(institution);
             setInstitution(formValues)
             setLoadingInitial(false);
@@ -120,7 +115,7 @@ export default observer(function InstitutionForm() {
                         <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
-                                top: '-5em',
+                                top: '-5rem',
                                 left: '15%',
                                 width: '70%',
                                 height: 'auto',
@@ -155,7 +150,7 @@ export default observer(function InstitutionForm() {
                                         <Item.Content>
                                             <Header
                                                 style={{ color: '#444', width: '60%', fontSize: '1rem' }}>
-                                                <CustomTextInput placeholder='Name' name='name' />
+                                                <CustomTextInput width='100%' placeholder='Name' name='name' />
                                             </Header>
                                             <Button.Group floated='right' style={{ minWidth: '10%', maxWidth: '30%' }} >
                                                 <Button
@@ -179,7 +174,7 @@ export default observer(function InstitutionForm() {
                                 </Item.Group>
                             </Segment>
                         </Grid.Column>
-                        <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-80px' }}>
+                        <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-100px' }}>
                             <InstitutionDetailsMenu />
                             {detailsMenuActiveItem === 'About' &&
                                 <InstitutionDetailsInfoForm institution={institution} />}
