@@ -12,11 +12,10 @@ import { useStore } from "../../../../app/stores/store";
 import { debounce, throttle } from "lodash";
 
 interface Props {
-  geocoder: geocoders.Nominatim;
-  center: L.LatLng;
+  center: any;
 }
 
-export default observer(function LeafletControlGeocoder({ geocoder, center }: Props) {
+export default observer(function LeafletControlGeocoder({ center }: Props) {
   const map = useMap();
   map.flyTo(center);
   return null;

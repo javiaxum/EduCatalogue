@@ -13,7 +13,7 @@ import InstitutionDetailsLocation from './location/InstitutionDetailsLocation';
 import { useTranslation } from 'react-i18next';
 
 export default observer(function InstitutionDetails() {
-    const { institutionStore, commonStore, profileStore } = useStore();
+    const { institutionStore, commonStore, profileStore, mapStore } = useStore();
     const {
         loadInstitution,
         detailsMenuActiveItem,
