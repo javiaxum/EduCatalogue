@@ -144,7 +144,14 @@ export default observer(function SpecialtyForm() {
                                                     content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`}
                                                 />
                                             </Segment>
-                                            <Segment>
+                                            <Segment >
+                                                <Icon
+                                                    name='book'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
+                                            </Segment>
+                                            <Segment basic>
                                                 <Icon
                                                     name='graduation'
                                                     size='big'
@@ -154,7 +161,7 @@ export default observer(function SpecialtyForm() {
                                                     width='14rem'
                                                     options={t("degreeOptions", { returnObjects: true })}
                                                     placeholder={t('Degree')}
-                                                    name='degree' />
+                                                    name='degreeId' />
                                             </Segment>
                                             <Segment basic>
                                                 <Icon
@@ -166,13 +173,6 @@ export default observer(function SpecialtyForm() {
                                                     type='number'
                                                     placeholder={t('ECTS credits')}
                                                     name='ectsCredits' />
-                                            </Segment>
-                                            <Segment basic>
-                                                <Icon
-                                                    name='book'
-                                                    size='big'
-                                                    color='blue' />
-                                                {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
                                             </Segment>
                                             <Segment basic>
                                                 <Icon

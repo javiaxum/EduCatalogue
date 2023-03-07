@@ -23,7 +23,7 @@ namespace Application.Specialties
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Specialty).SetValidator(new SpecialtyValidator());
+                RuleFor(x => x.Specialty).SetValidator(new SpecialtyEditValidator());
             }
         }
 

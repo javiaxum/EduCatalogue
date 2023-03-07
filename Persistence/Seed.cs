@@ -4133,13 +4133,15 @@ namespace Persistence
                 for (int i = 1; i < 12; i++)
                 {
                     var institution = await context.Institutions.FindAsync(Institutions[i].Id);
-                    var startIndex = new Random().Next(1, 8);
+                    var startIndex = new Random().Next(2, 8);
                     var endIndex = startIndex + new Random().Next(0, 7 - startIndex);
+
                     for (; startIndex <= endIndex; startIndex++)
                     {
+                        var managerEntity = await userManager.FindByEmailAsync($"testmail{startIndex}@test.com");
                         var manager = new AppUserInstitution
                         {
-                            Manager = await userManager.FindByEmailAsync($"testmail{startIndex}@test.com"),
+                            Manager = managerEntity,
                             Institution = institution,
                         };
                         institution.Managers.Add(manager);
@@ -4304,10 +4306,69 @@ namespace Persistence
                     },
                 };
 
+
                 await context.ComponentCores.AddRangeAsync(componentsCores);
                 await context.SaveChangesAsync();
+                // Seed Degrees 
 
+                var degrees = new List<Degree>
+                {
+                    new Degree
+                    {
+                        Name="Bachelor",
+                    },
+                    new Degree
+                    {
+                        Name="Master",
+                    },
+                    new Degree
+                    {
+                        Name="Doctorate",
+                    },
+                };
 
+                await context.Degrees.AddRangeAsync(degrees);
+                await context.SaveChangesAsync();
+
+                // Seed languages
+
+                var languages = new List<Language>
+                {
+                    new Language
+                    {
+                        Id = "en",
+                        ISOLanguageName = "English",
+                    },
+                    new Language
+                    {
+                        Id = "uk",
+                        ISOLanguageName="Ukrainian",
+                    },
+                };
+
+                await context.Languages.AddRangeAsync(languages);
+                await context.SaveChangesAsync();
+
+                // Seed studyForms
+
+                var studyForms = new List<StudyForm>
+                {
+                    new StudyForm
+                    {
+                        Name = "Full-time"
+                    },
+                    new StudyForm
+                    {
+                        Name = "Part-time"
+                    },
+                    new StudyForm
+                    {
+                        Name = "Extramural"
+                    },
+                };
+
+                await context.StudyForms.AddRangeAsync(studyForms);
+                await context.SaveChangesAsync();
 
                 var user1 = await userManager.FindByEmailAsync("testmail@test.com");
                 var user2 = await userManager.FindByEmailAsync("testmail2@test.com");
@@ -4317,7 +4378,7 @@ namespace Persistence
                 var user6 = await userManager.FindByEmailAsync("testmail6@test.com");
 
                 // Seed Specialties and Reviews
-                foreach (var item in context.Institutions)
+                foreach (var item in context.Institutions.ToList())
                 {
                     var reviews = new List<Review>
                     {
@@ -4326,14 +4387,14 @@ namespace Persistence
                             Institution = item,
                             Author = user1,
                             ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
-                            Rating=new Random().Next(1, 6),
+                            Rating=new Random().Next(3, 6),
                         },
                         new Review
                         {
                             Institution = item,
                             Author = user2,
                             ReviewMessage = "Slightly different test review message consisting of author, institution, message, 4 star* rating",
-                            Rating=new Random().Next(1, 6),
+                            Rating=new Random().Next(3, 6),
                         },
                         new Review
                         {
@@ -4347,23 +4408,25 @@ namespace Persistence
                             Institution = item,
                             Author = user4,
                             ReviewMessage = "Another one review message consisting of author being user4, institution, message, 5 star rating",
-                            Rating=new Random().Next(1, 6),
+                            Rating=new Random().Next(3, 6),
                         },
                         new Review
                         {
                             Institution = item,
                             Author = user5,
                             ReviewMessage = "Test review message consisting of author being user5, institution, message, 3 start rating",
-                            Rating=new Random().Next(1, 6),
+                            Rating=new Random().Next(4, 6),
                         },
                         new Review
                         {
                             Institution = item,
                             Author = user6,
                             ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
-                            Rating=new Random().Next(1, 6),
+                            Rating=new Random().Next(2, 6),
                         },
                     };
+                    await context.AddRangeAsync(reviews);
+
                     var specialties = new List<Specialty>
                     {
                         new Specialty
@@ -4371,7 +4434,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "122"),
                             Description = "Загальна освіта в галузі інформаційних технологій, спеціалізація «Комп’ютерні науки».Ключові слова: програмування, алгоритмізація, моделювання,комп’ютерна обробка даних, обчислювальні системи та технології,нечіткі моделі, Machine Learning, Big Data Processing, програмування на C#, C++, Python, Java, комп’ютерні мережі, розподілені серверні системи, розподілені та паралельні обчислення, нечіткі моделі та мережі, методи обчислювального інтелекту.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 80000,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4382,7 +4444,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
                             Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
                             EctsCredits = 60,
-                            Degree = "Master",
                             PriceUAH = 40001,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4393,7 +4454,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
                             Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 100001,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4404,7 +4464,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "125"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 180,
-                            Degree = "Bachelor",
                             PriceUAH = 45021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4415,7 +4474,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "121"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 75021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4426,7 +4484,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "123"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4437,7 +4494,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "124"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 95021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4448,7 +4504,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "112"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 76021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4460,7 +4515,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "111"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 52331,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4471,7 +4525,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "076"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 88754,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4482,7 +4535,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "073"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 87213,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4493,7 +4545,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "141"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4504,7 +4555,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "142"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4515,7 +4565,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "143"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4526,7 +4575,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "144"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4538,7 +4586,6 @@ namespace Persistence
                             SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "145"),
                             Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
                             EctsCredits = 240,
-                            Degree = "Bachelor",
                             PriceUAH = 85021,
                             StartYear = 2020,
                             EndYear = 2024,
@@ -4546,11 +4593,13 @@ namespace Persistence
                         },
                     };
 
-                    await context.AddRangeAsync(reviews);
-                    await context.AddRangeAsync(specialties.Skip(new Random().Next(0, 8)).Skip(new Random().Next(0, 8)));
+                    var toSkip = new Random().Next(0, 6);
+                    var toTake = specialties.Count() - toSkip - 1 - new Random().Next(0, specialties.Count() - toSkip);
+                    await context.AddRangeAsync(specialties.Skip(toSkip).Take(toTake));
                     await context.SaveChangesAsync();
                 }
-                foreach (var item in context.Specialties)
+
+                foreach (var item in context.Specialties.ToList())
                 {
                     var componentsLaw = new List<Component>
                     {
@@ -4721,6 +4770,147 @@ namespace Persistence
                     };
                     await context.AddRangeAsync(componentsCScience);
                     await context.AddRangeAsync(componentsLaw);
+                    await context.SaveChangesAsync();
+                }
+
+                // Seed and add Skills to Specialties
+                var skills = new List<Skill>
+                    {
+                        new Skill
+                        {
+                            Name = "C#",
+                        },
+                        new Skill
+                        {
+                            Name = "JavaScript",
+                        },
+                        new Skill
+                        {
+                            Name = "SQL",
+                        },
+                        new Skill
+                        {
+                            Name = "Rust",
+                        },
+                        new Skill
+                        {
+                            Name = ".NET",
+                        },
+                        new Skill
+                        {
+                            Name = "ASP.NET",
+                        },
+                        new Skill
+                        {
+                            Name = "Python",
+                        },
+                        new Skill
+                        {
+                            Name = "Git",
+                        },
+                        new Skill
+                        {
+                            Name = "GitHub",
+                        },
+                        new Skill
+                        {
+                            Name = "Figma",
+                        },
+                        new Skill
+                        {
+                            Name = "AutoCAD",
+                        },
+                        new Skill
+                        {
+                            Name = "PyTorch",
+                        },
+                        new Skill
+                        {
+                            Name = "Tensorflow",
+                        },
+                        new Skill
+                        {
+                            Name = "NumPy",
+                        },
+                        new Skill
+                        {
+                            Name = "Machine Learning",
+                        },
+                        new Skill
+                        {
+                            Name = "SolidWorks",
+                        },
+                        new Skill
+                        {
+                            Name = "PostgreSQL",
+                        },
+                        new Skill
+                        {
+                            Name = "MongoDB",
+                        },
+                        new Skill
+                        {
+                            Name = "MS Server",
+                        },
+                        new Skill
+                        {
+                            Name = "C++",
+                        },
+                        new Skill
+                        {
+                            Name = "C",
+                        },
+                        new Skill
+                        {
+                            Name = "PHP",
+                        },
+                        new Skill
+                        {
+                            Name = "MySQL",
+                        },
+                        new Skill
+                        {
+                            Name = "MS PowerPoint",
+                        },
+                        new Skill
+                        {
+                            Name = "Excel",
+                        },
+                        new Skill
+                        {
+                            Name = "MS Access",
+                        },
+                        new Skill
+                        {
+                            Name = "MS Office",
+                        },
+                    };
+
+                await context.AddRangeAsync(skills);
+                await context.SaveChangesAsync();
+
+                foreach (var item in context.Specialties.ToList())
+                {
+                    var skills1 = new List<Skill>();
+                    var sIndex = new Random().Next(1, 10);
+                    var eIndex = sIndex + 10;
+                    for (; sIndex < eIndex; sIndex++)
+                    {
+                        skills1.Add(await context.Skills.FirstOrDefaultAsync(x => x.Id == sIndex));
+                    }
+                    item.GraduateEmploymentRate = new Random().Next(20, 90);
+                    item.EnrolledStudentsCount = new Random().Next(10, 100);
+                    item.Skills = skills1;
+                    item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk") };
+                    item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
+                    item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };
+                    await context.SaveChangesAsync();
+                }
+
+                foreach (var item in context.Institutions.ToList())
+                {
+                    item.Accreditation = new Random().Next(3, 5);
+                    item.Coordinates = new Coordinates { Latitude = 0, Longitude = 0 };
                     await context.SaveChangesAsync();
                 }
             }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application.Core;
 using AutoMapper;
@@ -37,7 +38,8 @@ namespace Application.Institutions
                 var IsCitiesPredicate = !String.IsNullOrEmpty(request.Params.CitiesPredicate);
                 var IsMaxPrice = int.TryParse(request.Params.MaxPrice, out int MaxPrice);
                 var IsMinPrice = int.TryParse(request.Params.MinPrice, out int MinPrice);
-                var IsDegree = !String.IsNullOrEmpty(request.Params.Degree);
+                var IsDegree = int.TryParse(request.Params.Degree, out int Degree);
+                var IsName = !String.IsNullOrEmpty(request.Params.Name);
 
                 string[] CitiesPredicate;
                 if (IsCitiesPredicate)
@@ -47,14 +49,15 @@ namespace Application.Institutions
 
                 var query = _context.Institutions.Where(x =>
                     (!IsCitiesPredicate || CitiesPredicate.Contains(x.City.Id.ToString()))
+                    && (!IsName || x.Name.ToLower().Contains(request.Params.Name.ToLower()))
                     && x.Specialties.Any(s =>
                         (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
                         && (!IsMinPrice || s.PriceUAH >= MinPrice)
-                        && (!IsDegree || s.Degree == request.Params.Degree)));
+                        && (!IsDegree || s.Degree.Id == Degree)));
 
-                var sortedQuery = 
+                var sortedQuery =
                 request.Params.Sort == "za"
                 ? query.OrderByDescending(x => x.Name)
                 : request.Params.Sort == "hr"

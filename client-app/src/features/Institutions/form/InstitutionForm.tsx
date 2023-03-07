@@ -120,7 +120,7 @@ export default observer(function InstitutionForm() {
                                 width: '70%',
                                 height: 'auto',
                                 color: 'white',
-                                borderRadius: '0px',
+                                borderRadius: '5px',
                                 boxShadow: 'none',
                                 border: 'none',
                                 minWidth: '70vh'

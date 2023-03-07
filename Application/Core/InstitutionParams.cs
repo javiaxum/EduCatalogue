@@ -7,6 +7,7 @@ namespace Application.Core
 {
     public class InstitutionParams : PagingParams
     {
+        public string Name { get; set; } = "";
         public string BranchesPredicate { get; set; } = "";
         public string SpecialtiesPredicate { get; set; } = "";
         public string CitiesPredicate { get; set; } = "";

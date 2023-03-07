@@ -8,11 +8,11 @@ using FluentValidation;
 
 namespace Application.Specialties
 {
-    public class SpecialtyValidator : AbstractValidator<SpecialtyDTO>
+    public class SpecialtyEditValidator : AbstractValidator<SpecialtyDTO>
     {
-        public SpecialtyValidator()
+        public SpecialtyEditValidator()
         {
-            RuleFor(x => x.Degree).NotEmpty();
+            RuleFor(x => x.DegreeId).NotEmpty();
             RuleFor(x => x.EndYear).NotEmpty();
             RuleFor(x => x.StartYear).NotEmpty();
             RuleFor(x => x.LocalSpecialtyCode).NotEmpty();

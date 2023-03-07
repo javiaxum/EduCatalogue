@@ -26,10 +26,13 @@ namespace Persistence
         public DbSet<City> Cities { get; set; }
         public DbSet<Region> Regions { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Skill> Skills { get; set; }
+        public DbSet<Degree> Degrees { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<StudyForm> StudyForms { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-
             builder.Entity<AppUserInstitution>(x => x.HasKey(aa => new { aa.ManagerId, aa.InstitutionId }));
 
             builder.Entity<AppUserInstitution>()

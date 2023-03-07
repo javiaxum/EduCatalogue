@@ -21,8 +21,9 @@ namespace Application.Core
             .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates {Latitude = s.Latitude, Longitude = s.Longtitude}));
 
             CreateMap<Institution, InstitutionDTO>()
-            .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
+            .ForMember(d => d.EmblemImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.EmblemImageId).Url))
+            .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
@@ -52,12 +53,13 @@ namespace Application.Core
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
+            .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<SpecialtyDTO, Specialty>();
-            
 
             CreateMap<Specialty, SpecialtyComponentsDTO>()
+            .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<Component, ComponentDTO>()
@@ -70,6 +72,9 @@ namespace Application.Core
             .ForMember(d => d.ISCEDCores, o => o.MapFrom(s => s.ISCEDCores));
 
             CreateMap<ISCEDCore, ISCEDCoreDTO>();
+            CreateMap<Skill, SkillDTO>();
+            CreateMap<Language, LanguageDTO>();
+            CreateMap<StudyForm, StudyFormDTO>();
 
             CreateMap<Review, ReviewDTO>()
             .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id));

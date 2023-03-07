@@ -1,0 +1,407 @@
+[33mcommit 4110c48f9354b1220d31b7d390c05c33c221331d[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Mar 4 18:43:16 2023 +0200
+
+    Map geocoding fixed
+
+[33mcommit 65fe56b2802091fceece51ff47149ad4d523221d[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Mar 3 17:56:30 2023 +0200
+
+    UI rework, map edits, wip
+
+[33mcommit db01652fefe5b0724f18beeee596350156df056c[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Mar 2 18:25:52 2023 +0200
+
+    Translation further implementation, wip
+
+[33mcommit ffc7932ddfd8a40c0645a29a542010477d897192[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Feb 24 19:35:12 2023 +0200
+
+    Dropdown search Bugfix
+
+[33mcommit a5992e7ea6490ae174aaa1f497c7e52b38a38fd3[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Feb 23 11:33:37 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit a03ac57bfb7b4c974422fc56ace9e9adaa9e0930[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Feb 19 15:39:41 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 70dc6eaa361ef40f9dcc32fe83cedb8d9fb72f46[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Feb 16 19:31:04 2023 +0200
+
+    Leaflet map with nominatim geocoder API initial implementation, API institution entity coordinates added, client side form map location change handling
+
+[33mcommit d5ce0725efe427d41878f6ad88befd5ff6717713[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Feb 15 15:03:29 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit f2bb30119e44a7753dd159d11ed021ef212dfed1[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Feb 14 09:15:48 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 49cbe885e19d47d6602296d526699d860296af14[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Feb 10 16:46:01 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 44dfef08d58ae48a728b506baed8948479619451[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Feb 10 15:14:31 2023 +0200
+
+    UI styling edits
+
+[33mcommit 7ccbfbb403419d656c16968694dc5848058f9fc4[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Feb 10 13:12:00 2023 +0200
+
+    Minor edits, missing function call added, UI edited for narrow screens
+
+[33mcommit 4c06d11c509314535893db5e6976607e514a6bb9[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Feb 10 08:47:30 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit d944fe70bf46678b4e87a05e0733ae697e26ff87[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Feb 9 11:11:40 2023 +0200
+
+    RegionCity rework wip
+
+[33mcommit a5a6b4d50b8b67126022809e45c3e42fce975bf7[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Feb 9 08:00:23 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 5ef37f17bee7cac8095fda4782be7007b49ba419[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Feb 8 14:25:54 2023 +0200
+
+    Dashboard fixes, API Institution List query updates
+
+[33mcommit cee36f185fe350610d23964e543ec2db84528d7f[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Feb 7 16:16:46 2023 +0200
+
+    Search fixes
+
+[33mcommit 278a0e23ba600646c5a2e89a7ca03587d0d5911f[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Mon Feb 6 14:42:17 2023 +0200
+
+    Authorization policy intitial configuration
+
+[33mcommit 18a05ab563a5f9e47a3d920132d434216b581a03[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Feb 4 17:01:26 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 5cff15176860495a34b0785fca57cb41828537e3[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Feb 4 14:50:56 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 49c1b6c63ebc1ada8b10636211fe73e9f9cbd2f2[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Feb 4 09:14:20 2023 +0200
+
+    client side profile image upload logic
+
+[33mcommit a986369accfc860da6ce8fe3b29814ec21b5ccc9[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Jan 29 21:17:08 2023 +0200
+
+    InstitutionTitleImage upload widged implementation
+
+[33mcommit 927d5e3b046fd52d5b9d5dd1db55f24bfe19b57f[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Jan 29 18:01:31 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit 3e1d063bad28d9e186214f6628949c3f56c1c279[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Jan 29 17:02:30 2023 +0200
+
+    Server and client image handling in progress implementation
+
+[33mcommit 87767fb6a75506741d5574dcb814c3e33733a5e1[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Jan 29 13:01:31 2023 +0200
+
+    ImageEntityRework
+
+[33mcommit 9c244eaa4b725b761846ba889ca5112934afb7a7[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Jan 28 21:02:49 2023 +0200
+
+    Profile page implementatiton in progress
+
+[33mcommit 55a075ab9572a41ca97f2004b1841777fb922068[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Jan 28 18:46:16 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit d1c1ae3d676ecaf509ac260e3bfb14e39074f42f[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Jan 27 17:27:30 2023 +0200
+
+    Client specialty CRUD operations development
+
+[33mcommit a2ad719a10157e6e1f6de33dfc4e3228a60d5493[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Jan 27 15:08:33 2023 +0200
+
+    Client minor changes
+
+[33mcommit 969e173c064e900dfe3449cb08a82990f31ff7a8[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Jan 27 11:59:05 2023 +0200
+
+    Client-ui edits
+
+[33mcommit e7e83022b41efa6cb61f9e5f6cc26eb39d530008[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Jan 26 17:54:18 2023 +0200
+
+    Institution edit handler fixed, specialty editing operation wip
+
+[33mcommit 14cbf2c689827b1a3f7edb55268c45b8b5da1331[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Jan 26 12:21:45 2023 +0200
+
+    Minor client edits
+
+[33mcommit 2fea75ba097434a7ffd2e69ffd2481152a446526[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Jan 25 20:12:39 2023 +0200
+
+    In-process changes
+
+[33mcommit ec7b5f1a1fe6b47e1d613c0685afa3d7866e8e55[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Jan 25 18:14:48 2023 +0200
+
+    Minor client edits
+
+[33mcommit 5eb848b55bfc1345c9a6008a2a3d086e7c48dafc[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Jan 25 14:03:04 2023 +0200
+
+    In-process checkpoint
+
+[33mcommit e9839954ec6ecf610381507576cc1bee94a8b5f8[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Jan 25 09:08:49 2023 +0200
+
+    City Region entity tweaks
+
+[33mcommit b94b36b5584d81f5f5306db4c0ee99f244b1a148[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 24 18:51:32 2023 +0200
+
+    Client side search and review edits
+
+[33mcommit 470a4965ab06687ccbd3a3fe1feeda0f83d1573c[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 24 15:15:55 2023 +0200
+
+    Client side search and review edits
+
+[33mcommit 80e70a8413fe503ae032172a69b93b916fc4da35[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 24 11:40:57 2023 +0200
+
+    Client UI edits, minor API edits
+
+[33mcommit 5d85bfc9bfad16f2c7ac8d3599349e9e9dc9132e[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Mon Jan 23 08:57:52 2023 +0200
+
+    Review server and client side edits
+
+[33mcommit bcce4c5846681bd1bc8bce75ce553e8b18377f4c[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Jan 22 17:53:55 2023 +0200
+
+    Client UI Institution Details, Specialty search, Footer bug fixes
+
+[33mcommit 38d6a1dd76cadaa0c623e2e8a31ea728ca57849b[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Jan 21 16:14:27 2023 +0200
+
+    API List command typo fixed
+
+[33mcommit 186d69f0cff69e8cf672ca67cc4069292ec747f0[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Jan 21 15:06:35 2023 +0200
+
+    In process changes, entity edits, client UI and API edits
+
+[33mcommit 59802adffd3bd4bab69282a95790f41bb43d8371[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Jan 20 12:09:30 2023 +0200
+
+    In process work, seed extention
+
+[33mcommit c9d1e0c6979e34688fbc2a514a8f5e8a5b134240[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Thu Jan 19 08:37:06 2023 +0200
+
+    Specialty details in-process changes, footer
+
+[33mcommit 3aa89f039ef77c627269d1ea1feba79ebccccc12[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 17 21:24:53 2023 +0200
+
+    Client UI in-process edits
+
+[33mcommit c036b52fa5945c38fbbab93b44028360416a2443[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 17 11:59:53 2023 +0200
+
+    Minor edits
+
+[33mcommit 7aad2f9d1ff6e6802b16ac79d1bf21c4b487b152[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Tue Jan 17 11:09:04 2023 +0200
+
+    Entity tweaks
+
+[33mcommit a8fe0b77d20da7a7dc5a1e7ca397729913b290fd[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sat Jan 14 10:48:23 2023 +0200
+
+    Minor changes to API
+
+[33mcommit 9149de71dfb220892f17234df696e00fb6b8110b[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Fri Jan 13 15:33:58 2023 +0200
+
+    Client side edits, search implementation in-process
+
+[33mcommit 572f058cedcbf46a0c78fbdc6eff1cac5c933b68[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Fri Jan 13 12:03:56 2023 +0200
+
+    In-process edits, Entity rework
+
+[33mcommit 8016cfb482606dfc85d121c7758960544abdaed8[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Thu Jan 12 08:41:14 2023 +0200
+
+    In process development, Branch entity implementation
+
+[33mcommit 39bbb2cd07487e4d4db4924ad49a8f31c0c57821[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Tue Jan 10 10:23:47 2023 +0200
+
+    Entity rework and pagination client-side development
+
+[33mcommit 2cff80872905593d584f59beb970c50fd7a96e47[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Fri Jan 6 18:35:21 2023 +0200
+
+    WIP commit, Entities rework, DTOs simplification to avoid nested types client-side
+
+[33mcommit bdb6a397341dd4a43a9a65f2f768c51edea69494[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Wed Jan 4 11:55:32 2023 +0200
+
+    API Pagination in-progress
+
+[33mcommit 5b2da7cff262dd8cfdc48f5039f68020cd25715f[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Jan 4 09:44:43 2023 +0200
+
+    Specialties CRUD handling client and server-side in-process commit
+
+[33mcommit 9a4407957b07959c2cf5e606b0a484ccceb9b606[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Wed Dec 28 21:09:14 2022 +0200
+
+    In-process edits, server and client side specialties CRUD handling
+
+[33mcommit 75e05abde7cf7b6883cbc036f4242ac5d4e3be3c[m
+Author: J4V1 <jawjagr.am@gmail.com>
+Date:   Sun Dec 25 22:08:44 2022 +0200
+
+    Unrefined Changes, Specialty Entity implemented on server&client
+
+[33mcommit 90b5dc3d82b03c8f74f31172000ed603d1123104[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Fri Dec 23 11:34:29 2022 +0200
+
+    Authorization policy edits
+
+[33mcommit db970108bbac8abcd23c5a59d51410dd6e5aaef8[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Wed Dec 14 12:08:58 2022 +0200
+
+    Clent side Identity added
+
+[33mcommit 82fd7ff1e92f777cb76f513227967e0e72f83b43[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Mon Dec 12 08:45:44 2022 +0200
+
+    Error handling implemented
+
+[33mcommit 56f44bc99a6552571e1e73e5e02d69c640905b93[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Mon Dec 5 15:14:05 2022 +0200
+
+    React SPA Routing added
+
+[33mcommit d7ac9bd4eb847467cfb4430fb8070da37b7b53d8[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Sun Dec 4 16:32:55 2022 +0200
+
+    Identity added
+
+[33mcommit 1d58bcb26845d2ce11693d565e5f71effd5dcf11[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Fri Dec 2 21:21:10 2022 +0200
+
+    MobX state management implemented
+
+[33mcommit 6d9d80ee94572f062a477e6b45902eed5db04095[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Tue Nov 29 09:32:14 2022 +0200
+
+    Client API communication added
+
+[33mcommit 8f989eae6e329320cbf48861ca817c98b18c2a62[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Mon Nov 28 17:05:18 2022 +0200
+
+    Client basic CRU(D) and UI implemented
+
+[33mcommit fba96b7dfb404f330ad7ba4cd7bb2674c2edeb0e[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Wed Nov 23 20:32:11 2022 +0200
+
+    Client side implemented
+
+[33mcommit 6f68b2f87f5b9337517742fa4190d51c3fe202d2[m
+Author: J4V1J46 <jawjagr.am@gmail.com>
+Date:   Tue Nov 22 19:33:34 2022 +0200
+
+    InitialCommit

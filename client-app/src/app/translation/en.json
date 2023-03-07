@@ -1,4 +1,5 @@
 {
+    "Search institutions": "Search institutions",
     "Select city": "Select city",
     "Select region": "Select region",
     "Region": "Region",
@@ -43,11 +44,11 @@
     "Select degree": "Select degree",
     "Bachelor": "Bachelor",
     "Master": "Master",
-    "Ph.D.": "Ph.D.",
+    "Doctorate": "Doctorate",
     "degreeOptions": [
-        { "text": "Bachelor", "value": "Bachelor" },
-        { "text": "Master", "value": "Master" },
-        { "text": "Ph.D.", "value": "Ph.D." }
+        { "text": "Bachelor", "value": 0 },
+        { "text": "Master", "value": 1 },
+        { "text": "Doctorate", "value": 2 }
     ],
     "institutionSortingOptions": [
         {"text": "A-Z", "value": "az"},

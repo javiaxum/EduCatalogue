@@ -25,7 +25,7 @@ namespace Application.Specialties
         {
             public CommandValidator()
             {
-                RuleFor(x => x.Specialty).SetValidator(new SpecialtyDTOValidator());
+                RuleFor(x => x.Specialty).SetValidator(new SpecialtyCreateValidator());
             }
         }
 

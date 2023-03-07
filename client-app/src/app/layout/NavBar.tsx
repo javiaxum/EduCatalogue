@@ -2,12 +2,12 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Button, Container, Dropdown, Image, Menu } from 'semantic-ui-react';
+import { Button, Container, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
-    const { modalStore, userStore, profileStore, commonStore } = useStore()
+    const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
     const { t, i18n } = useTranslation();
     return (
         <Menu inverted style={{ borderRadius: '0px' }}>
@@ -36,6 +36,15 @@ export default observer(function NavBar() {
                         </Button>
                     </Button.Group>
                 </Menu.Item>
+                <Menu.Item>
+                    <Search
+                        placeholder={t('Search institutions')! + '...'}
+                        showNoResults={false}
+                        onSearchChange={(e, d) => {
+                            institutionStore.setSearchNameParam(d.value!);
+                        }}
+                    />
+                </Menu.Item>
                 {!userStore.isLoggedIn
                     ? (<Menu.Item onClick={() => modalStore.openModal(<LoginForm />)} position='right' name='Profile'></Menu.Item>)
                     : (<Menu.Item position='right' name='Profile'>
@@ -47,7 +56,6 @@ export default observer(function NavBar() {
                             </Dropdown.Menu>
                         </Dropdown>
                     </Menu.Item>)}
-
             </Container>
         </Menu>
     )

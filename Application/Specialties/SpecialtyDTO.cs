@@ -12,7 +12,9 @@ namespace Application.Specialties
         public string LocalSpecialtyCode { get; set; }
         public string Description { get; set; }
         public int EctsCredits { get; set; }
-        public string Degree { get; set; }
+        public int DegreeId { get; set; }
+        public int EnrolledStudentsCount { get; set; }
+        public int GraduateEmploymentRate { get; set; }
         public decimal PriceUAH { get; set; }
         public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }

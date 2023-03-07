@@ -20,6 +20,7 @@ export default observer(function SpecialtyDetails() {
         setEditMode(false);
     }, [loadSpecialty, selectedSpecialty, id]);
 
+    const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
     if (loadingInitial || loading) return <LoadingComponent />
     if (!selectedSpecialty) return <></>;
 
@@ -64,10 +65,17 @@ export default observer(function SpecialtyDetails() {
                                 </Segment>
                                 <Segment>
                                     <Icon
+                                        name='book'
+                                        size='big'
+                                        color='blue' />
+                                    {t('Knowledge branch')}: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
+                                </Segment>
+                                <Segment basic>
+                                    <Icon
                                         name='graduation'
                                         size='big'
                                         color='blue' />
-                                    {t('Degree')}: {t(selectedSpecialty.degree)}
+                                    {t('Degree')}: {degrees[selectedSpecialty.degreeId].text}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
@@ -75,13 +83,6 @@ export default observer(function SpecialtyDetails() {
                                         size='big'
                                         color='blue' />
                                     {t('ECTS credits')}: {selectedSpecialty.ectsCredits} {t('credits')}
-                                </Segment>
-                                <Segment basic>
-                                    <Icon
-                                        name='book'
-                                        size='big'
-                                        color='blue' />
-                                    {t('Knowledge branch')}: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
@@ -113,7 +114,7 @@ export default observer(function SpecialtyDetails() {
                 <Grid.Row>
                     <Divider />
                     <Header
-                        content={t('Educational components')+':'}
+                        content={t('Educational components') + ':'}
                         size='huge'
                         style={{ padding: '0 0 10px 0', color: '#444' }} />
                 </Grid.Row>

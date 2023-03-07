@@ -5,7 +5,9 @@ export interface Specialty {
     localSpecialtyCode: string;
     description: string;
     ectsCredits: number;
-    degree: string;
+    degreeId: number;
+    enrolledStudentsCount: number;
+    graduateEmploymentRate: number;
     priceUAH: number;
     nonPaidEducationAvailable: boolean;
     startYear: number;
@@ -28,7 +30,9 @@ export class SpecialtyFormValues {
     nonPaidEducationAvailable: boolean = false;
     startYear: number = 0;
     endYear: number = 0;
-    degree: string = '';
+    degreeId: number = 0;
+    enrolledStudentsCount: number = 0;
+    graduateEmploymentRate: number = 0;
 
     constructor(specialty?: SpecialtyFormValues | Specialty) {
         if (specialty) {
@@ -40,7 +44,9 @@ export class SpecialtyFormValues {
             this.nonPaidEducationAvailable = specialty.nonPaidEducationAvailable;
             this.startYear = specialty.startYear;
             this.endYear = specialty.endYear;
-            this.degree = specialty.degree;
+            this.degreeId = specialty.degreeId;
+            this.enrolledStudentsCount = specialty.enrolledStudentsCount;
+            this.graduateEmploymentRate = specialty.graduateEmploymentRate;
         }
     }
 }

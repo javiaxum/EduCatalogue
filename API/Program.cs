@@ -48,7 +48,7 @@ internal class Program
         builder.Services.AddSwaggerGen();
         builder.Services.AddDbContext<DataContext>(opt =>
         {
-            opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
+            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
         });
         builder.Services.AddCors(opt =>
         {

@@ -1,4 +1,5 @@
 {
+    "Search institutions": "Пошук ЗВО",
     "Select city": "Обрати місто",
     "Select region": "Обрати область",
     "Region": "Область",
@@ -43,11 +44,11 @@
     "Select degree": "Обрати освітній ступінь",
     "Bachelor": "Бакалавр",
     "Master": "Магістр",
-    "Ph.D.": "Ph.D.",
+    "Doctorate": "Докторат",
     "degreeOptions": [
-        { "text": "Бакалавр", "value": "Bachelor" },
-        { "text": "Магістр", "value": "Master" },
-        { "text": "Ph.D.", "value": "Ph.D." }
+        { "text": "Бакалавр", "value": 0 },
+        { "text": "Магістр", "value": 1 },
+        { "text": "Докторат", "value": 2 }
     ],
     "institutionSortingOptions": [
         {"text": "За назвою", "value": "az"},

@@ -16,6 +16,7 @@ namespace Application
         public string Name { get; set; }
         public string Description { get; set; }
         public int StudentCount { get; set; }
+        public int Accreditation { get; set; }
         public int CityId { get; set; }
         public int RegionId { get; set; }
         public string Latitude { get; set; }
@@ -23,6 +24,7 @@ namespace Application
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; } // can be revorked into separate table with numerous links and icons
         public string TitleImageId { get; set; }
+        public string EmblemImageId { get; set; } 
         public string BackgroundImageId { get; set; }
         public string ContactInformation { get; set; }
         public ICollection<Image> Images { get; set; } = new List<Image>();

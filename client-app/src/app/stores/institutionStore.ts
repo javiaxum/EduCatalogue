@@ -25,12 +25,14 @@ export default class InstitutionStore {
     pagingParams: PagingParams = new PagingParams();
     selectedCities: number[] = [];
     selectedInstitutionsSort: string = 'az';
+    searchNameParam: string = '';
 
     constructor() {
         makeAutoObservable(this);
 
         reaction(
             () => [
+                this.searchNameParam,
                 this.selectedInstitutionsSort,
                 this.selectedCities],
             () => {
@@ -41,9 +43,13 @@ export default class InstitutionStore {
     setSelectedCities = (value: number[]) => {
         this.selectedCities = value;
     }
+    setSearchNameParam = (value: string) => {
+        this.searchNameParam = value;
+    }
 
     get axiosParams() {
         const params = new URLSearchParams();
+        params.append('name', this.searchNameParam);
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
 
