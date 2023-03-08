@@ -3,8 +3,8 @@ import { EducationalComponent } from "./educationalComponent";
 export interface Specialty {
     id: string;
     localSpecialtyCode: string;
-    description: string;
     ectsCredits: number;
+    description: string;
     degreeId: number;
     enrolledStudentsCount: number;
     graduateEmploymentRate: number;
@@ -12,7 +12,10 @@ export interface Specialty {
     nonPaidEducationAvailable: boolean;
     startYear: number;
     endYear: number;
-    components: EducationalComponent[];
+    componentDTOs: EducationalComponent[];
+    languageIds: string[];
+    studyFormIds: number[];
+    skillIds: number[];
 }
 
 export class Specialty implements Specialty {
@@ -30,9 +33,13 @@ export class SpecialtyFormValues {
     nonPaidEducationAvailable: boolean = false;
     startYear: number = 0;
     endYear: number = 0;
-    degreeId: number = 0;
+    degreeId: number = 1;
     enrolledStudentsCount: number = 0;
     graduateEmploymentRate: number = 0;
+    componentDTOs: EducationalComponent[] = [];
+    languageIds: string[] = [];
+    studyFormIds: number[] = [];
+    skillIds: number[] = [];
 
     constructor(specialty?: SpecialtyFormValues | Specialty) {
         if (specialty) {
@@ -47,6 +54,10 @@ export class SpecialtyFormValues {
             this.degreeId = specialty.degreeId;
             this.enrolledStudentsCount = specialty.enrolledStudentsCount;
             this.graduateEmploymentRate = specialty.graduateEmploymentRate;
+            this.componentDTOs = specialty.componentDTOs;
+            this.languageIds = specialty.languageIds;
+            this.studyFormIds = specialty.studyFormIds;
+            this.skillIds = specialty.skillIds;
         }
     }
 }

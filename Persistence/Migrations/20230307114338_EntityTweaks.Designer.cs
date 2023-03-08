@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230307114338_EntityTweaks")]
+    partial class EntityTweaks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -624,12 +627,12 @@ namespace Persistence.Migrations
                     b.Property<int>("SkillsId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("SpecialtiesId")
+                    b.Property<Guid>("SpecialtyId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("SkillsId", "SpecialtiesId");
+                    b.HasKey("SkillsId", "SpecialtyId");
 
-                    b.HasIndex("SpecialtiesId");
+                    b.HasIndex("SpecialtyId");
 
                     b.ToTable("SkillSpecialty");
                 });
@@ -851,7 +854,7 @@ namespace Persistence.Migrations
 
                     b.HasOne("Domain.Specialty", null)
                         .WithMany()
-                        .HasForeignKey("SpecialtiesId")
+                        .HasForeignKey("SpecialtyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

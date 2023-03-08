@@ -18,7 +18,16 @@ export default observer(function NavBar() {
                 </Menu.Item>
                 <Menu.Item as={NavLink} to="/institutions" name={t('Institutions').toString()} />
                 {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
-                <Menu.Item style={{ marginRight: '0', position: 'relative' }}>
+                <Menu.Item>
+                    <Search
+                        placeholder={t('Search institutions')! + '...'}
+                        showNoResults={false}
+                        onSearchChange={(e, d) => {
+                            institutionStore.setSearchNameParam(d.value!);
+                        }}
+                    />
+                </Menu.Item>
+                <Menu.Item position='right' style={{ marginRight: '0', position: 'relative' }}>
                     <Button.Group>
                         <Button
                             className='languageToggler'
@@ -35,15 +44,6 @@ export default observer(function NavBar() {
                             Укр
                         </Button>
                     </Button.Group>
-                </Menu.Item>
-                <Menu.Item>
-                    <Search
-                        placeholder={t('Search institutions')! + '...'}
-                        showNoResults={false}
-                        onSearchChange={(e, d) => {
-                            institutionStore.setSearchNameParam(d.value!);
-                        }}
-                    />
                 </Menu.Item>
                 {!userStore.isLoggedIn
                     ? (<Menu.Item onClick={() => modalStore.openModal(<LoginForm />)} position='right' name='Profile'></Menu.Item>)

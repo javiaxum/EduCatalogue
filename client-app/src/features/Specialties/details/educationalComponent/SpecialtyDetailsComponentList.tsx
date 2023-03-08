@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect } from 'react';
-import { Grid, Item, Segment } from 'semantic-ui-react';
+import { useState } from 'react';
+import { Grid, Segment } from 'semantic-ui-react';
+import { EducationalComponent } from '../../../../app/models/educationalComponent';
 import { useStore } from '../../../../app/stores/store';
 import ComponentListItem from './ComponentListItem';
 import SpecialtyDetailsComponentListAddNewItem from './SpecialtyDetailsComponentListAddNewItem';
@@ -8,17 +9,19 @@ import SpecialtyDetailsComponentListAddNewItem from './SpecialtyDetailsComponent
 export default observer(function SpecialtyDetailsComponentList() {
     const { specialtyStore, commonStore } = useStore();
     const { editMode } = commonStore;
+    const [localComponents, setLocalComponents] = useState<EducationalComponent[]| undefined>(specialtyStore.selectedSpecialty?.componentDTOs);
 
-    if(!specialtyStore.selectedSpecialty || !specialtyStore.selectedSpecialty.components) return <></>;
+    if (!specialtyStore.selectedSpecialty || !specialtyStore.selectedSpecialty.componentDTOs) return <></>;
 
     return (
-        <Grid style={{ display: 'block' }}>
-            {specialtyStore.selectedSpecialty.components.length === 0 && !editMode && <Segment style={{ color: '#444' }}>There are no educational components available...</Segment>}
-            {specialtyStore.selectedSpecialty.components.length !== 0 && specialtyStore.selectedSpecialty.components.map((component) => (
-                <ComponentListItem component={component} key={component.id} />
+        <Grid style={{ display: 'block', padding: '0' }}>
+            {specialtyStore.selectedSpecialty.componentDTOs.length === 0 && !editMode &&
+                <Segment style={{ color: '#444' }}>There are no educational components available...</Segment>}
+            {specialtyStore.selectedSpecialty.componentDTOs.length !== 0 && localComponents?.map((component) => (
+                <ComponentListItem component={component} key={component.id} setEduComponents={setLocalComponents} />
             ))}
-            {(editMode && specialtyStore.selectedSpecialty.components.length === 0) &&
-                <SpecialtyDetailsComponentListAddNewItem />}
+            {(editMode || specialtyStore.selectedSpecialty.componentDTOs.length === 0) &&
+                <SpecialtyDetailsComponentListAddNewItem setEduComponents={setLocalComponents} />}
         </Grid>
     )
 })

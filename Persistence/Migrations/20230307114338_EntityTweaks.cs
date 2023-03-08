@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class EntityTweaks : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -341,8 +341,7 @@ namespace Persistence.Migrations
                 name: "Components",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     ComponentCoreId = table.Column<int>(type: "integer", nullable: true),
                     ECTSCredits = table.Column<int>(type: "integer", nullable: false),
                     isOptional = table.Column<bool>(type: "boolean", nullable: false),

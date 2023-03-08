@@ -7,7 +7,8 @@ namespace Application.EduComponents
 {
     public class ComponentDTO
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
+        public int ComponentCoreId { get; set; }
         public string Name { get; set; }
         public int ECTSCredits { get; set; }
         public bool isOptional { get; set; }

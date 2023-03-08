@@ -2,7 +2,10 @@ import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { DropdownItemProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { Branch } from "../models/branch";
+import { ComponentCore } from "../models/componentCore";
+import { EducationalComponent } from "../models/educationalComponent";
 import { Profile } from "../models/profile";
+import { Skill } from "../models/skill";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
 import { store } from "./store";
@@ -13,6 +16,8 @@ export default class SpecialtyStore {
     selectedSpecialty: Specialty | undefined;
     specialtyCoreRegistry = new Map<string, SpecialtyCore>();
     branchRegistry = new Map<string, Branch>();
+    skillRegistry = new Map<number, Skill>();
+    componentCoreRegistry = new Map<number, ComponentCore>();
     loadingInitial: boolean = true;
     loading: boolean = false;
     selectedSpecialties: string[] = [];
@@ -20,7 +25,6 @@ export default class SpecialtyStore {
     minPrice: string = '';
     maxPrice: string = '';
     selectedDegree: string = '';
-
 
     constructor() {
         makeAutoObservable(this);
@@ -52,6 +56,7 @@ export default class SpecialtyStore {
     setSelectedSpeialties = (value: string[]) => {
         this.selectedSpecialties = value;
     }
+
     filterSpecialtiesBySelectedBranch = (value: string[]) => {
         this.selectedSpecialties = value;
     }
@@ -74,6 +79,16 @@ export default class SpecialtyStore {
             .map(element => (element))
             .sort((a, b) => a.id.localeCompare(b.id))
     }
+    get skillsById() {
+        return Array.from(this.skillRegistry.values())
+            .map(element => (element))
+            .sort((a, b) => a.id - b.id)
+    }
+    get componentCoresById() {
+        return Array.from(this.componentCoreRegistry.values())
+            .map(element => (element))
+            .sort((a, b) => a.id - b.id)
+    }
 
     getSpecialtyCoreISCEDString = (id: string) => {
         const specialtyCore = this.specialtyCoreRegistry.get(id);
@@ -93,9 +108,19 @@ export default class SpecialtyStore {
     getSpecialty = (id: string) => {
         return this.specialtyRegistry.get(id);
     }
+
     getBranch = (id: string) => {
         return this.branchRegistry.get(id);
     }
+
+    getSkill = (id: number) => {
+        return this.skillRegistry.get(id);
+    }
+
+    getComponentCore  = (id: number) => {
+        return this.componentCoreRegistry.get(id);
+    }
+
     getSpecialtyCore = (id: string) => {
         return this.specialtyCoreRegistry.get(id);
     }
@@ -103,6 +128,7 @@ export default class SpecialtyStore {
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
+
     setLoading = (state: boolean) => {
         this.loading = state;
     }
@@ -114,6 +140,42 @@ export default class SpecialtyStore {
             runInAction(() => {
                 specialtyCores.forEach(specialtyCore => {
                     this.specialtyCoreRegistry.set(specialtyCore.id, specialtyCore)
+                });
+            })
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
+    loadComponentCores = async () => {
+        this.setLoading(true);
+        try {
+            const componentCores = await agent.Specialties.listComponentCores();
+            runInAction(() => {
+                componentCores.forEach(componentCore => {
+                    this.componentCoreRegistry.set(componentCore.id, componentCore);
+                });
+            })
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
+    loadSkills = async () => {
+        this.setLoading(true);
+        try {
+            const skills = await agent.Specialties.listSkills();
+            runInAction(() => {
+                skills.forEach(skill => {
+                    this.skillRegistry.set(skill.id, skill);
                 });
             })
             this.setLoadingInitial(false);

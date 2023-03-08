@@ -9,7 +9,7 @@ import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetai
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore } = useStore()
-    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSpecialtyCoreISCEDString, loading } = specialtyStore;
+    const { selectedSpecialty, loadSpecialty, loadingInitial, getSpecialtyCore, getBranch, getSkill, getSpecialtyCoreISCEDString, loading } = specialtyStore;
     const { } = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
@@ -57,7 +57,7 @@ export default observer(function SpecialtyDetails() {
                 <Grid.Row>
                     <Grid style={{ width: '100%' }}>
                         <Grid.Column width={6}>
-                            <Segment.Group style={{ boxShadow: 'none' }}>
+                            <Segment.Group style={{ boxShadow: 'none', border: '0' }}>
                                 <Segment>
                                     <Label
                                         content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
@@ -75,7 +75,7 @@ export default observer(function SpecialtyDetails() {
                                         name='graduation'
                                         size='big'
                                         color='blue' />
-                                    {t('Degree')}: {degrees[selectedSpecialty.degreeId].text}
+                                    {t('Degree')}: {degrees[selectedSpecialty.degreeId - 1].text}
                                 </Segment>
                                 <Segment basic>
                                     <Icon
@@ -101,22 +101,28 @@ export default observer(function SpecialtyDetails() {
                                 </Segment>
                             </Segment.Group>
                         </Grid.Column>
-                        <Grid.Column width={8} stretched>
-                            <Segment style={{ boxShadow: 'none', padding: '30px' }}>
+                        <Grid.Column width={6} stretched>
+                            <Segment basic style={{ boxShadow: 'none', padding: '30px' }}>
                                 <Header as='h4' content={t('Description')} dividing />
                                 <Segment basic style={{ padding: '0 0 0 10px' }}>
                                     {selectedSpecialty.description}
                                 </Segment>
                             </Segment>
                         </Grid.Column>
+                        <Grid.Column width={4} stretched>
+                            <Segment basic style={{ boxShadow: 'none', padding: '30px' }}>
+                                <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
+                                {selectedSpecialty.skillIds.map((skill) => <Label key={skill} content={getSkill(skill)?.name} style={{ margin: '0.2rem' }} />)}
+                            </Segment>
+                        </Grid.Column>
                     </Grid>
                 </Grid.Row>
-                <Grid.Row>
+                <Grid.Row style={{ padding: '0' }}>
                     <Divider />
                     <Header
                         content={t('Educational components') + ':'}
                         size='huge'
-                        style={{ padding: '0 0 10px 0', color: '#444' }} />
+                        style={{ padding: '0', color: '#444' }} />
                 </Grid.Row>
                 <Grid.Row>
                     <SpecialtyDetailsComponentList />

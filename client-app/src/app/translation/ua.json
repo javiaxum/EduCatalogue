@@ -1,4 +1,6 @@
 {
+    "Enrolled students count": "Кількість студентів",
+    "Graduate employment rate": "Коефіцієнт працевлаштування випускників",
     "Search institutions": "Пошук ЗВО",
     "Select city": "Обрати місто",
     "Select region": "Обрати область",
@@ -46,9 +48,9 @@
     "Master": "Магістр",
     "Doctorate": "Докторат",
     "degreeOptions": [
-        { "text": "Бакалавр", "value": 0 },
-        { "text": "Магістр", "value": 1 },
-        { "text": "Докторат", "value": 2 }
+        { "text": "Бакалавр", "value": 1 },
+        { "text": "Магістр", "value": 2 },
+        { "text": "Докторат", "value": 3 }
     ],
     "institutionSortingOptions": [
         {"text": "За назвою", "value": "az"},

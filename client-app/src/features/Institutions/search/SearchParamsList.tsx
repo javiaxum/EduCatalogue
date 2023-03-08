@@ -35,16 +35,19 @@ export default observer(function SearchParamsList() {
         text: city.name,
         value: city.id,
     }));
+
     const specialtyOptions: DropdownItemProps[] = filteredSpecialties.map(specialty => ({
         key: specialty.id,
         text: `${specialty.id} ${specialty.name}`,
         value: specialty.id,
     }));
+
     const branchOptions: DropdownItemProps[] = branchesById.map(branch => ({
         key: branch.id,
         text: `${branch.id} ${branch.name}`,
         value: branch.id,
     }));
+
     const { t } = useTranslation();
 
     return (
@@ -56,7 +59,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     placeholder="0"
                     name="min"
-                    style={{ width: '6rem' }}
+                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
                     value={minPrice}
                     onChange={(e, d) => {
                         setMinPrice(d.value);
@@ -66,7 +69,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     placeholder="0"
                     name="max"
-                    style={{ width: '6rem' }}
+                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
                     value={maxPrice}
                     onChange={(e, d) => {
                         setMaxPrice(d.value);
@@ -77,7 +80,7 @@ export default observer(function SearchParamsList() {
             </Grid.Column>
             <Header as='h4' content={t('Knowledge branch')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder='State'
+                placeholder={t('Select branch') as string}
                 fluid
                 multiple
                 search
@@ -94,7 +97,7 @@ export default observer(function SearchParamsList() {
             />
             <Header as='h4' content={t('Specialty')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder='State'
+                placeholder={t('Select specialty') as string}
                 fluid
                 multiple
                 search
@@ -106,7 +109,7 @@ export default observer(function SearchParamsList() {
             />
             <Header as='h4' content={t('Location')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder='State'
+                placeholder={t('Select city') as string}
                 fluid
                 multiple
                 search
@@ -121,7 +124,7 @@ export default observer(function SearchParamsList() {
                 <Select
                     fluid
                     clearable
-                    placeholder={t('Select degree').toString()}
+                    placeholder={t('Select degree') as string}
                     name='degree'
                     value={selectedDegree}
                     options={t("degreeOptions", { returnObjects: true })}

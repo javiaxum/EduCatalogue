@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 export default observer(function InstitutionDetails() {
     const { institutionStore, commonStore, profileStore, mapStore } = useStore();
     const {
-        loadInstitution,
+    loadInstitution,
         detailsMenuActiveItem,
         loading,
         selectedInstitution,
@@ -83,7 +83,7 @@ export default observer(function InstitutionDetails() {
                     </Item.Group>
                 </Segment>
             </Grid.Column>
-            <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-80px' }}>
+            <Grid.Column style={{ minWidth: '1000px', width: '84%', left: '8%', top: '-80px' }}>
                 <InstitutionDetailsMenu />
                 {detailsMenuActiveItem === 'About' &&
                     <InstitutionDetailsInfo />}

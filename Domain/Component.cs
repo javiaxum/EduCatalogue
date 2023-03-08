@@ -7,7 +7,7 @@ namespace Domain
 {
     public class Component
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public ComponentCore ComponentCore { get; set; }
         public int ECTSCredits { get; set; }
         public bool isOptional { get; set; }

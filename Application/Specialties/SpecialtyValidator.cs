@@ -8,7 +8,7 @@ using FluentValidation;
 
 namespace Application.Specialties
 {
-    public class SpecialtyEditValidator : AbstractValidator<SpecialtyDTO>
+    public class SpecialtyEditValidator : AbstractValidator<SpecialtyComponentsDTO>
     {
         public SpecialtyEditValidator()
         {

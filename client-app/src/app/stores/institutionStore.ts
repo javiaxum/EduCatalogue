@@ -10,6 +10,7 @@ import { Review, ReviewFormValues } from "../models/review";
 import { Region } from "../models/region";
 import { Specialty } from "../models/specialty";
 import { debounce } from "lodash";
+import { el } from "date-fns/locale";
 
 export default class InstitutionStore {
     institutionsRegistry = new Map<string, Institution>();
@@ -26,6 +27,7 @@ export default class InstitutionStore {
     selectedCities: number[] = [];
     selectedInstitutionsSort: string = 'az';
     searchNameParam: string = '';
+    selectedInstitutionIds: string[] = [];
 
     constructor() {
         makeAutoObservable(this);
@@ -40,9 +42,17 @@ export default class InstitutionStore {
             })
     }
 
+    toggleSelectedInstitutionId = (id: string) => {
+        if (this.selectedInstitutionIds.includes(id)) {
+            this.selectedInstitutionIds = this.selectedInstitutionIds.filter((x) => x != id);
+        }
+        else this.selectedInstitutionIds.push(id);
+    }
+
     setSelectedCities = (value: number[]) => {
         this.selectedCities = value;
     }
+
     setSearchNameParam = (value: string) => {
         this.searchNameParam = value;
     }
@@ -52,14 +62,12 @@ export default class InstitutionStore {
         params.append('name', this.searchNameParam);
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-
         let branchesPredicate = store.specialtyStore.selectedBranches.join('-');
         let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
         let citiesPredicate = this.selectedCities.join('-');
         params.append('specialtiesPredicate', specialtiesPredicate);
         params.append('branchesPredicate', branchesPredicate);
         params.append('citiesPredicate', citiesPredicate);
-        
         params.append('minPrice', store.specialtyStore.minPrice.toString());
         params.append('maxPrice', store.specialtyStore.maxPrice.toString());
         params.append('degree', store.specialtyStore.selectedDegree);
@@ -79,7 +87,6 @@ export default class InstitutionStore {
             return institutions.sort((a, b) => b.name.localeCompare(a.name));
         return institutions.sort((a, b) => a.name.localeCompare(b.name));
     }
-
 
     get isInstitutionManager() {
         if (store.userStore.isLoggedIn && store.profileStore.profile)
@@ -192,7 +199,6 @@ export default class InstitutionStore {
             this.setLoadingInitial(false);
             this.setLoading(false);
         }
-
     }
 
     loadRegionsWithCities = async () => {
@@ -211,7 +217,6 @@ export default class InstitutionStore {
             this.setLoadingInitial(false);
             this.setLoading(false);
         }
-
     }
 
 
@@ -227,7 +232,7 @@ export default class InstitutionStore {
         this.pagingParams = pagingParams;
     }
 
-    
+
     private setInstitution = (institution: Institution) => {
         institution.reviews.forEach((x) => {
             x.createdAt = new Date(x.createdAt);
@@ -265,12 +270,12 @@ export default class InstitutionStore {
             this.setLoadingInitial(false);
             this.setLoading(false);
         }
-
     }
 
     setPagination = (pagination: Pagination) => {
         this.pagination = pagination;
     }
+
     loadInstitution = async (id: string) => {
         this.setLoading(true);
         let institution = this.institutionsRegistry.get(id);
@@ -302,6 +307,7 @@ export default class InstitutionStore {
             }
         }
     }
+
     createInstitution = async (institution: InstitutionFormValues) => {
         const user = store.userStore.user;
         const manager = new Profile(user!);
@@ -317,6 +323,7 @@ export default class InstitutionStore {
             console.log(error);
         }
     }
+
     editInstitution = async (institution: InstitutionFormValues) => {
         try {
             await agent.Institutions.update(new InstitutionFormValues(institution));
@@ -331,6 +338,7 @@ export default class InstitutionStore {
             console.log(error);
         }
     }
+
     deleteInstitution = async (id: string) => {
         try {
             await agent.Institutions.delete(id);
@@ -342,9 +350,11 @@ export default class InstitutionStore {
         }
 
     }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
     }
+
     setLoading = (state: boolean) => {
         this.loading = state;
     }

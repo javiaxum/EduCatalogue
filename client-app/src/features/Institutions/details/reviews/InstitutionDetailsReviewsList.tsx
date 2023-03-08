@@ -56,7 +56,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
             : selectedInstitution.reviews.slice().sort(compareReviewByRatingDescending);
 
     return (
-        <Grid style={{ padding: '20px', minWidth: '1000px' }}>
+        <Grid style={{ padding: '20px'}}>
             {!reviewForm && <Grid.Column width={16} style={{ padding: '0' }}>
                 {buttons}
                 <Select
@@ -97,10 +97,10 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                     </Item.Group>
                 </Grid>
             </Grid.Column>
-            <Grid.Column width={6}>
+            <Grid.Column width={6} floated='right'>
                 <Image
                     src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                    style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
+                    style={{ objectFit: 'cover', minHeight: '18rem', minWidth: '18rem',  maxHeight: '26rem', maxWidth: '26rem', borderRadius: '30px' }} />
             </Grid.Column>
         </Grid>
     )

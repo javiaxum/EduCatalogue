@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Button, Grid, Item, Image, Header, Icon, Container, Segment } from 'semantic-ui-react';
@@ -8,16 +9,17 @@ interface Props {
     institution: Institution
 }
 
-export default function InstitutionsListItem({ institution }: Props) {
+export default observer(function InstitutionsListItem({ institution }: Props) {
     let elements = [];
-    for (let i = 1; i <= Math.floor(institution.rating); i++) {
+    for (let i = 1; i <= Math.round(institution.rating); i++) {
         elements.push((<Icon color='yellow' name='star' key={i} />))
     }
-    for (let i = 1; i <= 5 - Math.floor(institution.rating); i++) {
+    for (let i = 1; i <= 5 - Math.round(institution.rating); i++) {
         elements.push((<Icon color='yellow' name='star outline' key={5 - i + 1} />))
     }
 
     const { institutionStore } = useStore();
+    const isActive = institutionStore.selectedInstitutionIds.includes(institution.id);
 
     return (
         <Item style={{ minHeight: 110, paddingTop: 20 }}>
@@ -33,7 +35,7 @@ export default function InstitutionsListItem({ institution }: Props) {
                             <Header
                                 as={Link}
                                 to={`/institutions/${institution.id}`}
-                                style={{maxWidth: 'calc(100% - 15rem)'}}>
+                                style={{ maxWidth: 'calc(100% - 15rem)' }}>
                                 {institution.name}</Header>
                             <Segment style={{ padding: '0 0 0 3rem', margin: '0', position: 'absolute', right: '0' }} basic>{elements}</Segment>
                         </Grid.Row>
@@ -41,6 +43,14 @@ export default function InstitutionsListItem({ institution }: Props) {
                             <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
                         </Grid.Row>
                         <Grid.Row style={{ padding: '0 0 1rem 0' }} >
+                            <Button
+                                basic
+                                active={isActive}
+                                className={isActive ? 'customButtonActive' : ''}
+                                style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
+                                onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
+                                <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                            </Button>
                         </Grid.Row>
                     </Grid>
                 </Grid.Column>
@@ -50,4 +60,4 @@ export default function InstitutionsListItem({ institution }: Props) {
             </Grid>
         </Item>
     )
-}
+})

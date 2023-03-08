@@ -1,5 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Grid, Segment } from 'semantic-ui-react';
 import PaginationBar from '../../../app/common/pagination/PaginationBar';
 import { useStore } from '../../../app/stores/store';
@@ -16,20 +17,19 @@ export default observer(function InstitutionDashboard() {
     }, [institutionStore, setActiveMenuItem])
 
     return (
-        <Segment style={{ borderRadius: '0px', border: 'none', minWidth: '60em' }}>
-            <Grid style={{border: '0', margin: '0', minWidth: '60em'}}>
-                <Grid.Column style={{minWidth: '50px', width: '16%'}} stretched>
-                </Grid.Column>
-                <Grid.Column style={{minWidth: '500px', width: '56%'}}>
-                    <InstitutionsList />
-                    <PaginationBar />
-                </Grid.Column>
-                <Grid.Column style={{minWidth: '280px', width: '18%'}} stretched>
-                    <SearchParamsSideBar />
-                </Grid.Column>
-                <Grid.Column style={{minWidth: '50px', width: '10%'}} stretched>
-                </Grid.Column>
-            </Grid>
-        </Segment>
+        <Grid style={{ border: '0', margin: '0', minWidth: '60em' }}>
+            <Grid.Column style={{ minWidth: '50px', width: '16%' }} stretched>
+            </Grid.Column>
+            <Grid.Column style={{ minWidth: '500px', width: '56%' }}>
+                <InstitutionsList />
+                <PaginationBar />
+            </Grid.Column>
+            <Grid.Column style={{ minWidth: '300px', width: '18%' }} >
+                <SearchParamsSideBar />
+            </Grid.Column>
+            <Grid.Column style={{ minWidth: '30px', width: '10%' }} stretched>
+            </Grid.Column>
+            
+        </Grid>
     )
 })

@@ -12,14 +12,16 @@ interface Props {
     label?: string;
     onChange?: (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => void;
     width?: string;
+    padding?: string;
 }
 
 export default observer(function CustomSelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0', width: props.width, display: 'inline-block' }}>
+        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0', width: props.width, display: 'inline-block', padding: props.padding }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <Dropdown
+                style={{minWidth: props.width}}
                 search
                 selection
                 clearable

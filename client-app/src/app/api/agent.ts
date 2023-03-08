@@ -13,6 +13,8 @@ import { Profile } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 import { Image } from '../../app/models/image';
+import { Skill } from "../models/skill";
+import { ComponentCore } from "../models/componentCore";
 
 
 axios.defaults.baseURL = 'http://localhost:5172/api';
@@ -116,6 +118,8 @@ const Specialties = {
     details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
     listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
     listBranches: () => requests.get<Branch[]>("/specialties/branches"),
+    listSkills: () => requests.get<Skill[]>("/specialties/skills"),
+    listComponentCores: () => requests.get<ComponentCore[]>("/specialties/componentCores"),
     create: (specialty: SpecialtyFormValues, institutionId: string) => requests.post<void>(`/institutions/${institutionId}/specialties`, specialty),
     update: (specialty: SpecialtyFormValues, institutionId: string) => requests.put<void>(`/specialties/${institutionId}/specialty/${specialty.id}`, specialty),
     delete: (id: string) => requests.delete<void>(`/specialties/${id}`)

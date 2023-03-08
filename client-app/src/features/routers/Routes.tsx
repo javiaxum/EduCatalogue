@@ -3,6 +3,7 @@ import App from "../../app/layout/App";
 import ErrorPage from "../errors/ErrorPage";
 import NotFound from "../errors/NotFound";
 import ServerError from "../errors/ServerError";
+import InstitutionComparisonBoard from "../Institutions/comparison/InstitutionComparisonBoard";
 import InstitutionDashboard from "../Institutions/dashboard/InstitutionDashboard";
 import InstitutionDetails from "../Institutions/details/InstitutionDetails";
 import InstitutionForm from "../Institutions/form/InstitutionForm";
@@ -16,6 +17,7 @@ export const routes: RouteObject[] = [
         element: <App />,
         children: [
             { path: 'institutions', element: <InstitutionDashboard /> },
+            { path: 'institutions/comparison', element: <InstitutionComparisonBoard /> },
             { path: 'institutions/:id', element: <InstitutionDetails /> },
             { path: 'createInstitution', element: <InstitutionForm /> },
             { path: 'manage/:id', element: <InstitutionForm /> },

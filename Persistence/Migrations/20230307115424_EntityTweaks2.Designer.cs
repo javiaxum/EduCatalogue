@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230307071035_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20230307115424_EntityTweaks2")]
+    partial class EntityTweaks2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -148,11 +148,9 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Component", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                        .HasColumnType("uuid");
 
                     b.Property<int?>("ComponentCoreId")
                         .HasColumnType("integer");
@@ -629,12 +627,12 @@ namespace Persistence.Migrations
                     b.Property<int>("SkillsId")
                         .HasColumnType("integer");
 
-                    b.Property<Guid>("SpecialtyId")
+                    b.Property<Guid>("SpecialtiesId")
                         .HasColumnType("uuid");
 
-                    b.HasKey("SkillsId", "SpecialtyId");
+                    b.HasKey("SkillsId", "SpecialtiesId");
 
-                    b.HasIndex("SpecialtyId");
+                    b.HasIndex("SpecialtiesId");
 
                     b.ToTable("SkillSpecialty");
                 });
@@ -856,7 +854,7 @@ namespace Persistence.Migrations
 
                     b.HasOne("Domain.Specialty", null)
                         .WithMany()
-                        .HasForeignKey("SpecialtyId")
+                        .HasForeignKey("SpecialtiesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

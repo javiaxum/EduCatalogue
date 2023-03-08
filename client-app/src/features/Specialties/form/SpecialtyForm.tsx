@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Checkbox, Divider, DropdownProps, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Checkbox, Divider, Dropdown, DropdownItemProps, DropdownProps, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -16,6 +16,7 @@ import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomCheckboxInput from '../../../app/common/form/CustomCheckboxInput';
 import { SpecialtyCore } from '../../../app/models/specialtyCore';
 import { useTranslation } from 'react-i18next';
+import { Skill } from '../../../app/models/skill';
 
 
 export default observer(function SpecialtyForm() {
@@ -32,7 +33,8 @@ export default observer(function SpecialtyForm() {
         loadingInitial,
         setLoadingInitial,
         getSpecialtyCoreISCEDString,
-        specialtyCoresById } = specialtyStore;
+        specialtyCoresById,
+        skillsById } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
@@ -46,10 +48,16 @@ export default observer(function SpecialtyForm() {
         value: specialty.id,
     }));
 
+    const skillOptions: DropdownItemProps[] = skillsById.map(skill => ({
+        key: skill.id,
+        text: skill.name,
+        value: skill.id,
+    }));
+
     const validationSchema = Yup.object({
         localSpecialtyCode: Yup.string().required(),
         description: Yup.string().required('Specialty description is required'),
-        degree: Yup.string().required(),
+        degreeId: Yup.string().required(),
         ectsCredits: Yup.number().required(),
         priceUAH: Yup.number().required(),
         nonPaidEducationAvailable: Yup.string().required(),
@@ -75,6 +83,7 @@ export default observer(function SpecialtyForm() {
     }, [setLoadingInitial, institutionStore.loadInstitution, setSpecialty, setSpecialtyCore, getSpecialtyCore, loadingInitial, setEditMode, id1, id2, loadSpecialty])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
+        console.log(specialty)
         if (id) {
             specialty.id = uuid();
             createSpecialty(specialty, id).then(() => {
@@ -97,7 +106,7 @@ export default observer(function SpecialtyForm() {
             initialValues={specialty}
             onSubmit={values => handleSpecialtyFormSubmit(values)}
         >
-            {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+            {({ handleSubmit, isValid, isSubmitting, dirty, getFieldProps, getFieldHelpers }) => (
                 <Form
                     className='ui form'
                     onSubmit={handleSubmit}
@@ -138,13 +147,13 @@ export default observer(function SpecialtyForm() {
                             <Grid.Row>
                                 <Grid style={{ width: '100%' }}>
                                     <Grid.Column width={6}>
-                                        <Segment.Group style={{ boxShadow: 'none' }}>
+                                        <Segment.Group style={{ border: 'none', boxShadow: 'none' }}>
                                             <Segment>
                                                 <Label
                                                     content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`}
                                                 />
                                             </Segment>
-                                            <Segment >
+                                            <Segment>
                                                 <Icon
                                                     name='book'
                                                     size='big'
@@ -168,7 +177,7 @@ export default observer(function SpecialtyForm() {
                                                     name='clock'
                                                     size='big'
                                                     color='blue' />
-                                                {t('ECTS credits')}:
+                                                {t('ECTS credits') + ': '}
                                                 <CustomTextInput
                                                     type='number'
                                                     placeholder={t('ECTS credits')}
@@ -200,12 +209,55 @@ export default observer(function SpecialtyForm() {
                                                     placeholder='0'
                                                     name='endYear' />
                                             </Segment>
+                                            <Segment basic>
+                                                <Icon
+                                                    name='user'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Enrolled students count') + ': '}
+                                                <CustomTextInput
+                                                    padding='0.4em 0.2em 0.4em 0.2em'
+                                                    width='7rem'
+                                                    type='number'
+                                                    placeholder={t('Enrolled students count')}
+                                                    name='enrolledStudentsCount' />
+                                            </Segment>
+                                            <Segment basic>
+                                                <Icon
+                                                    padding='0.4em 0.2em 0.4em 0.2em'
+                                                    name='percent'
+                                                    size='big'
+                                                    color='blue' />
+                                                {t('Graduate employment rate') + ': '}
+                                                <CustomTextInput
+                                                    padding='0.4em 0.2em 0.4em 0.2em'
+                                                    width='5.5rem'
+                                                    type='number'
+                                                    placeholder={t('Specify rate in percents')}
+                                                    name='graduateEmploymentRate' />%
+                                            </Segment>
                                         </Segment.Group>
                                     </Grid.Column>
-                                    <Grid.Column width={8} stretched>
-                                        <Segment style={{ boxShadow: 'none', padding: '30px' }}>
+                                    <Grid.Column width={6} stretched>
+                                        <Segment basic style={{ padding: '30px' }}>
                                             <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
-                                            <CustomTextArea rows={4} placeholder={t('Description')} name='description' />
+                                            <CustomTextArea rows={16} placeholder={t('Description')} name='description' />
+                                        </Segment>
+                                    </Grid.Column>
+                                    <Grid.Column width={4} stretched>
+                                        <Segment basic style={{ padding: '30px' }}>
+                                            <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
+                                            <Dropdown
+                                                placeholder='State'
+                                                fluid
+                                                multiple
+                                                search
+                                                selection
+                                                clearable
+                                                value={getFieldProps('skillIds').value}
+                                                options={skillOptions}
+                                                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => getFieldHelpers('skillIds').setValue(data.value)}
+                                            />
                                         </Segment>
                                     </Grid.Column>
                                 </Grid>

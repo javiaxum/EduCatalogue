@@ -1,4 +1,6 @@
 {
+    "Enrolled students count": "Enrolled students count",
+    "Graduate employment rate": "Graduate employment rate",
     "Search institutions": "Search institutions",
     "Select city": "Select city",
     "Select region": "Select region",
@@ -46,9 +48,9 @@
     "Master": "Master",
     "Doctorate": "Doctorate",
     "degreeOptions": [
-        { "text": "Bachelor", "value": 0 },
-        { "text": "Master", "value": 1 },
-        { "text": "Doctorate", "value": 2 }
+        { "text": "Bachelor", "value": 1 },
+        { "text": "Master", "value": 2 },
+        { "text": "Doctorate", "value": 3 }
     ],
     "institutionSortingOptions": [
         {"text": "A-Z", "value": "az"},

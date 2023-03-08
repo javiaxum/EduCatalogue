@@ -20,9 +20,9 @@ namespace Application.Specialties
         public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
-        public ICollection<StudyFormDTO> StudyForms { get; set; } = new List<StudyFormDTO>();
-        public ICollection<LanguageDTO> Languages { get; set; } = new List<LanguageDTO>();
-        public ICollection<ComponentDTO> Components { get; set; } = new List<ComponentDTO>();
-        public ICollection<SkillDTO> Skills { get; set; } = new List<SkillDTO>();
+        public ICollection<int> StudyFormsIds { get; set; } = new List<int>();
+        public ICollection<string> LanguageIds { get; set; } = new List<string>();
+        public ICollection<ComponentDTO> ComponentDTOs { get; set; } = new List<ComponentDTO>();
+        public ICollection<int> SkillIds { get; set; } = new List<int>();
     }
 }

@@ -16,14 +16,14 @@ export default observer(function App() {
   const location = useLocation();
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
   const { loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
-  const { loadSpecialtyCores, loadBranches } = specialtyStore;
+  const { loadSpecialtyCores, loadBranches, loadSkills } = specialtyStore;
 
   useEffect(() => {
     if (commonStore.token) {
       userStore.getUser().then(() => loadProfile(), () => userStore.logout());
     }
     commonStore.loadAppData()
-  }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadRegionsWithCities, institutionStore])
+  }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadSkills, loadRegionsWithCities, institutionStore])
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (

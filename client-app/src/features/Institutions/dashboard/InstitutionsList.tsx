@@ -1,7 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
+import { Button, Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
@@ -23,7 +24,7 @@ export default observer(function InstitutionsList() {
     for (let i = 0; i < pagingParams.pageSize; i++) {
         placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
     }
-    
+
     const { t } = useTranslation();
 
     let placeholdersComponent = <>{placeholders}</>
@@ -43,6 +44,16 @@ export default observer(function InstitutionsList() {
                 value={selectedInstitutionsSort}
                 onChange={(e, d) => { setInstitutionsSearchSort(d.value as string); setLoading(true) }}
             />
+            {institutionStore.selectedInstitutionIds.length > 0 &&
+                <Button
+                    color='facebook'
+                    size='huge'
+                    as={Link}
+                    to='/institutions/comparison'
+                    style={{ position: 'fixed', right: '10rem', bottom: '1rem', zIndex: 1000 }}>
+                    Compare {institutionStore.selectedInstitutionIds.length}
+                </Button>
+            }
             <Divider style={{ width: 'calc(100% - 17rem)', display: 'inline-block', margin: '0rem 0 0 1rem', position: 'absolute', top: '6.9rem' }} />
             <Item.Group divided>
                 {loadingInitial || loading

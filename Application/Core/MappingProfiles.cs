@@ -18,7 +18,7 @@ namespace Application.Core
             CreateMap<Institution, Institution>();
 
             CreateMap<InstitutionDTO, Institution>()
-            .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates {Latitude = s.Latitude, Longitude = s.Longtitude}));
+            .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates { Latitude = s.Latitude, Longitude = s.Longtitude }));
 
             CreateMap<Institution, InstitutionDTO>()
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
@@ -27,7 +27,7 @@ namespace Application.Core
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
-            
+
             CreateMap<Institution, InstitutionDetailedDTO>()
             .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
             .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
@@ -56,14 +56,20 @@ namespace Application.Core
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
-            CreateMap<SpecialtyDTO, Specialty>();
-
+            CreateMap<SpecialtyComponentsDTO, Specialty>();
+            
             CreateMap<Specialty, SpecialtyComponentsDTO>()
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
+            .ForMember(d => d.SkillIds, o => o.MapFrom(s => s.Skills.Select(x => x.Id)))
+            .ForMember(d => d.ComponentDTOs, o => o.MapFrom(s => s.Components))
+            .ForMember(d => d.LanguageIds, o => o.MapFrom(s => s.Languages.Select(x => x.Id)))
+            .ForMember(d => d.StudyFormsIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
+            CreateMap<ComponentCore, ComponentCoreDTO>();
             CreateMap<Component, ComponentDTO>()
             .ForMember(d => d.Id, o => o.MapFrom(s => s.Id))
+            .ForMember(d => d.ComponentCoreId, o => o.MapFrom(s => s.ComponentCore.Id))
             .ForMember(d => d.Name, o => o.MapFrom(s => s.ComponentCore.Name))
             .ForMember(d => d.ECTSCredits, o => o.MapFrom(s => s.ECTSCredits))
             .ForMember(d => d.isOptional, o => o.MapFrom(s => s.isOptional));

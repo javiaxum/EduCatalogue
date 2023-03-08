@@ -50,7 +50,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     placeholder="0"
                     name="min"
-                    style={{ width: '7rem' }}
+                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
                     value={minPrice}
                     onChange={(e, d) => {
                         setMinPrice(d.value);
@@ -60,7 +60,7 @@ export default observer(function SearchParamsList() {
                 <Input
                     placeholder="0"
                     name="max"
-                    style={{ width: '7rem' }}
+                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
                     value={maxPrice}
                     onChange={(e, d) => {
                         setMaxPrice(d.value);

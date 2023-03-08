@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace Application.Specialties
 {
-    public class Skill
+    public class ComponentCoreDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

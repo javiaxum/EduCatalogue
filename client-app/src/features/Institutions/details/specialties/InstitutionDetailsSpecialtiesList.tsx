@@ -20,10 +20,10 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
             selectedBranches.includes(specialty.localSpecialtyCode.slice(0, 2)))
     if (selectedSpecialties.length !== 0)
         filteredSpecialties = filteredSpecialties.filter((specialty) =>
-            selectedSpecialties.includes(specialty.localSpecialtyCode.slice(0, 2)))
+            selectedSpecialties.includes(specialty.localSpecialtyCode))
     return (
         <Grid style={{ padding: '10px' }}>
-            <Grid.Column width={12}>
+            <Grid.Column style={{ minWidth: '500px', width: '69%' }}>
                 <Grid >
                     {filteredSpecialties.length === 0
                         ? <Segment style={{ color: '#444', width: '300px' }}>There are no specialties available...</Segment>
@@ -45,7 +45,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                     }
                 </Grid>
             </Grid.Column>
-            <Grid.Column width={4}>
+            <Grid.Column floated='right' style={{ minWidth: '300px', width: '18%' }}>
                 <SearchParamsList />
             </Grid.Column>
         </Grid>

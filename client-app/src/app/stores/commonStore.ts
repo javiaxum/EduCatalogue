@@ -9,14 +9,21 @@ export default class CommonStore {
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
     editMode: boolean = false;
+    componentForm: boolean = false;
 
     loadAppData = async () => {
         await Promise.all([store.institutionStore.loadInstitutions(),
         store.specialtyStore.loadSpecialtyCores(),
+        store.specialtyStore.loadSkills(),
+        store.specialtyStore.loadComponentCores(),
         store.specialtyStore.loadBranches(),
         store.institutionStore.loadCitiesWithInstitutions(),
         store.institutionStore.loadRegionsWithCities()])
         this.setAppLoaded();
+    }
+
+    setComponentForm = (state: boolean) => {
+        this.componentForm = state;
     }
 
     setEditMode = (state: boolean) => {

@@ -16,28 +16,41 @@ namespace API.Controllers
     {
         [AllowAnonymous]
         [HttpGet("specialtyCores")]
-        public async Task<IActionResult> GetSpecialtyCores()
+        public async Task<IActionResult> ListSpecialtyCores()
         {
             return HandleResult(await Mediator.Send(new ListCores.Query { }));
         }
         [AllowAnonymous]
         [HttpGet("branches")]
-        public async Task<IActionResult> GetBranches()
+        public async Task<IActionResult> ListBranches()
         {
             return HandleResult(await Mediator.Send(new ListBranches.Query { }));
+        }
+        [AllowAnonymous]
+        [HttpGet("skills")]
+        public async Task<IActionResult> ListSkills()
+        {
+            return HandleResult(await Mediator.Send(new ListSkills.Query { }));
+        }
+        [AllowAnonymous]
+        [HttpGet("componentCores")]
+        public async Task<IActionResult> ListComponentCores()
+        {
+            return HandleResult(await Mediator.Send(new ListComponentCores.Query { }));
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSpecialty(Guid id)
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]   
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
         [HttpPut("{id}/specialty/{specialtyId}")]
-        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyDTO specialty)
+        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyComponentsDTO specialty)
         {
             specialty.Id = specialtyId;
-            return HandleResult(await Mediator.Send(new Edit.Command {Specialty = specialty}));
+            return HandleResult(await Mediator.Send(new Edit.Command { Specialty = specialty }));
         }
+
         // [HttpDelete("{id}")]
         // public async Task<ActionResult> DeleteSpecialty(Guid id)
         // {

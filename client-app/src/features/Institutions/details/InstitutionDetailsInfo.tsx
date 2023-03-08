@@ -41,14 +41,14 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='marker' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={6}>
-                                    {t('City') + ': '} 
+                                    {t('City') + ': '}
                                     {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
                                 </Grid.Column>
                                 <Grid.Column width={1}>
                                     <Icon name='home' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={7}>
-                                    {t('Address') + ': '} 
+                                    {t('Address') + ': '}
                                     {selectedInstitution?.streetAddress}
                                 </Grid.Column>
                             </Grid.Row>
@@ -57,7 +57,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='chain' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
-                                    {t('Homepage') + ': '} 
+                                    {t('Homepage') + ': '}
                                     {selectedInstitution && <a href={`https://${selectedInstitution.siteURL}`} target="_blank">  {selectedInstitution.siteURL}</a>}
                                 </Grid.Column>
                             </Grid.Row>
@@ -66,7 +66,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <Icon name='phone' size='large' color='blue' />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
-                                    {t('Contact information') + ': '} 
+                                    {t('Contact information') + ': '}
                                     {selectedInstitution?.contactInformation}
                                 </Grid.Column>
                             </Grid.Row>
@@ -75,7 +75,7 @@ export default observer(function InstitutionDetailsInfo() {
                     <Grid.Column width={6}>
                         {selectedInstitution && <Image
                             src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                            style={{ objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />}
+                            style={{ objectFit: 'cover', minHeight: '18rem', minWidth: '18rem', maxHeight: '26rem', maxWidth: '26rem', borderRadius: '30px' }} />}
                     </Grid.Column>
                 </Grid>}
         </>
