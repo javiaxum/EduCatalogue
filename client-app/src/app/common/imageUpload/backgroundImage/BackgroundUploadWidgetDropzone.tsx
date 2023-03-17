@@ -18,15 +18,13 @@ export default function BackgroundUploadWidgetDropzone({ setFiles, imageUrl }: P
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
     const style = {
-        border: 'dashed 3px #aaa',
+        boxShadow: '0px 0px 0px 10px black inset',
         textAlign: 'center' as 'center',
-        height: '230px',
-        minWidth: '1200px',
-        boxSizing: 'border-box' as 'border-box',
+        height: '14rem',
         // height: 200
     }
     const activeStyle = {
-        borderColor: 'green',
+        boxShadow: 'green',
     }
 
     return (
@@ -34,7 +32,7 @@ export default function BackgroundUploadWidgetDropzone({ setFiles, imageUrl }: P
             <input {...getInputProps()} />
             <Image
                 src={imageUrl}
-                style={{ filter: 'brightness(50%)', objectFit: 'cover', height: '224px', minWidth: '1000px', width: '100%' }}
+                style={{ filter: 'brightness(50%)', objectFit: 'cover', height: '14rem', width: '100%' }}
             // style={hover ? { filter: 'brightness(30%)', objectFit: 'cover', height: '224px', minWidth: '1000px', width: '100%' } : { filter: 'brightness(40%)', objectFit: 'cover', height: '224px', minWidth: '1000px', width: '100%' }}
             // onMouseEnter={() => sethover(true)}
             // onMouseLeave={() => sethover(false)} 

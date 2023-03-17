@@ -1,16 +1,11 @@
 body {
-  background-color: rgb(255, 255, 255) !important;
+  background-color: rgb(239, 239, 239) !important;
+  overflow: scroll;
 }
 
 .root {
   overflow: scroll;
-}
-
-.footer {
-  height: 70px;
-  left: 0;
-  bottom: 0;
-  right: 0;
+  --main-color: rgb(30, 71, 160);
 }
 
 .languageToggler {
@@ -18,11 +13,11 @@ body {
 }
 
 .languageToggler:hover {
-  color: #fff !important;
+  color: #f1f1f1 !important;
 }
 
 .ui.active.button.languageToggler {
-  color: #fff !important;
+  color: #f1f1f1 !important;
 }
 
 .specialtyCard {
@@ -33,8 +28,14 @@ body {
 
 .ui.active.basic.button.customButtonActive {
   color: #fff !important;
-  background-color: #fbbd08 !important;
-  box-shadow: none;
+  background-color: rgb(255, 200, 0, 1) !important;
+  box-shadow: none !important;
+}
+
+.ui.active.basic.button.customButtonInactive {
+  background-color: rgb(255, 255, 255, 1) !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .componentCard {
@@ -44,16 +45,10 @@ body {
 }
 
 .ui.inverted.menu {
-  background-image: linear-gradient(135deg, rgb(30, 71, 160) 40%, rgb(34, 90, 202) 100%) !important;
+  background-color: rgb(30, 71, 160) !important;
   width: 100%;
   height: 6em;
   margin: 0 0 0;
-}
-
-.ui.container {
-  width: 100% !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
 }
 
 .masthead {
@@ -72,4 +67,43 @@ body {
 .masthead h2 {
   font-size: 1.7em;
   font-weight: normal;
+}
+
+.sidebar-transition-enter {
+  left: -18rem;
+}
+
+/* This is where we can add the transition*/
+.sidebar-transition-enter-active {
+  left: 0;
+  transition: ease-in-out 400ms;
+}
+
+/* This fires as soon as the this.state.showList is false */
+.sidebar-transition-exit {
+  left: 0;
+}
+
+/* fires as element leaves the DOM*/
+.sidebar-transition-exit-active {
+  left: -18rem;
+  transition: ease-in-out 400ms;
+}
+
+.move-in {
+  animation-name: move-in;
+  animation-duration: 0.8s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+}
+
+
+@keyframes move-in {
+  from {
+    left: -30rem;
+  }
+
+  to {
+    left: 0;
+  }
 }

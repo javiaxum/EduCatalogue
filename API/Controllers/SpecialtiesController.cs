@@ -9,11 +9,18 @@ using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Application.Specialties;
+using Application.Core;
 
 namespace API.Controllers
 {
     public class SpecialtiesController : BaseAPIController
     {
+        [AllowAnonymous]
+        [HttpGet("{id}/list")]
+        public async Task<IActionResult> GetSpecialty([FromQuery] SpecialtyParams param, Guid id)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Specialties.List.Query { Params = param, InstitutionId = id }));
+        }
         [AllowAnonymous]
         [HttpGet("specialtyCores")]
         public async Task<IActionResult> ListSpecialtyCores()
@@ -50,11 +57,11 @@ namespace API.Controllers
             specialty.Id = specialtyId;
             return HandleResult(await Mediator.Send(new Edit.Command { Specialty = specialty }));
         }
-
-        // [HttpDelete("{id}")]
-        // public async Task<ActionResult> DeleteSpecialty(Guid id)
-        // {
-        //     return Ok();
-        // }
+        [Authorize(Policy = "IsOperator")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteSpecialty(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+        }
     }
 }

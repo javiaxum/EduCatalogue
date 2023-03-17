@@ -15,12 +15,12 @@ interface Props {
 export default function CustomTextInput(props: Props) {
     const [field, meta] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ width: props.width, display: 'inline-block' }}>
+        <Form.Field error={meta.touched && !!meta.error} style={{ margin: '0', width: props.width, display: 'inline-block', padding: props.padding }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <input
                 {...field}
                 {...props}
-                style={{ padding: props.padding, position: 'relative', top: '-0.5rem' }}
+                style={{ padding: props.padding, position: 'relative' }}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>

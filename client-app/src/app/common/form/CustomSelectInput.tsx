@@ -13,18 +13,21 @@ interface Props {
     onChange?: (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => void;
     width?: string;
     padding?: string;
+    multiple?: boolean;
+    maxHeight?: string;
 }
 
 export default observer(function CustomSelectInput(props: Props) {
     const [field, meta, helpers] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', margin: '0', width: props.width, display: 'inline-block', padding: props.padding }}>
+        <Form.Field error={meta.touched && !!meta.error} style={{ minHeight: 'auto', maxHeight: props.maxHeight, margin: '0', width: props.width, display: 'inline-block', padding: props.padding }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <Dropdown
                 style={{minWidth: props.width}}
                 search
                 selection
                 clearable
+                multiple={props.multiple}
                 disabled={props.disabled}
                 options={props.options}
                 value={field.value || props.value || null}
@@ -36,7 +39,7 @@ export default observer(function CustomSelectInput(props: Props) {
                 placeholder={props.placeholder}
             />
             {meta.touched && meta.error ? (
-                <Label basic color='red'>{meta.error}</Label>
+                <Label basic color='red' style={{position: 'absolute', width: '18rem', zIndex: '1000'}}>{meta.error}</Label>
             ) : (null)}
         </Form.Field>
     )

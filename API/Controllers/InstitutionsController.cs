@@ -45,7 +45,7 @@ namespace API.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteInstitution(Guid id)
         {
-            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new Application.Institutions.Delete.Command { Id = id }));
         }
         [AllowAnonymous]
         [HttpGet("cities")]
@@ -55,7 +55,7 @@ namespace API.Controllers
         }
         [Authorize(Policy = "IsInstitutionManagerOrOperator")]   
         [HttpPost("{id}/specialties")]
-        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDTO specialty)
+        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyComponentsDTO specialty)
         {
             return HandleResult(await Mediator.Send(new Application.Specialties.Create.Command
             {

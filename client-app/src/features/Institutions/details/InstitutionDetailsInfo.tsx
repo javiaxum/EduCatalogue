@@ -15,7 +15,7 @@ export default observer(function InstitutionDetailsInfo() {
         <>
             {loading
                 ? <InstitutionDetailsInfoPlaceholder />
-                : <Grid>
+                : <Grid style={{ margin: 0 }}>
                     <Grid.Column width={10}>
                         <Grid style={{ color: '#444', padding: '0' }} verticalAlign='middle'>
                             <Grid.Row>
@@ -28,6 +28,13 @@ export default observer(function InstitutionDetailsInfo() {
                                 </Grid.Column>
                             </Grid.Row>
                             <Grid.Row>
+                                <Grid.Column width={1}>
+                                    <Icon size='large' color='blue' name='graduation' />
+                                </Grid.Column>
+                                <Grid.Column width={5}>
+                                    {t("Student count") + ': '}
+                                    {selectedInstitution?.studentCount}
+                                </Grid.Column>
                                 <Grid.Column width={1}>
                                     <Icon size='large' color='blue' name='graduation' />
                                 </Grid.Column>

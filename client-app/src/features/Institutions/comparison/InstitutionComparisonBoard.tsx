@@ -2,14 +2,11 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Grid, Header, Icon, Image, Segment, Table } from 'semantic-ui-react';
-import PaginationBar from '../../../app/common/pagination/PaginationBar';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { Institution } from '../../../app/models/institution';
 import { Specialty } from '../../../app/models/specialty';
 import { useStore } from '../../../app/stores/store';
 import { router } from '../../routers/Routes';
-import SearchParamsSideBar from '../search/SearchParamsSideBar';
-import InstitutionComparisonItem from './InstitutionComparisonItem';
 
 
 export default observer(function InstitutionComparisonBoard() {

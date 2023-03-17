@@ -10,6 +10,7 @@ namespace Application.Specialties
     public class SpecialtyComponentsDTO
     {
         public Guid Id { get; set; }
+        public Guid InstitutionId { get; set; }
         public string LocalSpecialtyCode { get; set; }
         public string Description { get; set; }
         public int EctsCredits { get; set; }
@@ -20,7 +21,7 @@ namespace Application.Specialties
         public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
-        public ICollection<int> StudyFormsIds { get; set; } = new List<int>();
+        public ICollection<int> StudyFormIds { get; set; } = new List<int>();
         public ICollection<string> LanguageIds { get; set; } = new List<string>();
         public ICollection<ComponentDTO> ComponentDTOs { get; set; } = new List<ComponentDTO>();
         public ICollection<int> SkillIds { get; set; } = new List<int>();

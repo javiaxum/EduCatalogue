@@ -15,11 +15,21 @@ export class PaginatedResult<T> {
     }
 }
 
-export class PagingParams {
+export class InstitutionsPagingParams {
     pageNumber;
     pageSize;
 
     constructor(pageNumber = 1, pageSize = 7) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+}
+
+export class SpecialtiesPagingParams {
+    pageNumber;
+    pageSize;
+
+    constructor(pageNumber = 1, pageSize = 6) {
         this.pageNumber = pageNumber;
         this.pageSize = pageSize;
     }

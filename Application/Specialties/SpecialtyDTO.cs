@@ -19,5 +19,8 @@ namespace Application.Specialties
         public bool NonPaidEducationAvailable { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
+        public ICollection<int> StudyFormsIds { get; set; } = new List<int>();
+        public ICollection<string> LanguageIds { get; set; } = new List<string>();
+        public ICollection<int> SkillIds { get; set; } = new List<int>();
     }
 }

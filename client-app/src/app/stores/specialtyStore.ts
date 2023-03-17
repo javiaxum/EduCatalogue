@@ -1,9 +1,11 @@
+import { debounce } from "lodash";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { DropdownItemProps } from "semantic-ui-react";
 import agent from "../api/agent";
 import { Branch } from "../models/branch";
 import { ComponentCore } from "../models/componentCore";
 import { EducationalComponent } from "../models/educationalComponent";
+import { Pagination, SpecialtiesPagingParams } from "../models/pagination";
 import { Profile } from "../models/profile";
 import { Skill } from "../models/skill";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
@@ -20,25 +22,71 @@ export default class SpecialtyStore {
     componentCoreRegistry = new Map<number, ComponentCore>();
     loadingInitial: boolean = true;
     loading: boolean = false;
+    // Search params
+    pagination: Pagination | null = null;
+    pagingParams: SpecialtiesPagingParams = new SpecialtiesPagingParams();
     selectedSpecialties: string[] = [];
     selectedBranches: string[] = [];
+    selectedSkillIds: number[] = [];
+    selectedLanguages: string[] = [];
+    selectedStudyForms: number[] = [];
     minPrice: string = '';
     maxPrice: string = '';
     selectedDegree: string = '';
+    selectedSpecialtyIds: string[] = [];
+    selectedSpecialtiesSort: string = 'az';
+    //
 
     constructor() {
         makeAutoObservable(this);
 
         reaction(
             () => [
+                this.selectedSkillIds,
+                this.selectedLanguages,
+                this.selectedStudyForms,
                 this.selectedSpecialties,
                 this.selectedBranches,
                 this.maxPrice,
                 this.minPrice,
                 this.selectedDegree],
             () => {
-                store.institutionStore.debouncedLoadInstitutions();
+                this.debouncedLoadSpecialties();
             })
+    }
+
+    // reset() {
+    //     this.specialtyRegistry = new Map<string, Specialty>();
+    //     this.loadingInitial = true;
+    //     this.loading = false;
+    //     this.pagination = null;
+    //     this.pagingParams = new SpecialtiesPagingParams();
+    //     this.selectedSpecialties = [];
+    //     this.selectedBranches = [];
+    //     this.selectedSkillIds = [];
+    //     this.minPrice = '';
+    //     this.maxPrice = '';
+    //     this.selectedDegree = '';
+    //     this.selectedSpecialtyIds = [];
+    //     this.selectedSpecialtiesSort = 'az';
+    // }
+
+    get instititutionsBySelectedSort() {
+        const specialties = Array.from(this.specialtyRegistry.values());
+        if (this.selectedSpecialtiesSort == 'za')
+            return specialties.sort((a, b) => b.localSpecialtyCode.localeCompare(a.localSpecialtyCode));
+        return specialties.sort((a, b) => a.localSpecialtyCode.localeCompare(b.localSpecialtyCode));
+    }
+
+    setInstitutionsSearchSort = (selectedSpecialtiesSort: string) => {
+        this.selectedSpecialtiesSort = selectedSpecialtiesSort;
+    }
+
+    toggleSelectedSpecialtyId = (id: string) => {
+        if (this.selectedSpecialtyIds.includes(id)) {
+            this.selectedSpecialtyIds = this.selectedSpecialtyIds.filter((x) => x != id);
+        }
+        else this.selectedSpecialtyIds.push(id);
     }
 
     setDegreePredicate = (degree: string) => {
@@ -57,12 +105,20 @@ export default class SpecialtyStore {
         this.selectedSpecialties = value;
     }
 
-    filterSpecialtiesBySelectedBranch = (value: string[]) => {
-        this.selectedSpecialties = value;
-    }
-
     setSelectedBranches = (value: string[]) => {
         this.selectedBranches = value;
+    }
+    
+    setSelectedSkillIds = (value: number[]) => {
+        this.selectedSkillIds = value;
+    }
+
+    setSelectedLanguages = (value: string[]) => {
+        this.selectedLanguages = value;
+    }
+
+    setSelectedStudyForms = (value: number[]) => {
+        this.selectedStudyForms = value;
     }
 
     get specialtyCoresByName() {
@@ -117,7 +173,7 @@ export default class SpecialtyStore {
         return this.skillRegistry.get(id);
     }
 
-    getComponentCore  = (id: number) => {
+    getComponentCore = (id: number) => {
         return this.componentCoreRegistry.get(id);
     }
 
@@ -205,10 +261,68 @@ export default class SpecialtyStore {
         }
     }
 
+    setSelectedSpecialty = (specialty: Specialty) => {
+        this.selectedSpecialty = specialty;
+    }
+
+    setPagination = (pagination: Pagination) => {
+        this.pagination = pagination;
+    }
+
+    setPagingParams = (pagingParams: SpecialtiesPagingParams) => {
+        this.pagingParams = pagingParams;
+    }
+
+    get axiosParams() {
+        const params = new URLSearchParams();
+        params.append('pageNumber', this.pagingParams.pageNumber.toString());
+        params.append('pageSize', this.pagingParams.pageSize.toString());
+        let branchesPredicate = store.specialtyStore.selectedBranches.join('-');
+        let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
+        let skillsPredicate = store.specialtyStore.selectedSkillIds.join('-');
+        let languagesPredicate = store.specialtyStore.selectedLanguages.join('-');
+        let studyFormsPredicate = store.specialtyStore.selectedSkillIds.join('-');
+        params.append('studyFormsPredicate', studyFormsPredicate);
+        params.append('languagesPredicate', languagesPredicate);
+        params.append('skillsPredicate', skillsPredicate);
+        params.append('specialtiesPredicate', specialtiesPredicate);
+        params.append('branchesPredicate', branchesPredicate);
+        params.append('minPrice', store.specialtyStore.minPrice.toString());
+        params.append('maxPrice', store.specialtyStore.maxPrice.toString());
+        params.append('degreeId', store.specialtyStore.selectedDegree);
+        params.append('sort', this.selectedSpecialtiesSort);
+        return params;
+    }
+
+    debouncedLoadSpecialties = debounce(() => {
+        this.pagingParams = new SpecialtiesPagingParams();
+        this.loadSpecialties()
+    }, 800);
+
+    loadSpecialties = async () => {
+        this.setLoading(true);
+        this.specialtyRegistry.clear()
+        try {
+            const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
+            runInAction(() => {
+                result.data.forEach(specialty => {
+                    this.specialtyRegistry.set(specialty.id, specialty)
+                });
+            })
+            this.setPagination(result.pagination);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
     loadSpecialty = async (id: string) => {
         this.setLoading(true);
         let specialty = this.specialtyRegistry.get(id);
-        if (specialty) {
+        if (specialty && specialty.studyFormIds && specialty.componentDTOs && specialty.languageIds && specialty.skillIds) {
             this.selectedSpecialty = specialty;
             this.setLoadingInitial(false);
             this.setLoading(false);
@@ -230,6 +344,7 @@ export default class SpecialtyStore {
         }
 
     }
+
     createSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {
         const user = store.userStore.user;
         const manager = new Profile(user!);

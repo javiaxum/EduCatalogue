@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import { Button, Divider, Header, Item, Segment, Select } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Item, Loader, Segment, Select } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
@@ -27,37 +28,57 @@ export default observer(function InstitutionsList() {
 
     const { t } = useTranslation();
 
-    let placeholdersComponent = <>{placeholders}</>
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
 
     return (
         <>
-            <Header as='h2' content={t("Institutions")} style={{ display: 'inline' }} />
-            {!loading &&
-                <Header
-                    as='h5'
-                    color='grey'
-                    content={`found ${pagination?.totalItems} ${pagination?.totalItems === 1 ? 'item' : 'items'}`}
-                    style={{ display: 'inline', marginLeft: '20px' }} />}<br></br>
-            <Select
-                style={{ left: '0px', marginTop: '1rem', display: 'inline-block' }}
-                options={t("institutionSortingOptions", { returnObjects: true })}
-                value={selectedInstitutionsSort}
-                onChange={(e, d) => { setInstitutionsSearchSort(d.value as string); setLoading(true) }}
-            />
-            {institutionStore.selectedInstitutionIds.length > 0 &&
-                <Button
-                    color='facebook'
-                    size='huge'
-                    as={Link}
-                    to='/institutions/comparison'
-                    style={{ position: 'fixed', right: '10rem', bottom: '1rem', zIndex: 1000 }}>
-                    Compare {institutionStore.selectedInstitutionIds.length}
-                </Button>
+            {isComputerOrTablet &&
+                <>
+                    <Header as='h2' content={t("Institutions")} style={{ width: '100%' }} />
+                    <Header
+                        as='h5'
+                        color='grey'
+                        style={{ margin: 0 }} >
+                        {t('search results') + ": "} {loading ? <Loader active inline size='mini' /> : pagination?.totalItems}
+                    </Header>
+                    <Segment basic style={{ width: '100%', border: 0, padding: 0 }}>
+                        <Divider style={{ width: 'calc(100% - 14rem)', display: 'inline-block' }} />
+                        <Select
+                            style={{ display: 'inline-block' }}
+                            options={t("institutionSortingOptions", { returnObjects: true })}
+                            value={selectedInstitutionsSort}
+                            onChange={(e, d) => { setInstitutionsSearchSort(d.value as string); setLoading(true) }} />
+                    </Segment>
+                </>
             }
-            <Divider style={{ width: 'calc(100% - 17rem)', display: 'inline-block', margin: '0rem 0 0 1rem', position: 'absolute', top: '6.9rem' }} />
-            <Item.Group divided>
+            {isMobile &&
+                <>
+                    <Grid style={{ margin: 0, padding: '1rem' }}>
+                        <Grid.Row style={{ margin: 0, padding: 0 }}>
+                            <Header as='h2' content={t("Institutions")} style={{ width: '100%' }} />
+                        </Grid.Row>
+                        <Grid.Row style={{ margin: 0, padding: 0 }}>
+                            <Header
+                                as='h5'
+                                color='grey'
+                                style={{ margin: 0 }} >
+                                {t('search results') + ": "} {loading ? <Loader active inline size='mini' /> : pagination?.totalItems}
+                            </Header>
+                        </Grid.Row>
+                        <Grid.Row style={{ margin: 0, padding: 0 }}>
+                            <Select
+                                style={{ width: '95vw', height: '3rem' }}
+                                options={t("institutionSortingOptions", { returnObjects: true })}
+                                value={selectedInstitutionsSort}
+                                onChange={(e, d) => { setInstitutionsSearchSort(d.value as string); setLoading(true) }} />
+                        </Grid.Row>
+                    </Grid>
+                </>
+            }
+            <Item.Group divided style={{padding: '1rem'}}>
                 {loadingInitial || loading
-                    ? (placeholdersComponent)
+                    ? placeholders
                     : (
                         <>
                             {institutionsRegistry.size === 0

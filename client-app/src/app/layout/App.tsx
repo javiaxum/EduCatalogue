@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect } from 'react';
-import { Container } from 'semantic-ui-react';
+import { Container, Grid, Segment } from 'semantic-ui-react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
@@ -11,6 +11,8 @@ import ModalContainer from '../common/modals/ModalContainer';
 import CustomFooter from './CustomFooter';
 import languageDetector from 'i18next-browser-languagedetector';
 import { useTranslation } from 'react-i18next';
+import NavBarMobile from './NavBarMobile';
+import { useMediaQuery } from 'react-responsive';
 
 export default observer(function App() {
   const location = useLocation();
@@ -24,6 +26,10 @@ export default observer(function App() {
     }
     commonStore.loadAppData()
   }, [commonStore, userStore, loadProfile, loadInstitutions, loadCitiesWithInstitutionsCount, loadSpecialtyCores, loadBranches, loadSkills, loadRegionsWithCities, institutionStore])
+
+  const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+  const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+
   if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (
@@ -33,14 +39,15 @@ export default observer(function App() {
       {location.pathname === '/' ? (
         <HomePage />
       ) : (
-        <Fragment>
-          <NavBar />
-          <Container style={{ minHeight: 'calc(100vh - 140px)' }} >
+        <>
+          {isComputerOrTablet && <NavBar />}
+          {isMobile && <NavBarMobile />}
+          <Segment basic style={{ minHeight: '100vh', margin: 0, padding: 0, border: 0 }}>
             <Outlet />
-          </Container>
-        </Fragment>
+          </Segment>
+          <CustomFooter />
+        </>
       )}
-      <CustomFooter />
     </>
   );
 })

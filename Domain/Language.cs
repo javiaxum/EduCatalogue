@@ -9,6 +9,6 @@ namespace Domain
     {
         public string Id { get; set; } // ISO 639-1 language code, assigned manually
         public string ISOLanguageName { get; set; }
-        public ICollection<Specialty> Specialty { get; set; } = new List<Specialty>();
+        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

@@ -1,4 +1,10 @@
 {
+    "Study forms": "Форми навчання",
+    "Languages": "Мова викладання",
+    "Optional": "Вибірково",
+    "search results": "результатів пошуку",
+    "Select branch": "Обрати галузь знань",
+    "Skills": "Навички",
     "Enrolled students count": "Кількість студентів",
     "Graduate employment rate": "Коефіцієнт працевлаштування випускників",
     "Search institutions": "Пошук ЗВО",
@@ -61,5 +67,14 @@
         { "text": "Найновіші", "value": "mr" },
         { "text": "Найвищий рейтинг", "value": "hrf" },
         { "text": "Найнижчий рейтинг", "value": "lrf" }
-      ]
+    ],
+    "languageOptions": [
+        { "text": "Англійська", "value": "en" },
+        { "text": "Українська", "value": "uk" }
+    ],
+    "studyFormOptions": [
+        { "text": "Очна", "value": 1 },
+        { "text": "Змішана", "value": 2 },
+        { "text": "Заочна", "value": 3 }
+    ]
 }

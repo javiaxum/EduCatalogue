@@ -18,7 +18,7 @@ namespace Application.Specialties
         public class Command : IRequest<Result<Unit>>
         {
             public Guid Id { get; set; }
-            public SpecialtyDTO Specialty { get; set; }
+            public SpecialtyComponentsDTO Specialty { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>
@@ -47,6 +47,40 @@ namespace Application.Specialties
                 _mapper.Map(request.Specialty, specialty);
                 specialty.Institution = institution;
                 specialty.SpecialtyCore = specialtyCore;
+
+                var degree = await _context.Degrees.FindAsync(request.Specialty.DegreeId);
+                if (degree != null)
+                    specialty.Degree = degree;
+
+                foreach (var skillId in request.Specialty.SkillIds)
+                {
+                    var newSkill = await _context.Skills.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == skillId);
+                    newSkill.Specialties.Add(specialty);
+                }
+
+                foreach (var languageId in request.Specialty.LanguageIds)
+                {
+                    var newLanguage = await _context.Languages.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == languageId);
+                    newLanguage.Specialties.Add(specialty);
+                }
+
+                foreach (var studyFormId in request.Specialty.StudyFormIds)
+                {
+                    var newStudyForm = await _context.StudyForms.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == studyFormId);
+                    newStudyForm.Specialties.Add(specialty);
+                }
+
+                foreach (var componentDTO in request.Specialty.ComponentDTOs)
+                {
+                    var newComponent = new Component();
+                    var componentCore = await _context.ComponentCores.FirstOrDefaultAsync(x => x.Id == componentDTO.ComponentCoreId);
+                    newComponent.ComponentCore = componentCore;
+                    newComponent.ECTSCredits = componentDTO.ECTSCredits;
+                    newComponent.isOptional = componentDTO.isOptional;
+                    newComponent.Specialty = specialty;
+                    newComponent.Id = componentDTO.Id;
+                    _context.Components.Add(newComponent);
+                }
 
                 _context.Specialties.Add(specialty);
 

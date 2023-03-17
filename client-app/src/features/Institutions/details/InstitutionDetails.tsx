@@ -11,11 +11,12 @@ import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsLi
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 import InstitutionDetailsLocation from './location/InstitutionDetailsLocation';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 
 export default observer(function InstitutionDetails() {
-    const { institutionStore, commonStore, profileStore, mapStore } = useStore();
+    const { institutionStore, commonStore, profileStore, specialtyStore } = useStore();
     const {
-    loadInstitution,
+        loadInstitution,
         detailsMenuActiveItem,
         loading,
         selectedInstitution,
@@ -24,78 +25,71 @@ export default observer(function InstitutionDetails() {
     const { id } = useParams();
 
     useEffect(() => {
-        if (id) loadInstitution(id);
+        if (id) loadInstitution(id).then(() => specialtyStore.loadSpecialties())
         setEditMode(false);
     }, [loadInstitution, id]);
 
     const { t } = useTranslation();
 
-    return (
-        <Grid style={{ minWidth: '1000px' }}>
-            <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
-                <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                    {loading
-                        ? <Placeholder style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '100vw', width: '100%' }}>
-                            <Placeholder.Image />
-                        </Placeholder>
-                        : <Image
-                            src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
-                            style={{ filter: 'brightness(80%)', height: '224px', objectFit: 'cover', minWidth: '1000px', width: '100%', overflow: 'hidden' }} />}
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
+    return (
+        <Grid style={{ margin: 0, minWidth: '70rem' }}>
+            <Grid.Row style={{ padding: 0 }}>
+                {loading
+                    ? <Placeholder
+                        style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} >
+                        <Placeholder.Image />
+                    </Placeholder>
+                    : <Image
+                        src={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'}
+                        style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
+            </Grid.Row>
+            <Grid.Row
+                style={{ padding: 0, top: '-4rem' }}>
+                <Segment
+                    style={{ padding: '1rem 3rem 1rem 3rem', left: '15%', width: '70%', color: 'white', borderRadius: '5px', boxShadow: 'none', border: 'none', }}>
+                    {loading ?
+                        <Placeholder style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 13rem)', height: '2rem' }}>
+                            <Placeholder.Line />
+                        </Placeholder>
+                        : <Header
+                            size='huge'
+                            content={selectedInstitution?.name}
+                            style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 13rem)', margin: 0 }} />}
+                    {isInstitutionManager || profileStore.isOperator &&
+                        <Button
+                            onClick={() => setEditMode(!editMode)}
+                            as={Link}
+                            floated='right'
+                            to={`/manage/${selectedInstitution?.id}`}
+                            style={{ display: 'inline-block', width: '12rem' }}
+                            content={t('Manage Institution')} />}
                 </Segment>
-                <Segment style={{
-                    padding: '1em 3em 1em 3em',
-                    top: '-4em',
-                    left: '15%',
-                    width: '70%',
-                    height: 'auto',
-                    color: 'white',
-                    borderRadius: '5px',
-                    boxShadow: 'none',
-                    border: 'none',
-                    minWidth: '70vh'
-                }}>
-                    <Item.Group>
-                        <Item>
-                            <Item.Content>
-                                {loading
-                                    ? <Placeholder>
-                                        <Placeholder.Header>
-                                            <Placeholder.Line />
-                                        </Placeholder.Header>
-                                    </Placeholder>
-                                    : <Header
-                                        size='huge'
-                                        content={selectedInstitution?.name}
-                                        style={{ color: '#444', width: 'calc(100% - 14rem)' }}
-                                    />}
-                                {isInstitutionManager || profileStore.isOperator &&
-                                    <Button
-                                        onClick={() => setEditMode(!editMode)}
-                                        as={Link}
-                                        to={`/manage/${selectedInstitution?.id}`}
-                                        floated='right'
-                                        style={{ width: '12rem' }}
-                                        content={t('Manage Institution')}
-                                    />}
-                            </Item.Content>
-                        </Item>
-                    </Item.Group>
+                <Segment basic style={{padding: '0 3rem 0 3rem'}}>
+                    <InstitutionDetailsMenu />
+                    {detailsMenuActiveItem === 'About' &&
+                        <InstitutionDetailsInfo />}
+                    {detailsMenuActiveItem === 'Specialties' &&
+                        <InstitutionDetailsSpecialtiesList />}
+                    {detailsMenuActiveItem === 'Reviews' &&
+                        <InstitutionDetailsReviewsList />}
+                    {detailsMenuActiveItem === 'Location' &&
+                        <InstitutionDetailsLocation />}
+                    {detailsMenuActiveItem === 'Gallery' &&
+                        <InstitutionDetailsGallery />}
                 </Segment>
-            </Grid.Column>
-            <Grid.Column style={{ minWidth: '1000px', width: '84%', left: '8%', top: '-80px' }}>
-                <InstitutionDetailsMenu />
-                {detailsMenuActiveItem === 'About' &&
-                    <InstitutionDetailsInfo />}
-                {detailsMenuActiveItem === 'Specialties' &&
-                    <InstitutionDetailsSpecialtiesList />}
-                {detailsMenuActiveItem === 'Reviews' &&
-                    <InstitutionDetailsReviewsList />}
-                {detailsMenuActiveItem === 'Location' &&
-                    <InstitutionDetailsLocation />}
-                {detailsMenuActiveItem === 'Gallery' &&
-                    <InstitutionDetailsGallery />}
-            </Grid.Column>
+            </Grid.Row>
+            {specialtyStore.selectedSpecialtyIds.length > 0 &&
+                <Button
+                    color='facebook'
+                    size='huge'
+                    as={Link}
+                    to='/specialties/comparison'
+                    style={{ position: 'fixed', right: '10rem', bottom: '1rem', zIndex: 1000 }}>
+                    Compare {specialtyStore.selectedSpecialtyIds.length} specialties
+                </Button>}
         </Grid>
     )
 })  

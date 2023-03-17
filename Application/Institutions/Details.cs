@@ -33,8 +33,8 @@ namespace Application.Institutions
                 var institution = await _context.Institutions
                     .ProjectTo<InstitutionDetailedDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
-                    if (institution == null) return null;
-                    
+                if (institution == null) return null;
+
                 return Result<InstitutionDetailedDTO>.Success(institution);
             }
         }

@@ -39,7 +39,11 @@ namespace Application.Specialties
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var specialty = await _context.Specialties.Include(x => x.SpecialtyCore).Include(s => s.Skills).Include(c => c.Components).FirstOrDefaultAsync(x => x.Id == request.Specialty.Id);
+                var specialty = await _context.Specialties
+                    .Include(x => x.SpecialtyCore)
+                    .Include(s => s.Skills)
+                    .Include(c => c.Components)
+                        .FirstOrDefaultAsync(x => x.Id == request.Specialty.Id);
                 if (specialty == null) return null;
 
                 _mapper.Map(request.Specialty, specialty);
@@ -47,6 +51,9 @@ namespace Application.Specialties
                 if (specialtyCore.Id != specialty.SpecialtyCore.Id)
                     specialty.SpecialtyCore = specialtyCore;
 
+                var degree = await _context.Degrees.FindAsync(request.Specialty.DegreeId);
+                if (degree != null)
+                    specialty.Degree = degree;
 
                 foreach (var skill in specialty.Skills)
                 {
@@ -57,6 +64,28 @@ namespace Application.Specialties
                 {
                     var newSkill = await _context.Skills.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == skillId);
                     if (!newSkill.Specialties.Contains(specialty)) newSkill.Specialties.Add(specialty);
+                }
+
+                foreach (var language in specialty.Languages)
+                {
+                    if (!request.Specialty.LanguageIds.Contains(language.Id)) language.Specialties.Remove(specialty);
+                }
+
+                foreach (var languageId in request.Specialty.LanguageIds)
+                {
+                    var newLanguage = await _context.Languages.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == languageId);
+                    if (!newLanguage.Specialties.Contains(specialty)) newLanguage.Specialties.Add(specialty);
+                }
+
+                foreach (var studyForm in specialty.StudyForms)
+                {
+                    if (!request.Specialty.StudyFormIds.Contains(studyForm.Id)) studyForm.Specialties.Remove(specialty);
+                }
+
+                foreach (var studyFormId in request.Specialty.StudyFormIds)
+                {
+                    var newStudyForm = await _context.StudyForms.Include(s => s.Specialties).FirstOrDefaultAsync(x => x.Id == studyFormId);
+                    if (!newStudyForm.Specialties.Contains(specialty)) newStudyForm.Specialties.Add(specialty);
                 }
 
                 foreach (var componentDTO in request.Specialty.ComponentDTOs)

@@ -4,7 +4,7 @@ import { Institution, InstitutionFormValues } from "../models/institution";
 import { Profile } from "../models/profile";
 import { store } from "./store";
 import * as Yup from 'yup';
-import { Pagination, PagingParams } from "../models/pagination";
+import { Pagination, InstitutionsPagingParams } from "../models/pagination";
 import { City } from "../models/city";
 import { Review, ReviewFormValues } from "../models/review";
 import { Region } from "../models/region";
@@ -22,18 +22,31 @@ export default class InstitutionStore {
     reviewForm: boolean = false;
     loadingInitial: boolean = true;
     detailsMenuActiveItem: string = 'About';
+    // Search Params
     pagination: Pagination | null = null;
-    pagingParams: PagingParams = new PagingParams();
+    pagingParams: InstitutionsPagingParams = new InstitutionsPagingParams(); 
+    selectedSpecialties: string[] = [];
+    selectedBranches: string[] = [];
     selectedCities: number[] = [];
     selectedInstitutionsSort: string = 'az';
+    minPrice: string = '';
+    maxPrice: string = '';
+    selectedDegree: string = '';
     searchNameParam: string = '';
+    //
     selectedInstitutionIds: string[] = [];
+    
 
     constructor() {
         makeAutoObservable(this);
 
         reaction(
             () => [
+                this.selectedSpecialties,
+                this.selectedBranches,
+                this.maxPrice,
+                this.minPrice,
+                this.selectedDegree,
                 this.searchNameParam,
                 this.selectedInstitutionsSort,
                 this.selectedCities],
@@ -53,8 +66,28 @@ export default class InstitutionStore {
         this.selectedCities = value;
     }
 
+    setDegreePredicate = (degree: string) => {
+        this.selectedDegree = degree;
+    }
+
+    setMaxPrice = (value: string) => {
+        this.maxPrice = value;
+    }
+
+    setMinPrice = (value: string) => {
+        this.minPrice = value;
+    }
+
+    setSelectedSpeialties = (value: string[]) => {
+        this.selectedSpecialties = value;
+    }
+
     setSearchNameParam = (value: string) => {
         this.searchNameParam = value;
+    }
+
+    setSelectedBranches = (value: string[]) => {
+        this.selectedBranches = value;
     }
 
     get axiosParams() {
@@ -62,15 +95,15 @@ export default class InstitutionStore {
         params.append('name', this.searchNameParam);
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-        let branchesPredicate = store.specialtyStore.selectedBranches.join('-');
-        let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
+        let branchesPredicate = this.selectedBranches.join('-');
+        let specialtiesPredicate = this.selectedSpecialties.join('-');
         let citiesPredicate = this.selectedCities.join('-');
         params.append('specialtiesPredicate', specialtiesPredicate);
         params.append('branchesPredicate', branchesPredicate);
         params.append('citiesPredicate', citiesPredicate);
-        params.append('minPrice', store.specialtyStore.minPrice.toString());
-        params.append('maxPrice', store.specialtyStore.maxPrice.toString());
-        params.append('degree', store.specialtyStore.selectedDegree);
+        params.append('minPrice', this.minPrice.toString());
+        params.append('maxPrice', this.maxPrice.toString());
+        params.append('degree', this.selectedDegree);
         params.append('sort', this.selectedInstitutionsSort);
         return params;
     }
@@ -228,10 +261,9 @@ export default class InstitutionStore {
         return this.regionRegistry.get(regionId)?.cities.find((x) => x.id == cityId);
     }
 
-    setPagingParams = (pagingParams: PagingParams) => {
+    setPagingParams = (pagingParams: InstitutionsPagingParams) => {
         this.pagingParams = pagingParams;
     }
-
 
     private setInstitution = (institution: Institution) => {
         institution.reviews.forEach((x) => {
@@ -248,7 +280,7 @@ export default class InstitutionStore {
     }
 
     debouncedLoadInstitutions = debounce(() => {
-        this.pagingParams = new PagingParams();
+        this.pagingParams = new InstitutionsPagingParams();
         this.institutionsRegistry.clear();
         this.loadInstitutions()
     }, 800);

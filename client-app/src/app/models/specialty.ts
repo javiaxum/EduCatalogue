@@ -2,6 +2,7 @@ import { EducationalComponent } from "./educationalComponent";
 
 export interface Specialty {
     id: string;
+    institutionId: string;
     localSpecialtyCode: string;
     ectsCredits: number;
     description: string;
@@ -26,6 +27,7 @@ export class Specialty implements Specialty {
 
 export class SpecialtyFormValues {
     id?: string = undefined;
+    institutionId?: string = undefined;
     localSpecialtyCode: string = '';
     description: string = '';
     ectsCredits: number = 0;
@@ -44,6 +46,7 @@ export class SpecialtyFormValues {
     constructor(specialty?: SpecialtyFormValues | Specialty) {
         if (specialty) {
             this.id = specialty.id;
+            this.institutionId = specialty.institutionId;
             this.localSpecialtyCode = specialty.localSpecialtyCode;
             this.description = specialty.description;
             this.ectsCredits = specialty.ectsCredits;

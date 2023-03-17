@@ -44,6 +44,7 @@ export default class UserStore {
         store.commonStore.setToken(null);
         this.user = null;
         store.modalStore.closeModal();
+        store.commonStore.setSidebarOpened(false);
     }
 
     getUser = async () => {

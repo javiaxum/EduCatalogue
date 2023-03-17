@@ -52,6 +52,7 @@ namespace Application.Institutions
                     && (!IsName || x.Name.ToLower().Contains(request.Params.Name.ToLower()))
                     && x.Specialties.Any(s =>
                         (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
+                        && (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
                         && (!IsMinPrice || s.PriceUAH >= MinPrice)

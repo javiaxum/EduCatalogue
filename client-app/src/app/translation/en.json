@@ -61,5 +61,14 @@
         { "text": "Most recent", "value": "mr" },
         { "text": "High rating first", "value": "hrf" },
         { "text": "Low rating first", "value": "lrf" }
-      ]
+    ],
+    "languageOptions": [
+        { "text": "English", "value": "en" },
+        { "text": "Ukrainian", "value": "uk" }
+    ],
+    "studyFormOptions": [
+        { "text": "Full-time", "value": 1 },
+        { "text": "Part-time", "value": 2 },
+        { "text": "Extramural", "value": 3 }
+    ]
 }

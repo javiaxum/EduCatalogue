@@ -9,6 +9,6 @@ namespace Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<Specialty> Specialty { get; set; } = new List<Specialty>();
+        public ICollection<Specialty> Specialties { get; set; } = new List<Specialty>();
     }
 }

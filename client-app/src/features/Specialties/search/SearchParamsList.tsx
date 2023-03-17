@@ -2,33 +2,37 @@ import { observer } from "mobx-react-lite";
 import react from "react";
 import { useTranslation } from "react-i18next";
 import { Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
-import CustomSelectInput from "../../../app/common/form/CustomSelectInput";
-import { Branch } from "../../../app/models/branch";
-import { SpecialtyCore } from "../../../app/models/specialtyCore";
 import { useStore } from "../../../app/stores/store";
 
-
-
 export default observer(function SearchParamsList() {
-    const { specialtyStore, institutionStore } = useStore();
+    const { specialtyStore, commonStore } = useStore();
     const {
         branchesById,
+        skillsById,
         selectedSpecialties,
         selectedBranches,
+        selectedSkillIds,
+        selectedLanguages,
+        selectedStudyForms,
         selectedDegree,
         setSelectedBranches,
         setSelectedSpeialties,
+        setSelectedSkillIds,
+        setSelectedStudyForms,
+        setSelectedLanguages,
         maxPrice,
         minPrice,
         setMaxPrice,
         setMinPrice,
         setDegreePredicate } = specialtyStore;
 
-    let filteredSpecialties = specialtyStore.specialtyCoresById
-        .filter((specialty) => selectedBranches.length === 0 || selectedBranches.find((branchId) => branchId == specialty.id.slice(0, 2)))
+    const { t, i18n } = useTranslation();
 
+    const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
+    const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
+    const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
 
-    let specialtyOptions: DropdownItemProps[] = filteredSpecialties.map(specialty => ({
+    let specialtyOptions: DropdownItemProps[] = specialtyStore.specialtyCoresById.map(specialty => ({
         key: specialty.id,
         text: `${specialty.id} ${specialty.name}`,
         value: specialty.id,
@@ -38,8 +42,12 @@ export default observer(function SearchParamsList() {
         text: `${branch.id} ${branch.name}`,
         value: branch.id,
     }));
+    const skillOptions: DropdownItemProps[] = skillsById.map(skill => ({
+        key: skill.id,
+        text: skill.name,
+        value: skill.id,
+    }));
 
-    const { t } = useTranslation();
 
     return (
         <Grid style={{ padding: '0.4rem' }}>
@@ -71,7 +79,7 @@ export default observer(function SearchParamsList() {
             </Grid.Column>
             <Header as='h4' content={t('Knowledge branch')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder='State'
+                placeholder={t('Select branch') as string}
                 fluid
                 multiple
                 search
@@ -84,10 +92,11 @@ export default observer(function SearchParamsList() {
                     if (selectedSpecialties?.length != 0 && selectedBranches.length != 0) {
                         setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
                     }
-                }} />
+                }}
+            />
             <Header as='h4' content={t('Specialty')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder='State'
+                placeholder={t('Select specialty') as string}
                 fluid
                 multiple
                 search
@@ -95,18 +104,50 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedSpecialties}
                 options={specialtyOptions}
-                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSpeialties(data.value)} />
+                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSpeialties(data.value)}
+            />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column style={{ padding: '0', height: '200px', overflowX: 'hidden' }} width={16}>
-                <Select
-                    fluid
-                    clearable
-                    placeholder={t('Select degree').toString()}
-                    name='degree'
-                    value={selectedDegree}
-                    options={t("degreeOptions", { returnObjects: true })}
-                    onChange={(e, d) => setDegreePredicate(d.value as string)} />
-            </Grid.Column>
+            <Select
+                fluid
+                clearable
+                placeholder={t('Select degree') as string}
+                name='degree'
+                value={selectedDegree}
+                options={t("degreeOptions", { returnObjects: true })}
+                onChange={(e, d) => setDegreePredicate(d.value as string)} />
+            <Header as='h4' content={t('Skills')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Dropdown
+                placeholder={t('Select skills') as string}
+                fluid
+                multiple
+                search
+                selection
+                clearable
+                value={selectedSkillIds}
+                options={skillOptions}
+                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSkillIds(data.value)} />
+            <Header as='h4' content={t('Languages')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Dropdown
+                placeholder={t('Select languages') as string}
+                fluid
+                multiple
+                search
+                selection
+                clearable
+                value={selectedLanguages}
+                options={languages}
+                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedLanguages(data.value)} />
+            <Header as='h4' content={t('Skills')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Dropdown
+                placeholder={t('Select study form') as string}
+                fluid
+                multiple
+                search
+                selection
+                clearable
+                value={selectedStudyForms}
+                options={studyForms}
+                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedStudyForms(data.value)} />
         </Grid>
     )
 })

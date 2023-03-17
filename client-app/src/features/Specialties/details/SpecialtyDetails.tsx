@@ -2,7 +2,8 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Container, Divider, Grid, Header, Icon, Label, Segment } from 'semantic-ui-react';
+import { Button, Container, Divider, Grid, Header, Icon, Label, Segment, Table } from 'semantic-ui-react';
+import { number } from 'yup';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetailsComponentList';
@@ -21,8 +22,14 @@ export default observer(function SpecialtyDetails() {
     }, [loadSpecialty, selectedSpecialty, id]);
 
     const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
+    const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
+    const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
+
     if (loadingInitial || loading) return <LoadingComponent />
     if (!selectedSpecialty) return <></>;
+
+    const specialtyLanguages = selectedSpecialty.languageIds.map((i) => languages[i == "en" ? 0 : 1 as number]?.text).join(", ");
+    const specialtyStudyForms = selectedSpecialty.studyFormIds.map((i) => studyForms[i - 1]?.text).join(", ");
 
     return (
         <Segment basic style={{ width: '80%', minWidth: '1000px', marginLeft: '10%' }}>
@@ -48,7 +55,7 @@ export default observer(function SpecialtyDetails() {
                         <Button
                             onClick={() => commonStore.setEditMode(true)}
                             as={Link}
-                            to={`/manage/${institutionStore.selectedInstitution?.id}/specialty/${selectedSpecialty.id}`}
+                            to={`/manage/${selectedSpecialty.institutionId}/specialty/${selectedSpecialty.id}`}
                             style={{ width: '16rem', marginLeft: '0', height: '2.5rem' }}
                             content={t('Edit specialty')}
                         />
@@ -56,62 +63,156 @@ export default observer(function SpecialtyDetails() {
                 </Grid.Row>
                 <Grid.Row>
                     <Grid style={{ width: '100%' }}>
-                        <Grid.Column width={6}>
-                            <Segment.Group style={{ boxShadow: 'none', border: '0' }}>
-                                <Segment>
-                                    <Label
-                                        content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`}
-                                    />
-                                </Segment>
-                                <Segment>
-                                    <Icon
-                                        name='book'
-                                        size='big'
-                                        color='blue' />
-                                    {t('Knowledge branch')}: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
-                                </Segment>
-                                <Segment basic>
-                                    <Icon
-                                        name='graduation'
-                                        size='big'
-                                        color='blue' />
-                                    {t('Degree')}: {degrees[selectedSpecialty.degreeId - 1].text}
-                                </Segment>
-                                <Segment basic>
-                                    <Icon
-                                        name='clock'
-                                        size='big'
-                                        color='blue' />
-                                    {t('ECTS credits')}: {selectedSpecialty.ectsCredits} {t('credits')}
-                                </Segment>
-                                <Segment basic>
-                                    <Icon
-                                        name='dollar'
-                                        size='big'
-                                        color='blue' />
-                                    {t('Full price')}: {selectedSpecialty.priceUAH} UAH
-                                    {selectedSpecialty.nonPaidEducationAvailable && <Label content={t('Non paid education is available')} />}
-                                </Segment>
-                                <Segment basic>
-                                    <Icon
-                                        name='flag'
-                                        size='big'
-                                        color='blue' />
-                                    {t('Education period')}: {selectedSpecialty.startYear} - {selectedSpecialty.endYear}
-                                </Segment>
-                            </Segment.Group>
+                        <Grid.Column width={7}>
+                            <Table basic='very' compact>
+                                <Table.Body>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Label
+                                                content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty.localSpecialtyCode)}`} />
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='book'
+                                                size='big'
+                                                color='blue' />
+                                            {t('Knowledge branch')}: {selectedSpecialty.localSpecialtyCode.slice(0, 2)} {getBranch(selectedSpecialty.localSpecialtyCode.slice(0, 2))?.name}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                </Table.Body>
+                            </Table>
+                            <Table basic='very' compact>
+                                <Table.Body>
+                                    <Table.Row>
+                                        <Table.Cell style={{ minWidth: '3rem' }}>
+                                            <Icon
+                                                name='graduation'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell style={{ minWidth: '12rem', maxWidth: '15rem' }}>
+                                            {t('Degree')}:
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {degrees[selectedSpecialty.degreeId - 1].text}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row >
+                                        <Table.Cell>
+                                            <Icon
+                                                name='clock'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('ECTS credits') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.ectsCredits} {t('credits')}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='dollar'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Full price')}:
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.priceUAH} UAH <br></br>
+                                            {selectedSpecialty.nonPaidEducationAvailable && <Label content={t('Non paid education is available')} />}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='flag'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Education period')}:
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.startYear} - {selectedSpecialty.endYear}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='user'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Enrolled students count') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.enrolledStudentsCount}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                padding='0.4em 0.2em 0.4em 0.2em'
+                                                name='percent'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Graduate employment rate') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.graduateEmploymentRate}%
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                padding='0.4em 0.2em 0.4em 0.2em'
+                                                name='language'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Languages') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {specialtyLanguages}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                padding='0.4em 0.2em 0.4em 0.2em'
+                                                name='address book'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Study forms') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {specialtyStudyForms}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                </Table.Body>
+                            </Table>
                         </Grid.Column>
                         <Grid.Column width={6} stretched>
-                            <Segment basic style={{ boxShadow: 'none', padding: '30px' }}>
-                                <Header as='h4' content={t('Description')} dividing />
-                                <Segment basic style={{ padding: '0 0 0 10px' }}>
-                                    {selectedSpecialty.description}
-                                </Segment>
+                            <Segment basic style={{ padding: '0' }}>
+                                <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '10px' }} />
+                                <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>{selectedSpecialty.description}</pre>
                             </Segment>
                         </Grid.Column>
-                        <Grid.Column width={4} stretched>
-                            <Segment basic style={{ boxShadow: 'none', padding: '30px' }}>
-                                <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
+                        <Grid.Column width={3} stretched>
+                            <Segment basic style={{ padding: '0' }}>
+                                <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '10px' }} />
                                 {selectedSpecialty.skillIds.map((skill) => <Label key={skill} content={getSkill(skill)?.name} style={{ margin: '0.2rem' }} />)}
                             </Segment>
                         </Grid.Column>

@@ -9,6 +9,7 @@ export default class CommonStore {
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
     editMode: boolean = false;
+    sidebarOpened: boolean = false;
     componentForm: boolean = false;
 
     loadAppData = async () => {
@@ -28,6 +29,10 @@ export default class CommonStore {
 
     setEditMode = (state: boolean) => {
         this.editMode = state;
+    }
+
+    setSidebarOpened = (state: boolean) => {
+        this.sidebarOpened = state;
     }
 
     constructor() {

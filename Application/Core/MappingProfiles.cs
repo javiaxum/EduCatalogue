@@ -53,17 +53,19 @@ namespace Application.Core
             CreateMap<Specialty, Specialty>();
 
             CreateMap<Specialty, SpecialtyDTO>()
+            .ForMember(d => d.SkillIds, o => o.MapFrom(s => s.Skills.Select(i => i.Id)))
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<SpecialtyComponentsDTO, Specialty>();
-            
+
             CreateMap<Specialty, SpecialtyComponentsDTO>()
+            .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id))
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.SkillIds, o => o.MapFrom(s => s.Skills.Select(x => x.Id)))
             .ForMember(d => d.ComponentDTOs, o => o.MapFrom(s => s.Components))
             .ForMember(d => d.LanguageIds, o => o.MapFrom(s => s.Languages.Select(x => x.Id)))
-            .ForMember(d => d.StudyFormsIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
+            .ForMember(d => d.StudyFormIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
             CreateMap<ComponentCore, ComponentCoreDTO>();

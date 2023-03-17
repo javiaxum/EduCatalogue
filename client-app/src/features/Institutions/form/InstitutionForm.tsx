@@ -101,24 +101,21 @@ export default observer(function InstitutionForm() {
             onSubmit={values => handleInstitutionFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Grid style={{ minWidth: '1000px' }}>
-                        <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
+                    <Grid style={{}}>
+                        <Grid.Row style={{ padding: '0 0 1rem 0' }}>
                             <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
                                 {files && files.length == 0 && <BackgroundUploadWidgetDropzone
                                     setFiles={setFiles}
                                     imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'} />}
                                 {files && files.length > 0 && <>
-                                    <div className='bkgr-img-preview' style={{ height: '224px', overflow: 'hidden' }} />
+                                    <div className='bkgr-img-preview' style={{ height: '10rem', overflow: 'hidden' }} />
                                 </>}
                             </Segment>
-                        </Grid.Column>
-                        <Grid.Column width={16} style={{ padding: '1rem 0 1rem 0' }}>
                             <Segment style={{
                                 padding: '1em 3em 1em 3em',
-                                top: '-5rem',
+                                top: '-4rem',
                                 left: '15%',
                                 width: '70%',
-                                height: 'auto',
                                 color: 'white',
                                 borderRadius: '5px',
                                 boxShadow: 'none',
@@ -173,8 +170,8 @@ export default observer(function InstitutionForm() {
                                     </Item>
                                 </Item.Group>
                             </Segment>
-                        </Grid.Column>
-                        <Grid.Column style={{ minWidth: '1000px', width: '70%', left: '15%', top: '-100px' }}>
+                        </Grid.Row>
+                        <Grid.Column style={{ minWidth: '1000px', width: '90%', left: '8%', top: '-80px' }}>
                             <InstitutionDetailsMenu />
                             {detailsMenuActiveItem === 'About' &&
                                 <InstitutionDetailsInfoForm institution={institution} />}

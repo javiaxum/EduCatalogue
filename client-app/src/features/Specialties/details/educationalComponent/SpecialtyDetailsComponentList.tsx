@@ -9,18 +9,18 @@ import SpecialtyDetailsComponentListAddNewItem from './SpecialtyDetailsComponent
 export default observer(function SpecialtyDetailsComponentList() {
     const { specialtyStore, commonStore } = useStore();
     const { editMode } = commonStore;
-    const [localComponents, setLocalComponents] = useState<EducationalComponent[]| undefined>(specialtyStore.selectedSpecialty?.componentDTOs);
+    const [localComponents, setLocalComponents] = useState<EducationalComponent[] | undefined>(specialtyStore.selectedSpecialty?.componentDTOs);
 
-    if (!specialtyStore.selectedSpecialty || !specialtyStore.selectedSpecialty.componentDTOs) return <></>;
+    if (!specialtyStore.selectedSpecialty) return <></>;
 
     return (
         <Grid style={{ display: 'block', padding: '0' }}>
-            {specialtyStore.selectedSpecialty.componentDTOs.length === 0 && !editMode &&
+            {specialtyStore.selectedSpecialty.componentDTOs && specialtyStore.selectedSpecialty.componentDTOs.length === 0 && !editMode &&
                 <Segment style={{ color: '#444' }}>There are no educational components available...</Segment>}
-            {specialtyStore.selectedSpecialty.componentDTOs.length !== 0 && localComponents?.map((component) => (
+            {specialtyStore.selectedSpecialty.componentDTOs && specialtyStore.selectedSpecialty.componentDTOs.length !== 0 && localComponents?.map((component) => (
                 <ComponentListItem component={component} key={component.id} setEduComponents={setLocalComponents} />
             ))}
-            {(editMode || specialtyStore.selectedSpecialty.componentDTOs.length === 0) &&
+            {(editMode || (!specialtyStore.selectedSpecialty.componentDTOs || specialtyStore.selectedSpecialty.componentDTOs.length === 0)) &&
                 <SpecialtyDetailsComponentListAddNewItem setEduComponents={setLocalComponents} />}
         </Grid>
     )

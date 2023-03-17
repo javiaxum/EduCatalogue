@@ -1,7 +1,7 @@
 import { observer } from "mobx-react-lite";
 import react from "react";
 import { useTranslation } from "react-i18next";
-import { Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
+import { Container, Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
 
@@ -9,7 +9,6 @@ import { useStore } from "../../../app/stores/store";
 export default observer(function SearchParamsList() {
     const { specialtyStore, institutionStore, commonStore } = useStore();
     const {
-        branchesById,
         selectedSpecialties,
         selectedBranches,
         selectedDegree,
@@ -19,16 +18,12 @@ export default observer(function SearchParamsList() {
         minPrice,
         setMaxPrice,
         setMinPrice,
-        setDegreePredicate } = specialtyStore;
-
-    const {
+        setDegreePredicate,
         setSelectedCities,
         populatedCitiesByName,
-        populatedCityRegistry,
         selectedCities } = institutionStore;
 
-    const filteredSpecialties = specialtyStore.specialtyCoresById
-        .filter((specialty) => selectedBranches.length === 0 || selectedBranches.find((branchId) => branchId == specialty.id.slice(0, 2)))
+    const { branchesById } = specialtyStore;
 
     const cityOptions: DropdownItemProps[] = populatedCitiesByName.map(city => ({
         key: city.id,
@@ -36,7 +31,7 @@ export default observer(function SearchParamsList() {
         value: city.id,
     }));
 
-    const specialtyOptions: DropdownItemProps[] = filteredSpecialties.map(specialty => ({
+    const specialtyOptions: DropdownItemProps[] = specialtyStore.specialtyCoresById.map(specialty => ({
         key: specialty.id,
         text: `${specialty.id} ${specialty.name}`,
         value: specialty.id,
@@ -54,26 +49,30 @@ export default observer(function SearchParamsList() {
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column width={16} style={{ padding: '0' }}>
-                <Label
-                    content={t('from')} style={{ padding: '12px' }} />
-                <Input
-                    placeholder="0"
-                    name="min"
-                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                    value={minPrice}
-                    onChange={(e, d) => {
-                        setMinPrice(d.value);
-                    }} />
-                <Label
-                    content={t('to')} style={{ padding: '12px' }} />
-                <Input
-                    placeholder="0"
-                    name="max"
-                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                    value={maxPrice}
-                    onChange={(e, d) => {
-                        setMaxPrice(d.value);
-                    }} />
+                <Container style={{width: 'auto', display: 'inline-block'}}>
+                    <Label
+                        content={t('from')} style={{ padding: '12px' }} />
+                    <Input
+                        placeholder="0"
+                        name="min"
+                        style={{ minWidth: '5rem', maxWidth: '6rem' }}
+                        value={minPrice}
+                        onChange={(e, d) => {
+                            setMinPrice(d.value);
+                        }} />
+                </Container>
+                <Container style={{width: 'auto', display: 'inline-block'}}>
+                    <Label
+                        content={t('to')} style={{ padding: '12px' }} />
+                    <Input
+                        placeholder="0"
+                        name="max"
+                        style={{ minWidth: '5rem', maxWidth: '6rem' }}
+                        value={maxPrice}
+                        onChange={(e, d) => {
+                            setMaxPrice(d.value);
+                        }} />
+                </Container>
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>
                 <Divider />
@@ -120,16 +119,14 @@ export default observer(function SearchParamsList() {
                 onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedCities(data.value)}
             />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column style={{ padding: '0', height: '200px', overflowX: 'hidden' }} width={16}>
-                <Select
-                    fluid
-                    clearable
-                    placeholder={t('Select degree') as string}
-                    name='degree'
-                    value={selectedDegree}
-                    options={t("degreeOptions", { returnObjects: true })}
-                    onChange={(e, d) => setDegreePredicate(d.value as string)} />
-            </Grid.Column>
+            <Select
+                fluid
+                clearable
+                placeholder={t('Select degree') as string}
+                name='degree'
+                value={selectedDegree}
+                options={t("degreeOptions", { returnObjects: true })}
+                onChange={(e, d) => setDegreePredicate(d.value as string)} />
         </Grid>
     )
 })

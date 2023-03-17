@@ -34,7 +34,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(400);
+    await sleep(500);
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -115,6 +115,7 @@ const Reviews = {
 }
 
 const Specialties = {
+    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/list`, { params }).then(responseBody),
     details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
     listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
     listBranches: () => requests.get<Branch[]>("/specialties/branches"),
