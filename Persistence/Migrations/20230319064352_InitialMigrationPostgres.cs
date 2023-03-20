@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class EntityTweaks : Migration
+    public partial class InitialMigrationPostgres : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,6 +76,19 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Degrees", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "InstitutionTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_InstitutionTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -224,8 +237,9 @@ namespace Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    StudentCount = table.Column<int>(type: "integer", nullable: false),
                     Accreditation = table.Column<int>(type: "integer", nullable: false),
+                    UndergraduateCount = table.Column<int>(type: "integer", nullable: false),
+                    TypeId = table.Column<int>(type: "integer", nullable: true),
                     CityId = table.Column<int>(type: "integer", nullable: true),
                     CoordinatesId = table.Column<int>(type: "integer", nullable: true),
                     StreetAddress = table.Column<string>(type: "text", nullable: true),
@@ -247,6 +261,11 @@ namespace Persistence.Migrations
                         name: "FK_Institutions_Coordinates_CoordinatesId",
                         column: x => x.CoordinatesId,
                         principalTable: "Coordinates",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Institutions_InstitutionTypes_TypeId",
+                        column: x => x.TypeId,
+                        principalTable: "InstitutionTypes",
                         principalColumn: "Id");
                 });
 
@@ -275,12 +294,14 @@ namespace Persistence.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SpecialtyCoreId = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
-                    EctsCredits = table.Column<int>(type: "integer", nullable: false),
                     DegreeId = table.Column<int>(type: "integer", nullable: true),
-                    EnrolledStudentsCount = table.Column<int>(type: "integer", nullable: false),
-                    GraduateEmploymentRate = table.Column<int>(type: "integer", nullable: false),
                     PriceUAH = table.Column<decimal>(type: "numeric", nullable: false),
                     NonPaidEducationAvailable = table.Column<bool>(type: "boolean", nullable: false),
+                    AcceptanceRate = table.Column<int>(type: "integer", nullable: false),
+                    GraduationRate = table.Column<int>(type: "integer", nullable: false),
+                    GraduateEmploymentRate = table.Column<int>(type: "integer", nullable: false),
+                    UndergraduateCount = table.Column<int>(type: "integer", nullable: false),
+                    EctsCredits = table.Column<int>(type: "integer", nullable: false),
                     StartYear = table.Column<int>(type: "integer", nullable: false),
                     EndYear = table.Column<int>(type: "integer", nullable: false),
                     InstitutionId = table.Column<Guid>(type: "uuid", nullable: true)
@@ -367,11 +388,11 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     LanguagesId = table.Column<string>(type: "text", nullable: false),
-                    SpecialtyId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SpecialtiesId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LanguageSpecialty", x => new { x.LanguagesId, x.SpecialtyId });
+                    table.PrimaryKey("PK_LanguageSpecialty", x => new { x.LanguagesId, x.SpecialtiesId });
                     table.ForeignKey(
                         name: "FK_LanguageSpecialty_Languages_LanguagesId",
                         column: x => x.LanguagesId,
@@ -379,8 +400,8 @@ namespace Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LanguageSpecialty_Specialties_SpecialtyId",
-                        column: x => x.SpecialtyId,
+                        name: "FK_LanguageSpecialty_Specialties_SpecialtiesId",
+                        column: x => x.SpecialtiesId,
                         principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -391,11 +412,11 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     SkillsId = table.Column<int>(type: "integer", nullable: false),
-                    SpecialtyId = table.Column<Guid>(type: "uuid", nullable: false)
+                    SpecialtiesId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SkillSpecialty", x => new { x.SkillsId, x.SpecialtyId });
+                    table.PrimaryKey("PK_SkillSpecialty", x => new { x.SkillsId, x.SpecialtiesId });
                     table.ForeignKey(
                         name: "FK_SkillSpecialty_Skills_SkillsId",
                         column: x => x.SkillsId,
@@ -403,8 +424,8 @@ namespace Persistence.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_SkillSpecialty_Specialties_SpecialtyId",
-                        column: x => x.SpecialtyId,
+                        name: "FK_SkillSpecialty_Specialties_SpecialtiesId",
+                        column: x => x.SpecialtiesId,
                         principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -414,15 +435,15 @@ namespace Persistence.Migrations
                 name: "SpecialtyStudyForm",
                 columns: table => new
                 {
-                    SpecialtyId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SpecialtiesId = table.Column<Guid>(type: "uuid", nullable: false),
                     StudyFormsId = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SpecialtyStudyForm", x => new { x.SpecialtyId, x.StudyFormsId });
+                    table.PrimaryKey("PK_SpecialtyStudyForm", x => new { x.SpecialtiesId, x.StudyFormsId });
                     table.ForeignKey(
-                        name: "FK_SpecialtyStudyForm_Specialties_SpecialtyId",
-                        column: x => x.SpecialtyId,
+                        name: "FK_SpecialtyStudyForm_Specialties_SpecialtiesId",
+                        column: x => x.SpecialtiesId,
                         principalTable: "Specialties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -648,14 +669,19 @@ namespace Persistence.Migrations
                 column: "CoordinatesId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Institutions_TypeId",
+                table: "Institutions",
+                column: "TypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ISCEDCoreSpecialtyCore_SpecialtyCoresId",
                 table: "ISCEDCoreSpecialtyCore",
                 column: "SpecialtyCoresId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LanguageSpecialty_SpecialtyId",
+                name: "IX_LanguageSpecialty_SpecialtiesId",
                 table: "LanguageSpecialty",
-                column: "SpecialtyId");
+                column: "SpecialtiesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reviews_AuthorId",
@@ -668,9 +694,9 @@ namespace Persistence.Migrations
                 column: "InstitutionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SkillSpecialty_SpecialtyId",
+                name: "IX_SkillSpecialty_SpecialtiesId",
                 table: "SkillSpecialty",
-                column: "SpecialtyId");
+                column: "SpecialtiesId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Specialties_DegreeId",
@@ -776,6 +802,9 @@ namespace Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "Coordinates");
+
+            migrationBuilder.DropTable(
+                name: "InstitutionTypes");
 
             migrationBuilder.DropTable(
                 name: "Regions");

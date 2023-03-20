@@ -6,7 +6,7 @@ import { City } from "../models/city";
 import { Institution, InstitutionFormValues } from "../models/institution";
 import { PaginatedResult } from "../models/pagination";
 import { Region } from "../models/region";
-import { ReviewFormValues } from "../models/review";
+import { Review, ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
 import { Profile } from "../models/profile";
@@ -107,11 +107,19 @@ const Institutions = {
         return axios.post<Image>(`/images/institutions/${id}?isBackgroundImage=true`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         })
+    },
+    setImage: (file: Blob, id: string) => {
+        let formData = new FormData();
+        formData.append('File', file)
+        return axios.post<Image>(`/images/institutions/${id}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        })
     }
 }
 
 const Reviews = {
     create: (institutionId: string, review: ReviewFormValues) => requests.post<void>(`/institutions/${institutionId}/reviews`, review),
+    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Review[]>>(`/institutions/${institutionId}/reviews`, { params }).then(responseBody),
 }
 
 const Specialties = {

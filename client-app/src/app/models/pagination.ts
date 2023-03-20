@@ -24,6 +24,15 @@ export class InstitutionsPagingParams {
         this.pageSize = pageSize;
     }
 }
+export class ReviewsPagingParams {
+    pageNumber;
+    pageSize;
+
+    constructor(pageNumber = 1, pageSize = 7) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+}
 
 export class SpecialtiesPagingParams {
     pageNumber;

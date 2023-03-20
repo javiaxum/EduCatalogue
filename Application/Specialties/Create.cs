@@ -18,7 +18,7 @@ namespace Application.Specialties
         public class Command : IRequest<Result<Unit>>
         {
             public Guid Id { get; set; }
-            public SpecialtyComponentsDTO Specialty { get; set; }
+            public SpecialtyDetailedDTO Specialty { get; set; }
         }
 
         public class CommandValidator : AbstractValidator<Command>

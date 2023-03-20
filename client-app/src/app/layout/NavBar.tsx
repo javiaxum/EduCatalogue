@@ -10,22 +10,20 @@ export default observer(function NavBar() {
     const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
     const { t, i18n } = useTranslation();
     return (
-        <Menu inverted style={{ borderRadius: '0px'}}>
-            <Menu.Item as={NavLink} to="/">
+        <Menu secondary inverted style={{ borderRadius: '0px', minWidth: '85rem' }}>
+            <Menu.Item as={Link} to="/institutions" active={false}>
                 <img src='\assets\logo.png' alt='logo' style={{ width: "4em", height: "4em", alignSelf: "center" }} />
                 <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
             </Menu.Item>
-            <Menu.Item as={NavLink} to="/institutions" name={t('Institutions').toString()} />
-            {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
             <Menu.Item>
                 <Search
                     placeholder={t('Search institutions')! + '...'}
                     showNoResults={false}
                     onSearchChange={(e, d) => {
                         institutionStore.setSearchNameParam(d.value!);
-                    }}
-                />
+                    }} />
             </Menu.Item>
+            {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
             <Menu.Item position='right' style={{ marginRight: '0', position: 'relative' }}>
                 <Button.Group>
                     <Button

@@ -12,6 +12,24 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            // Seed institution types
+            if (!context.InstitutionTypes.Any())
+            {
+                var types = new List<InstitutionType>
+                {
+                    new InstitutionType
+                    {
+                        Name="Public",
+                    },
+                    new InstitutionType
+                    {
+                        Name="Private",
+                    }
+                };
+                await context.InstitutionTypes.AddRangeAsync(types);
+                await context.SaveChangesAsync();
+            }
+
             // Seed states with cities
             if (!context.Regions.Any())
             {
@@ -3807,50 +3825,14 @@ namespace Persistence
             // in case of an empty DB seed users
             if (!userManager.Users.Any())
             {
-                var users = new List<AppUser> {
-                    new AppUser {
-                        DisplayName = "Test User",
-                        UserName = "testuser",
-                        Email = "testmail@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User2",
-                        UserName = "testuser2",
-                        Email = "testmail2@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User3",
-                        UserName = "testuser3",
-                        Email = "testmail3@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User4",
-                        UserName = "testuser4",
-                        Email = "testmail4@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User5",
-                        UserName = "testuser5",
-                        Email = "testmail5@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User6",
-                        UserName = "testuser6",
-                        Email = "testmail6@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User7",
-                        UserName = "testuser7",
-                        Email = "testmail7@test.com"
-                    },
-                    new AppUser {
-                        DisplayName = "Test User8",
-                        UserName = "testuser8",
-                        Email = "testmail8@test.com"
-                    },
-                };
-                foreach (var user in users)
+                for (int i = 1; i < 50; i++)
                 {
+                    var user = new AppUser
+                    {
+                        DisplayName = $"Test User{i}",
+                        UserName = $"testuser{i}",
+                        Email = $"testmail{i}@test.com",
+                    };
                     await userManager.CreateAsync(user, "2dS92jD72jsdLsS");
                 }
             }
@@ -3862,25 +3844,25 @@ namespace Persistence
                 Email = "EduCatalogue@service.com",
             };
 
-            string userPassword = "2dS92jD72jsdLsS";
             var _user = await userManager.FindByEmailAsync("EduCatalogue@service.com");
 
             if (_user == null)
             {
-                var createPowerUser = await userManager.CreateAsync(powerUser, userPassword);
+                var createPowerUser = await userManager.CreateAsync(powerUser, "2dS92jD72jsdLsS");
             }
             await context.SaveChangesAsync();
+
             // check for institutions and seed if none was found
             if (!context.Institutions.Any())
             {
-                var Institutions = new List<Institution>
+                var institutions = new List<Institution>
                 {
                     new Institution
                     {
                         Name = "Львівський національний медичний університет імені Данила Галицького",
                         Description = "Львівський національний медичний університет імені Данила Галицького (ЛНМУ; лат. Universitatis Medicinalis Leopoliensis) — один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. За даними міжнародної бази Scopus університет посідає перше місце серед медичних вишів України",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        StudentCount = 5150,
+                        UndergraduateCount = 5150,
                         StreetAddress = "вул. Пекарська, 69",
                         SiteURL = "new.meduniv.lviv.ua",
                         ContactInformation = "0231231028"
@@ -3890,7 +3872,7 @@ namespace Persistence
                         Name = "Київський національний університет імені Тараса Шевченка",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 32000,
+                        UndergraduateCount = 32000,
                         StreetAddress = "вул. Володимирська, 60",
                         SiteURL = "knu.ua",
                         ContactInformation = "6683328733"
@@ -3900,7 +3882,7 @@ namespace Persistence
                         Name = "Буковинський державний медичний університет",
                         Description = "один із найбільших закладів вищої освіти м. Чернівці. Це сучасний багатопрофільний заклад вищої медичної освіти, включений до загального реєстру Всесвітньої організації охорони здоров'я, Великої Хартії університетів, Європейської асоціації університету, що здійснює підготовку здобувачів вищої освіти за ступеневою системою освіти. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        StudentCount = 5284,
+                        UndergraduateCount = 5284,
                         StreetAddress = "Театральна площа, 2",
                         SiteURL = "www.bsmu.edu.ua",
                         ContactInformation = "23474623659"
@@ -3910,7 +3892,7 @@ namespace Persistence
                         Name = "Тернопільський національний медичний університет",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        StudentCount = 6530,
+                        UndergraduateCount = 6530,
                         StreetAddress = "Майдан Волі, 1",
                         SiteURL = "tdmu.edu.ua",
                         ContactInformation = "023sdads8"
@@ -3920,7 +3902,7 @@ namespace Persistence
                         Name = "Львівський національний університет імені Івана Франка",
                         Description = "один із найстаріших університетів України й Східної Європи та найпрестижніших в Україні. Є спадкоємцем колегіуму (1608—1661) та академії (1661—1773) єзуїтів, Йосифинського університету (1784—1805), Львівського ліцею (1805—1817), Університету Франца I (1817—1918), Львівського університету Яна-Казимира (1919—1939), Львівського державного університету імені Івана Франка (1939—1999).",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        StudentCount = 25000,
+                        UndergraduateCount = 25000,
                         StreetAddress = "вул. Університетська, 1",
                         SiteURL = "lnu.edu.ua",
                         ContactInformation = "0322 603 402"
@@ -3930,7 +3912,7 @@ namespace Persistence
                         Name = "Національний університет «Києво-Могилянська академія»",
                         Description = "Національний університет «Києво-Могилянська академія» це заклад вищої освіти в Україні. Заснований 1615 року. Розміщується в корпусах історичної Києво-Могилянської академії, від якої отримав свою назву. Університетське містечко розташоване на Подолі в Києві, між Контрактовою площею та набережною Дніпра. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 4422,
+                        UndergraduateCount = 4422,
                         StreetAddress = "вулиця Григорія Сковороди, 2",
                         SiteURL = "www.ukma.edu.ua",
                         ContactInformation = "044 425 6059"
@@ -3940,7 +3922,7 @@ namespace Persistence
                         Name = "Державний торговельно-економічний університет",
                         Description = "вищий навчальний заклад Міністерства освіти і науки України в Києві, Україна. Заснований як Київський філіал Всесоюзного заочного інституту радянської торгівлі в 1946 році. Знаходиться у Деснянському районі на території Лісового масиву між вулицями Кіото і Мілютенка.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 36600,
+                        UndergraduateCount = 36600,
                         StreetAddress = "вулиця Кіото, 19",
                         SiteURL = "knute.edu.ua",
                         ContactInformation = "044 513 3348"
@@ -3950,7 +3932,7 @@ namespace Persistence
                         Name = "Прикарпатський національний університет імені Василя Стефаника",
                         Description = "Прикарпатський національний університет імені Василя Стефаника є одним з найстаріших вищих навчальних закладів Івано-Франківської області. Згідно з указом Президента України від 26 серпня 1992 р. його створено на базі педагогічного інституту, заснованого 1940 р. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Івано-Франківськ"),
-                        StudentCount = 18000,
+                        UndergraduateCount = 18000,
                         StreetAddress = "вулиця Шевченка, 57",
                         SiteURL = "pnu.edu.ua",
                         ContactInformation = "0342 531 574"
@@ -3960,7 +3942,7 @@ namespace Persistence
                         Name = "Національний технічний університет «Дніпровська політехніка»",
                         Description = "Національний технічний університет «Дніпро́вська політе́хніка» — державний заклад вищої освіти, багатогалузевий технічний університет, найстаріший заклад вищої освіти в м. Дніпро, перший заклад вищої гірничої освіти України. Має статус національного.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        StudentCount = 8260,
+                        UndergraduateCount = 8260,
                         StreetAddress = "проспект Дмитра Яворницького, 19",
                         SiteURL = "nmu.org.ua",
                         ContactInformation = "056 744 1411"
@@ -3970,7 +3952,7 @@ namespace Persistence
                         Name = "Київський національний університет технологій та дизайну",
                         Description = "Ки́ївський націона́льний університе́т техноло́гій та диза́йну — вищий навчальний заклад в Україні IV рівня акредитації, заснований 1930 року. В університеті навчається більше 10 тис. Київський національний університет технологій та дизайну увійшов у рейтинг «ТОР-100 кращих дизайнерських шкіл світу» і посів 71 місце.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 15000,
+                        UndergraduateCount = 15000,
                         StreetAddress = "вулиця Немировича-Данченка, 2",
                         SiteURL = "knutd.com.ua",
                         ContactInformation = "044 256 2975"
@@ -3980,7 +3962,7 @@ namespace Persistence
                         Name = "Волинський національний університет імені Лесі Українки",
                         Description = "державний вищий навчальний заклад IV рівня акредитації у місті Луцьк, Україна. Заснований у 1940 році, впродовж історії змінював назви: Луцький державний учительський інститут, Луцький державний педагогічний інститут; у статусі університету мав назви Волинського державного, Волинського національного і Східноєвропейського національного. З 2020 року повернув назву Волинський національний університет. Названий на честь письменниці Лесі Українки.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Луцьк"),
-                        StudentCount = 12369,
+                        UndergraduateCount = 12369,
                         StreetAddress = "проспект Волі, 13",
                         SiteURL = "vnu.edu.ua",
                         ContactInformation = "0332 720 123"
@@ -3990,7 +3972,7 @@ namespace Persistence
                         Name = "Національний університет «Полтавська політехніка імені Юрія Кондратюка»",
                         Description = "Університет володіє сучасними матеріально-технічними ресурсами. 9 навчальних корпусів із загальною площею 87 000 м², безпечні сприятливі умови для високоякісного навчання. Бібліотека налічує приблизно 500 тисяч одиниць літератури, 5 читальних залів з 400 місцями, 55 навчальних лабораторій та 10 науково-дослідницьких, споряджених стаціонарним обладнанням, 26 комп'ютерних класів у розпорядженні студентів і викладачів. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Полтава"),
-                        StudentCount = 10000,
+                        UndergraduateCount = 10000,
                         StreetAddress = "Першотравневий проспект, 24",
                         SiteURL = "nupp.edu.ua",
                         ContactInformation = "05325 61604"
@@ -4000,7 +3982,7 @@ namespace Persistence
                         Name = "Дніпропетровський державний університет внутрішніх справ",
                         Description = "Університет заснований 16 березня 1966, як Дніпропетровська спеціальна середня школа міліції МВС СРСР. В 1992 вона була реорганізована в Дніпропетровське училище міліції МВС України. 1 вересня 1997 училище міліції було перетворено у вищий навчальний заклад — Дніпропетровський юридичний інститут МВС України. 1998 р. заклад з вул. Артема, 147 переїхав до приміщень колишнього Дніпропетровського військового зенітно-ракетного училища за адресою просп. Гагарина, 26. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        StudentCount = 0,
+                        UndergraduateCount = 0,
                         StreetAddress = "проспект Гагаріна, 26",
                         SiteURL = "dduvs.in.ua",
                         ContactInformation = "Не зазначено"
@@ -4010,7 +3992,7 @@ namespace Persistence
                         Name = "Запорізький державний медичний університет",
                         Description = "Запорізький державний медичний університет — заклад вищої освіти в Україні. Запорізький державний медичний університет — це сучасний навчальний центр, що має вищий (IV) ступінь акредитації. Університет — один з найстаріших вищих медичних навчальних закладів України.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Запоріжжя"),
-                        StudentCount = 8879,
+                        UndergraduateCount = 8879,
                         StreetAddress = "проспект Маяковського, 26",
                         SiteURL = "www.zsmu.edu.ua",
                         ContactInformation = "0612 246 469"
@@ -4020,7 +4002,7 @@ namespace Persistence
                         Name = "Чернівецький національний університет імені Юрія Федьковича",
                         Description = "Чернівецький національний університет імені Юрія Федьковича — державний вищий заклад освіти 4-го рівня акредитації у місті Чернівці.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        StudentCount = 19227,
+                        UndergraduateCount = 19227,
                         StreetAddress = "вулиця Коцюбинського, 2",
                         SiteURL = "www.chnu.edu.ua",
                         ContactInformation = "0372 584 810"
@@ -4030,7 +4012,7 @@ namespace Persistence
                         Name = "Національний університет біоресурсів і природокористування України",
                         Description = "Націона́льний університе́т біоресу́рсів і природокористува́ння Украї́ни, є провідним вищим аграрним закладом освіти України. З 2009 до 2014 року мав статус автономного дослідницького університету. Розташований у місті Києві. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 0,
+                        UndergraduateCount = 0,
                         StreetAddress = "вулиця Героїв Оборони, 15",
                         SiteURL = "www.nubip.edu.ua",
                         ContactInformation = "044 527 8205"
@@ -4040,7 +4022,7 @@ namespace Persistence
                         Name = "Західноукраїнський національний універиситет",
                         Description = "Західноукраїнський національний університет — вищий навчальний заклад України IV-го рівня акредитації в м. Тернополі. Університет здійснює підготовку майже 25 тисяч студентів на всіх рівнях вищої освіти. ЗУНУ є підписантом Великої хартії університетів та членом Асоціації європейських університетів.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        StudentCount = 14963,
+                        UndergraduateCount = 14963,
                         StreetAddress = "вулиця Львівська, 11",
                         SiteURL = "wunu.edu.ua",
                         ContactInformation = "0352 517 575"
@@ -4050,7 +4032,7 @@ namespace Persistence
                         Name = "Національний педагогічний університет імені М. П. Драгоманова",
                         Description = "З осені 1989 року колектив вишу став активно домагатися повернення інститутові несправедливо відібраного в середині 20-х років імені Михайла Петровича Драгоманова. Це питання постійно стало порушуватися на зборах викладачів і студентів, засіданнях ради інституту і рад філологічного, історичного, педагогічного та інших факультетів й у статтях в періодичній пресі. Усі ці вимоги й акції завершилися перемогою справедливості: в 1993 році інститутові було повернуто ім'я видатного українського вченого-енциклопедиста, борця за вільну українську школу М. П. Драгоманова. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        StudentCount = 36000,
+                        UndergraduateCount = 36000,
                         StreetAddress = "вулиця Пирогова, 9",
                         SiteURL = "www.npu.edu.ua",
                         ContactInformation = "044 239 3017"
@@ -4060,7 +4042,7 @@ namespace Persistence
                         Name = "Хмельницький національний університет",
                         Description = "вищий навчальний заклад на Поділлі, який готує спеціалістів із багатьох галузей знань і проводить навчальну, методичну, наукову та виховну роботу. Університет засновано 1962 року. Пройшов шлях від загальнотехнічного факультету Українського поліграфічного інституту до Хмельницького національного університету, який має найвищий IV рівень акредитації. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Хмельницький"),
-                        StudentCount = 9759,
+                        UndergraduateCount = 9759,
                         StreetAddress = "вулиця Інститутська, 11",
                         SiteURL = "khnu.km.ua",
                         ContactInformation = "0382 670 276"
@@ -4070,7 +4052,7 @@ namespace Persistence
                         Name = "Вінницький національний технічний університет",
                         Description = "український заклад вищої освіти четвертого рівня акредитації, який здійснює підготовку фахівців інженерно-технічного профілю. Заклад є центром освіти, науки та культури Подільського регіону. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Вінниця"),
-                        StudentCount = 6000,
+                        UndergraduateCount = 6000,
                         StreetAddress = "Хмельницьке шосе, 95",
                         SiteURL = "vntu.edu.ua",
                         ContactInformation = "0432 560 848"
@@ -4080,7 +4062,7 @@ namespace Persistence
                         Name = "Житомирський державний університет імені Івана Франка",
                         Description = "найстаріший вищий навчальний заклад Житомирщини. Заснований у 1919 році як «Волинський педагогічний інститут».",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Житомир"),
-                        StudentCount = 4456,
+                        UndergraduateCount = 4456,
                         StreetAddress = "вулиця Велика Бердичівська, 40",
                         SiteURL = "zu.edu.ua",
                         ContactInformation = "0412 431 417"
@@ -4090,7 +4072,7 @@ namespace Persistence
                         Name = "Харківський політехнічний інститут",
                         Description = "Національний технічний університет «Харківський політехнічний інститут», до 1929 Харківський технологічний інститут, з 1975 Харківський ордена Леніна політехнічний інститут імені В. І. Леніна — заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        StudentCount = 12000,
+                        UndergraduateCount = 12000,
                         StreetAddress = "вулиця Кирпичова, 2",
                         SiteURL = "kpi.kharkov.ua",
                         ContactInformation = "057 707 6634"
@@ -4100,7 +4082,7 @@ namespace Persistence
                         Name = "Харківський національний медичний університет",
                         Description = "Ха́рківський націона́льний меди́чний університе́т, раніше Харківський державний медичний інститут. Вищий навчальний заклад, метою якого є підготовка медичних фахівців та підвищення кваліфікації, формування на базі університету науково-виробничого кластеру.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        StudentCount = 6167,
+                        UndergraduateCount = 6167,
                         StreetAddress = "проспект Науки, 4",
                         SiteURL = "knmu.edu.ua",
                         ContactInformation = "057 707 7380"
@@ -4110,7 +4092,7 @@ namespace Persistence
                         Name = "Ужгородський національний університет",
                         Description = "Ужгородський національний університет є членом Асоціації університетів Карпатського регіону (ACRU), яка входить до Асоціації європейських університетів (EUA) та є асоційованим членом Міжнародної асоціації університетів (IAU). Виш співпрацює зі 125 партнерами з різних країн, зокрема з такими, як Карлів університет, Технічний університет у м. Прага (Чехія), Університет Корвіна, Університет держави і права ім. Л.Кошута (Угорщина), Кошицький університет ім. П. Й. Шафарика, Університет ім. Я. А. Коменського (Словаччина), Університет м. Орадеа, Клузький університет м. Бабеш-Бояї (Румунія), Інститут германістики Університету м. Ландау, Університет Регенсбургу (Німеччина), Асоціація гомеопатичної медицини м. Рим (Італія), Загребський університет (Хорватія), Словацьким медичним університетом (Братислава) та іншими. У 2020 році укладено 7 нових міжнародних білатеральних угод, 7 угод з реалізації міжнародних проєктів та 8 угод з метою супроводу академічної мобільності Erasmus+.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Ужгород"),
-                        StudentCount = 14460,
+                        UndergraduateCount = 14460,
                         StreetAddress = "вулиця Університетська, 14",
                         SiteURL = "uzhnu.edu.ua",
                         ContactInformation = "0312 643 084"
@@ -4120,19 +4102,19 @@ namespace Persistence
                         Name = "Національний університет «Львівська Політехніка»",
                         Description = "найстаріший технічний заклад вищої освіти України та Східної Європи, заснований у 1816 році як Реальна школа з дозволу австрійського імператора Франца І.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        StudentCount = 35000,
+                        UndergraduateCount = 35000,
                         StreetAddress = "вул. Степана Бандери, 12",
                         SiteURL = "lp.edu.ua",
                         ContactInformation = "0322 582 111"
                     },
                 };
-                await context.Institutions.AddRangeAsync(Institutions);
+                await context.Institutions.AddRangeAsync(institutions);
                 await context.SaveChangesAsync();
 
                 // Seed managers
                 for (int i = 1; i < 12; i++)
                 {
-                    var institution = await context.Institutions.FindAsync(Institutions[i].Id);
+                    var institution = await context.Institutions.FindAsync(institutions[i].Id);
                     var startIndex = new Random().Next(2, 8);
                     var endIndex = startIndex + new Random().Next(0, 7 - startIndex);
 
@@ -4149,168 +4131,67 @@ namespace Persistence
                     await context.SaveChangesAsync();
                 }
 
+
                 // Seed Components
-                var componentsCores = new List<ComponentCore>
+                if (!context.ComponentCores.Any())
                 {
-                    new ComponentCore
-                    {
-                        Name="Цивільне право",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Правові висновки Верховного Cуду",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Альтернативні способи вирішення суперечок",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Нотаріальний процес",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Порівняльне цивільне право і процес",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Школа прикладної юриспруденції",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Практична підготовка",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Дискретна математика",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Математичний аналіз",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Фізика",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Вступ до комп'ютерних наук",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Іноземна мова",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Теорія ймовірностей та математична статистика",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Комп'ютерні технології обробки та візуалізації даних",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Алгоритмізація та програмування",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Оптимізаційні методи та моделі",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Штучний інтелект",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Управління ІТ-проектами",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Технологія Java",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Адміністрування серверних систем",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Web-технології",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Інженерна та комп'ютерна графіка",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Технології аналізу даних",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Технології створення програмних продуктів",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Правознавство",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Психологія",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Ораторське мистецтво",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Безпека життя",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Історія української культури",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Ораторське мистецтво",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Менеджмент",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Філософія",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Соціологія",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Логіка",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Бухгалтерський облік",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Організація баз даних та знань",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Архітектура обчислювальних систем",
-                    },
-                    new ComponentCore
-                    {
-                        Name="Теорія управління в інформаційних системах",
-                    },
+                    var componentCores = new List<ComponentCore>();
+                    var componentsCoreStrings = new List<string>
+                {
+                    "Цивільне право",
+                    "Правові висновки Верховного Cуду",
+                    "Альтернативні способи вирішення суперечок",
+                    "Нотаріальний процес",
+                    "Порівняльне цивільне право і процес",
+                    "Школа прикладної юриспруденції",
+                    "Практична підготовка",
+                    "Дискретна математика",
+                    "Математичний аналіз",
+                    "Фізика",
+                    "Вступ до комп'ютерних наук",
+                    "Іноземна мова",
+                    "Теорія ймовірностей та математична статистика",
+                    "Комп'ютерні технології обробки та візуалізації даних",
+                    "Алгоритмізація та програмування",
+                    "Оптимізаційні методи та моделі",
+                    "Штучний інтелект",
+                    "Управління ІТ-проектами",
+                    "Технологія Java",
+                    "Адміністрування серверних систем",
+                    "Web-технології",
+                    "Інженерна та комп'ютерна графіка",
+                    "Технології аналізу даних",
+                    "Технології створення програмних продуктів",
+                    "Правознавство",
+                    "Психологія",
+                    "Ораторське мистецтво",
+                    "Безпека життя",
+                    "Історія української культури",
+                    "Ораторське мистецтво",
+                    "Менеджмент",
+                    "Філософія",
+                    "Соціологія",
+                    "Логіка",
+                    "Бухгалтерський облік",
+                    "Організація баз даних та знань",
+                    "Архітектура обчислювальних систем",
+                    "Теорія управління в інформаційних системах",
                 };
+                    foreach (var componentStr in componentsCoreStrings)
+                    {
+                        componentCores.Add(new ComponentCore
+                        {
+                            Name = componentStr,
+                        });
+                    }
+                    await context.ComponentCores.AddRangeAsync(componentCores);
+                    await context.SaveChangesAsync();
+                };
+            }
 
-
-                await context.ComponentCores.AddRangeAsync(componentsCores);
-                await context.SaveChangesAsync();
-                // Seed Degrees 
-
+            // Seed Degrees 
+            if (!context.Degrees.Any())
+            {
                 var degrees = new List<Degree>
                 {
                     new Degree
@@ -4329,9 +4210,11 @@ namespace Persistence
 
                 await context.Degrees.AddRangeAsync(degrees);
                 await context.SaveChangesAsync();
+            }
+            // Seed languages
 
-                // Seed languages
-
+            if (!context.Languages.Any())
+            {
                 var languages = new List<Language>
                 {
                     new Language
@@ -4348,9 +4231,11 @@ namespace Persistence
 
                 await context.Languages.AddRangeAsync(languages);
                 await context.SaveChangesAsync();
+            }
+            // Seed studyForms
 
-                // Seed studyForms
-
+            if (!context.StudyForms.Any())
+            {
                 var studyForms = new List<StudyForm>
                 {
                     new StudyForm
@@ -4369,551 +4254,858 @@ namespace Persistence
 
                 await context.StudyForms.AddRangeAsync(studyForms);
                 await context.SaveChangesAsync();
+            }
+            List<string> reviewStrings = new List<string>();
+            reviewStrings.Add("I couldn't have asked for a better university experience than what I received at [University Name]. The supportive community, excellent faculty, diverse academic programs, and abundant opportunities for personal growth make it stand out as one of the best universities in the country.");
+            reviewStrings.Add("My time at [University Name] was a truly transformative experience. The academic programs are top-notch, the faculty are passionate and knowledgeable, and the campus community is welcoming and inclusive. I highly recommend this university to anyone seeking an exceptional education.");
+            reviewStrings.Add("If you're looking for a university that provides an exceptional academic experience along with ample opportunities for personal growth, [University Name] is the place for you. With its passionate community, world-class faculty, and diverse academic programs, it truly stands out as one of the best universities in the country.");
+            reviewStrings.Add("[University Name] exceeded all my expectations and then some. The supportive community, diverse academic programs, and numerous opportunities for personal growth and involvement make it an outstanding university. I highly recommend it to anyone seeking a transformative higher education experience.");
+            reviewStrings.Add("As a recent graduate of [University Name], I can attest to its exceptional academic programs, passionate faculty, and welcoming community. With its diverse academic offerings and ample opportunities for personal growth and involvement, [University Name] is truly one of the best universities in the country.");
 
-                var user1 = await userManager.FindByEmailAsync("testmail@test.com");
-                var user2 = await userManager.FindByEmailAsync("testmail2@test.com");
-                var user3 = await userManager.FindByEmailAsync("testmail3@test.com");
-                var user4 = await userManager.FindByEmailAsync("testmail4@test.com");
-                var user5 = await userManager.FindByEmailAsync("testmail5@test.com");
-                var user6 = await userManager.FindByEmailAsync("testmail6@test.com");
-
-                // Seed Specialties and Reviews
+            // Seed Reviews
+            if (!context.Reviews.Any())
+            {
                 foreach (var item in context.Institutions.ToList())
                 {
-                    var reviews = new List<Review>
+                    var reviews = new List<Review>();
+                    var reviewRate = new Random().Next(1, 10);
+                    for (int i = 1; i < 50; i++)
                     {
-                        new Review
+                        if (new Random().Next(0, reviewRate) == 1) continue;
+                        var review = new Review
                         {
                             Institution = item,
-                            Author = user1,
-                            ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
-                            Rating=new Random().Next(3, 6),
-                        },
-                        new Review
-                        {
-                            Institution = item,
-                            Author = user2,
-                            ReviewMessage = "Slightly different test review message consisting of author, institution, message, 4 star* rating",
-                            Rating=new Random().Next(3, 6),
-                        },
-                        new Review
-                        {
-                            Institution = item,
-                            Author = user3,
-                            ReviewMessage = "Another test review message consisting of author being user3, institution, message, 1 star rating",
-                            Rating=new Random().Next(1, 6),
-                        },
-                        new Review
-                        {
-                            Institution = item,
-                            Author = user4,
-                            ReviewMessage = "Another one review message consisting of author being user4, institution, message, 5 star rating",
-                            Rating=new Random().Next(3, 6),
-                        },
-                        new Review
-                        {
-                            Institution = item,
-                            Author = user5,
-                            ReviewMessage = "Test review message consisting of author being user5, institution, message, 3 start rating",
-                            Rating=new Random().Next(4, 6),
-                        },
-                        new Review
-                        {
-                            Institution = item,
-                            Author = user6,
-                            ReviewMessage = "Test review message consisting of author, institution, message, 5 start rating",
-                            Rating=new Random().Next(2, 6),
-                        },
-                    };
+                            Author = await userManager.FindByEmailAsync($"testmail{i}@test.com"),
+                            ReviewMessage = reviewStrings[new Random().Next(0, 5)],
+                            Rating = new Random().Next(2, 6)
+                        };
+                        reviews.Add(review);
+                    }
                     await context.AddRangeAsync(reviews);
-
-                    var specialties = new List<Specialty>
-                    {
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "122"),
-                            Description = "Загальна освіта в галузі інформаційних технологій, спеціалізація «Комп’ютерні науки».Ключові слова: програмування, алгоритмізація, моделювання,комп’ютерна обробка даних, обчислювальні системи та технології,нечіткі моделі, Machine Learning, Big Data Processing, програмування на C#, C++, Python, Java, комп’ютерні мережі, розподілені серверні системи, розподілені та паралельні обчислення, нечіткі моделі та мережі, методи обчислювального інтелекту.",
-                            EctsCredits = 240,
-                            PriceUAH = 80000,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
-                            Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
-                            EctsCredits = 60,
-                            PriceUAH = 40001,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "081"),
-                            Description = "Підготовка нового покоління юристів, здатних здійснювати професійну діяльність у сфері  договірного, сімейного і спадкового права, захищати особисті майнові та немайнові права своїх клієнтів в умовах постійно зростаючої конкуренції на ринку юридичних послуг.",
-                            EctsCredits = 240,
-                            PriceUAH = 100001,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "125"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 180,
-                            PriceUAH = 45021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "121"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 75021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "123"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "124"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 95021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "112"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 76021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            NonPaidEducationAvailable = true,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "111"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 52331,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "076"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 88754,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "073"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 87213,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "141"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "142"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "143"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "144"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            NonPaidEducationAvailable = true,
-                            Institution = item,
-                        },
-                        new Specialty
-                        {
-                            SpecialtyCore = await context.SpecialtyCores.FirstOrDefaultAsync(x => x.Id == "145"),
-                            Description = "Specialty test description specifying main field of study, career perspective, roadmap, study environment, collective.",
-                            EctsCredits = 240,
-                            PriceUAH = 85021,
-                            StartYear = 2020,
-                            EndYear = 2024,
-                            Institution = item,
-                        },
-                    };
-
-                    var toSkip = new Random().Next(0, 6);
-                    var toTake = specialties.Count() - toSkip - 1 - new Random().Next(0, specialties.Count() - toSkip);
-                    await context.AddRangeAsync(specialties.Skip(toSkip).Take(toTake));
                     await context.SaveChangesAsync();
                 }
+            }
+            if (!context.Specialties.Any())
+            {
+                foreach (var item in context.Institutions.ToList())
+                {
 
+                    var descriptionString = @"
+                    Університетська спеціальність, також відома як спеціалізація, — це цілеспрямована область навчання, яка дозволяє студентам поглиблено досліджувати певний предмет або сферу інтересів. Обираючи університетську спеціальність, студенти можуть розвинути високий рівень знань і майстерності в обраній галузі навчання. Вони також можуть отримати практичні навички та знання, які мають відношення до їхньої майбутньої кар’єри чи академічної діяльності.
+
+Університетські спеціальності можуть охоплювати широкий спектр предметів і дисциплін, включаючи науку, технології, інженерію, математику, соціальні науки, гуманітарні науки, мистецтво тощо. Кожна університетська спеціальність має власний унікальний набір вимог, результатів навчання та очікувань, які покликані підготувати студентів до успіху в обраній сфері.
+
+Однією з ключових особливостей університетської спеціальності є вимога до відданості та працьовитості. Очікується, що студенти, які обирають університетську спеціальність, будуть високомотивованими та відданими навчанню. Вони повинні володіти сильним критичним мисленням, аналітичними та дослідницькими навичками, а також бути готовими брати участь у незалежних дослідженнях.
+
+Іншим важливим аспектом університетської спеціальності є зосередженість на практичному застосуванні та реальному досвіді. Студентам надається можливість отримати практичний досвід через стажування, кооперативні програми, дослідницькі проекти та інші форми експериментального навчання. Це дозволяє їм розвивати практичні навички та знання, які цінують роботодавці та аспіранти.
+                    ";
+                    var specialties = new List<Specialty>();
+                    foreach (var sc in context.SpecialtyCores.ToList())
+                    {
+                        if (new Random().Next(0, 15) == 1)
+                            continue;
+                        var specialty = new Specialty
+                        {
+                            SpecialtyCore = sc,
+                            Description = descriptionString,
+                            PriceUAH = new Random().Next(60000, 400000),
+                            StartYear = 2023,
+                            EndYear = 2027,
+                            Institution = item,
+                        };
+                        specialties.Add(specialty);
+                    }
+
+                    await context.AddRangeAsync(specialties);
+                    await context.SaveChangesAsync();
+                }
+            }
+
+            //Seed components into specialties
+            if (context.Components.Any())
+            {
                 foreach (var item in context.Specialties.ToList())
                 {
-                    var componentsLaw = new List<Component>
+                    var components = new List<Component>();
+
+                    foreach (var componentCore in context.ComponentCores.ToList())
                     {
-                        new Component
+                        if (new Random().Next(0, 15) == 0)
+                            continue;
+                        var eCreds = new Random().Next(0, 3);
+                        components.Add(new Component
                         {
-                            ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Цивільне право"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Правові висновки Верховного Cуду"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Альтернативні способи вирішення суперечок"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Нотаріальний процес"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Порівняльне цивільне право і процес"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Школа прикладної юриспруденції"),
-                            ECTSCredits=18,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                    };
-                    var componentsCScience = new List<Component>
-                    {
-                        new Component
-                        {
-                            ComponentCore = await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Вступ до комп'ютерних наук"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore= await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Дискретна математика"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Фізика"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Математичний аналіз"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Комп'ютерні технології обробки та візуалізації даних"),
-                            ECTSCredits=6,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Алгоритмізація та програмування"),
-                            ECTSCredits=18,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Практична підготовка"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Оптимізаційні методи та моделі"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Філософія"),
-                            ECTSCredits=6,
-                            isOptional=true,
-                            Specialty=item
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Адміністрування серверних систем"),
-                            ECTSCredits=6,
-                            isOptional=true,
-                            Specialty=item
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Організація баз даних та знань"),
-                            ECTSCredits=6,
-                            isOptional=true,
-                            Specialty=item
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Архітектура обчислювальних систем"),
-                            ECTSCredits=6,
-                            isOptional=true,
-                            Specialty=item
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Web-технології"),
-                            ECTSCredits=6,
-                            isOptional=true,
-                            Specialty=item
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Теорія управління в інформаційних системах"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Технології аналізу даних"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                        new Component
-                        {
-                            ComponentCore=await context.ComponentCores.FirstOrDefaultAsync(x => x.Name == "Безпека життя"),
-                            ECTSCredits=12,
-                            isOptional=false,
-                            Specialty=item,
-                        },
-                    };
-                    await context.AddRangeAsync(componentsCScience);
-                    await context.AddRangeAsync(componentsLaw);
+                            ComponentCore = componentCore,
+                            ECTSCredits = eCreds == 0 ? 6 : eCreds == 1 ? 12 : 18,
+                            isOptional = new Random().Next(0, 20) == 0,
+                            Specialty = item,
+                        });
+                    }
+                    await context.AddRangeAsync(components);
                     await context.SaveChangesAsync();
                 }
-
-                // Seed and add Skills to Specialties
-                var skills = new List<Skill>
+            }
+            // Seed Skills to Specialties
+            if (!context.Skills.Any())
+            {
+                var skills = new List<string>
+                {
+                    "C#",
+                    "Java",
+                    "Python",
+                    "JavaScript",
+                    "SQL",
+                    "HTML",
+                    "CSS",
+                    "PHP",
+                    "C++",
+                    "Ruby",
+                    "Swift",
+                    "Objective-C",
+                    "Go",
+                    "Scala",
+                    "Kotlin",
+                    "Rust",
+                    "Assembly",
+                    "MATLAB",
+                    "Perl",
+                    "Visual Basic",
+                    "TypeScript",
+                    "React",
+                    "Angular",
+                    "Vue.js",
+                    "Node.js",
+                    "jQuery",
+                    "Bootstrap",
+                    "Sass",
+                    "Less",
+                    "Webpack",
+                    "Gulp",
+                    "Grunt",
+                    "Git",
+                    "GitHub",
+                    "Bitbucket",
+                    "SVN",
+                    "Docker",
+                    "Kubernetes",
+                    "AWS",
+                    "Azure",
+                    "Google Cloud Platform",
+                    "Firebase",
+                    "Heroku",
+                    "Netlify",
+                    "MongoDB",
+                    "MySQL",
+                    "PostgreSQL",
+                    "Oracle",
+                    "Redis",
+                    "Elasticsearch",
+                    "Cassandra",
+                    "Neo4j",
+                    "Hadoop",
+                    "Spark",
+                    "Kafka",
+                    "RabbitMQ",
+                    "Nginx",
+                    "Apache",
+                    "IIS",
+                    "Linux",
+                    "Unix",
+                    "Windows",
+                    "MacOS",
+                    "iOS",
+                    "Android",
+                    "React Native",
+                    "Flutter",
+                    "Ionic",
+                    "Xamarin",
+                    "Unity",
+                    "Unreal Engine",
+                    "Photoshop",
+                    "Illustrator",
+                    "InDesign",
+                    "Premiere Pro",
+                    "After Effects",
+                    "Final Cut Pro",
+                    "Blender",
+                    "Maya",
+                    "3ds Max",
+                    "AutoCAD",
+                    "SolidWorks",
+                    "SketchUp",
+                    "Revit",
+                    "Rhino",
+                    "Grasshopper",
+                    "Figma",
+                    "Adobe XD",
+                    "InVision",
+                    "Zeplin",
+                    "Sketch",
+                    "Marvel",
+                    "Principle",
+                    "Axure",
+                    "Balsamiq",
+                    "Lucidchart",
+                    "Trello",
+                    "Asana",
+                    "Jira",
+                    "Slack",
+                    "Microsoft Office",
+                    "Google Suite",
+                    "Zoom",
+                    "WebEx",
+                    "Skype",
+                    "Teams",
+                    "Salesforce",
+                    "HubSpot",
+                    "Zoho",
+                    "Mailchimp",
+                    "ActiveCampaign",
+                    "Constant Contact",
+                    "Sendinblue",
+                    "Hootsuite",
+                    "Buffer",
+                    "Sprout Social",
+                    "Google Analytics",
+                    "Google Ads",
+                    "Facebook Ads",
+                    "Instagram Ads",
+                    "LinkedIn Ads",
+                    "Twitter Ads",
+                    "SEO",
+                    "PPC",
+                    "SEM",
+                    "Content Marketing",
+                    "Email Marketing",
+                    "Social Media Marketing",
+                    "Affiliate Marketing",
+                    "Influencer Marketing",
+                    "Video Marketing",
+                    "Mobile Marketing",
+                    "Analytics",
+                    "Data Science",
+                    "Machine Learning",
+                    "Artificial Intelligence",
+                    "Big Data",
+                    "Data Mining",
+                    "Data Visualization",
+                    "Statistical Analysis",
+                    "Quantitative Analysis",
+                    "Qualitative Analysis",
+                    "Market Research",
+                    "Business Intelligence",
+                    "Project Management",
+                    "Agile Methodology",
+                    "Scrum",
+                    "Kanban",
+                    "Waterfall",
+                    "PR",
+                    "Media Relations",
+                    "Crisis Communications",
+                    "Internal Communications",
+                    "Brand Management",
+                    "Public Speaking",
+                    "Presentation Skills",
+                    "Leadership",
+                    "Team Management",
+                    "Conflict Resolution",
+                    "Time Management",
+                    "Organizational Skills",
+                    "Problem Solving",
+                    "Decision Making",
+                    "Critical Thinking",
+                    "Creativity",
+                    "Innovation",
+                    "Collaboration",
+                    "Networking",
+                    "Negotiation",
+                    "Sales",
+                    "Business Development",
+                    "Account Management",
+                    "Customer Service",
+                    "Client Relations",
+                    "Product Management",
+                    "Product Development",
+                    "Product Marketing",
+                    "User Experience (UX)",
+                    "User Interface (UI)",
+                    "Interaction Design",
+                    "Visual Design",
+                    "Graphic Design",
+                    "Motion Graphics",
+                    "Animation",
+                    "Game Design",
+                    "Virtual Reality",
+                    "Augmented Reality",
+                    "Web Design",
+                    "Mobile Design",
+                    "Front-End Development",
+                    "Back-End Development",
+                    "Full-Stack Development",
+                    "DevOps",
+                    "Quality Assurance",
+                    "Testing",
+                    "Security",
+                    "Cybersecurity",
+                    "Network Security",
+                    "Information Security",
+                    "Ethical Hacking",
+                    "Penetration Testing",
+                    "Compliance",
+                    "Risk Management",
+                    "Financial Analysis",
+                    "Accounting",
+                    "Bookkeeping",
+                    "Taxation",
+                    "Auditing",
+                    "Investment Management",
+                    "Financial Planning",
+                    "Insurance",
+                    "Real Estate",
+                    "Law",
+                    "Legal Research",
+                    "Legal Writing",
+                    "Contracts",
+                    "Intellectual Property",
+                    "Corporate Law",
+                    "International Law",
+                    "Human Resources",
+                    "Recruiting",
+                    "Onboarding",
+                    "Training",
+                    "Compensation and Benefits",
+                    "Employee Relations",
+                    "Workforce Planning",
+                    "Talent Management",
+                    "Diversity and Inclusion",
+                    "Performance Management",
+                    "Learning and Development",
+                    "Organizational Development",
+                    "Change Management",
+                    "Employee Engagement",
+                    "Wellness",
+                    "Health and Safety",
+                    "Environmental Sustainability",
+                    "Corporate Social Responsibility",
+                    "Nonprofit Management",
+                    "Fundraising",
+                    "Grant Writing",
+                    "Program Management",
+                    "Community Outreach",
+                    "Volunteer Management",
+                    "Social Services",
+                    "Education",
+                    "Curriculum Development",
+                    "Teaching",
+                    "Instructional Design",
+                    "E-Learning",
+                    "Student Affairs",
+                    "Academic Advising",
+                    "Research",
+                    "Writing",
+                    "Copywriting",
+                    "Editing",
+                    "Proofreading",
+                    "Content Development",
+                    "Technical Writing",
+                    "Journalism",
+                    "Blogging",
+                    "Social Media",
+                    "Photography",
+                    "Videography",
+                    "Music Production",
+                    "Sound Design",
+                    "Audio Engineering",
+                    "Film Production",
+                    "Screenwriting",
+                    "Acting",
+                    "Theater",
+                    "Dance",
+                    "Fine Arts",
+                    "Museum Studies",
+                    "Library Science",
+                    "Archives",
+                    "History",
+                    "Anthropology",
+                    "Sociology",
+                    "Psychology",
+                    "Counseling",
+                    "Social Work",
+                    "Political Science",
+                    "International Relations",
+                    "Economics",
+                    "Geography",
+                    "Environmental Science",
+                    "Biology",
+                    "Chemistry",
+                    "Physics",
+                    "Mathematics",
+                    "Statistics",
+                    "Engineering",
+                    "Architecture",
+                    "Urban Planning",
+                    "Transportation Planning",
+                    "Energy",
+                    "Renewable Energy",
+                    "Mechanical Engineering",
+                    "Electrical Engineering",
+                    "Civil Engineering",
+                    "Aerospace Engineering",
+                    "Biomedical Engineering",
+                    "Chemical Engineering",
+                    "Materials Science",
+                    "Computer Science",
+                    "Artificial Intelligence",
+                    "Machine Learning",
+                    "Data Science",
+                    "Data Analysis",
+                    "Big Data",
+                    "Data Visualization",
+                    "Database Management",
+                    "Cloud Computing",
+                    "Information Technology",
+                    "Software Development",
+                    "Agile Methodology",
+                    "Scrum",
+                    "Project Management",
+                    "Program Management",
+                    "Portfolio Management",
+                    "Business Analysis",
+                    "Business Intelligence",
+                    "Business Process Improvement",
+                    "Six Sigma",
+                    "Lean Manufacturing",
+                    "Supply Chain Management",
+                    "Logistics",
+                    "Procurement",
+                    "Operations Management",
+                    "Quality Control",
+                    "Quality Assurance",
+                    "Customer Relationship Management (CRM)",
+                    "Marketing",
+                    "Digital Marketing",
+                    "Search Engine Optimization (SEO)",
+                    "Search Engine Marketing (SEM)",
+                    "Email Marketing",
+                    "Content Marketing",
+                    "Social Media Marketing",
+                    "Affiliate Marketing",
+                    "Influencer Marketing",
+                    "Brand Strategy",
+                    "Marketing Analytics",
+                    "Market Research",
+                    "Consumer Behavior",
+                    "Product Design",
+                    "Product Strategy",
+                    "Product Launch",
+                    "Innovation Management",
+                    "Entrepreneurship",
+                    "Startups",
+                    "Venture Capital",
+                    "Angel Investing",
+                    "Mergers and Acquisitions",
+                    "Corporate Finance",
+                    "Investment Banking",
+                    "Private Equity",
+                    "Hedge Funds",
+                    "Asset Management",
+                    "Trading",
+                    "Quantitative Analysis",
+                    "Risk Analysis",
+                    "Financial Modeling",
+                    "Derivatives",
+                    "Fixed Income",
+                    "Equity Research",
+                    "Sales and Trading",
+                    "Wealth Management",
+                    "Retail Banking",
+                    "Commercial Banking",
+                    "Investor Relations",
+                    "Public Relations",
+                    "Event Planning",
+                    "Hospitality",
+                    "Tourism",
+                    "Customer Experience",
+                    "User Research",
+                    "Marketplace Management",
+                    "Retail Operations",
+                    "E-commerce",
+                    "Supply Chain Optimization",
+                    "Fulfillment",
+                    "Inventory Management",
+                    "Procure to Pay",
+                    "Order to Cash",
+                    "Accounts Payable",
+                    "Accounts Receivable",
+                    "Payroll",
+                    "Treasury Management",
+                    "Financial Reporting",
+                    "Financial Statements",
+                    "Audit",
+                    "Internal Audit",
+                    "External Audit",
+                    "Fraud Detection",
+                    "Risk Assessment",
+                    "Information Management",
+                    "Data Governance",
+                    "Master Data Management",
+                    "Metadata Management",
+                    "Data Warehousing",
+                    "ETL",
+                    "Data Integration",
+                    "Data Migration",
+                    "Data Cleansing",
+                    "Data Quality",
+                    "Data Privacy",
+                    "Data Protection",
+                    "Data Ethics",
+                    "Artificial Intelligence Ethics",
+                    "Machine Learning Ethics",
+                    "Cyber Ethics",
+                    "Digital Ethics",
+                    "Social Ethics",
+                    "Environmental Ethics",
+                    "Healthcare Ethics",
+                    "Legal Ethics",
+                    "Business Ethics",
+                    "Media Ethics",
+                    "Research Ethics",
+                    "Ethics Education",
+                    "Ethics Consulting",
+                    "Ethics Training",
+                    "Ethics Auditing",
+                    "Ethics Compliance",
+                    "Ethics Investigations",
+                    "Ethics Policy Development",
+                    "Ethics Risk Management",
+                    "Ethics Reporting",
+                    "Ethics Governance",
+                    "Ethics Leadership",
+                    "Ethics Culture",
+                    "Ethics Strategy",
+                    "Ethics Innovation",
+                    "Ethics Sustainability",
+                    "Ethics Advocacy",
+                    "Intellectual Property Law",
+                    "Contract Law",
+                    "Corporate Law",
+                    "Criminal Law",
+                    "Environmental Law",
+                    "Family Law",
+                    "Health Law",
+                    "Immigration Law",
+                    "International Law",
+                    "Labor Law",
+                    "Real Estate Law",
+                    "Tax Law",
+                    "Litigation",
+                    "Alternative Dispute Resolution (ADR)",
+                    "Mediation",
+                    "Arbitration",
+                    "Negotiation",
+                    "Employment Law",
+                    "Intellectual Property",
+                    "Patent Law",
+                    "Trademark Law",
+                    "Copyright Law",
+                    "Trade Secret Law",
+                    "Entertainment Law",
+                    "Sports Law",
+                    "Bankruptcy Law",
+                    "Mergers and Acquisitions Law",
+                    "Securities Law",
+                    "Insurance Law",
+                    "Public Interest Law",
+                    "Human Rights Law",
+                    "Civil Rights Law",
+                    "International Development",
+                    "International Relations",
+                    "International Trade",
+                    "Diplomacy",
+                    "Foreign Policy",
+                    "International Security",
+                    "International Law and Organizations",
+                    "International Humanitarian Law",
+                    "Peace and Conflict Studies",
+                    "Humanitarian Assistance",
+                    "Social Work",
+                    "Counseling",
+                    "Psychology",
+                    "Psychotherapy",
+                    "Psychiatry",
+                    "Behavioral Therapy",
+                    "Cognitive Therapy",
+                    "Emotion-focused Therapy",
+                    "Existential Therapy",
+                    "Gestalt Therapy",
+                    "Humanistic Therapy",
+                    "Interpersonal Therapy",
+                    "Mindfulness-based Therapy",
+                    "Narrative Therapy",
+                    "Person-centered Therapy",
+                    "Psychodynamic Therapy",
+                    "Solution-focused Therapy",
+                    "Art Therapy",
+                    "Music Therapy",
+                    "Dance Therapy",
+                    "Play Therapy",
+                    "Occupational Therapy",
+                    "Physical Therapy",
+                    "Speech Therapy",
+                    "Rehabilitation",
+                    "Gerontology",
+                    "Public Health",
+                    "Epidemiology",
+                    "Health Promotion",
+                    "Health Education",
+                    "Health Policy",
+                    "Healthcare Management",
+                    "Nursing",
+                    "Medical Assisting",
+                    "Medical Billing and Coding",
+                    "Pharmacy",
+                    "Radiology",
+                    "Medical Imaging",
+                    "Medical Laboratory Science",
+                    "Biotechnology",
+                    "Bioinformatics",
+                    "Genomics",
+                    "Proteomics",
+                    "Biochemistry",
+                    "Molecular Biology",
+                    "Cell Biology",
+                    "Immunology",
+                    "Microbiology",
+                    "Ecology",
+                    "Evolutionary Biology",
+                    "Behavioral Ecology",
+                    "Conservation Biology",
+                    "Zoology",
+                    "Botany",
+                    "Marine Biology",
+                    "Paleontology",
+                    "Geology",
+                    "Physical Geography",
+                    "Human Geography",
+                    "Cartography",
+                    "Geographic Information Systems (GIS)",
+                    "Remote Sensing",
+                    "Environmental Science",
+                    "Climate Science",
+                    "Atmospheric Science",
+                    "Oceanography",
+                    "Meteorology",
+                    "Astronomy",
+                    "Astrophysics",
+                    "Cosmology",
+                    "Particle Physics",
+                    "Nuclear Physics",
+                    "Condensed Matter Physics",
+                    "Optics",
+                    "Acoustics",
+                    "Fluid Mechanics",
+                    "Solid Mechanics",
+                    "Thermodynamics",
+                    "Electromagnetism",
+                    "Computer Hardware",
+                    "Computer Networking",
+                    "Information Security",
+                    "Cybersecurity",
+                    "Computer Forensics",
+                    "Data Recovery",
+                    "Computer Vision",
+                    "Natural Language Processing",
+                    "Robotics",
+                    "Embedded Systems",
+                    "Internet of Things (IoT)",
+                    "Virtual Reality (VR)",
+                    "Augmented Reality (AR)",
+                    "Artificial Intelligence (AI)",
+                    "Machine Learning",
+                    "Deep Learning",
+                    "Neural Networks",
+                    "Computer Graphics",
+                    "User Interface (UI) Design",
+                    "User Experience (UX) Design",
+                    "Web Development",
+                    "Front-end Development",
+                    "Back-end Development",
+                    "Full-stack Development",
+                    "Mobile Development",
+                    "iOS Development",
+                    "Android Development",
+                    "Game Development",
+                    "Unity Development",
+                    "Unreal Engine Development",
+                    "Software Development",
+                    "Agile Development",
+                    "Waterfall Development",
+                    "Scrum",
+                    "Kanban",
+                    "DevOps",
+                    "Cloud Computing",
+                    "Amazon Web Services (AWS)",
+                    "Microsoft Azure",
+                    "Google Cloud Platform (GCP)",
+                    "Blockchain",
+                    "Cryptocurrency",
+                    "Financial Analysis",
+                    "Investment Management",
+                    "Financial Planning",
+                    "Financial Modeling",
+                    "Accounting",
+                    "Bookkeeping",
+                    "Auditing",
+                    "Tax Preparation",
+                    "Risk Management",
+                    "Insurance",
+                    "Actuarial Science",
+                    "Statistics",
+                    "Data Analysis",
+                    "Data Visualization",
+                    "Business Intelligence",
+                    "Big Data",
+                    "Data Science",
+                    "Marketing",
+                    "Digital Marketing",
+                    "Content Marketing",
+                    "Social Media Marketing",
+                    "Email Marketing",
+                    "Search Engine Optimization (SEO)",
+                    "Pay-per-click (PPC) Advertising",
+                    "Affiliate Marketing",
+                    "Sales",
+                    "Business Development",
+                    "Account Management",
+                    "Customer Relationship Management (CRM)",
+                    "Supply Chain Management",
+                    "Logistics",
+                    "Operations Management",
+                    "Project Management",
+                    "Product Management",
+                    "Quality Assurance (QA)",
+                    "Quality Control (QC)",
+                    "Six Sigma",
+                    "Lean Management",
+                    "Human Resources",
+                    "Talent Acquisition",
+                    "Employee Relations",
+                    "Compensation and Benefits",
+                    "Training and Development",
+                    "Organizational Development",
+                    "Leadership Development",
+                    "Change Management",
+                    "Executive Coaching",
+                    "Performance Management",
+                    "Office Administration",
+                    "Executive Assistance",
+                    "Administrative Support",
+                    "Event Planning",
+                    "Hospitality",
+                    "Travel Planning",
+                    "Facilities Management",
+                    "Property Management",
+                    "Real Estate",
+                    "Interior Design",
+                    "Architecture",
+                    "Construction",
+                    "Civil Engineering",
+                    "Mechanical Engineering",
+                    "Electrical Engineering",
+                    "Chemical Engineering",
+                    "Aerospace Engineering",
+                    "Materials Engineering",
+                    "Industrial Engineering",
+                    "Manufacturing",
+                    "Supply Chain Optimization",
+                    "Product Design",
+                    "Quality Engineering",
+                    "Testing",
+                    "Maintenance",
+                    "Technical Writing",
+                    "Technical Editing",
+                    "Translation",
+                    "Localization",
+                    "Copywriting",
+                    "Content Writing",
+                    "Creative Writing",
+                    "Journalism",
+                    "Public Relations",
+                    "Corporate Communications",
+                    "Advertising",
+                    "Media Production",
+                    "Film Production",
+                    "Television Production",
+                    "Radio Production",
+                    "Audio Production",
+                    "Graphic Design",
+                    "Illustration",
+                    "Motion Graphics",
+                    "Animation",
+                    "Industrial Design",
+                    "Fashion Design",
+                    "Jewelry Design",
+                    "Fine Arts",
+                    "Visual Arts",
+                    "Performing Arts",
+                    "Music",
+                    "Theater",
+                    "Dance",
+                    "Photography",
+                    "Photo Editing",
+                    "Video Editing",
+                    "Sound Design",
+                    "Game Design",
+                    "Game Art",
+                    "Game Programming",
+                    "Game Testing",
+                    "Sports Coaching",
+                    "Athletic Training",
+                };
+                var filteredSkills = skills.Distinct().ToList();
+                var skillObjectList = new List<Skill>();
+                foreach (var item in filteredSkills)
+                {
+                    skillObjectList.Add(new Skill
                     {
-                        new Skill
-                        {
-                            Name = "C#",
-                        },
-                        new Skill
-                        {
-                            Name = "JavaScript",
-                        },
-                        new Skill
-                        {
-                            Name = "SQL",
-                        },
-                        new Skill
-                        {
-                            Name = "Rust",
-                        },
-                        new Skill
-                        {
-                            Name = ".NET",
-                        },
-                        new Skill
-                        {
-                            Name = "ASP.NET",
-                        },
-                        new Skill
-                        {
-                            Name = "Python",
-                        },
-                        new Skill
-                        {
-                            Name = "Git",
-                        },
-                        new Skill
-                        {
-                            Name = "GitHub",
-                        },
-                        new Skill
-                        {
-                            Name = "Figma",
-                        },
-                        new Skill
-                        {
-                            Name = "AutoCAD",
-                        },
-                        new Skill
-                        {
-                            Name = "PyTorch",
-                        },
-                        new Skill
-                        {
-                            Name = "Tensorflow",
-                        },
-                        new Skill
-                        {
-                            Name = "NumPy",
-                        },
-                        new Skill
-                        {
-                            Name = "Machine Learning",
-                        },
-                        new Skill
-                        {
-                            Name = "SolidWorks",
-                        },
-                        new Skill
-                        {
-                            Name = "PostgreSQL",
-                        },
-                        new Skill
-                        {
-                            Name = "MongoDB",
-                        },
-                        new Skill
-                        {
-                            Name = "MS Server",
-                        },
-                        new Skill
-                        {
-                            Name = "C++",
-                        },
-                        new Skill
-                        {
-                            Name = "C",
-                        },
-                        new Skill
-                        {
-                            Name = "PHP",
-                        },
-                        new Skill
-                        {
-                            Name = "MySQL",
-                        },
-                        new Skill
-                        {
-                            Name = "MS PowerPoint",
-                        },
-                        new Skill
-                        {
-                            Name = "Excel",
-                        },
-                        new Skill
-                        {
-                            Name = "MS Access",
-                        },
-                        new Skill
-                        {
-                            Name = "MS Office",
-                        },
-                    };
+                        Name = item
+                    });
+                }
 
-                await context.AddRangeAsync(skills);
+                await context.AddRangeAsync(skillObjectList);
                 await context.SaveChangesAsync();
 
-                foreach (var item in context.Specialties.ToList())
+                foreach (var item in context.Specialties.Include(x => x.Components).ToList())
                 {
                     var skills1 = new List<Skill>();
-                    var sIndex = new Random().Next(1, 10);
-                    var eIndex = sIndex + 10;
+                    var sIndex = new Random().Next(1, await context.Skills.CountAsync() - 21);
+                    var eIndex = sIndex + 20;
                     for (; sIndex < eIndex; sIndex++)
                     {
                         skills1.Add(await context.Skills.FirstOrDefaultAsync(x => x.Id == sIndex));
                     }
+                    var componentsECTSCreds = item.Components.Select(x => x.ECTSCredits).Sum();
+                    item.EctsCredits = componentsECTSCreds + new Random().Next(0, 2) == 1 ? 20 : 40;
+                    item.AcceptanceRate = new Random().Next(5, 90);
+                    item.GraduationRate = new Random().Next(20, 90);
                     item.GraduateEmploymentRate = new Random().Next(20, 90);
-                    item.EnrolledStudentsCount = new Random().Next(10, 100);
+                    item.UndergraduateCount = new Random().Next(20, 150);
                     item.Skills = skills1;
-                    item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk") };
+                    item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"), await context.Languages.FirstOrDefaultAsync(x => x.Id == "en") };
                     item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
                     item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };
                     await context.SaveChangesAsync();
                 }
-
                 foreach (var item in context.Institutions.ToList())
                 {
+                    item.Type = await context.InstitutionTypes.FirstOrDefaultAsync(x => x.Id == 1);
+                    item.UndergraduateCount = item.Specialties.Select(x => x.UndergraduateCount).Sum() + new Random().Next(0, 5000); ;
                     item.Accreditation = new Random().Next(3, 5);
-                    item.Coordinates = new Coordinates { Latitude = 0, Longitude = 0 };
+                    item.Coordinates = new Coordinates { Latitude = 49.320175149, Longitude = 32.6557279 };
                     await context.SaveChangesAsync();
                 }
             }
+
         }
     }
 }

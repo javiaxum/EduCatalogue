@@ -59,11 +59,11 @@ namespace Application.Institutions
                         && (!IsDegree || s.Degree.Id == Degree)));
 
                 var sortedQuery =
-                request.Params.Sort == "za"
-                ? query.OrderByDescending(x => x.Name)
-                : request.Params.Sort == "hr"
-                ? query.OrderByDescending(x => x.Reviews.Select(x => x.Rating).Average())
-                : query.OrderBy(x => x.Name);
+                    request.Params.Sort == "za"
+                    ? query.OrderByDescending(x => x.Name)
+                    : request.Params.Sort == "hr"
+                    ? query.OrderByDescending(x => x.Reviews.Select(x => x.Rating).Average())
+                    : query.OrderBy(x => x.Name);
                 var result = sortedQuery
                 .ProjectTo<InstitutionDTO>(_mapper.ConfigurationProvider);
                 return Result<PagedList<InstitutionDTO>>.Success(

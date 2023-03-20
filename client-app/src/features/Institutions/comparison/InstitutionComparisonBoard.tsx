@@ -56,13 +56,13 @@ export default observer(function InstitutionComparisonBoard() {
         return specialties.reduce((sum, specialty) => sum + specialty.priceUAH, 0) / specialties.length;
     }
 
-    const MaxSpecialtiesCoverage = Math.max(...selectedInstitutions.map((i) => SpecialtiesCoverage(i.specialties)));
-    const MaxAverageEmployment = Math.max(...selectedInstitutions.map((i) => AverageEmployment(i.specialties)));
+    // const MaxSpecialtiesCoverage = Math.max(...selectedInstitutions.map((i) => SpecialtiesCoverage(i.specialties)));
+    // const MaxAverageEmployment = Math.max(...selectedInstitutions.map((i) => AverageEmployment(i.specialties)));
 
     if (loading) return <LoadingComponent />
 
     return (
-        <Grid style={{ border: '0', margin: '0', minWidth: '60em' }}>
+        <Grid style={{ border: '0', margin: '0', minWidth: '60rem', maxWidth: '85rem' }}>
             <Grid.Column style={{ minWidth: '50px', width: '5%' }} stretched>
             </Grid.Column>
             <Grid.Column style={{ minWidth: '780px', width: '90%' }}>
@@ -103,8 +103,7 @@ export default observer(function InstitutionComparisonBoard() {
                             {selectedInstitutions.map((i) =>
                                 <Table.Cell
                                     key={i.id}
-                                    textAlign='center'
-                                    positive={selectedInstitutions.reduce((max, institution) => { return Math.round(institution.rating) > max ? Math.round(institution.rating) : max; }, 0) == Math.round(i.rating)}>
+                                    textAlign='center'>
                                     {BuildRatingStars(i.rating)}
                                     <Header as='h4' style={{ color: '#777', display: 'block', padding: 0, margin: 0 }} >
                                         {i.reviews?.length + ' ' + t('відгуків')}
@@ -120,8 +119,7 @@ export default observer(function InstitutionComparisonBoard() {
                             {selectedInstitutions.map((i) =>
                                 <Table.Cell
                                     key={i.id}
-                                    textAlign='center'
-                                    positive={selectedInstitutions.reduce((max, institution) => { return institution.accreditation > max ? institution.accreditation : max; }, 0) == i.accreditation}>
+                                    textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
                                         {i.accreditation}
                                     </Header>
@@ -136,8 +134,7 @@ export default observer(function InstitutionComparisonBoard() {
                             {selectedInstitutions.map((i) =>
                                 <Table.Cell
                                     key={i.id}
-                                    textAlign='center'
-                                    positive={selectedInstitutions.reduce((max, institution) => { return institution.studentCount > max ? institution.studentCount : max; }, 0) == i.studentCount}>
+                                    textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
                                         {i.studentCount}
                                     </Header>
@@ -149,18 +146,14 @@ export default observer(function InstitutionComparisonBoard() {
                                     {t('SPECIALTIES COVERAGE')}
                                 </Header>
                             </Table.Cell>
-                            {selectedInstitutions.map((i) => {
-                                const sc = SpecialtiesCoverage(i.specialties);
-                                return (
-                                    <Table.Cell
-                                        key={i.id}
-                                        textAlign='center'
-                                        positive={MaxSpecialtiesCoverage == sc}>
-                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {SpecialtiesCoverage(i.specialties).toPrecision(1)}%
-                                        </Header>
-                                    </Table.Cell>)
-                            })}
+                            {selectedInstitutions.map((i) =>
+                                <Table.Cell
+                                    key={i.id}
+                                    textAlign='center'>
+                                    <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                        {SpecialtiesCoverage(i.specialties).toPrecision(1)}%
+                                    </Header>
+                                </Table.Cell>)}
                         </Table.Row>
                         <Table.Row >
                             <Table.Cell>
@@ -168,18 +161,14 @@ export default observer(function InstitutionComparisonBoard() {
                                     {t('AVERAGE EMPLOYMENT RATE')}
                                 </Header>
                             </Table.Cell>
-                            {selectedInstitutions.map((i) => {
-                                const ae = AverageEmployment(i.specialties);
-                                return (
-                                    <Table.Cell
-                                        key={i.id}
-                                        textAlign='center'
-                                        positive={MaxAverageEmployment == ae}>
-                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {AverageEmployment(i.specialties).toPrecision(3)}%
-                                        </Header>
-                                    </Table.Cell>)
-                            })}
+                            {selectedInstitutions.map((i) =>
+                                <Table.Cell
+                                    key={i.id}
+                                    textAlign='center'>
+                                    <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                        {AverageEmployment(i.specialties).toPrecision(3)}%
+                                    </Header>
+                                </Table.Cell>)}
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>

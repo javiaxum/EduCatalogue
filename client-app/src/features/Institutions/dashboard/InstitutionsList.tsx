@@ -1,9 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Link } from 'react-router-dom';
-import { Button, Container, Divider, Grid, Header, Item, Loader, Segment, Select } from 'semantic-ui-react';
+import { Divider, Grid, Header, List, Loader, Segment, Select, Transition } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionsListItem from './InstitutionsListItem';
 import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
@@ -11,21 +9,18 @@ import InstitutionsListItemPlaceholder from './InstitutionsListItemPlaceholder';
 export default observer(function InstitutionsList() {
     const { institutionStore } = useStore();
     const {
-        pagination,
-        pagingParams,
+        institutionPagination: pagination,
+        institutionPagingParams: pagingParams,
         setInstitutionsSearchSort,
         setLoading,
-        selectedInstitutionsSort,
+        institutionsSorting: selectedInstitutionsSort,
         loading,
-        instititutionsBySelectedSort,
-        institutionsRegistry,
-        loadingInitial } = institutionStore;
+        institutions } = institutionStore;
 
     let placeholders = [];
     for (let i = 0; i < pagingParams.pageSize; i++) {
         placeholders.push(<InstitutionsListItemPlaceholder key={i} />);
     }
-
     const { t } = useTranslation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
@@ -76,22 +71,29 @@ export default observer(function InstitutionsList() {
                     </Grid>
                 </>
             }
-            <Item.Group divided style={{padding: '1rem'}}>
-                {loadingInitial || loading
-                    ? placeholders
-                    : (
-                        <>
-                            {institutionsRegistry.size === 0
-                                ? (<>
-                                    <Segment>No results were found...</Segment>
-                                </>)
-                                : (<>
-                                    {instititutionsBySelectedSort.map((institution) => (
-                                        <InstitutionsListItem institution={institution} key={institution.id} />
-                                    ))}
-                                </>)}
-                        </>)}
-            </Item.Group>
+            <div style={{ minHeight: '150rem' }}>
+                <Transition.Group
+                    as={List}
+                    duration={500}
+                    size='huge'
+                    verticalAlign='middle'>
+                    {institutions.map((institution) =>
+                        <List.Item key={institution.id}>
+                            <InstitutionsListItem institution={institution} />
+                        </List.Item>
+                    )}
+                </Transition.Group>
+            </div>
+            <Transition
+                visible={loading}
+                duration={500}
+                unmountOnHide
+                size='huge'
+                verticalAlign='middle'>
+                <div style={{ position: 'absolute', top: '10rem', minHeight: '150rem', maxHeight: '150rem', zIndex: 0 }}>
+                    {placeholders}
+                </div>
+            </Transition>
         </>
     )
 })

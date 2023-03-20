@@ -11,8 +11,9 @@ namespace Domain
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int StudentCount { get; set; }
         public int Accreditation { get; set; }
+        public int UndergraduateCount { get; set; }  
+        public InstitutionType Type { get; set; } //Private Public
         public City City { get; set; }
         public Coordinates Coordinates { get; set; }
         public string StreetAddress { get; set; }

@@ -11,11 +11,12 @@ namespace Application
 {
     public class InstitutionDTO
     {
-        public Guid Id { get; set; }
+         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int StudentCount { get; set; }
         public int Accreditation { get; set; }
+        public int UndergraduateCount { get; set; }  
+        public int TypeId { get; set; }
         public int CityId { get; set; }
         public int RegionId { get; set; }
         public double Latitude { get; set; }
@@ -27,5 +28,6 @@ namespace Application
         public string BackgroundImageUrl { get; set; }
         public string ContactInformation { get; set; }
         public double Rating { get; set; }
+        public ICollection<Guid> Reviews { get; set; }
     }
 }

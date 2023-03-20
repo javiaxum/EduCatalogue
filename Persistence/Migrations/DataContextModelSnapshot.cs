@@ -288,11 +288,14 @@ namespace Persistence.Migrations
                     b.Property<string>("StreetAddress")
                         .HasColumnType("text");
 
-                    b.Property<int>("StudentCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("TitleImageId")
                         .HasColumnType("text");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UndergraduateCount")
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -300,7 +303,25 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CoordinatesId");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("Institutions");
+                });
+
+            modelBuilder.Entity("Domain.InstitutionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InstitutionTypes");
                 });
 
             modelBuilder.Entity("Domain.Language", b =>
@@ -384,6 +405,9 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<int>("AcceptanceRate")
+                        .HasColumnType("integer");
+
                     b.Property<int?>("DegreeId")
                         .HasColumnType("integer");
 
@@ -396,10 +420,10 @@ namespace Persistence.Migrations
                     b.Property<int>("EndYear")
                         .HasColumnType("integer");
 
-                    b.Property<int>("EnrolledStudentsCount")
+                    b.Property<int>("GraduateEmploymentRate")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GraduateEmploymentRate")
+                    b.Property<int>("GraduationRate")
                         .HasColumnType("integer");
 
                     b.Property<Guid?>("InstitutionId")
@@ -415,6 +439,9 @@ namespace Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<int>("StartYear")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UndergraduateCount")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -718,9 +745,15 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("CoordinatesId");
 
+                    b.HasOne("Domain.InstitutionType", "Type")
+                        .WithMany("Institutions")
+                        .HasForeignKey("TypeId");
+
                     b.Navigation("City");
 
                     b.Navigation("Coordinates");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Domain.Review", b =>
@@ -742,7 +775,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Domain.Specialty", b =>
                 {
                     b.HasOne("Domain.Degree", "Degree")
-                        .WithMany("Specialty")
+                        .WithMany("Specialties")
                         .HasForeignKey("DegreeId");
 
                     b.HasOne("Domain.Institution", "Institution")
@@ -890,7 +923,7 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Degree", b =>
                 {
-                    b.Navigation("Specialty");
+                    b.Navigation("Specialties");
                 });
 
             modelBuilder.Entity("Domain.Institution", b =>
@@ -902,6 +935,11 @@ namespace Persistence.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Specialties");
+                });
+
+            modelBuilder.Entity("Domain.InstitutionType", b =>
+                {
+                    b.Navigation("Institutions");
                 });
 
             modelBuilder.Entity("Domain.Region", b =>

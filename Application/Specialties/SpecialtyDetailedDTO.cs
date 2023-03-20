@@ -7,23 +7,25 @@ using Domain;
 
 namespace Application.Specialties
 {
-    public class SpecialtyComponentsDTO
+    public class SpecialtyDetailedDTO
     {
         public Guid Id { get; set; }
         public Guid InstitutionId { get; set; }
         public string LocalSpecialtyCode { get; set; }
         public string Description { get; set; }
-        public int EctsCredits { get; set; }
         public int DegreeId { get; set; }
-        public int EnrolledStudentsCount { get; set; }
-        public int GraduateEmploymentRate { get; set; }
         public decimal PriceUAH { get; set; }
         public bool NonPaidEducationAvailable { get; set; }
+        public int AcceptanceRate { get; set; }
+        public int GraduationRate { get; set; }
+        public int GraduateEmploymentRate { get; set; }
+        public int UndergraduateCount { get; set; }
+        public int EctsCredits { get; set; }
         public int StartYear { get; set; }
         public int EndYear { get; set; }
         public ICollection<int> StudyFormIds { get; set; } = new List<int>();
         public ICollection<string> LanguageIds { get; set; } = new List<string>();
-        public ICollection<ComponentDTO> ComponentDTOs { get; set; } = new List<ComponentDTO>();
         public ICollection<int> SkillIds { get; set; } = new List<int>();
+        public ICollection<ComponentDTO> ComponentDTOs { get; set; } = new List<ComponentDTO>();
     }
 }

@@ -7,7 +7,7 @@ using FluentValidation;
 
 namespace Application.Specialties
 {
-    public class SpecialtyCreateValidator : AbstractValidator<SpecialtyComponentsDTO>
+    public class SpecialtyCreateValidator : AbstractValidator<SpecialtyDetailedDTO>
     {
         public SpecialtyCreateValidator()
         {

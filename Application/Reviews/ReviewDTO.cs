@@ -7,7 +7,8 @@ using Domain;
 
 namespace Application.Reviews
 {
-    public class ReviewDTO
+    public class 
+    ReviewDTO
     {
         public Guid Id { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;

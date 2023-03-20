@@ -16,14 +16,14 @@ interface Props {
 export default observer(function SpecialtyListItem({ specialty, specialtyCore, iscedCodeString }: Props) {
 
     const { specialtyStore } = useStore();
-    const { t, i18n } = useTranslation();
+    const { t  } = useTranslation();
     const isActive = specialtyStore.selectedSpecialtyIds.includes(specialty.id);
 
     return (
         <Grid.Column style={{ width: '245px', overflow: 'hidden' }}>
             <Card as={Link} to={`/specialties/${specialty.id}`} className='specialtyCard' style={{ display: 'block' }}>
                 <Card.Content>
-                    <Card.Header style={{width: '180px'}}>{specialtyCore.name.slice(0, 50)} {specialtyCore.name.length > 50 && '...'}</Card.Header>
+                    <Card.Header style={{width: '180px'}}>{specialtyCore.name.slice(0, 40)} {specialtyCore.name.length > 50 && '...'}</Card.Header>
                     <Card.Description>{t('Specialty code') + ': '} {specialtyCore.id}</Card.Description>
                     <Card.Description>{t('ISCED code') + ': '} {iscedCodeString}</Card.Description>
                     <Card.Description>{specialty.description.slice(0, 80)} {specialty.description.length > 80 && '...'}</Card.Description>

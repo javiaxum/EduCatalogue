@@ -1,28 +1,20 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { Button, Container, Grid, Header, Icon, Image, Item, Segment } from 'semantic-ui-react';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Button, Grid, Header, Icon, Segment } from 'semantic-ui-react';
 import { v4 as uuid } from 'uuid';
 import { Form, Formik } from 'formik';
 import * as Yup from 'yup';
-import { Review, ReviewFormValues } from '../../../../app/models/review';
+import { ReviewFormValues } from '../../../../app/models/review';
 import { useStore } from '../../../../app/stores/store';
 import CustomTextArea from '../../../../app/common/form/CustomTextArea';
 
 export default observer(function ReviewForm() {
-    const { institutionStore, commonStore } = useStore();
+    const { institutionStore } = useStore();
     const {
-        loadInstitution,
-        loadingInitial,
-        createInstitution,
-        editInstitution,
-        setLoadingInitial,
-        detailsMenuActiveItem,
-        loading,
         createReview,
         setReviewForm } = institutionStore;
     const { id } = useParams();
-    const { editMode, setEditMode } = commonStore;
 
     const [review, setReview] = useState<ReviewFormValues>(new ReviewFormValues())
     const [rating, setRating] = useState<number>(0);

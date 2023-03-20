@@ -30,6 +30,7 @@ namespace Persistence
         public DbSet<Degree> Degrees { get; set; }
         public DbSet<Language> Languages { get; set; }
         public DbSet<StudyForm> StudyForms { get; set; }
+        public DbSet<InstitutionType> InstitutionTypes { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

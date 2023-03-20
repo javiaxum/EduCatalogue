@@ -1,26 +1,27 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Divider, Grid, Header, Segment } from 'semantic-ui-react';
+import { useMediaQuery } from 'react-responsive';
+import { Divider, Header, Segment } from 'semantic-ui-react';
 import SearchParamsList from './SearchParamsList';
 
 export default function SearchParamsSideBar() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
+
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
+
     return (
-        <Grid style={{ padding: 0, margin: 0 }}>
-            <Grid.Row only='mobile' style={{ padding: 0, margin: 0 }}>
+        <>
+            {isMobile &&
                 <Segment style={{ boxShadow: 'none', border: 0, borderRadius: 0 }}>
                     <Divider />
                     <Header as='h3' content={t('Filtering Options')} />
                     <SearchParamsList />
-                </Segment>
-            </Grid.Row>
-            <Grid.Row only='computer tablet' style={{ padding: 0, margin: 0 }}>
-                <Segment>
+                </Segment>}
+            {isComputerOrTablet &&
+                <Segment style={{ position: 'sticky', top: 0 }}>
                     <Header as='h3' content={t('Filtering Options')} />
                     <SearchParamsList />
-                </Segment>
-            </Grid.Row>
-        </Grid>
-
+                </Segment>}
+        </>
     )
 }

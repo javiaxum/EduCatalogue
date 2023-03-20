@@ -52,7 +52,7 @@ namespace API.Controllers
         }
         [Authorize(Policy = "IsInstitutionManagerOrOperator")]
         [HttpPut("{id}/specialty/{specialtyId}")]
-        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyComponentsDTO specialty)
+        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyDetailedDTO specialty)
         {
             specialty.Id = specialtyId;
             return HandleResult(await Mediator.Send(new Edit.Command { Specialty = specialty }));

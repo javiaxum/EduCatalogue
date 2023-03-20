@@ -21,6 +21,8 @@ namespace Application.Core
             .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates { Latitude = s.Latitude, Longitude = s.Longtitude }));
 
             CreateMap<Institution, InstitutionDTO>()
+            .ForMember(d => d.Reviews, o => o.MapFrom(s => s.Reviews.Select(x => x.Id)))
+            .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
             .ForMember(d => d.EmblemImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.EmblemImageId).Url))
             .ForMember(d => d.BackgroundImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.BackgroundImageId).Url))
@@ -29,15 +31,11 @@ namespace Application.Core
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
 
             CreateMap<Institution, InstitutionDetailedDTO>()
+            .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
             .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
             .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
             .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id));
-
-            // CreateMap<AppUserInstitution, Profiles.Profile>()
-            // .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.Manager.DisplayName))
-            // .ForMember(d => d.Username, o => o.MapFrom(s => s.Manager.UserName))
-            // .ForMember(d => d.Image, o => o.MapFrom(s => s.Manager.Images.FirstOrDefault(x => x.Type == "ProfileMainImage").Url));
 
             CreateMap<AppUser, Profiles.ProfileDetailed>()
             .ForMember(d => d.ManagedInstitutions, o => o.MapFrom(s => s.Institutions));
@@ -57,9 +55,9 @@ namespace Application.Core
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 
-            CreateMap<SpecialtyComponentsDTO, Specialty>();
+            CreateMap<SpecialtyDetailedDTO, Specialty>();
 
-            CreateMap<Specialty, SpecialtyComponentsDTO>()
+            CreateMap<Specialty, SpecialtyDetailedDTO>()
             .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id))
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.SkillIds, o => o.MapFrom(s => s.Skills.Select(x => x.Id)))

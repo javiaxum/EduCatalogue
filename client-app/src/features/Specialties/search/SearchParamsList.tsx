@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite";
-import react from "react";
 import { useTranslation } from "react-i18next";
-import { Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
+import { Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Select } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 
 export default observer(function SearchParamsList() {
-    const { specialtyStore, commonStore } = useStore();
+    const { specialtyStore } = useStore();
     const {
         branchesById,
         skillsById,
@@ -26,9 +25,8 @@ export default observer(function SearchParamsList() {
         setMinPrice,
         setDegreePredicate } = specialtyStore;
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
-    const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
     const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
     const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
 
@@ -89,7 +87,7 @@ export default observer(function SearchParamsList() {
                 options={branchOptions}
                 onChange={(e, data) => {
                     setSelectedBranches(data.value as string[])
-                    if (selectedSpecialties?.length != 0 && selectedBranches.length != 0) {
+                    if (selectedSpecialties?.length !== 0 && selectedBranches.length !== 0) {
                         setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
                     }
                 }}
@@ -137,7 +135,7 @@ export default observer(function SearchParamsList() {
                 value={selectedLanguages}
                 options={languages}
                 onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedLanguages(data.value)} />
-            <Header as='h4' content={t('Skills')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Header as='h4' content={t('Study form')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
                 placeholder={t('Select study form') as string}
                 fluid

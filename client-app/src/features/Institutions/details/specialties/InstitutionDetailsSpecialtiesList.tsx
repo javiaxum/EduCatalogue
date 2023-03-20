@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect } from 'react';
-import { Container, Grid, Segment } from 'semantic-ui-react';
-import PaginationBar from '../../../../app/common/pagination/PaginationBar';
+import { Container, Grid, Pagination, Segment } from 'semantic-ui-react';
 import { SpecialtiesPagingParams } from '../../../../app/models/pagination';
 import { useStore } from '../../../../app/stores/store';
 import SearchParamsList from '../../../Specialties/search/SearchParamsList';
@@ -10,16 +9,21 @@ import SpecialtyListAddNewItem from './SpecialtyListAddNewItem';
 import SpecialtyListItem from './SpecialtyListItem';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
-    const { institutionStore, commonStore, specialtyStore } = useStore();
-    const { getSpecialtyCore, getSpecialtyCoreISCEDString, pagingParams, loading, loadSpecialties, pagination, setPagingParams, selectedBranches, selectedSpecialties, selectedSkillIds, specialtyRegistry } = specialtyStore;
-    const { selectedInstitution } = institutionStore;
+    const { commonStore, specialtyStore } = useStore();
+    const {
+        getSpecialtyCore,
+        getSpecialtyCoreISCEDString,
+        pagingParams,
+        loading,
+        loadSpecialties,
+        pagination,
+        setPagingParams,
+        specialtyRegistry } = specialtyStore;
     const { editMode } = commonStore;
 
     useEffect(() => {
         specialtyStore.loadSpecialties();
-    }, [specialtyStore.loadSpecialties])
-
-    if (!selectedInstitution || !selectedInstitution.specialties) return <></>;
+    }, [specialtyStore, specialtyStore.loadSpecialties])
 
     function handleLoad(i: number) {
         setPagingParams(new SpecialtiesPagingParams(i));
@@ -34,36 +38,38 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
         placeholders.push(<SpecialtiesListItemPlaceholder key={i} />);
     }
     return (
-        <Grid >
-            <Grid.Column style={{ minWidth: '500px', width: '69%' }}>
-                <Container style={{ textAlign: 'center', padding: '0 0 0.5rem 0'}}>
-                    <PaginationBar handleLoad={handleLoad} pagination={pagination} />
+        <Grid style={{ margin: 0 }}>
+            <Grid.Column width={11} style={{ padding: 0 }}>
+                <Container style={{ textAlign: 'center', padding: '0 0 0.5rem 0' }}>
+                    <Pagination
+                        totalPages={pagination?.totalPages!}
+                        activePage={pagination?.currentPage}
+                        onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                 </Container>
                 <Grid>
-                    {loading ? placeholders : (
+                    {loading ?
+                        placeholders :
                         <>
                             {(specialties.length === 0)
-                                ? <Segment style={{ color: '#444', width: '300px' }}>There are no specialties available...</Segment>
-                                : (
-                                    <>
-                                        {specialties.map((specialty) => (
-                                            <SpecialtyListItem
-                                                specialty={specialty}
-                                                specialtyCore={getSpecialtyCore(specialty.localSpecialtyCode)!}
-                                                key={specialty.id}
-                                                iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />
-                                        ))}
-                                    </>
-                                )}
+                                ? <Segment style={{ color: '#444', width: '10rem' }}>There are no specialties available...</Segment>
+                                : <>
+                                    {specialties.map((specialty) => (
+                                        <SpecialtyListItem
+                                            specialty={specialty}
+                                            specialtyCore={getSpecialtyCore(specialty.localSpecialtyCode)!}
+                                            key={specialty.id}
+                                            iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />
+                                    ))}
+                                </>}
                             {editMode &&
-                                <SpecialtyListAddNewItem />
-                            }
-                        </>
-                    )}
+                                <SpecialtyListAddNewItem />}
+                        </>}
                 </Grid>
             </Grid.Column>
-            <Grid.Column floated='right' style={{ minWidth: '300px', width: '18%', top: '-2rem' }}>
-                <SearchParamsList />
+            <Grid.Column width={5} style={{ padding: 0, top: '-2rem' }}>
+                <Segment>
+                    <SearchParamsList />
+                </Segment>
             </Grid.Column>
         </Grid>
     )

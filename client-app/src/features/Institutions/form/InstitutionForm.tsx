@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Grid, Header, Item, Segment } from 'semantic-ui-react';
+import { Button, Grid, Header, Placeholder, Segment } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -10,24 +10,19 @@ import * as Yup from 'yup';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import { InstitutionFormValues } from '../../../app/models/institution';
 import { router } from '../../routers/Routes';
-import InstitutionDetailsMenu from '../details/InstitutionDetailsMenu';
-import InstitutionDetailsSpecialtiesList from '../details/specialties/InstitutionDetailsSpecialtiesList';
-import InstitutionDetailsInfoForm from './InstitutionDetailsInfoForm';
-import InstitutionDetailsReviewsList from '../details/reviews/InstitutionDetailsReviewsList';
-import InstitutionDetailsGallery from '../details/gallery/InstitutionDetailsGallery';
 import BackgroundUploadWidgetDropzone from '../../../app/common/imageUpload/backgroundImage/BackgroundUploadWidgetDropzone';
 import BackgroundImageUploadWidgetCropper from '../../../app/common/imageUpload/backgroundImage/BackgroundImageUploadWidgetCropper';
-import InstitutionDetailsLocationForm from '../details/location/InstitutionDetailsLocationForm';
+import InstitutionFormContent from '../details/InstitutionFormContent';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore } = useStore();
     const {
         loadInstitution,
         loadingInitial,
+        loading,
         createInstitution,
         editInstitution,
         setLoadingInitial,
-        detailsMenuActiveItem,
         loadRegionsWithCities,
         selectedInstitution,
         uploading,
@@ -79,6 +74,7 @@ export default observer(function InstitutionForm() {
         return (() => {
             files.forEach((file: any) => URL.revokeObjectURL(file.preview));
         })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [files, loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
@@ -101,89 +97,73 @@ export default observer(function InstitutionForm() {
             onSubmit={values => handleInstitutionFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Grid style={{}}>
-                        <Grid.Row style={{ padding: '0 0 1rem 0' }}>
-                            <Segment style={{ top: '-1px', padding: '0' }} basic clearing>
-                                {files && files.length == 0 && <BackgroundUploadWidgetDropzone
-                                    setFiles={setFiles}
-                                    imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'} />}
-                                {files && files.length > 0 && <>
-                                    <div className='bkgr-img-preview' style={{ height: '10rem', overflow: 'hidden' }} />
+                    <Grid style={{ margin: 0, minWidth: '70rem', backgroundColor: '#fff' }} stretched>
+                        <Grid.Row style={{ padding: 0, zIndex: 1 }}>
+                            {loading
+                                ? <Placeholder
+                                    style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} >
+                                    <Placeholder.Image />
+                                </Placeholder>
+                                : <>
+                                    {(files && files.length === 0) &&
+                                        <BackgroundUploadWidgetDropzone
+                                            setFiles={setFiles}
+                                            imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'} />}
+                                    {(files && files.length > 0) &&
+                                        <div className='bkgr-img-preview' style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
                                 </>}
-                            </Segment>
-                            <Segment style={{
-                                padding: '1em 3em 1em 3em',
-                                top: '-4rem',
-                                left: '15%',
-                                width: '70%',
-                                color: 'white',
-                                borderRadius: '5px',
-                                boxShadow: 'none',
-                                border: 'none',
-                                minWidth: '70vh'
-                            }}>
-                                {files && files.length > 0 &&
+                        </Grid.Row>
+                        <Grid.Row
+                            style={{ padding: 0, top: '-4rem' }}>
+                            <Segment
+                                style={{ margin: 0, padding: '1rem 3rem 0.15rem 3rem', left: '15%', width: '70%', borderRadius: '5px', boxShadow: 'none', border: 'none', zIndex: 2 }}>
+                                {(files && files.length > 0) &&
                                     <Segment style={{ padding: '1rem 0 1rem 0' }} clearing>
                                         <Header as='h3' content='Background preview' style={{ paddingLeft: '40px' }} />
                                         <BackgroundImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
-                                        <Button.Group widths={2}>
+                                        <Button.Group>
                                             <Button
                                                 positive
                                                 type='button'
                                                 icon='check'
                                                 onClick={onCrop}
-                                                loading={uploading}
-                                            />
+                                                loading={uploading} />
                                             <Button
                                                 onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
                                                 type='button'
                                                 icon='cancel'
-                                                disabled={uploading}
-                                            />
+                                                disabled={uploading} />
                                         </Button.Group>
                                     </Segment>}
-                                <Item.Group>
-                                    <Item>
-                                        <Item.Content>
-                                            <Header
-                                                style={{ color: '#444', width: '60%', fontSize: '1rem' }}>
-                                                <CustomTextInput width='100%' placeholder='Name' name='name' />
-                                            </Header>
-                                            <Button.Group floated='right' style={{ minWidth: '10%', maxWidth: '30%' }} >
-                                                <Button
-                                                    positive
-                                                    type='submit'
-                                                    content='Submit'
-                                                    loading={isSubmitting}
-                                                    disabled={!dirty || isSubmitting || !isValid}
-                                                />
-                                                <Button
-                                                    as={Link}
-                                                    to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
-                                                    onClick={() => setEditMode(false)}
-                                                    floated='right'
-                                                    type='button'
-                                                    content='Cancel'
-                                                    disabled={isSubmitting} />
-                                            </Button.Group>
-                                        </Item.Content>
-                                    </Item>
-                                </Item.Group>
+                                {loading ?
+                                    <Placeholder style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 25rem)', height: '2rem' }}>
+                                        <Placeholder.Line />
+                                    </Placeholder>
+                                    : <Header
+                                        style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 25rem)', margin: 0 }}>
+                                        <CustomTextInput width='100%' placeholder='Name' name='name' />
+                                    </Header>}
+                                <Button.Group style={{ position: 'absolute', width: '22rem', right: '2rem' }}>
+                                    <Button
+                                        positive
+                                        type='submit'
+                                        content='Submit'
+                                        loading={isSubmitting}
+                                        disabled={!dirty || isSubmitting || !isValid} />
+                                    <Button
+                                        as={Link}
+                                        to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
+                                        onClick={() => setEditMode(false)}
+                                        floated='right'
+                                        type='button'
+                                        content='Cancel'
+                                        disabled={isSubmitting} />
+                                </Button.Group>
+                            </Segment>
+                            <Segment basic style={{ padding: '0 3rem 0 3rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100rem', minWidth: '100rem' }}>
+                                <InstitutionFormContent />
                             </Segment>
                         </Grid.Row>
-                        <Grid.Column style={{ minWidth: '1000px', width: '90%', left: '8%', top: '-80px' }}>
-                            <InstitutionDetailsMenu />
-                            {detailsMenuActiveItem === 'About' &&
-                                <InstitutionDetailsInfoForm institution={institution} />}
-                            {detailsMenuActiveItem === 'Specialties' &&
-                                <InstitutionDetailsSpecialtiesList />}
-                            {detailsMenuActiveItem === 'Location' &&
-                                <InstitutionDetailsLocationForm />}
-                            {detailsMenuActiveItem === 'Reviews' &&
-                                <InstitutionDetailsReviewsList />}
-                            {detailsMenuActiveItem === 'Gallery' &&
-                                <InstitutionDetailsGallery />}
-                        </Grid.Column>
                     </Grid>
                 </Form>
             )}

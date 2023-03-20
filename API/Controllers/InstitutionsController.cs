@@ -55,7 +55,7 @@ namespace API.Controllers
         }
         [Authorize(Policy = "IsInstitutionManagerOrOperator")]   
         [HttpPost("{id}/specialties")]
-        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyComponentsDTO specialty)
+        public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDetailedDTO specialty)
         {
             return HandleResult(await Mediator.Send(new Application.Specialties.Create.Command
             {

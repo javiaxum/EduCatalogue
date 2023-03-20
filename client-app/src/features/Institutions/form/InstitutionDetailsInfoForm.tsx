@@ -1,27 +1,17 @@
-import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { Fragment, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
-import { Button, Container, DropdownProps, Grid, Header, Icon, Image, Input, Search, Segment } from 'semantic-ui-react';
-import { number } from 'yup';
-import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
+import { Button, Container, Grid, Header, Icon } from 'semantic-ui-react';
 import CustomTextArea from '../../../app/common/form/CustomTextArea';
 import CustomTextInput from '../../../app/common/form/CustomTextInput';
 import ImageUploadWidgetCropper from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetCropper';
 import ImageUploadWidgetDropzone from '../../../app/common/imageUpload/titleImage/ImageUploadWidgetDropzone';
-import { InstitutionFormValues } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    institution: InstitutionFormValues
-}
-
-export default observer(function InstitutionDetailsInfoForm({ institution }: Props) {
+export default observer(function InstitutionDetailsInfoForm() {
     const { institutionStore } = useStore();
     const {
-        regionRegistry,
-        getRegionById,
         selectedInstitution,
         setTitleImage,
         uploading } = institutionStore;
@@ -47,8 +37,7 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 URL.revokeObjectURL(file.preview));
         })
     }, [files])
-    const { t, i18n } = useTranslation();
-    const formik = useFormikContext();
+    const { t } = useTranslation();
 
     return (
         <Grid style={{ minWidth: '1000px' }}>
@@ -93,14 +82,14 @@ export default observer(function InstitutionDetailsInfoForm({ institution }: Pro
                 </Grid>
             </Grid.Column>
             <Grid.Column width={4}>
-                {files && files.length == 0 &&
+                {(files && files.length === 0) &&
                     <ImageUploadWidgetDropzone
                         setFiles={setFiles}
                         imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'} />}
-                {files && files.length > 0 && <>
+                {(files && files.length > 0) && <>
                     <div className='img-preview' style={{ borderRadius: '30px', minHeight: '22rem', minWidth: '22rem', overflow: 'hidden', }} />
                 </>}
-                {files && files.length > 0 &&
+                {(files && files.length > 0) &&
                     <Container style={{ minHeight: '22rem', minWidth: '22rem', paddingTop: '3rem' }}>
                         <Header as='h3' content='Image preview' />
                         <ImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />

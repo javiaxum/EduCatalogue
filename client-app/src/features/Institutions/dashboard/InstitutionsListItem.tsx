@@ -1,8 +1,9 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import { Button, Grid, Item, Image, Header, Icon, Container, Segment } from 'semantic-ui-react';
+import { Button, Grid, Item, Image, Header, Icon, Segment } from 'semantic-ui-react';
+import RatingStars from '../../../app/common/rating/RatingStars';
 import { Institution } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
 
@@ -11,62 +12,73 @@ interface Props {
 }
 
 export default observer(function InstitutionsListItem({ institution }: Props) {
-    let elements = [];
-    for (let i = 1; i <= Math.round(institution.rating); i++) {
-        elements.push((<Icon color='yellow' name='star' key={i} />))
-    }
-    for (let i = 1; i <= 5 - Math.round(institution.rating); i++) {
-        elements.push((<Icon color='yellow' name='star outline' key={5 - i + 1} />))
-    }
-
     const { institutionStore } = useStore();
     const isActive = institutionStore.selectedInstitutionIds.includes(institution.id);
+
+    const { t } = useTranslation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
 
     return (
-        <Item style={{ minHeight: 110, paddingTop: 20 }}>
+        <>
             {isComputerOrTablet &&
-                <Grid>
-                    <Grid.Column style={{ width: '13rem', minWidth: '13rem' }}>
-                        <Segment style={{width: '12rem', height: '12rem', padding: 0, borderRadius: '10px 0 0 0 '}}>
+                <Segment style={{ padding: 0, borderRadius: '10px' }}>
+                    <Grid style={{ margin: 0 }}>
+                        <Grid.Column style={{ width: '13rem', minWidth: '13rem', padding: 0 }}>
                             <img
+                                alt='TitleImage'
                                 src={institution.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
-                                style={{ objectFit: 'cover', height: 'inherit', width: 'inherit', borderRadius: 'inherit' }} />
-                        </Segment>
-                    </Grid.Column>
-                    <Grid.Column style={{ width: 'calc(100% - 14rem)' }}>
-                        <Grid style={{ width: '100%', padding: '0 0 0 5%' }}>
-                            <Grid.Row style={{ paddingBottom: '0' }}>
-                                <Header
+                                style={{ width: '12rem', height: '12rem', borderRadius: '10px 0 0 0 ', objectFit: 'cover' }} />
+                        </Grid.Column>
+                        <Grid.Column style={{ width: 'calc(100% - 14rem)' }}>
+                            <Grid style={{ width: '100%', padding: '0 0 0 5%' }}>
+                                <Grid.Row style={{ paddingBottom: '0' }}>
+                                    <Header
+                                        as={Link}
+                                        to={`/institutions/${institution.id}`}
+                                        style={{ maxWidth: 'calc(100% - 15rem)' }}>
+                                        {institution.name}</Header>
+                                    <div style={{ position: 'absolute', right: 0 }}>
+                                        <div style={{ display: 'block' }}>
+                                            <RatingStars rating={institution.rating} />
+                                        </div>
+                                        <div style={{ color: '#777', display: 'block', marginLeft: '1rem' }}>
+                                            {institution.reviews.length} {t('Reviews_Dashboard_plural')}
+                                        </div>
+                                    </div>
+                                </Grid.Row>
+                                <Grid.Row style={{ padding: '0 0 1rem 0' }}>
+                                    <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
+                                </Grid.Row>
+                                <Grid.Row style={{ padding: '0 0 1rem 0' }} >
+                                    <Button
+                                        basic
+                                        active={isActive}
+                                        className={isActive ? 'customButtonActive' : ''}
+                                        style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
+                                        onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
+                                        <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                    </Button>
+                                    <div style={{ color: '#777', padding: '0.7rem' }}>{t('Compare')}</div>
+                                </Grid.Row>
+                            </Grid>
+                        </Grid.Column>
+                        <Grid.Column style={{ width: '100%' }}>
+                            <Item.Description>{institution.description.slice(0, 250)}...
+                                <Button
                                     as={Link}
                                     to={`/institutions/${institution.id}`}
-                                    style={{ maxWidth: 'calc(100% - 15rem)' }}>
-                                    {institution.name}</Header>
-                                <Segment style={{ padding: '0 0 0 3rem', margin: '0', position: 'absolute', right: '0' }} basic>{elements}</Segment>
-                            </Grid.Row>
-                            <Grid.Row style={{ padding: '0 0 1rem 0' }}>
-                                <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
-                            </Grid.Row>
-                            <Grid.Row style={{ padding: '0 0 1rem 0' }} >
-                                <Button
-                                    basic
-                                    active={isActive}
-                                    className={isActive ? 'customButtonActive' : ''}
-                                    style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
-                                    onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
-                                    <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                    style={{ border: 0, boxShadow: 'none', padding: 4, fontWeight: 'bold' }}
+                                    basic>
+                                    {t('Read more')}{'>>'}
                                 </Button>
-                            </Grid.Row>
-                        </Grid>
-                    </Grid.Column>
-                    <Grid.Column style={{ width: '100%' }}>
-                        <Item.Description>{institution.description.slice(0, 250) + " ..."}</Item.Description>
-                    </Grid.Column>
-                </Grid>}
+                            </Item.Description>
+                        </Grid.Column>
+                    </Grid>
+                </Segment>}
             {isMobile &&
-                <Grid style={{ margin: 0 }}>
+                <Grid style={{ margin: 0, padding: '1rem' }}>
                     <Grid.Row>
                         <Header
                             textAlign='center'
@@ -91,7 +103,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                     onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
                                     <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
                                 </Button>
-                                {elements}
+                                <RatingStars rating={institution.rating} />
                             </Grid.Row>
                             <Grid.Row style={{ padding: '1rem 0 0 0' }}>
                                 <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
@@ -106,6 +118,6 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                         </Item.Description>
                     </Grid.Row>
                 </Grid>}
-        </Item>
+        </>
     )
 })
