@@ -12,13 +12,6 @@ namespace Application.Specialties
         public SpecialtyCreateValidator()
         {
             RuleFor(x => x.DegreeId).NotEmpty();
-            RuleFor(x => x.EndYear).NotEmpty();
-            RuleFor(x => x.StartYear).NotEmpty();
-            RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
-            RuleFor(x => x.Description).NotEmpty();
-            RuleFor(x => x.EctsCredits).NotEmpty();
-            RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
-            RuleFor(x => x.PriceUAH).NotEmpty();
         }
     }
 }

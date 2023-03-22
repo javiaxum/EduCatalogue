@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.Details.Query { Id = id }));
         }
-        [Authorize(Policy = "IsOperator")]   
+        [Authorize(Policy = "IsOperator")]
         [HttpPost]
         public async Task<ActionResult> CreateInstitution(InstitutionDTO institution)
         {
@@ -41,7 +41,7 @@ namespace API.Controllers
             institution.Id = id;
             return HandleResult(await Mediator.Send(new Application.Institutions.Edit.Command { Institution = institution }));
         }
-        [Authorize(Policy = "IsOperator")]   
+        [Authorize(Policy = "IsOperator")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteInstitution(Guid id)
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListCities.Query { Params = param }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]   
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
         [HttpPost("{id}/specialties")]
         public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDetailedDTO specialty)
         {
@@ -67,6 +67,11 @@ namespace API.Controllers
         public async Task<ActionResult> CreateReview(Guid id, Review review)
         {
             return HandleResult(await Mediator.Send(new Application.Reviews.Create.Command { Id = id, Review = review }));
+        }
+        [HttpGet("{id}/reviews")]
+        public async Task<ActionResult> ListInstitutionReviews([FromQuery] ReviewParams param, Guid id)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Institutions.ListReviews.Query { InstitutionId = id, Params = param }));
         }
         [AllowAnonymous]
         [HttpGet("regions")]

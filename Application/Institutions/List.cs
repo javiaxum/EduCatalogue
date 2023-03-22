@@ -36,9 +36,9 @@ namespace Application.Institutions
                 var IsBranchesPredicate = !String.IsNullOrEmpty(request.Params.BranchesPredicate);
                 if (IsSpecialtiesPredicate) IsBranchesPredicate = false;
                 var IsCitiesPredicate = !String.IsNullOrEmpty(request.Params.CitiesPredicate);
-                var IsMaxPrice = int.TryParse(request.Params.MaxPrice, out int MaxPrice);
-                var IsMinPrice = int.TryParse(request.Params.MinPrice, out int MinPrice);
-                var IsDegree = int.TryParse(request.Params.Degree, out int Degree);
+                var IsMaxTuition = int.TryParse(request.Params.MaxTuition, out int MaxTuition);
+                var IsMinTuition = int.TryParse(request.Params.MinTuition, out int MinTuition);
+                var IsDegree = int.TryParse(request.Params.DegreeId, out int Degree);
                 var IsName = !String.IsNullOrEmpty(request.Params.Name);
 
                 string[] CitiesPredicate;
@@ -54,14 +54,14 @@ namespace Application.Institutions
                         (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
-                        && (!IsMaxPrice || s.PriceUAH <= MaxPrice)
-                        && (!IsMinPrice || s.PriceUAH >= MinPrice)
+                        && (!IsMaxTuition || s.TuitionUAH <= MaxTuition)
+                        && (!IsMinTuition || s.TuitionUAH >= MinTuition)
                         && (!IsDegree || s.Degree.Id == Degree)));
-
+                
                 var sortedQuery =
-                    request.Params.Sort == "za"
+                    request.Params.Sorting == "za"
                     ? query.OrderByDescending(x => x.Name)
-                    : request.Params.Sort == "hr"
+                    : request.Params.Sorting == "hr"
                     ? query.OrderByDescending(x => x.Reviews.Select(x => x.Rating).Average())
                     : query.OrderBy(x => x.Name);
                 var result = sortedQuery

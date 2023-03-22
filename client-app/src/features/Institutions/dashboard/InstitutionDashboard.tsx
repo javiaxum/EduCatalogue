@@ -41,7 +41,7 @@ export default observer(function InstitutionDashboard() {
                                 onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                         </Container>
                     </Grid.Column>
-                    <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem' }} >
+                    <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem'}}>
                         <SearchParamsSideBar />
                     </Grid.Column>
                     <Grid.Column style={{ width: '5%' }} >

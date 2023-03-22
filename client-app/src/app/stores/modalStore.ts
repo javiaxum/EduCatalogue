@@ -6,7 +6,11 @@ interface Modal {
 }
 
 export default class ModalStore {
-    modal: Modal = {
+    modalMini: Modal = {
+        open: false,
+        body: null
+    }
+    modalFulscreen: Modal = {
         open: false,
         body: null
     }
@@ -15,12 +19,18 @@ export default class ModalStore {
         makeAutoObservable(this);
     }
 
-    openModal = (element: JSX.Element) => {
-        this.modal.open = true;
-        this.modal.body = element;
+    openModalMini = (element: JSX.Element) => {
+        this.modalMini.open = true;
+        this.modalMini.body = element;
+    }
+    openModalFullscreen = (element: JSX.Element) => {
+        this.modalFulscreen.open = true;
+        this.modalFulscreen.body = element;
     }
     closeModal = () => {
-        this.modal.open = false;
-        this.modal.body = null;
+        this.modalFulscreen.open = false;
+        this.modalFulscreen.body = null;
+        this.modalMini.open = false;
+        this.modalMini.body = null;
     }
 }

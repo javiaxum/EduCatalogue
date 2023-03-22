@@ -15,27 +15,15 @@ export default function ImageUploadWidgetDropzone({ setFiles, imageUrl }: Props)
     }, [setFiles])
     const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
 
-    const style = {
-        border: 'dashed 3px #aaa',
-        borderRadius: '30px',
-        textAlign: 'center' as 'center',
-        minHeight: '22rem',
-        minWidth: '22.4rem',
-        // height: 200
-    }
-    const activeStyle = {
-        borderColor: 'green',
-    }
 
     return (
-        <div {...getRootProps()} style={isDragActive ? { ...style, ...activeStyle } : style}>
+        <div {...getRootProps()} style={{ height: '100%' }}>
             <input {...getInputProps()} />
             <Image
-                avatar
                 src={imageUrl}
-                style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '22rem', minWidth: '22rem', borderRadius: '30px' }} />
-            <Icon name='plus' size='huge' style={{ position: 'absolute', left: '9.7rem', top: '10rem', color: '#fff' }} />
-            <Header as='h2' inverted content='Click to choose or drag a file here' style={{ position: 'absolute', top: '12rem', left: '4.8rem', width: '15rem' }} />
+                style={{ objectFit: 'cover', height: '100%', filter: 'brightness(50%)' }} />
+            <Icon name='plus' size='huge' style={{ position: 'relative', bottom: '55%', left: '42%', color: '#fff' }} />
+            {/* <Header as='h2' inverted content='Click to choose or drag a file here' style={{ position: 'absolute', top: '12rem', left: '4.8rem', width: '15rem' }} /> */}
         </div>
     )
 }

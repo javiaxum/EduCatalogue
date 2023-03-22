@@ -16,8 +16,8 @@ namespace API.Controllers
     public class SpecialtiesController : BaseAPIController
     {
         [AllowAnonymous]
-        [HttpGet("{id}/list")]
-        public async Task<IActionResult> GetSpecialty([FromQuery] SpecialtyParams param, Guid id)
+        [HttpGet("{id}/institution")]
+        public async Task<IActionResult> GetSpecialties([FromQuery] SpecialtyParams param, Guid id)
         {
             return HandlePagedResult(await Mediator.Send(new Application.Specialties.List.Query { Params = param, InstitutionId = id }));
         }
@@ -51,13 +51,13 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
         [Authorize(Policy = "IsInstitutionManagerOrOperator")]
-        [HttpPut("{id}/specialty/{specialtyId}")]
-        public async Task<IActionResult> EditSpecialty(Guid specialtyId, SpecialtyDetailedDTO specialty)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> EditSpecialty(Guid id, SpecialtyDetailedDTO specialty)
         {
-            specialty.Id = specialtyId;
+            specialty.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { Specialty = specialty }));
         }
-        [Authorize(Policy = "IsOperator")]
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSpecialty(Guid id)
         {

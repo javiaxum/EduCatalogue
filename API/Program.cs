@@ -13,6 +13,7 @@ using Infrastructure.Security;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -58,10 +59,11 @@ internal class Program
             });
         });
         // builder.Services.AddMediatR(typeof(List.Handler).Assembly);
-        builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());              
+        builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         builder.Services.AddScoped<IImageAccessor, ImageAccessor>();
         builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("Cloudinary"));
+
         builder.Services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireNonAlphanumeric = false;
@@ -95,7 +97,10 @@ internal class Program
         builder.Services.AddTransient<IAuthorizationHandler, IsOperatorRequirementHandler>();
         builder.Services.AddTransient<IAuthorizationHandler, IsManagerOrOperatorRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
-
+        builder.Services.Configure<FormOptions>(options =>
+            {
+                options.MultipartBodyLengthLimit = 60000000;
+            });
         var app = builder.Build();
 
         using var scope = app.Services.CreateScope();

@@ -8,6 +8,7 @@ interface Props {
     disabled?: boolean;
     label?: string;
     type?: string;
+    margin?: string;
     padding?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     width?: string;
@@ -15,7 +16,9 @@ interface Props {
 export default function CustomTextInput(props: Props) {
     const [field, meta] = useField(props.name);
     return (
-        <Form.Field error={meta.touched && !!meta.error} style={{ margin: '0', width: props.width, display: 'inline-block', padding: props.padding }}>
+        <Form.Field
+            error={meta.touched && !!meta.error}
+            style={{ margin: props.margin ? props.margin : 0, width: props.width, display: 'inline-block', padding: props.padding }}>
             <label style={{ margin: '0' }}>{props.label}</label>
             <input
                 {...field}

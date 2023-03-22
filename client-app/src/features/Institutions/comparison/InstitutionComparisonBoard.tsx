@@ -40,21 +40,6 @@ export default observer(function InstitutionComparisonBoard() {
         return elements;
     }
 
-    function SpecialtiesCoverage(specialties: Specialty[]) {
-        const localSpecialtyCoresIdsUntrimmed = specialties.map((specialty) => specialty.localSpecialtyCode);
-        const localSpecialtyCoreIds = localSpecialtyCoresIdsUntrimmed.filter((value, index) => {
-            return localSpecialtyCoresIdsUntrimmed.indexOf(value) === index;
-        });
-        return (localSpecialtyCoreIds.length / specialtyStore.specialtyCoreRegistry.size) * 100;
-    }
-
-    function AverageEmployment(specialties: Specialty[]) {
-        return specialties.reduce((sum, specialty) => sum + specialty.graduateEmploymentRate, 0) / specialties.length;
-    }
-
-    function AveragePrice(specialties: Specialty[]) {
-        return specialties.reduce((sum, specialty) => sum + specialty.priceUAH, 0) / specialties.length;
-    }
 
     // const MaxSpecialtiesCoverage = Math.max(...selectedInstitutions.map((i) => SpecialtiesCoverage(i.specialties)));
     // const MaxAverageEmployment = Math.max(...selectedInstitutions.map((i) => AverageEmployment(i.specialties)));
@@ -106,7 +91,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     textAlign='center'>
                                     {BuildRatingStars(i.rating)}
                                     <Header as='h4' style={{ color: '#777', display: 'block', padding: 0, margin: 0 }} >
-                                        {i.reviews?.length + ' ' + t('відгуків')}
+                                        {i.reviewsCount + ' ' + t('відгуків')}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -136,7 +121,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {i.studentCount}
+                                        {i.undergraduatesEnrolled}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -151,7 +136,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {SpecialtiesCoverage(i.specialties).toPrecision(1)}%
+                                        {}%
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -166,7 +151,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {AverageEmployment(i.specialties).toPrecision(3)}%
+                                        {}%
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -181,7 +166,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {AveragePrice(i.specialties).toPrecision(7)} UAH
+                                        {} UAH
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>

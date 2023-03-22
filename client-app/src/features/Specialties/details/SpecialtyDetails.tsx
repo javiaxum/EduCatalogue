@@ -121,11 +121,11 @@ export default observer(function SpecialtyDetails() {
                                                 color='blue' />
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {t('Full price')}:
+                                            {t('Tuition')}:
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {selectedSpecialty.priceUAH} UAH <br></br>
-                                            {selectedSpecialty.nonPaidEducationAvailable && <Label content={t('Non paid education is available')} />}
+                                            {selectedSpecialty.tuitionUAH} UAH <br></br>
+                                            {selectedSpecialty.scholarship && <Label content={t('Non paid education is available')} />}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
@@ -153,7 +153,35 @@ export default observer(function SpecialtyDetails() {
                                             {t('Enrolled students count') + ': '}
                                         </Table.Cell>
                                         <Table.Cell>
-                                            {selectedSpecialty.enrolledStudentsCount}
+                                            {selectedSpecialty.undergraduatesEnrolled}
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='percent'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Acceptance rate') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.acceptanceRate}%
+                                        </Table.Cell>
+                                    </Table.Row>
+                                    <Table.Row>
+                                        <Table.Cell>
+                                            <Icon
+                                                name='percent'
+                                                size='big'
+                                                color='blue' />
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {t('Graduation rate') + ': '}
+                                        </Table.Cell>
+                                        <Table.Cell>
+                                            {selectedSpecialty.graduationRate}%
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>

@@ -9,13 +9,14 @@ namespace Application.Core
     {
         public string BranchesPredicate { get; set; }
         public string SpecialtiesPredicate { get; set; }
-        public string SkillsPredicate { get; set; }
         public string StudyFormsPredicate { get; set; }
+        public bool ListMostPopular { get; set; }
+        public string SkillsPredicate { get; set; }
         public string LanguagesPredicate { get; set; }
-        public string MinPrice { get; set; }
-        public string MaxPrice { get; set; }
+        public string MinTuition { get; set; }
+        public string MaxTuition { get; set; }
         public string DegreeId { get; set; }
-        public string StudentCount { get; set; }
-        public string NonPaidEducationAvailable { get; set; }
+        public string UndergraduatesEnrolled { get; set; }
+        public string Scholarship { get; set; }
     }
 }

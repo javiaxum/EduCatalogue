@@ -1,95 +1,126 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Grid, Item, Segment, Image, Button, Icon, Select } from 'semantic-ui-react';
+import { Grid, Segment, Button, Select, Transition, List, Loader } from 'semantic-ui-react';
 import RatingStars from '../../../../app/common/rating/RatingStars';
 import { useStore } from '../../../../app/stores/store';
 import ReviewForm from './ReviewForm';
 import ReviewListItem from './ReviewListItem';
-import InfiniteScroll from 'react-infinite-scroller';
 import { ReviewsPagingParams } from '../../../../app/models/pagination';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
     const { institutionStore, commonStore, userStore } = useStore();
-    const { reviewForm, debouncedLoadReviews, reviewsLoading, reviewsPagination, setReviewForm, setReviewSorting, setReviewPagingParams, reviewSorting, selectedInstitution } = institutionStore;
+    const {
+        reviewForm,
+        reviewsLoading,
+        reviewsPagination,
+        setReviewForm,
+        setReviewSorting,
+        setReviewPagingParams,
+        clearReviewsPagination,
+        reviewSorting,
+        reviewPagingParams,
+        selectedInstitution,
+        selectedInstitutionReviews,
+        setReviewTargetRating,
+        reviewTargetRating,
+        clearInstitutionReviews,
+        reviews } = institutionStore;
     const { editMode } = commonStore;
-    const [selectedRating, setSelectedRating] = useState<number | undefined>(undefined);
     const { t } = useTranslation();
 
     useEffect(() => {
-        institutionStore.loadReviews();
-    }, [institutionStore])
+        setReviewPagingParams(new ReviewsPagingParams(1));
+        return () => {
+            clearInstitutionReviews();
+            clearReviewsPagination();
+        }
+    }, [clearInstitutionReviews, clearReviewsPagination, setReviewPagingParams])
 
     function handleLoad() {
-        setReviewPagingParams(new ReviewsPagingParams(reviewsPagination?.currentPage! + 1));
-        debouncedLoadReviews();
+        console.log(reviewsPagination)
+        if (!reviewsPagination || reviewsPagination?.currentPage! < reviewsPagination?.totalPages!)
+            setReviewPagingParams(new ReviewsPagingParams(reviewsPagination?.currentPage! + 1));
     }
-    if (!selectedInstitution || !selectedInstitution.reviews) return <></>
+    if (!selectedInstitution) return <></>;
 
     let buttons = [];
     for (let i = 5; i > 0; i--) {
         buttons.push((<Button
+            style={{ padding: '0.5rem 0 0.5rem 0' }}
             basic
             key={i}
-            active={selectedRating === i}
-            disabled={!!!selectedInstitution.reviews.find((x) => x.rating === i)}
+            active={reviewTargetRating === i}
             onClick={() => {
-                selectedRating === i ? setSelectedRating(undefined) : setSelectedRating(i);
+                reviewTargetRating === i ? setReviewTargetRating(undefined) : setReviewTargetRating(i);
             }}>
             {<RatingStars rating={i} />}</Button>))
     }
 
+    let placeholders = [];
+    for (let i = 0; i < reviewPagingParams.pageSize; i++) {
+        placeholders.push();
+    }
+
     return (
         <Grid style={{ padding: '20px' }}>
-            {!reviewForm && <Grid.Column width={16} style={{ padding: '0' }}>
+            {!reviewForm && <Grid.Row style={{ padding: '0' }}>
                 {buttons}
                 <Select
                     options={t("reviewSortingOptions", { returnObjects: true })}
                     value={reviewSorting}
                     onChange={(e, d) => {
+                        console.log(d.value)
                         setReviewSorting(d.value as string)
                     }} />
-            </Grid.Column>}
-            <Grid.Column width={9}>
+            </Grid.Row>}
+            <Grid.Row>
                 <Grid style={{ padding: '20px 0 0 0' }}>
-                    <InfiniteScroll
-                        pageStart={0}
-                        loadMore={handleLoad}
-                        hasMore={!reviewsLoading && !!reviewsPagination && reviewsPagination.currentPage < reviewsPagination.totalPages}
-                        initialLoad={false}>
-                        <Item.Group divided>
-                            <Item>
-                                <Item.Content>
-                                    {
-                                        !!!selectedInstitution.reviews.find((x) => x.author.username === userStore.user?.username) && <>
-                                            {!reviewForm ? <Button
-                                                positive
-                                                content={t('Add review')}
-                                                style={{ marginLeft: '', backgroundColor: 'rgb(30, 71, 160)' }}
-                                                onClick={() => setReviewForm(true)} />
-                                                : <ReviewForm />}
-                                        </>
-                                    }
-                                </Item.Content>
-                            </Item>
-                            {(selectedInstitution.reviews && selectedInstitution.reviews.length > 0)
-                                ? <>
-                                    {selectedInstitution.reviews.map((review) => (
-                                        <ReviewListItem
-                                            review={review}
-                                            key={review.id} />
-                                    ))}
-                                </>
-                                : <>{!editMode && <Segment style={{ color: '#444', width: '300px' }}>There are no reviews available...</Segment>}</>}
-                        </Item.Group>
-                    </InfiniteScroll>
+                    <Grid.Row>
+                        {(reviews.length > 0 && !!!reviews.find((x) => x.author.username === userStore.user?.username)) && <>
+                            {!reviewForm ? <Button
+                                positive
+                                content={t('Add review')}
+                                style={{ marginLeft: '', backgroundColor: 'rgb(30, 71, 160)' }}
+                                onClick={() => setReviewForm(true)} />
+                                : <ReviewForm />}
+                        </>}
+                    </Grid.Row>
+                    <Grid.Row>
+                        {((!selectedInstitutionReviews && reviewsPagination) || (reviews.length === 0 && !editMode && !reviewsLoading)) &&
+                            <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>There are no reviews available...</Segment>}
+                        <InfiniteScroll
+                            style={{ overflow: 'hidden' }}
+                            dataLength={(reviewsPagination?.itemsPerPage! * reviewsPagination?.currentPage!) || 0}
+                            next={handleLoad}
+                            hasMore={!reviewsLoading && !!reviewsPagination
+                                && reviewsPagination.currentPage < reviewsPagination.totalPages}
+                            loader={
+                                <Transition
+                                    visible={reviewsLoading}
+                                    duration={500}
+                                    size='huge'
+                                    verticalAlign='middle'>
+                                    <Loader inline active={true} size='small' style={{ marginLeft: '20rem', zIndex: 100 }} />
+                                </Transition>}>
+                            <Transition.Group
+                                as={List}
+                                duration={500}
+                                size='huge'
+                                verticalAlign='middle'>
+                                {reviews.map((review) => (
+                                    <List.Item>
+                                        <ReviewListItem review={review} key={review.id} />
+                                    </List.Item>
+                                ))}
+                            </Transition.Group>
+                        </InfiniteScroll>
+                        <div style={{ height: '80rem' }}>
+                        </div>
+                    </Grid.Row>
                 </Grid>
-            </Grid.Column>
-            <Grid.Column width={6} floated='right'>
-                <Image
-                    src={selectedInstitution.images.find((x) => x.id === selectedInstitution.titleImageId)?.url || '/assets/institutionTitleImagePlaceholder.png'}
-                    style={{ objectFit: 'cover', maxHeight: '26rem', maxWidth: '26rem', borderRadius: '30px' }} />
-            </Grid.Column>
-        </Grid>
+            </Grid.Row >
+        </Grid >
     )
 })

@@ -11,11 +11,10 @@ namespace Application
 {
     public class InstitutionDTO
     {
-         public Guid Id { get; set; }
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public int Accreditation { get; set; }
-        public int UndergraduateCount { get; set; }  
         public int TypeId { get; set; }
         public int CityId { get; set; }
         public int RegionId { get; set; }
@@ -24,10 +23,20 @@ namespace Application
         public string StreetAddress { get; set; }
         public string SiteURL { get; set; }
         public string TitleImageUrl { get; set; }
-        public string EmblemImageUrl { get; set; } 
+        public string EmblemImageUrl { get; set; }
         public string BackgroundImageUrl { get; set; }
         public string ContactInformation { get; set; }
+
+        public int UndergraduatesEnrolled { get; set; }
         public double Rating { get; set; }
-        public ICollection<Guid> Reviews { get; set; }
+        public int ReviewsCount { get; set; }
+        public int SpecialtiesCount { get; set; }
+        public double AcceptanceRate { get; set; }
+        public double GraduationRate { get; set; }
+        public double GraduateEmploymentRate { get; set; }
+        public decimal AverageTuitionUAH { get; set; }
+        public bool Scholarship { get; set; }
+        public ICollection<int> StudyFormIds { get; set; }
+        public ICollection<string> LanguageIds { get; set; }
     }
 }

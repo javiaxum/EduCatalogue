@@ -14,13 +14,13 @@ namespace Application.Images
 {
     public class AddInstitutionImage
     {
-        public class Command : IRequest<Result<Image>>
+        public class Command : IRequest<Result<ImageDTO>>
         {
             public IFormFile File { get; set; }
             public ImageParams Params { get; set; }
             public Guid Id { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Result<Image>>
+        public class Handler : IRequestHandler<Command, Result<ImageDTO>>
         {
             private readonly DataContext _context;
             private readonly IUsernameAccessor _usernameAccessor;
@@ -32,7 +32,7 @@ namespace Application.Images
                 _context = context;
             }
 
-            public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<ImageDTO>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var institution = await _context.Institutions
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
@@ -61,7 +61,7 @@ namespace Application.Images
                     }
 
                 if (deleteResult == null)
-                    return Result<Image>.Failure("An error has occured while deleting an image");
+                    return Result<ImageDTO>.Failure("An error has occured while deleting an image");
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
 
@@ -78,10 +78,14 @@ namespace Application.Images
                 institution.Images.Add(image);
 
                 var result = await _context.SaveChangesAsync() > 0;
+                var imageDTO = new ImageDTO
+                {
+                    Url = image.Url,
+                    Id = image.Id
+                };
+                if (result) return Result<ImageDTO>.Success(imageDTO);
 
-                if (result) return Result<Image>.Success(image);
-
-                return Result<Image>.Failure("An error has occured while deleting an image");
+                return Result<ImageDTO>.Failure("An error has occured while deleting an image");
             }
         }
     }

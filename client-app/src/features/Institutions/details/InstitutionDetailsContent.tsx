@@ -35,6 +35,7 @@ export default observer(function InstitutionDetailsContent() {
                 {items.map((i) =>
                     <Menu.Item
                         name={i}
+                        key={i}
                         active={activeMenuItem === i}
                         content={t(i)}
                         onClick={() => setActiveMenuItem(i)}

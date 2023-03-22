@@ -294,9 +294,6 @@ namespace Persistence.Migrations
                     b.Property<int?>("TypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UndergraduateCount")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
@@ -405,8 +402,8 @@ namespace Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<int>("AcceptanceRate")
-                        .HasColumnType("integer");
+                    b.Property<double>("AcceptanceRate")
+                        .HasColumnType("double precision");
 
                     b.Property<int?>("DegreeId")
                         .HasColumnType("integer");
@@ -420,20 +417,17 @@ namespace Persistence.Migrations
                     b.Property<int>("EndYear")
                         .HasColumnType("integer");
 
-                    b.Property<int>("GraduateEmploymentRate")
-                        .HasColumnType("integer");
+                    b.Property<double>("GraduateEmploymentRate")
+                        .HasColumnType("double precision");
 
-                    b.Property<int>("GraduationRate")
-                        .HasColumnType("integer");
+                    b.Property<double>("GraduationRate")
+                        .HasColumnType("double precision");
 
                     b.Property<Guid?>("InstitutionId")
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("NonPaidEducationAvailable")
+                    b.Property<bool>("Scholarship")
                         .HasColumnType("boolean");
-
-                    b.Property<decimal>("PriceUAH")
-                        .HasColumnType("numeric");
 
                     b.Property<string>("SpecialtyCoreId")
                         .HasColumnType("text");
@@ -441,7 +435,10 @@ namespace Persistence.Migrations
                     b.Property<int>("StartYear")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UndergraduateCount")
+                    b.Property<decimal>("TuitionUAH")
+                        .HasColumnType("numeric");
+
+                    b.Property<int>("UndergraduatesEnrolled")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -497,6 +494,36 @@ namespace Persistence.Migrations
                     b.HasIndex("SpecialtyCoresId");
 
                     b.ToTable("ISCEDCoreSpecialtyCore");
+                });
+
+            modelBuilder.Entity("InstitutionLanguage", b =>
+                {
+                    b.Property<Guid>("InstitutionsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("LanguagesId")
+                        .HasColumnType("text");
+
+                    b.HasKey("InstitutionsId", "LanguagesId");
+
+                    b.HasIndex("LanguagesId");
+
+                    b.ToTable("InstitutionLanguage");
+                });
+
+            modelBuilder.Entity("InstitutionStudyForm", b =>
+                {
+                    b.Property<Guid>("InstitutionsId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("StudyFormsId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("InstitutionsId", "StudyFormsId");
+
+                    b.HasIndex("StudyFormsId");
+
+                    b.ToTable("InstitutionStudyForm");
                 });
 
             modelBuilder.Entity("LanguageSpecialty", b =>
@@ -730,9 +757,11 @@ namespace Persistence.Migrations
 
             modelBuilder.Entity("Domain.Image", b =>
                 {
-                    b.HasOne("Domain.Institution", null)
+                    b.HasOne("Domain.Institution", "Institution")
                         .WithMany("Images")
                         .HasForeignKey("InstitutionId");
+
+                    b.Navigation("Institution");
                 });
 
             modelBuilder.Entity("Domain.Institution", b =>
@@ -804,6 +833,36 @@ namespace Persistence.Migrations
                     b.HasOne("Domain.SpecialtyCore", null)
                         .WithMany()
                         .HasForeignKey("SpecialtyCoresId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InstitutionLanguage", b =>
+                {
+                    b.HasOne("Domain.Institution", null)
+                        .WithMany()
+                        .HasForeignKey("InstitutionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Language", null)
+                        .WithMany()
+                        .HasForeignKey("LanguagesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("InstitutionStudyForm", b =>
+                {
+                    b.HasOne("Domain.Institution", null)
+                        .WithMany()
+                        .HasForeignKey("InstitutionsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.StudyForm", null)
+                        .WithMany()
+                        .HasForeignKey("StudyFormsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

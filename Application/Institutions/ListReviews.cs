@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Application.Core;
+using Application.Interfaces;
 using Application.Reviews;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
@@ -25,9 +26,11 @@ namespace Application.Institutions
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
+            private readonly IUsernameAccessor _usernameAccessor;
 
-            public Handler(DataContext context, IMapper mapper)
+            public Handler(DataContext context, IMapper mapper, IUsernameAccessor usernameAccessor)
             {
+                _usernameAccessor = usernameAccessor;
                 _mapper = mapper;
                 _context = context;
             }
@@ -36,22 +39,20 @@ namespace Application.Institutions
             {
                 var IsTargetRating = int.TryParse(request.Params.TargetRating, out int TargetRating);
 
-                var institution = await _context.Institutions
-                    .Include(s => s.Reviews)
-                        .ThenInclude(x => x.Author)
-                    .FirstOrDefaultAsync(x => x.Id == request.InstitutionId);
-                var query = institution.Reviews.AsQueryable().Where(r =>
-                       (!IsTargetRating || r.Rating == TargetRating));
-                var sortedQuery =
+                var query = _context.Reviews.Where(x => x.Institution.Id == request.InstitutionId)
+                .Where(r => (!IsTargetRating || r.Rating == TargetRating || r.Author.UserName ==  _usernameAccessor.GetUsername()));
+                var result = query
+                   .ProjectTo<ReviewDTO>(_mapper.ConfigurationProvider)
+                   .OrderByDescending(r => r.Author.Username ==  _usernameAccessor.GetUsername());
+                var sortedResult =
                     request.Params.Sorting == "lrf"
-                    ? query.OrderBy(x => x.Rating)
+                    ? result.ThenBy(x => x.Rating)
                     : request.Params.Sorting == "hrf"
-                    ? query.OrderByDescending(x => x.Rating)
-                    : query.OrderBy(x => x.CreatedAt);
-                var result = sortedQuery
-                .ProjectTo<ReviewDTO>(_mapper.ConfigurationProvider);
+                    ? result.ThenByDescending(x => x.Rating)
+                    : result.ThenByDescending(x => x.CreatedAt);
+
                 return Result<PagedList<ReviewDTO>>.Success(
-                    PagedList<ReviewDTO>.Create(result, request.Params.PageNumber, request.Params.PageSize)
+                    await PagedList<ReviewDTO>.CreateAsync(sortedResult, request.Params.PageNumber, request.Params.PageSize)
                 );
             }
         }

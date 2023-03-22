@@ -30,12 +30,26 @@ namespace Infrastructure.Security
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (userId == null) return Task.CompletedTask;
 
-            var institutionId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
+            var Id = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
                 .SingleOrDefault(x => x.Key == "id").Value?.ToString());
 
             var IsManager = _dbContext.AppUserInstitution
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == institutionId)
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == Id)
+                .Result;
+
+            var institutionIdBySpecialty = _dbContext.Specialties
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == Id)
+                .Result;
+
+            Id = Id == Guid.Empty ? institutionIdBySpecialty != null ? institutionIdBySpecialty.Institution.Id : Guid.Empty : Id;
+
+            if (Id == Guid.Empty) return Task.CompletedTask;
+
+            var IsManagerBySpecialty = _dbContext.AppUserInstitution
+                .AsNoTracking()
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && (x.InstitutionId == Id))
                 .Result;
 
             var IsOperator = _dbContext.Users.FirstOrDefaultAsync(x => x.Email == "EduCatalogue@service.com").Result;

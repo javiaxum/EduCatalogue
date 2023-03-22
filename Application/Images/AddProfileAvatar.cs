@@ -14,11 +14,11 @@ namespace Application.Images
 {
     public class AddProfileAvatar
     {
-        public class Command : IRequest<Result<Image>>
+        public class Command : IRequest<Result<ImageDTO>>
         {
             public IFormFile File { get; set; }
         }
-        public class Handler : IRequestHandler<Command, Result<Image>>
+        public class Handler : IRequestHandler<Command, Result<ImageDTO>>
         {
             private readonly DataContext _context;
             private readonly IUsernameAccessor _usernameAccessor;
@@ -30,7 +30,7 @@ namespace Application.Images
                 _context = context;
             }
 
-            public async Task<Result<Image>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<ImageDTO>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.Include(a => a.Avatar)
                     .FirstOrDefaultAsync(x => x.UserName == _usernameAccessor.GetUsername());
@@ -44,7 +44,7 @@ namespace Application.Images
                     var deleteResult = await _imageAccessor.DeleteImage(user.Avatar.Id);
 
                     if (deleteResult == null)
-                        return Result<Image>.Failure("An error has occured while saving an image");
+                        return Result<ImageDTO>.Failure("An error has occured while saving an image");
                 }
 
                 var image = new Image
@@ -55,11 +55,16 @@ namespace Application.Images
 
                 user.Avatar = image;
 
+                var imageDTO = new ImageDTO
+                {
+                    Url = image.Url,
+                    Id = image.Id
+                };
                 var result = await _context.SaveChangesAsync() > 0;
 
-                if (result) return Result<Image>.Success(image);
+                if (result) return Result<ImageDTO>.Success(imageDTO);
 
-                return Result<Image>.Failure("An error has occured while saving an image");
+                return Result<ImageDTO>.Failure("An error has occured while saving an image");
             }
         }
     }

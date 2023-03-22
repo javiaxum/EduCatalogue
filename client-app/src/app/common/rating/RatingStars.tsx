@@ -14,5 +14,5 @@ export default function RatingStars({ rating }: Props) {
             elements.push((<Icon color='yellow' name='star outline' key={i} />))
     }
 
-    return (<>{elements}</>)
+    return (<div style={{minWidth: '10rem', maxWidth: '10rem'}}>{elements}</div>)
 }

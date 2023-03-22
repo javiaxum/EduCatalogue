@@ -62,7 +62,7 @@ export default observer(function InstitutionComparisonBoard() {
                                         }}>
                                         <Icon name='close' size='small' style={{ left: '0.25rem', bottom: '0.05rem', position: 'relative' }} />
                                     </Button>
-                                    <Container as={Link} to={`/specialties/${i.id}`}  style={{ height: 'inherit', width: '100%' }}>
+                                    <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%' }}>
                                         {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
                                         <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
                                     </Container>
@@ -73,14 +73,14 @@ export default observer(function InstitutionComparisonBoard() {
                         <Table.Row >
                             <Table.Cell>
                                 <Header as='h4' textAlign='center' color='grey'>
-                                    {t('PRICE')}
+                                    {t('TUTITION')}
                                 </Header>
                             </Table.Cell>
                             {selectedSpecialties.map((i) =>
                                 <Table.Cell
                                     key={i.id}
                                     textAlign='center'>
-                                    {i.priceUAH}
+                                    {i.tuitionUAH}
                                 </Table.Cell>)}
                         </Table.Row>
                         <Table.Row >
@@ -93,8 +93,8 @@ export default observer(function InstitutionComparisonBoard() {
                                 <Table.Cell
                                     key={i.id}
                                     textAlign='center'
-                                    positive={!selectedSpecialties.every((s) => s.nonPaidEducationAvailable) && i.nonPaidEducationAvailable}>
-                                    <Icon name={i.nonPaidEducationAvailable ? 'check' : 'x'} />
+                                    positive={!selectedSpecialties.every((s) => s.scholarship) && i.scholarship}>
+                                    <Icon name={i.scholarship ? 'check' : 'x'} />
                                 </Table.Cell>)}
                         </Table.Row>
                         <Table.Row >
@@ -106,10 +106,9 @@ export default observer(function InstitutionComparisonBoard() {
                             {selectedSpecialties.map((i) =>
                                 <Table.Cell
                                     key={i.id}
-                                    textAlign='center'
-                                    positive={selectedSpecialties.reduce((max, specialty) => { return specialty.enrolledStudentsCount > max ? specialty.enrolledStudentsCount : max; }, 0) == i.enrolledStudentsCount}>
+                                    textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {i.enrolledStudentsCount}
+                                        {i.undergraduatesEnrolled}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -168,7 +167,7 @@ export default observer(function InstitutionComparisonBoard() {
                                 <Table.Cell
                                     key={i.id}
                                     textAlign='center'
-                                content={i.languageIds.map((l) => languages[l == "en" ? 0 : 1 as number]?.text).join(", ")}>
+                                    content={i.languageIds.map((l) => languages[l == "en" ? 0 : 1 as number]?.text).join(", ")}>
                                 </Table.Cell>)}
                         </Table.Row>
                         <Table.Row>

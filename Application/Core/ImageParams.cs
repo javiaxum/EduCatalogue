@@ -5,9 +5,10 @@ using System.Threading.Tasks;
 
 namespace Application.Core
 {
-    public class ImageParams
+    public class ImageParams : PagingParams
     {
-        public bool isBackgroundImage { get; set; } = false;
-        public bool isTitleImage { get; set; } = false;
+        public bool isBackgroundImage { get; set; } 
+        public bool isTitleImage { get; set; } 
+        public bool isEmblemImage { get; set; } 
     }
 }

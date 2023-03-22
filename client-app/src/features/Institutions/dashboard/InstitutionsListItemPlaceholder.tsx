@@ -6,7 +6,7 @@ interface Props {
 
 export default function InstitutionsListItemPlaceholder({ minWidth }: Props) {
     return (
-        <Segment style={{ padding: 0, borderRadius: '10px' }}>
+        <Segment style={{ padding: 0, borderRadius: '10px', zIndex: 0 }}>
             <Placeholder fluid style={{ marginTop: 10, minHeight: '6rem', minWidth: '47rem' }}>
                 <Grid >
                     <Grid.Column style={{ width: '13rem', minWidth: '13rem' }}>

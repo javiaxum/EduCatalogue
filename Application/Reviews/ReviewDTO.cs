@@ -7,14 +7,13 @@ using Domain;
 
 namespace Application.Reviews
 {
-    public class 
-    ReviewDTO
+    public class ReviewDTO
     {
         public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public string ReviewMessage { get; set; }
-        public int Rating { get; set; }
-        public Guid InstitutionId { get; set; }
         public Profile Author { get; set; }
+        public string ReviewMessage { get; set; }
+        public Guid InstitutionId { get; set; }
+        public int Rating { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

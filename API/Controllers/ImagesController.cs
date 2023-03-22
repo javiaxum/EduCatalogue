@@ -26,9 +26,25 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(command));
         }
         [HttpDelete("profileImage/{id}")]
-        public async Task<ActionResult> Delete(string id)
+        public async Task<ActionResult> DeleteProfileImage(string id)
         {
-            return HandleResult(await Mediator.Send(new Delete.Command { Id = id }));
+            return HandleResult(await Mediator.Send(new DeleteProfileImage.Command { Id = id }));
+        }
+        [HttpGet("{id}/list")]
+        public async Task<ActionResult> ListImages([FromQuery] ImageParams param, Guid id)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Images.List.Query { InstitutionId = id, Params = param }));
+        }
+        [HttpPost("{institutionId}/changeStatus/{id}")]
+        public async Task<ActionResult> SetStatus([FromQuery] ImageParams param, Guid institutionId, string id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Images.SetStatus.Command { InstitutionId = institutionId, Id = id, Params = param }));
+        }
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [HttpDelete("{id}/delete/{imageId}")]
+        public async Task<ActionResult> DeleteInstitutionImage(string imageId, Guid id)
+        {
+            return HandleResult(await Mediator.Send(new DeleteInstitutionImage.Command { Id = imageId, InstitutionId = id }));
         }
     }
 }

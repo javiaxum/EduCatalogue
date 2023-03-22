@@ -16,12 +16,25 @@ namespace Application.Core
         public MappingProfiles()
         {
             CreateMap<Institution, Institution>();
+            CreateMap<Image, ImageDTO>();
 
             CreateMap<InstitutionDTO, Institution>()
             .ForMember(d => d.Coordinates, o => o.MapFrom(s => new Coordinates { Latitude = s.Latitude, Longitude = s.Longtitude }));
 
             CreateMap<Institution, InstitutionDTO>()
-            .ForMember(d => d.Reviews, o => o.MapFrom(s => s.Reviews.Select(x => x.Id)))
+            .ForMember(d => d.ReviewsCount, o => o.MapFrom(s => s.Reviews.Count()))
+            .ForMember(d => d.SpecialtiesCount, o => o.MapFrom(s => s.Specialties.Count()))
+            .ForMember(d => d.AcceptanceRate, o => o.MapFrom(s => s.Specialties.Select(a => a.AcceptanceRate).Average()))
+            .ForMember(d => d.GraduationRate, o => o.MapFrom(s => s.Specialties.Select(a => a.GraduationRate).Average()))
+            .ForMember(d => d.GraduateEmploymentRate, o => o.MapFrom(s => s.Specialties.Select(a => a.GraduateEmploymentRate).Average()))
+            .ForMember(d => d.AverageTuitionUAH, o => o.MapFrom(s => s.Specialties.Select(a => a.TuitionUAH).Average()))
+            .ForMember(d => d.Scholarship, o => o.MapFrom(s => s.Specialties.Any(a => a.Scholarship)))
+            .ForMember(d => d.UndergraduatesEnrolled, o => o.MapFrom(s => s.Specialties.Select(u => u.UndergraduatesEnrolled).Sum()))
+            .ForMember(d => d.LanguageIds, o => o.MapFrom(s => s.Languages.Select(x => x.Id)))
+            .ForMember(d => d.StudyFormIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
+            .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
+            .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
+            // .ForMember(d => d.SpecialtyCoverage, o => o.MapFrom(s => s.Specialties.Count()))
             .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
             .ForMember(d => d.EmblemImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.EmblemImageId).Url))
@@ -30,12 +43,12 @@ namespace Application.Core
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
 
-            CreateMap<Institution, InstitutionDetailedDTO>()
-            .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
-            .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
-            .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
-            .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
-            .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id));
+            // CreateMap<Institution, InstitutionDetailedDTO>()
+            // .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
+            // .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
+            // .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
+            // .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
+            // .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id));
 
             CreateMap<AppUser, Profiles.ProfileDetailed>()
             .ForMember(d => d.ManagedInstitutions, o => o.MapFrom(s => s.Institutions));
@@ -52,6 +65,8 @@ namespace Application.Core
 
             CreateMap<Specialty, SpecialtyDTO>()
             .ForMember(d => d.SkillIds, o => o.MapFrom(s => s.Skills.Select(i => i.Id)))
+            .ForMember(d => d.LanguageIds, o => o.MapFrom(s => s.Languages.Select(x => x.Id)))
+            .ForMember(d => d.StudyFormIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
             .ForMember(d => d.DegreeId, o => o.MapFrom(s => s.Degree.Id))
             .ForMember(d => d.LocalSpecialtyCode, o => o.MapFrom(s => s.SpecialtyCore.Id));
 

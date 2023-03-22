@@ -13,9 +13,13 @@ import { router } from '../../routers/Routes';
 import BackgroundUploadWidgetDropzone from '../../../app/common/imageUpload/backgroundImage/BackgroundUploadWidgetDropzone';
 import BackgroundImageUploadWidgetCropper from '../../../app/common/imageUpload/backgroundImage/BackgroundImageUploadWidgetCropper';
 import InstitutionFormContent from '../details/InstitutionFormContent';
+import { ImagesPagingParams, ReviewsPagingParams } from '../../../app/models/pagination';
+import specialtyStore from '../../../app/stores/specialtyStore';
+import RatingStars from '../../../app/common/rating/RatingStars';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function InstitutionForm() {
-    const { institutionStore, commonStore } = useStore();
+    const { institutionStore, commonStore, specialtyStore } = useStore();
     const {
         loadInstitution,
         loadingInitial,
@@ -26,7 +30,10 @@ export default observer(function InstitutionForm() {
         loadRegionsWithCities,
         selectedInstitution,
         uploading,
-        setBackgroundImage } = institutionStore;
+        setBackgroundImage,
+        setImagesPagingParams,
+        setReviewPagingParams,
+        getRegionById } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -57,12 +64,18 @@ export default observer(function InstitutionForm() {
         cityId: Yup.string().required(),
         contactInformation: Yup.string().required(),
     })
+    const { t } = useTranslation();
 
     useEffect(() => {
+        setImagesPagingParams(new ImagesPagingParams(1));
+        setReviewPagingParams(new ReviewsPagingParams(1));
+
         if (id) loadInstitution(id)
             .then(institution => {
                 let formValues = new InstitutionFormValues(institution);
                 setInstitution(formValues);
+                specialtyStore.loadSpecialties();
+                specialtyStore.loadPopularSpecialties();
             });
         else {
             let formValues = new InstitutionFormValues(institution);
@@ -97,7 +110,7 @@ export default observer(function InstitutionForm() {
             onSubmit={values => handleInstitutionFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Grid style={{ margin: 0, minWidth: '70rem', backgroundColor: '#fff' }} stretched>
+                    <Grid style={{ margin: 0, backgroundColor: '#fff' }} stretched>
                         <Grid.Row style={{ padding: 0, zIndex: 1 }}>
                             {loading
                                 ? <Placeholder
@@ -108,7 +121,7 @@ export default observer(function InstitutionForm() {
                                     {(files && files.length === 0) &&
                                         <BackgroundUploadWidgetDropzone
                                             setFiles={setFiles}
-                                            imageUrl={selectedInstitution?.images.find((x) => x.id === selectedInstitution.backgroundImageId)?.url || '/assets/YFCNU.jpg'} />}
+                                            imageUrl={selectedInstitution?.backgroundImageUrl || '/assets/placeholder.png'} />}
                                     {(files && files.length > 0) &&
                                         <div className='bkgr-img-preview' style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
                                 </>}
@@ -121,7 +134,7 @@ export default observer(function InstitutionForm() {
                                     <Segment style={{ padding: '1rem 0 1rem 0' }} clearing>
                                         <Header as='h3' content='Background preview' style={{ paddingLeft: '40px' }} />
                                         <BackgroundImageUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
-                                        <Button.Group>
+                                        <Button.Group fluid>
                                             <Button
                                                 positive
                                                 type='button'
@@ -139,10 +152,23 @@ export default observer(function InstitutionForm() {
                                     <Placeholder style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 25rem)', height: '2rem' }}>
                                         <Placeholder.Line />
                                     </Placeholder>
-                                    : <Header
-                                        style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 25rem)', margin: 0 }}>
-                                        <CustomTextInput width='100%' placeholder='Name' name='name' />
-                                    </Header>}
+                                    :
+                                    <div style={{ display: 'inline-block', width: 'calc(100% - 13rem)' }}>
+                                        <Header
+                                            style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 25rem)', margin: 0 }}>
+                                            <CustomTextInput width='100%' placeholder='Name' name='name' />
+                                        </Header>
+                                        <div style={{ display: 'block', color: '#888', padding: '0 0 1rem 0' }}>
+                                            {getRegionById(selectedInstitution?.regionId!)?.name}, {" "}
+                                            {institutionStore.getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}
+                                        </div>
+                                        <div style={{ display: 'inline-block' }}>
+                                            <RatingStars rating={selectedInstitution?.rating!} />
+                                        </div>
+                                        <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
+                                            {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
+                                        </div>
+                                    </div>}
                                 <Button.Group style={{ position: 'absolute', width: '22rem', right: '2rem' }}>
                                     <Button
                                         positive
@@ -160,7 +186,7 @@ export default observer(function InstitutionForm() {
                                         disabled={isSubmitting} />
                                 </Button.Group>
                             </Segment>
-                            <Segment basic style={{ padding: '0 3rem 0 3rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '100rem', minWidth: '100rem' }}>
+                            <Segment basic style={{ padding: '0 3rem 0 3rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem', minWidth: '85rem' }}>
                                 <InstitutionFormContent />
                             </Segment>
                         </Grid.Row>

@@ -33,8 +33,8 @@ export default function InstitutionDetailsLocation() {
             </Grid.Column>
             <Grid.Column width={8}>
                 <MapContainer
-                    center={{ lat: selectedInstitution?.latitude || 0, lng: selectedInstitution?.longtitude! || 0 }}
-                    zoom={20}
+                    center={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}
+                    zoom={8}
                     scrollWheelZoom={false}
                     style={{ overflow: 'hidden', width: '40rem', height: '30rem' }}>
                     <TileLayer

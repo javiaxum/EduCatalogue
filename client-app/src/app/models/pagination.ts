@@ -33,6 +33,15 @@ export class ReviewsPagingParams {
         this.pageSize = pageSize;
     }
 }
+export class ImagesPagingParams {
+    pageNumber;
+    pageSize;
+
+    constructor(pageNumber = 1, pageSize = 5) {
+        this.pageNumber = pageNumber;
+        this.pageSize = pageSize;
+    }
+}
 
 export class SpecialtiesPagingParams {
     pageNumber;

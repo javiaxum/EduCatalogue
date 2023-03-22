@@ -3862,7 +3862,7 @@ namespace Persistence
                         Name = "Львівський національний медичний університет імені Данила Галицького",
                         Description = "Львівський національний медичний університет імені Данила Галицького (ЛНМУ; лат. Universitatis Medicinalis Leopoliensis) — один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. За даними міжнародної бази Scopus університет посідає перше місце серед медичних вишів України",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        UndergraduateCount = 5150,
+                        // UndergraduateCount = 5150,
                         StreetAddress = "вул. Пекарська, 69",
                         SiteURL = "new.meduniv.lviv.ua",
                         ContactInformation = "0231231028"
@@ -3872,7 +3872,7 @@ namespace Persistence
                         Name = "Київський національний університет імені Тараса Шевченка",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 32000,
+                        // UndergraduateCount = 32000,
                         StreetAddress = "вул. Володимирська, 60",
                         SiteURL = "knu.ua",
                         ContactInformation = "6683328733"
@@ -3882,7 +3882,7 @@ namespace Persistence
                         Name = "Буковинський державний медичний університет",
                         Description = "один із найбільших закладів вищої освіти м. Чернівці. Це сучасний багатопрофільний заклад вищої медичної освіти, включений до загального реєстру Всесвітньої організації охорони здоров'я, Великої Хартії університетів, Європейської асоціації університету, що здійснює підготовку здобувачів вищої освіти за ступеневою системою освіти. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        UndergraduateCount = 5284,
+                        // UndergraduateCount = 5284,
                         StreetAddress = "Театральна площа, 2",
                         SiteURL = "www.bsmu.edu.ua",
                         ContactInformation = "23474623659"
@@ -3892,7 +3892,7 @@ namespace Persistence
                         Name = "Тернопільський національний медичний університет",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        UndergraduateCount = 6530,
+                        // UndergraduateCount = 6530,
                         StreetAddress = "Майдан Волі, 1",
                         SiteURL = "tdmu.edu.ua",
                         ContactInformation = "023sdads8"
@@ -3902,7 +3902,7 @@ namespace Persistence
                         Name = "Львівський національний університет імені Івана Франка",
                         Description = "один із найстаріших університетів України й Східної Європи та найпрестижніших в Україні. Є спадкоємцем колегіуму (1608—1661) та академії (1661—1773) єзуїтів, Йосифинського університету (1784—1805), Львівського ліцею (1805—1817), Університету Франца I (1817—1918), Львівського університету Яна-Казимира (1919—1939), Львівського державного університету імені Івана Франка (1939—1999).",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        UndergraduateCount = 25000,
+                        // UndergraduateCount = 25000,
                         StreetAddress = "вул. Університетська, 1",
                         SiteURL = "lnu.edu.ua",
                         ContactInformation = "0322 603 402"
@@ -3912,7 +3912,7 @@ namespace Persistence
                         Name = "Національний університет «Києво-Могилянська академія»",
                         Description = "Національний університет «Києво-Могилянська академія» це заклад вищої освіти в Україні. Заснований 1615 року. Розміщується в корпусах історичної Києво-Могилянської академії, від якої отримав свою назву. Університетське містечко розташоване на Подолі в Києві, між Контрактовою площею та набережною Дніпра. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 4422,
+                        // UndergraduateCount = 4422,
                         StreetAddress = "вулиця Григорія Сковороди, 2",
                         SiteURL = "www.ukma.edu.ua",
                         ContactInformation = "044 425 6059"
@@ -3922,7 +3922,7 @@ namespace Persistence
                         Name = "Державний торговельно-економічний університет",
                         Description = "вищий навчальний заклад Міністерства освіти і науки України в Києві, Україна. Заснований як Київський філіал Всесоюзного заочного інституту радянської торгівлі в 1946 році. Знаходиться у Деснянському районі на території Лісового масиву між вулицями Кіото і Мілютенка.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 36600,
+                        // UndergraduateCount = 36600,
                         StreetAddress = "вулиця Кіото, 19",
                         SiteURL = "knute.edu.ua",
                         ContactInformation = "044 513 3348"
@@ -3932,7 +3932,7 @@ namespace Persistence
                         Name = "Прикарпатський національний університет імені Василя Стефаника",
                         Description = "Прикарпатський національний університет імені Василя Стефаника є одним з найстаріших вищих навчальних закладів Івано-Франківської області. Згідно з указом Президента України від 26 серпня 1992 р. його створено на базі педагогічного інституту, заснованого 1940 р. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Івано-Франківськ"),
-                        UndergraduateCount = 18000,
+                        // UndergraduateCount = 18000,
                         StreetAddress = "вулиця Шевченка, 57",
                         SiteURL = "pnu.edu.ua",
                         ContactInformation = "0342 531 574"
@@ -3942,7 +3942,7 @@ namespace Persistence
                         Name = "Національний технічний університет «Дніпровська політехніка»",
                         Description = "Національний технічний університет «Дніпро́вська політе́хніка» — державний заклад вищої освіти, багатогалузевий технічний університет, найстаріший заклад вищої освіти в м. Дніпро, перший заклад вищої гірничої освіти України. Має статус національного.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        UndergraduateCount = 8260,
+                        // UndergraduateCount = 8260,
                         StreetAddress = "проспект Дмитра Яворницького, 19",
                         SiteURL = "nmu.org.ua",
                         ContactInformation = "056 744 1411"
@@ -3952,7 +3952,7 @@ namespace Persistence
                         Name = "Київський національний університет технологій та дизайну",
                         Description = "Ки́ївський націона́льний університе́т техноло́гій та диза́йну — вищий навчальний заклад в Україні IV рівня акредитації, заснований 1930 року. В університеті навчається більше 10 тис. Київський національний університет технологій та дизайну увійшов у рейтинг «ТОР-100 кращих дизайнерських шкіл світу» і посів 71 місце.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 15000,
+                        // UndergraduateCount = 15000,
                         StreetAddress = "вулиця Немировича-Данченка, 2",
                         SiteURL = "knutd.com.ua",
                         ContactInformation = "044 256 2975"
@@ -3962,7 +3962,7 @@ namespace Persistence
                         Name = "Волинський національний університет імені Лесі Українки",
                         Description = "державний вищий навчальний заклад IV рівня акредитації у місті Луцьк, Україна. Заснований у 1940 році, впродовж історії змінював назви: Луцький державний учительський інститут, Луцький державний педагогічний інститут; у статусі університету мав назви Волинського державного, Волинського національного і Східноєвропейського національного. З 2020 року повернув назву Волинський національний університет. Названий на честь письменниці Лесі Українки.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Луцьк"),
-                        UndergraduateCount = 12369,
+                        // UndergraduateCount = 12369,
                         StreetAddress = "проспект Волі, 13",
                         SiteURL = "vnu.edu.ua",
                         ContactInformation = "0332 720 123"
@@ -3972,7 +3972,7 @@ namespace Persistence
                         Name = "Національний університет «Полтавська політехніка імені Юрія Кондратюка»",
                         Description = "Університет володіє сучасними матеріально-технічними ресурсами. 9 навчальних корпусів із загальною площею 87 000 м², безпечні сприятливі умови для високоякісного навчання. Бібліотека налічує приблизно 500 тисяч одиниць літератури, 5 читальних залів з 400 місцями, 55 навчальних лабораторій та 10 науково-дослідницьких, споряджених стаціонарним обладнанням, 26 комп'ютерних класів у розпорядженні студентів і викладачів. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Полтава"),
-                        UndergraduateCount = 10000,
+                        // UndergraduateCount = 10000,
                         StreetAddress = "Першотравневий проспект, 24",
                         SiteURL = "nupp.edu.ua",
                         ContactInformation = "05325 61604"
@@ -3982,7 +3982,7 @@ namespace Persistence
                         Name = "Дніпропетровський державний університет внутрішніх справ",
                         Description = "Університет заснований 16 березня 1966, як Дніпропетровська спеціальна середня школа міліції МВС СРСР. В 1992 вона була реорганізована в Дніпропетровське училище міліції МВС України. 1 вересня 1997 училище міліції було перетворено у вищий навчальний заклад — Дніпропетровський юридичний інститут МВС України. 1998 р. заклад з вул. Артема, 147 переїхав до приміщень колишнього Дніпропетровського військового зенітно-ракетного училища за адресою просп. Гагарина, 26. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        UndergraduateCount = 0,
+                        // UndergraduateCount = 0,
                         StreetAddress = "проспект Гагаріна, 26",
                         SiteURL = "dduvs.in.ua",
                         ContactInformation = "Не зазначено"
@@ -3992,7 +3992,7 @@ namespace Persistence
                         Name = "Запорізький державний медичний університет",
                         Description = "Запорізький державний медичний університет — заклад вищої освіти в Україні. Запорізький державний медичний університет — це сучасний навчальний центр, що має вищий (IV) ступінь акредитації. Університет — один з найстаріших вищих медичних навчальних закладів України.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Запоріжжя"),
-                        UndergraduateCount = 8879,
+                        // UndergraduateCount = 8879,
                         StreetAddress = "проспект Маяковського, 26",
                         SiteURL = "www.zsmu.edu.ua",
                         ContactInformation = "0612 246 469"
@@ -4002,7 +4002,7 @@ namespace Persistence
                         Name = "Чернівецький національний університет імені Юрія Федьковича",
                         Description = "Чернівецький національний університет імені Юрія Федьковича — державний вищий заклад освіти 4-го рівня акредитації у місті Чернівці.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        UndergraduateCount = 19227,
+                        // UndergraduateCount = 19227,
                         StreetAddress = "вулиця Коцюбинського, 2",
                         SiteURL = "www.chnu.edu.ua",
                         ContactInformation = "0372 584 810"
@@ -4012,7 +4012,7 @@ namespace Persistence
                         Name = "Національний університет біоресурсів і природокористування України",
                         Description = "Націона́льний університе́т біоресу́рсів і природокористува́ння Украї́ни, є провідним вищим аграрним закладом освіти України. З 2009 до 2014 року мав статус автономного дослідницького університету. Розташований у місті Києві. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 0,
+                        // UndergraduateCount = 0,
                         StreetAddress = "вулиця Героїв Оборони, 15",
                         SiteURL = "www.nubip.edu.ua",
                         ContactInformation = "044 527 8205"
@@ -4022,7 +4022,7 @@ namespace Persistence
                         Name = "Західноукраїнський національний універиситет",
                         Description = "Західноукраїнський національний університет — вищий навчальний заклад України IV-го рівня акредитації в м. Тернополі. Університет здійснює підготовку майже 25 тисяч студентів на всіх рівнях вищої освіти. ЗУНУ є підписантом Великої хартії університетів та членом Асоціації європейських університетів.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        UndergraduateCount = 14963,
+                        // UndergraduateCount = 14963,
                         StreetAddress = "вулиця Львівська, 11",
                         SiteURL = "wunu.edu.ua",
                         ContactInformation = "0352 517 575"
@@ -4032,7 +4032,7 @@ namespace Persistence
                         Name = "Національний педагогічний університет імені М. П. Драгоманова",
                         Description = "З осені 1989 року колектив вишу став активно домагатися повернення інститутові несправедливо відібраного в середині 20-х років імені Михайла Петровича Драгоманова. Це питання постійно стало порушуватися на зборах викладачів і студентів, засіданнях ради інституту і рад філологічного, історичного, педагогічного та інших факультетів й у статтях в періодичній пресі. Усі ці вимоги й акції завершилися перемогою справедливості: в 1993 році інститутові було повернуто ім'я видатного українського вченого-енциклопедиста, борця за вільну українську школу М. П. Драгоманова. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        UndergraduateCount = 36000,
+                        // UndergraduateCount = 36000,
                         StreetAddress = "вулиця Пирогова, 9",
                         SiteURL = "www.npu.edu.ua",
                         ContactInformation = "044 239 3017"
@@ -4042,7 +4042,7 @@ namespace Persistence
                         Name = "Хмельницький національний університет",
                         Description = "вищий навчальний заклад на Поділлі, який готує спеціалістів із багатьох галузей знань і проводить навчальну, методичну, наукову та виховну роботу. Університет засновано 1962 року. Пройшов шлях від загальнотехнічного факультету Українського поліграфічного інституту до Хмельницького національного університету, який має найвищий IV рівень акредитації. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Хмельницький"),
-                        UndergraduateCount = 9759,
+                        // UndergraduateCount = 9759,
                         StreetAddress = "вулиця Інститутська, 11",
                         SiteURL = "khnu.km.ua",
                         ContactInformation = "0382 670 276"
@@ -4052,7 +4052,7 @@ namespace Persistence
                         Name = "Вінницький національний технічний університет",
                         Description = "український заклад вищої освіти четвертого рівня акредитації, який здійснює підготовку фахівців інженерно-технічного профілю. Заклад є центром освіти, науки та культури Подільського регіону. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Вінниця"),
-                        UndergraduateCount = 6000,
+                        // UndergraduateCount = 6000,
                         StreetAddress = "Хмельницьке шосе, 95",
                         SiteURL = "vntu.edu.ua",
                         ContactInformation = "0432 560 848"
@@ -4062,7 +4062,7 @@ namespace Persistence
                         Name = "Житомирський державний університет імені Івана Франка",
                         Description = "найстаріший вищий навчальний заклад Житомирщини. Заснований у 1919 році як «Волинський педагогічний інститут».",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Житомир"),
-                        UndergraduateCount = 4456,
+                        // UndergraduateCount = 4456,
                         StreetAddress = "вулиця Велика Бердичівська, 40",
                         SiteURL = "zu.edu.ua",
                         ContactInformation = "0412 431 417"
@@ -4072,7 +4072,7 @@ namespace Persistence
                         Name = "Харківський політехнічний інститут",
                         Description = "Національний технічний університет «Харківський політехнічний інститут», до 1929 Харківський технологічний інститут, з 1975 Харківський ордена Леніна політехнічний інститут імені В. І. Леніна — заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        UndergraduateCount = 12000,
+                        // UndergraduateCount = 12000,
                         StreetAddress = "вулиця Кирпичова, 2",
                         SiteURL = "kpi.kharkov.ua",
                         ContactInformation = "057 707 6634"
@@ -4082,7 +4082,7 @@ namespace Persistence
                         Name = "Харківський національний медичний університет",
                         Description = "Ха́рківський націона́льний меди́чний університе́т, раніше Харківський державний медичний інститут. Вищий навчальний заклад, метою якого є підготовка медичних фахівців та підвищення кваліфікації, формування на базі університету науково-виробничого кластеру.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        UndergraduateCount = 6167,
+                        // UndergraduateCount = 6167,
                         StreetAddress = "проспект Науки, 4",
                         SiteURL = "knmu.edu.ua",
                         ContactInformation = "057 707 7380"
@@ -4092,7 +4092,7 @@ namespace Persistence
                         Name = "Ужгородський національний університет",
                         Description = "Ужгородський національний університет є членом Асоціації університетів Карпатського регіону (ACRU), яка входить до Асоціації європейських університетів (EUA) та є асоційованим членом Міжнародної асоціації університетів (IAU). Виш співпрацює зі 125 партнерами з різних країн, зокрема з такими, як Карлів університет, Технічний університет у м. Прага (Чехія), Університет Корвіна, Університет держави і права ім. Л.Кошута (Угорщина), Кошицький університет ім. П. Й. Шафарика, Університет ім. Я. А. Коменського (Словаччина), Університет м. Орадеа, Клузький університет м. Бабеш-Бояї (Румунія), Інститут германістики Університету м. Ландау, Університет Регенсбургу (Німеччина), Асоціація гомеопатичної медицини м. Рим (Італія), Загребський університет (Хорватія), Словацьким медичним університетом (Братислава) та іншими. У 2020 році укладено 7 нових міжнародних білатеральних угод, 7 угод з реалізації міжнародних проєктів та 8 угод з метою супроводу академічної мобільності Erasmus+.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Ужгород"),
-                        UndergraduateCount = 14460,
+                        // UndergraduateCount = 14460,
                         StreetAddress = "вулиця Університетська, 14",
                         SiteURL = "uzhnu.edu.ua",
                         ContactInformation = "0312 643 084"
@@ -4102,7 +4102,7 @@ namespace Persistence
                         Name = "Національний університет «Львівська Політехніка»",
                         Description = "найстаріший технічний заклад вищої освіти України та Східної Європи, заснований у 1816 році як Реальна школа з дозволу австрійського імператора Франца І.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        UndergraduateCount = 35000,
+                        // UndergraduateCount = 35000,
                         StreetAddress = "вул. Степана Бандери, 12",
                         SiteURL = "lp.edu.ua",
                         ContactInformation = "0322 582 111"
@@ -4308,7 +4308,7 @@ namespace Persistence
                         {
                             SpecialtyCore = sc,
                             Description = descriptionString,
-                            PriceUAH = new Random().Next(60000, 400000),
+                            TuitionUAH = new Random().Next(60000, 400000),
                             StartYear = 2023,
                             EndYear = 2027,
                             Institution = item,
@@ -4322,7 +4322,7 @@ namespace Persistence
             }
 
             //Seed components into specialties
-            if (context.Components.Any())
+            if (!context.Components.Any())
             {
                 foreach (var item in context.Specialties.ToList())
                 {
@@ -5085,12 +5085,13 @@ namespace Persistence
                         skills1.Add(await context.Skills.FirstOrDefaultAsync(x => x.Id == sIndex));
                     }
                     var componentsECTSCreds = item.Components.Select(x => x.ECTSCredits).Sum();
-                    item.EctsCredits = componentsECTSCreds + new Random().Next(0, 2) == 1 ? 20 : 40;
+                    item.EctsCredits = (componentsECTSCreds + new Random().Next(0, 2) == 1 ? 20 : 40);
                     item.AcceptanceRate = new Random().Next(5, 90);
                     item.GraduationRate = new Random().Next(20, 90);
                     item.GraduateEmploymentRate = new Random().Next(20, 90);
-                    item.UndergraduateCount = new Random().Next(20, 150);
+                    // item.UndergraduateCount = new Random().Next(20, 150);
                     item.Skills = skills1;
+                    item.Scholarship = new Random().Next(0, 12) == 0;
                     item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"), await context.Languages.FirstOrDefaultAsync(x => x.Id == "en") };
                     item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
                     item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };
@@ -5099,13 +5100,23 @@ namespace Persistence
                 foreach (var item in context.Institutions.ToList())
                 {
                     item.Type = await context.InstitutionTypes.FirstOrDefaultAsync(x => x.Id == 1);
-                    item.UndergraduateCount = item.Specialties.Select(x => x.UndergraduateCount).Sum() + new Random().Next(0, 5000); ;
+                    // item.UndergraduateCount = item.Specialties.Select(x => x.UndergraduateCount).Sum() + new Random().Next(0, 5000); ;
                     item.Accreditation = new Random().Next(3, 5);
                     item.Coordinates = new Coordinates { Latitude = 49.320175149, Longitude = 32.6557279 };
+                    item.StudyForms = new List<StudyForm>
+                    {
+                        await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1),
+                        await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 2),
+                        await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 3)
+                    };
+                    item.Languages = new List<Language>
+                    {
+                        await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"),
+                        await context.Languages.FirstOrDefaultAsync(x => x.Id == "en"),
+                    };
                     await context.SaveChangesAsync();
                 }
             }
-
         }
     }
 }

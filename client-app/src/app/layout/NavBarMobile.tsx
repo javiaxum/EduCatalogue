@@ -75,7 +75,7 @@ export default observer(function NavBarMobile() {
                                         basic
                                         fluid
                                         content={t('Login')}
-                                        onClick={() => modalStore.openModal(<LoginForm />)}
+                                        onClick={() => modalStore.openModalMini(<LoginForm />)}
                                         position='right'
                                         name='Profile' />)
                                     : (<>

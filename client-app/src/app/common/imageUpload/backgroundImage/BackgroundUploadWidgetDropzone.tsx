@@ -31,13 +31,13 @@ export default function BackgroundUploadWidgetDropzone({ setFiles, imageUrl }: P
             <input {...getInputProps()} />
             <Image
                 src={imageUrl}
-                style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }}
+                style={{ filter: 'brightness(50%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }}
             // style={hover ? { filter: 'brightness(30%)', objectFit: 'cover', height: '224px', minWidth: '1000px', width: '100%' } : { filter: 'brightness(40%)', objectFit: 'cover', height: '224px', minWidth: '1000px', width: '100%' }}
             // onMouseEnter={() => sethover(true)}
             // onMouseLeave={() => sethover(false)} 
             />
             <Icon name='plus' size='huge' style={{ position: 'absolute', left: 'calc(50% - 3rem)', top: '3rem', color: '#fff' }} />
-            <Header as='h2' inverted content='Click to choose or drag a file here' style={{ position: 'absolute', left: 'calc(50% - 15rem)', top: '5.6rem', width: '30rem' }} />
+            {/* <Header as='h2' inverted content='Click to choose or drag a file here' style={{ position: 'absolute', left: 'calc(50% - 15rem)', top: '5.6rem', width: '30rem' }} /> */}
         </div>
     )
 }

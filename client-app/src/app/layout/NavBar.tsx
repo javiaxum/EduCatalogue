@@ -43,7 +43,7 @@ export default observer(function NavBar() {
                 </Button.Group>
             </Menu.Item>
             {!userStore.isLoggedIn
-                ? (<Menu.Item onClick={() => modalStore.openModal(<LoginForm />)} position='right' name='Profile'></Menu.Item>)
+                ? (<Menu.Item onClick={() => modalStore.openModalMini(<LoginForm />)} position='right' name='Profile'></Menu.Item>)
                 : (<Menu.Item position='right' name='Profile'>
                     <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
                     <Dropdown pointing='top left' text={userStore.user?.displayName} >

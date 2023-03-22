@@ -94,6 +94,13 @@ const Institutions = {
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
     listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", { params }).then(responseBody),
     listRegions: () => requests.get<Region[]>("/institutions/regions"),
+
+}
+
+const Images = {
+    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Image[]>>(`/images/${institutionId}/list`, { params }).then(responseBody),
+    delete: (id: string, institutionId: string,) => requests.delete<void>(`/images/${institutionId}/delete/${id}`),
+    setImageStatus: (id: string, params: URLSearchParams) => requests.post(`/images/${id}`, { params }),
     setTitleImage: (file: Blob, id: string) => {
         let formData = new FormData();
         formData.append('File', file)
@@ -123,14 +130,14 @@ const Reviews = {
 }
 
 const Specialties = {
-    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/list`, { params }).then(responseBody),
+    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution`, { params }).then(responseBody),
     details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
     listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
     listBranches: () => requests.get<Branch[]>("/specialties/branches"),
     listSkills: () => requests.get<Skill[]>("/specialties/skills"),
     listComponentCores: () => requests.get<ComponentCore[]>("/specialties/componentCores"),
     create: (specialty: SpecialtyFormValues, institutionId: string) => requests.post<void>(`/institutions/${institutionId}/specialties`, specialty),
-    update: (specialty: SpecialtyFormValues, institutionId: string) => requests.put<void>(`/specialties/${institutionId}/specialty/${specialty.id}`, specialty),
+    update: (specialty: SpecialtyFormValues) => requests.put<void>(`/specialties/${specialty.id}`, specialty),
     delete: (id: string) => requests.delete<void>(`/specialties/${id}`)
 }
 
@@ -156,7 +163,8 @@ const agent = {
     Account,
     Specialties,
     Reviews,
-    Profiles
+    Profiles,
+    Images
 }
 
 export default agent;

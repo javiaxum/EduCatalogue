@@ -16,6 +16,7 @@ export default class SpecialtyStore {
 
     specialtyRegistry = new Map<string, Specialty>();
     selectedSpecialty: Specialty | undefined;
+
     specialtyCoreRegistry = new Map<string, SpecialtyCore>();
     branchRegistry = new Map<string, Branch>();
     skillRegistry = new Map<number, Skill>();
@@ -36,6 +37,7 @@ export default class SpecialtyStore {
     selectedSpecialtyIds: string[] = [];
     selectedSpecialtiesSort: string = 'az';
     //
+    popularSpecialtiesRegistry = new Map<string, Specialty>();
 
     constructor() {
         makeAutoObservable(this);
@@ -70,6 +72,9 @@ export default class SpecialtyStore {
     //     this.selectedSpecialtyIds = [];
     //     this.selectedSpecialtiesSort = 'az';
     // }
+    get popularSpecialties() {
+        return Array.from(this.popularSpecialtiesRegistry.values());
+    }
 
     get instititutionsBySelectedSort() {
         const specialties = Array.from(this.specialtyRegistry.values());
@@ -78,7 +83,7 @@ export default class SpecialtyStore {
         return specialties.sort((a, b) => a.localSpecialtyCode.localeCompare(b.localSpecialtyCode));
     }
 
-    setInstitutionsSearchSort = (selectedSpecialtiesSort: string) => {
+    setSpecialtiesSearchSort = (selectedSpecialtiesSort: string) => {
         this.selectedSpecialtiesSort = selectedSpecialtiesSort;
     }
 
@@ -108,7 +113,7 @@ export default class SpecialtyStore {
     setSelectedBranches = (value: string[]) => {
         this.selectedBranches = value;
     }
-    
+
     setSelectedSkillIds = (value: number[]) => {
         this.selectedSkillIds = value;
     }
@@ -281,7 +286,7 @@ export default class SpecialtyStore {
         let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
         let skillsPredicate = store.specialtyStore.selectedSkillIds.join('-');
         let languagesPredicate = store.specialtyStore.selectedLanguages.join('-');
-        let studyFormsPredicate = store.specialtyStore.selectedSkillIds.join('-');
+        let studyFormsPredicate = store.specialtyStore.selectedStudyForms.join('-');
         params.append('studyFormsPredicate', studyFormsPredicate);
         params.append('languagesPredicate', languagesPredicate);
         params.append('skillsPredicate', skillsPredicate);
@@ -301,7 +306,7 @@ export default class SpecialtyStore {
 
     loadSpecialties = async () => {
         this.setLoading(true);
-        this.specialtyRegistry.clear()
+        this.specialtyRegistry.clear();
         try {
             const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
             runInAction(() => {
@@ -312,6 +317,31 @@ export default class SpecialtyStore {
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
             this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
+    loadPopularSpecialties = async () => {
+        this.setLoading(true);
+        this.specialtyRegistry.clear();
+        const params = new URLSearchParams();
+        params.append('pageNumber', '1');
+        params.append('pageSize', '10');
+        params.append('listMostPopular', 'true');
+        this.popularSpecialtiesRegistry.clear();
+        try {
+            const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, params);
+            runInAction(() => {
+                result.data.forEach((specialty) =>
+                    this.popularSpecialtiesRegistry.set(specialty.id, specialty));
+                this.setLoadingInitial(false);
+                this.setLoading(false);
+            });
+            return result.data;
+
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
@@ -346,8 +376,6 @@ export default class SpecialtyStore {
     }
 
     createSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {
-        const user = store.userStore.user;
-        const manager = new Profile(user!);
         try {
             await agent.Specialties.create(specialty, institutionId);
             let newSpecialty = new Specialty(specialty);
@@ -359,9 +387,9 @@ export default class SpecialtyStore {
             console.log(error);
         }
     }
-    editSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {
+    editSpecialty = async (specialty: SpecialtyFormValues) => {
         try {
-            await agent.Specialties.update(new SpecialtyFormValues(specialty), institutionId);
+            await agent.Specialties.update(new SpecialtyFormValues(specialty));
             runInAction(() => {
                 if (specialty.id) {
                     let editedSpecialty = { ...this.getSpecialty(specialty.id), ...specialty };

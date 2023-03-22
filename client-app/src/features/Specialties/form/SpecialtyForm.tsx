@@ -62,13 +62,19 @@ export default observer(function SpecialtyForm() {
         localSpecialtyCode: Yup.string().required(),
         description: Yup.string().required('Specialty description is required'),
         degreeId: Yup.string().required(),
+        tuitionUAH: Yup.number().required(),
+        scholarship: Yup.string().required(),
+        acceptanceRate: Yup.string().required(),
+        graduationRate: Yup.string().required(),
+        graduateEmploymentRate: Yup.string().required(),
+        undergraduatesEnrolled: Yup.string().required(),
         ectsCredits: Yup.number().required(),
-        priceUAH: Yup.number().required(),
-        nonPaidEducationAvailable: Yup.string().required(),
         startYear: Yup.number().required(),
         endYear: Yup.number().required(),
         studyFormIds: Yup.array().min(1, "Specify at least a single study form"),
         languageIds: Yup.array().min(1, "Specify at least a single language"),
+        skillIds: Yup.array().min(1, "Specify at least a single skill"),
+        componentDTOs: Yup.array().min(1, "Specify at least a component"),
     })
 
 
@@ -93,12 +99,10 @@ export default observer(function SpecialtyForm() {
         if (id) {
             specialty.id = uuid();
             createSpecialty(specialty, id).then(() => {
-                institutionStore.setSpecialty(getSpecialty(specialty.id!)!, id);
                 router.navigate(`/specialties/${specialty.id}`)
             });
         } else if (id1 && id2) {
-            editSpecialty(specialty, id1).then(() => {
-                institutionStore.setSpecialty(getSpecialty(specialty.id!)!, id1);
+            editSpecialty(specialty).then(() => {
                 router.navigate(`/specialties/${id2}`)
             });
         }
@@ -224,11 +228,11 @@ export default observer(function SpecialtyForm() {
                                                     <CustomTextInput
                                                         type='number'
                                                         placeholder='0'
-                                                        name='priceUAH'
+                                                        name='tuitionUAH'
                                                         width='7rem' />
                                                     <Label content='UAH' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
-                                                    {t('Non paid education is available') + ': '}
-                                                    <CustomCheckboxInput name='nonPaidEducationAvailable' />
+                                                    {t('Scholarship available') + ': '}
+                                                    <CustomCheckboxInput name='scholarship' />
                                                 </Table.Cell>
                                             </Table.Row>
                                             <Table.Row>
@@ -263,14 +267,52 @@ export default observer(function SpecialtyForm() {
                                                         color='blue' />
                                                 </Table.Cell>
                                                 <Table.Cell>
-                                                    {t('Enrolled students count') + ': '}
+                                                    {t('Undergraduates enrolled') + ': '}
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <CustomTextInput
                                                         width='7rem'
                                                         type='number'
-                                                        placeholder={t('Enrolled students count')}
-                                                        name='enrolledStudentsCount' />
+                                                        placeholder={t('Undergraduates enrolled')}
+                                                        name='undergraduatesEnrolled' />
+                                                </Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>
+                                                    <Icon
+                                                        name='percent'
+                                                        size='big'
+                                                        color='blue' />
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t('Acceptance rate') + ': '}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <CustomTextInput
+                                                        width='5.5rem'
+                                                        type='number'
+                                                        placeholder={t('Specify rate in percents')}
+                                                        name='acceptanceRate' />
+                                                    <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                </Table.Cell>
+                                            </Table.Row>
+                                            <Table.Row>
+                                                <Table.Cell>
+                                                    <Icon
+                                                        name='percent'
+                                                        size='big'
+                                                        color='blue' />
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    {t('Graduation rate') + ': '}
+                                                </Table.Cell>
+                                                <Table.Cell>
+                                                    <CustomTextInput
+                                                        width='5.5rem'
+                                                        type='number'
+                                                        placeholder={t('Specify rate in percents')}
+                                                        name='graduationRate' />
+                                                    <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
                                                 </Table.Cell>
                                             </Table.Row>
                                             <Table.Row>
@@ -301,13 +343,13 @@ export default observer(function SpecialtyForm() {
                                                         color='blue' />
                                                 </Table.Cell>
                                                 <Table.Cell>
-                                                    {t('Languages') + ': '}
+                                                    {t('Education language') + ': '}
                                                 </Table.Cell>
                                                 <Table.Cell>
                                                     <CustomSelectInput
                                                         width='18rem'
                                                         options={languages}
-                                                        placeholder={t('Languages')}
+                                                        placeholder={t('Education language')}
                                                         name='languageIds'
                                                         multiple={true} />
                                                 </Table.Cell>

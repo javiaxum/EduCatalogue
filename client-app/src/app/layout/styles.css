@@ -42,6 +42,37 @@ html {
   box-shadow: none !important;
 }
 
+.ui.basic.button.image-crud-button {
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+.ui.basic.button.image-crud-button:focus {
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.image-crud-button:active {
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.image-crud-button:hover {
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.image-crud-button:focus > i {
+  color: #fff !important;
+}
+
+.ui.basic.button.image-crud-button:hover > i {
+  color: #fff !important;
+}
+
 .componentCard {
   min-height: 100px !important;
   width: 250px !important;

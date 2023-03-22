@@ -12,7 +12,7 @@ using Persistence;
 
 namespace Application.Images
 {
-    public class Delete
+    public class DeleteProfileImage
     {
         public class Command : IRequest<Result<Unit>>
         {

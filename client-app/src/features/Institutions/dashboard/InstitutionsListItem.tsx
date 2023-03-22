@@ -23,7 +23,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
     return (
         <>
             {isComputerOrTablet &&
-                <Segment style={{ padding: 0, borderRadius: '10px' }}>
+                <Segment style={{ padding: 0, borderRadius: '10px'}}>
                     <Grid style={{ margin: 0 }}>
                         <Grid.Column style={{ width: '13rem', minWidth: '13rem', padding: 0 }}>
                             <img
@@ -44,7 +44,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                             <RatingStars rating={institution.rating} />
                                         </div>
                                         <div style={{ color: '#777', display: 'block', marginLeft: '1rem' }}>
-                                            {institution.reviews.length} {t('Reviews_Dashboard_plural')}
+                                            {institution.reviewsCount} {t('Reviews_Dashboard_plural')}
                                         </div>
                                     </div>
                                 </Grid.Row>
