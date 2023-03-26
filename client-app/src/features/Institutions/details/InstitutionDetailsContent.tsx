@@ -15,7 +15,7 @@ export default observer(function InstitutionDetailsContent() {
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
-    
+
     const items = [
         'About',
         'Available Specialties',
@@ -31,11 +31,11 @@ export default observer(function InstitutionDetailsContent() {
     ]
     return (
         <>
-            <Menu pointing secondary style={{ width: isComputerOrTablet ? '37rem' : "auto" }}>
-                {items.map((i) =>
+            <Menu pointing secondary stackable={isMobile} style={{ width: isComputerOrTablet ? '37rem' : '' }}>
+                {items.map((i, index) =>
                     <Menu.Item
                         name={i}
-                        key={i}
+                        key={index}
                         active={activeMenuItem === i}
                         content={t(i)}
                         onClick={() => setActiveMenuItem(i)}

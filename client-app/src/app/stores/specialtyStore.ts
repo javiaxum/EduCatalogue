@@ -23,6 +23,7 @@ export default class SpecialtyStore {
     componentCoreRegistry = new Map<number, ComponentCore>();
     loadingInitial: boolean = true;
     loading: boolean = false;
+    editing: boolean = false;
     // Search params
     pagination: Pagination | null = null;
     pagingParams: SpecialtiesPagingParams = new SpecialtiesPagingParams();
@@ -203,11 +204,9 @@ export default class SpecialtyStore {
                     this.specialtyCoreRegistry.set(specialtyCore.id, specialtyCore)
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -221,11 +220,9 @@ export default class SpecialtyStore {
                     this.componentCoreRegistry.set(componentCore.id, componentCore);
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -239,11 +236,9 @@ export default class SpecialtyStore {
                     this.skillRegistry.set(skill.id, skill);
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -257,11 +252,9 @@ export default class SpecialtyStore {
                     this.branchRegistry.set(branch.id, branch);
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -300,8 +293,7 @@ export default class SpecialtyStore {
     }
 
     debouncedLoadSpecialties = debounce(() => {
-        this.pagingParams = new SpecialtiesPagingParams();
-        this.loadSpecialties()
+        this.loadSpecialties();
     }, 800);
 
     loadSpecialties = async () => {
@@ -310,9 +302,9 @@ export default class SpecialtyStore {
         try {
             const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
             runInAction(() => {
-                result.data.forEach(specialty => {
-                    this.specialtyRegistry.set(specialty.id, specialty)
-                });
+                result.data.forEach((specialty, index) =>
+                    setTimeout(() =>
+                        this.setSpecialty(specialty), index * 100));
             })
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
@@ -335,8 +327,9 @@ export default class SpecialtyStore {
         try {
             const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, params);
             runInAction(() => {
-                result.data.forEach((specialty) =>
-                    this.popularSpecialtiesRegistry.set(specialty.id, specialty));
+                result.data.forEach((specialty, index) =>
+                    setTimeout(() =>
+                        this.setPopularSpecialtiesRegistryItem(specialty), index * 100));
                 this.setLoadingInitial(false);
                 this.setLoading(false);
             });
@@ -393,12 +386,34 @@ export default class SpecialtyStore {
             runInAction(() => {
                 if (specialty.id) {
                     let editedSpecialty = { ...this.getSpecialty(specialty.id), ...specialty };
-                    this.specialtyRegistry.set(specialty.id, editedSpecialty as Specialty);
+                    this.setSpecialty(editedSpecialty as Specialty);
                     this.selectedSpecialty = editedSpecialty as Specialty;
                 }
             })
         } catch (error) {
             console.log(error);
         }
+    }
+    deleteSpecialty = async (id: string) => {
+        try {
+            this.editing = true;
+            await agent.Specialties.delete(id);
+            runInAction(() => {
+                if (id) {
+                    this.specialtyRegistry.delete(id);
+                    this.selectedSpecialty = undefined;
+                    this.editing = false;
+                }
+            })
+        } catch (error) {
+            this.editing = false;
+            console.log(error);
+        }
+    }
+    clearPopularSpecialtiesRegistry = () => {
+        this.popularSpecialtiesRegistry.clear();
+    }
+    setPopularSpecialtiesRegistryItem = (item: Specialty) => {
+        this.popularSpecialtiesRegistry.set(item.id, item);
     }
 }

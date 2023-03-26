@@ -9,8 +9,8 @@ namespace Domain
     {
         public Guid Id { get; set; }
         public ComponentCore ComponentCore { get; set; }
+        public Specialty Specialty { get; set; }
         public int ECTSCredits { get; set; }
         public bool isOptional { get; set; }
-        public Specialty Specialty { get; set; }
     }
 }

@@ -1,11 +1,9 @@
 import { Formik, useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
-import { Button, Card, DropdownItemProps, DropdownProps, Form, Grid, Icon, Item, Segment } from 'semantic-ui-react';
+import { Button, Card, DropdownItemProps, DropdownProps, Grid, Icon, Segment } from 'semantic-ui-react';
 import { ComponentFormValues, EducationalComponent } from '../../../../app/models/educationalComponent';
-import { Specialty } from '../../../../app/models/specialty';
 import { useStore } from '../../../../app/stores/store';
 import * as Yup from 'yup';
 import CustomSelectInput from '../../../../app/common/form/CustomSelectInput';
@@ -23,9 +21,16 @@ interface Props {
 }
 
 export default observer(function ComponentListItemForm({ component, setActiveForm, activeForm, setEduComponents, handleComponentDelete }: Props) {
-    const { t, i18n } = useTranslation();
-    const { specialtyStore } = useStore();
+    const { t } = useTranslation();
+    const { specialtyStore, commonStore } = useStore();
+    const [eduComponent, setEduComponent] = useState<ComponentFormValues>(new ComponentFormValues())
     const formik = useFormikContext();
+
+    useEffect(() => {
+        if (component && component.componentCoreId && component.ectsCredits && component.name)
+            setEduComponent(component);
+        commonStore.setEditMode(true);
+    }, [commonStore, component, setEduComponent])
 
     const componentCoreOptions: DropdownItemProps[] = specialtyStore.componentCoresById.map(componentCore => ({
         key: componentCore.id,
@@ -39,34 +44,36 @@ export default observer(function ComponentListItemForm({ component, setActiveFor
         ectsCredits: Yup.number().required(),
     })
 
-    function handleComponentFormSubmit(componentFormValue: EducationalComponent) {
+    function handleComponentFormSubmit(componentFormValue: ComponentFormValues) {
         let eduComponents = formik.getFieldProps('componentDTOs').value.slice() as EducationalComponent[];
+        let newComponent = new EducationalComponent(componentFormValue);
         if (component.id) {
+            console.log('id')
+            console.log(newComponent)
             var index = eduComponents.indexOf(component);
-            eduComponents[index] = componentFormValue;
-            component = componentFormValue;
-            formik.getFieldHelpers('componentDTOs').setValue(eduComponents);
+            console.log(eduComponents[index])
+
+            eduComponents[index] = newComponent;
             setEduComponents(eduComponents);
+            formik.getFieldHelpers('componentDTOs').setValue(eduComponents);
         }
         else {
-            componentFormValue.id = uuid();
-            eduComponents.push(componentFormValue);
-            component = componentFormValue;
-            formik.getFieldHelpers('componentDTOs').setValue(eduComponents);
+            newComponent.id = uuid();
+            eduComponents.push(newComponent);
             setEduComponents(eduComponents);
+            formik.getFieldHelpers('componentDTOs').setValue(eduComponents);
         }
     }
-    
+
     return (
         <Formik
             validationSchema={validationSchema}
             enableReinitialize
-            initialValues={component}
-            onSubmit={values => handleComponentFormSubmit(values)}
-        >
+            initialValues={eduComponent}
+            onSubmit={values => handleComponentFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty, getFieldProps, getFieldHelpers }) => (
 
-                <Grid.Column style={{ width: '250px', padding: '0.5rem' }}>
+                <Grid.Column style={{ width: '18rem', padding: '0.5rem' }}>
                     <Card className='componentCard' style={{ display: 'flex' }}>
                         <Card.Content style={{ padding: '1rem 1rem 0 1rem' }}>
                             <Button
@@ -84,7 +91,7 @@ export default observer(function ComponentListItemForm({ component, setActiveFor
                                 <Icon name='trash' />
                             </Button>}
                             <CustomSelectInput
-                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+                                onChange={(event, data) => {
                                     getFieldHelpers('name').setValue(specialtyStore.getComponentCore(data.value as number)?.name)
                                 }}
                                 padding='0 0 0 0.5rem'
@@ -100,7 +107,7 @@ export default observer(function ComponentListItemForm({ component, setActiveFor
                                     padding='0.4em 0.2em 0.4em 0.2em'
                                     width='5rem'
                                     type='number'
-                                    placeholder=''
+                                    placeholder='0'
                                     name='ectsCredits' />
                             </Segment>
                         </Card.Content>

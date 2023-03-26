@@ -11,14 +11,20 @@ import InstitutionsList from './InstitutionsList';
 
 export default observer(function InstitutionDashboard() {
     const { institutionStore, commonStore } = useStore();
-    const { setInstitutionPagingParams: setPagingParams, institutionPagination: pagination, loadInstitutions, institutionsRegistry } = institutionStore;
+    const { setInstitutionPagingParams,
+        institutionPagination,
+        loadInstitutions,
+        institutionsRegistry,
+        setActiveMenuItem } = institutionStore;
 
     useEffect(() => {
+        institutionStore.clearImages();
+        setActiveMenuItem('About');
         return () => { commonStore.setSidebarOpened(false) }
-    }, [institutionStore, commonStore.setSidebarOpened, commonStore])
+    }, [institutionStore, commonStore.setSidebarOpened, commonStore, setActiveMenuItem])
 
     function handleLoad(i: number) {
-        setPagingParams(new InstitutionsPagingParams(i));
+        setInstitutionPagingParams(new InstitutionsPagingParams(i));
         institutionsRegistry.clear();
         loadInstitutions();
     }
@@ -36,34 +42,31 @@ export default observer(function InstitutionDashboard() {
                         <InstitutionsList />
                         <Container style={{ textAlign: 'center', paddingTop: '2rem' }}>
                             <Pagination
-                                totalPages={pagination?.totalPages!}
-                                activePage={pagination?.currentPage}
+                                totalPages={institutionPagination?.totalPages!}
+                                activePage={institutionPagination?.currentPage}
                                 onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                         </Container>
                     </Grid.Column>
-                    <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem'}}>
+                    <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem' }}>
                         <SearchParamsSideBar />
                     </Grid.Column>
                     <Grid.Column style={{ width: '5%' }} >
                     </Grid.Column>
-                    {institutionStore.selectedInstitutionIds.length > 0 &&
-                        <Button
-                            color='facebook'
-                            size='huge'
-                            as={Link}
-                            to='/institutions/comparison'
-                            style={{ position: 'fixed', right: '10rem', bottom: '1rem', zIndex: 1000 }}>
-                            Compare {institutionStore.selectedInstitutionIds.length}
-                        </Button>}
                 </Grid>}
             {isMobile &&
                 <Grid style={{ margin: 0 }} >
                     <Grid.Column style={{ margin: 0, padding: 0 }} stretched>
+                        <Container style={{ textAlign: 'center' }}>
+                            <Pagination
+                                totalPages={institutionPagination?.totalPages!}
+                                activePage={institutionPagination?.currentPage}
+                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                        </Container>
                         <InstitutionsList />
                         <Container style={{ textAlign: 'center' }}>
                             <Pagination
-                                totalPages={pagination?.totalPages!}
-                                activePage={pagination?.currentPage}
+                                totalPages={institutionPagination?.totalPages!}
+                                activePage={institutionPagination?.currentPage}
                                 onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                         </Container>
                     </Grid.Column>

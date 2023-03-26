@@ -12,10 +12,12 @@ import { router } from '../../routers/Routes';
 export default observer(function InstitutionComparisonBoard() {
     const { institutionStore, specialtyStore } = useStore();
     const { selectedInstitutionIds, loadInstitution, institutionsRegistry } = institutionStore;
-
+    const { specialtyCoreRegistry } = specialtyStore;
     const [selectedInstitutions, setSelectedInstitutions] = useState<Institution[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
+    const { arabToRoman } = require('roman-numbers');
+
     useEffect(() => {
         let institutions = new Array<Institution>;
         loadInstitutions().then(() => {
@@ -28,6 +30,8 @@ export default observer(function InstitutionComparisonBoard() {
     async function loadInstitutions() {
         await Promise.all(selectedInstitutionIds.map((x) => loadInstitution(x)));
     }
+    const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
+    const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
 
     function BuildRatingStars(rating: number) {
         let elements = [];
@@ -39,10 +43,6 @@ export default observer(function InstitutionComparisonBoard() {
         }
         return elements;
     }
-
-
-    // const MaxSpecialtiesCoverage = Math.max(...selectedInstitutions.map((i) => SpecialtiesCoverage(i.specialties)));
-    // const MaxAverageEmployment = Math.max(...selectedInstitutions.map((i) => AverageEmployment(i.specialties)));
 
     if (loading) return <LoadingComponent />
 
@@ -106,7 +106,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {i.accreditation}
+                                        {arabToRoman(i.accreditation)}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -136,7 +136,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {}%
+                                        {((i.specialtiesCount / specialtyCoreRegistry.size) * 100).toFixed(1)}%
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -151,14 +151,14 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {}%
+                                        {i.graduateEmploymentRate}%
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>
                                 <Header as='h4' textAlign='center' color='grey'>
-                                    {t('AVERAGE EDUCATION COST')}
+                                    {t('AVERAGE TUITION')}
                                 </Header>
                             </Table.Cell>
                             {selectedInstitutions.map((i) =>
@@ -166,7 +166,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        {} UAH
+                                        {i.averageTuitionUAH} UAH
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -181,7 +181,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        English, Ukrainian
+                                        {i.languageIds.map((i) => languages[i == "en" ? 0 : 1 as number]?.text).join(", ")}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
@@ -196,14 +196,14 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        Full-time, Part-time, Extramural,,,
+                                        {i.studyFormIds.map((i) => studyForms[i - 1]?.text).join(", ")}
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>
                         <Table.Row>
                             <Table.Cell>
                                 <Header as='h4' textAlign='center' color='grey'>
-                                    {t('POPULARITY')}
+                                    {t('ACCEPTANCE RATE')}
                                 </Header>
                             </Table.Cell>
                             {selectedInstitutions.map((i) =>
@@ -211,7 +211,52 @@ export default observer(function InstitutionComparisonBoard() {
                                     key={i.id}
                                     textAlign='center'>
                                     <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                        ???%
+                                        {i.acceptanceRate}
+                                    </Header>
+                                </Table.Cell>)}
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h4' textAlign='center' color='grey'>
+                                    {t('GRADUATION RATE')}
+                                </Header>
+                            </Table.Cell>
+                            {selectedInstitutions.map((i) =>
+                                <Table.Cell
+                                    key={i.id}
+                                    textAlign='center'>
+                                    <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                        {i.graduationRate}
+                                    </Header>
+                                </Table.Cell>)}
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h4' textAlign='center' color='grey'>
+                                    {t('FREE EDUCATION')}
+                                </Header>
+                            </Table.Cell>
+                            {selectedInstitutions.map((i) =>
+                                <Table.Cell
+                                    key={i.id}
+                                    textAlign='center'>
+                                    <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                        <Icon name={i.scholarship ? 'check' : 'x'} size='large' />
+                                    </Header>
+                                </Table.Cell>)}
+                        </Table.Row>
+                        <Table.Row>
+                            <Table.Cell>
+                                <Header as='h4' textAlign='center' color='grey'>
+                                    {t('FREE EDUCATION')}
+                                </Header>
+                            </Table.Cell>
+                            {selectedInstitutions.map((i) =>
+                                <Table.Cell
+                                    key={i.id}
+                                    textAlign='center'>
+                                    <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                        
                                     </Header>
                                 </Table.Cell>)}
                         </Table.Row>

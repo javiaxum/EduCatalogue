@@ -76,8 +76,7 @@ axios.interceptors.response.use(async response => {
             break;
     }
     return Promise.reject(error);
-}
-)
+})
 
 const requests = {
     get: <T>(url: string) => axios.get<T>(url).then(responseBody),

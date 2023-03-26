@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230324124621_ComponentDeleteBehavior")]
+    partial class ComponentDeleteBehavior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -417,9 +420,6 @@ namespace Persistence.Migrations
                     b.Property<int>("EndYear")
                         .HasColumnType("integer");
 
-                    b.Property<bool>("FreeEducation")
-                        .HasColumnType("boolean");
-
                     b.Property<double>("GraduateEmploymentRate")
                         .HasColumnType("double precision");
 
@@ -428,6 +428,9 @@ namespace Persistence.Migrations
 
                     b.Property<Guid?>("InstitutionId")
                         .HasColumnType("uuid");
+
+                    b.Property<bool>("Scholarship")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("SpecialtyCoreId")
                         .HasColumnType("text");

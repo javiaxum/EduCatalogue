@@ -28,7 +28,7 @@ namespace Application.Core
             .ForMember(d => d.GraduationRate, o => o.MapFrom(s => s.Specialties.Select(a => a.GraduationRate).Average()))
             .ForMember(d => d.GraduateEmploymentRate, o => o.MapFrom(s => s.Specialties.Select(a => a.GraduateEmploymentRate).Average()))
             .ForMember(d => d.AverageTuitionUAH, o => o.MapFrom(s => s.Specialties.Select(a => a.TuitionUAH).Average()))
-            .ForMember(d => d.Scholarship, o => o.MapFrom(s => s.Specialties.Any(a => a.Scholarship)))
+            .ForMember(d => d.Scholarship, o => o.MapFrom(s => s.Specialties.Any(a => a.FreeEducation)))
             .ForMember(d => d.UndergraduatesEnrolled, o => o.MapFrom(s => s.Specialties.Select(u => u.UndergraduatesEnrolled).Sum()))
             .ForMember(d => d.LanguageIds, o => o.MapFrom(s => s.Languages.Select(x => x.Id)))
             .ForMember(d => d.StudyFormIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))

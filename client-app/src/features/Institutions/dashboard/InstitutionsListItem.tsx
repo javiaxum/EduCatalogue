@@ -23,7 +23,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
     return (
         <>
             {isComputerOrTablet &&
-                <Segment style={{ padding: 0, borderRadius: '10px'}}>
+                <Segment style={{ padding: 0, borderRadius: '10px' }}>
                     <Grid style={{ margin: 0 }}>
                         <Grid.Column style={{ width: '13rem', minWidth: '13rem', padding: 0 }}>
                             <img
@@ -78,46 +78,60 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                     </Grid>
                 </Segment>}
             {isMobile &&
-                <Grid style={{ margin: 0, padding: '1rem' }}>
-                    <Grid.Row>
-                        <Header
-                            textAlign='center'
-                            as={Link}
-                            to={`/institutions/${institution.id}`}
-                            style={{ width: '100%' }}>
-                            {institution.name}</Header>
-                    </Grid.Row>
-                    <Grid.Column style={{ width: '12rem', padding: 0 }}>
-                        <Image
-                            src={institution.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
-                            style={{ objectFit: 'cover', minHeight: '11rem', minWidth: '11rem', borderRadius: '30px' }} />
-                    </Grid.Column>
-                    <Grid.Column style={{ width: 'calc(100% - 12rem)' }}>
-                        <Grid style={{ width: '100%', margin: 0 }}>
-                            <Grid.Row style={{ paddingBottom: '0' }}>
+                <Segment style={{ padding: 0, borderRadius: '10px' }}>
+                    <Grid style={{ margin: 0 }}>
+                        <Grid.Column style={{ width: '13rem', minWidth: '13rem', padding: 0 }}>
+                            <img
+                                alt='TitleImage'
+                                src={institution.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
+                                style={{ width: '12rem', height: '12rem', borderRadius: '10px 0 0 0 ', objectFit: 'cover' }} />
+                        </Grid.Column>
+                        <Grid.Column style={{ width: 'calc(100% - 14rem)' }}>
+                            <Grid style={{ width: '100%', padding: '0 0 0 5%' }}>
+                                <Grid.Row style={{ padding: 0 }}>
+                                    <Header
+                                        as={Link}
+                                        to={`/institutions/${institution.id}`}
+                                        style={{ display: 'inline', padding: '0.5rem 0 2rem 0' }}>
+                                        {institution.name}</Header>
+                                    <div style={{ position: 'relative', right: 0 }}>
+                                        <div style={{ display: 'block' }}>
+                                            <RatingStars rating={institution.rating} />
+                                        </div>
+                                        <div style={{ color: '#777', display: 'inline', marginLeft: '1rem' }}>
+                                            {institution.reviewsCount} {t('Reviews_Dashboard_plural')}
+                                        </div>
+                                    </div>
+                                </Grid.Row>
+                            </Grid>
+                        </Grid.Column>
+                        <Grid.Row>
+                            <Button
+                                basic
+                                active={isActive}
+                                className={isActive ? 'customButtonActive' : ''}
+                                style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
+                                onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
+                                <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                            </Button>
+                            <div style={{ color: '#777', padding: '0.7rem' }}>{t('Compare')}</div>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Item.Description>{institution.description.slice(0, 150)}...
                                 <Button
-                                    basic
-                                    active={isActive}
-                                    className={isActive ? 'customButtonActive' : ''}
-                                    style={{ position: 'relative', left: 0, margin: '0 1rem 0 0', padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
-                                    onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
-                                    <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                    as={Link}
+                                    to={`/institutions/${institution.id}`}
+                                    style={{ border: 0, boxShadow: 'none', padding: 4, fontWeight: 'bold' }}
+                                    basic>
+                                    {t('Read more')}{'>>'}
                                 </Button>
-                                <RatingStars rating={institution.rating} />
-                            </Grid.Row>
-                            <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-                                <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
-                            </Grid.Row>
-                        </Grid>
-                    </Grid.Column>
-                    <Grid.Row>
-                        <Item.Description>
-                            <pre style={{ margin: 0, fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
-                                {institution.description.slice(0, 250) + " ..."}
-                            </pre>
-                        </Item.Description>
-                    </Grid.Row>
-                </Grid>}
+                            </Item.Description>
+                        </Grid.Row>
+                        <Grid.Row style={{ color: '#777', padding: '0.2rem' }}>
+                            {institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}
+                        </Grid.Row>
+                    </Grid>
+                </Segment>}
         </>
     )
 })

@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Button, Container, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
@@ -9,6 +9,8 @@ import { useStore } from '../stores/store';
 export default observer(function NavBar() {
     const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
     const { t, i18n } = useTranslation();
+    const location = useLocation();
+
     return (
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: '85rem' }}>
             <Menu.Item as={Link} to="/institutions" active={false}>
@@ -16,12 +18,13 @@ export default observer(function NavBar() {
                 <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
             </Menu.Item>
             <Menu.Item>
-                <Search
-                    placeholder={t('Search institutions')! + '...'}
-                    showNoResults={false}
-                    onSearchChange={(e, d) => {
-                        institutionStore.setSearchNameParam(d.value!);
-                    }} />
+                {location.pathname === '/institutions' &&
+                    <Search
+                        placeholder={t('Search institutions')! + '...'}
+                        showNoResults={false}
+                        onSearchChange={(e, d) => {
+                            institutionStore.setSearchNameParam(d.value!);
+                        }} />}
             </Menu.Item>
             {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
             <Menu.Item position='right' style={{ marginRight: '0', position: 'relative' }}>

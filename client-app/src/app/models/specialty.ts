@@ -7,7 +7,7 @@ export interface Specialty {
     localSpecialtyCode: string;
     degreeId: number;
     tuitionUAH: number;
-    scholarship: boolean;
+    freeEducation: boolean;
     acceptanceRate: number;
     graduationRate: number;
     graduateEmploymentRate: number;
@@ -34,7 +34,7 @@ export class SpecialtyFormValues {
     description: string = '';
     degreeId: number = 1;
     tuitionUAH: number = 0;
-    scholarship: boolean = false;
+    freeEducation: boolean = false;
     acceptanceRate: number = 0;
     graduationRate: number = 0;
     graduateEmploymentRate: number = 0;
@@ -55,7 +55,7 @@ export class SpecialtyFormValues {
             this.description = specialty.description;
             this.degreeId = specialty.degreeId;
             this.tuitionUAH = specialty.tuitionUAH;
-            this.scholarship = specialty.scholarship;
+            this.freeEducation = specialty.freeEducation;
             this.acceptanceRate = specialty.acceptanceRate;
             this.graduationRate = specialty.graduationRate;
             this.graduateEmploymentRate = specialty.graduateEmploymentRate;

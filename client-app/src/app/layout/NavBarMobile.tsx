@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { Button, Checkbox, Container, Divider, Dropdown, Grid, Header, Icon, Image, Item, Menu, Search, Segment, Sidebar } from 'semantic-ui-react';
+import { Button, Grid, Icon, Image, Menu, Search, Segment, Transition } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
 import { CSSTransition } from 'react-transition-group';
@@ -13,8 +12,10 @@ export default observer(function NavBarMobile() {
     const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
     const { setSidebarOpened, sidebarOpened } = commonStore;
     const { t, i18n } = useTranslation();
+    const location = useLocation();
+
     return (
-        <>
+        <div style={{ position: 'fixed', width: '100%', zIndex: 1000 }}>
             <Menu inverted style={{ borderRadius: '0px' }}>
                 <Menu.Item>
                     <Button
@@ -31,24 +32,23 @@ export default observer(function NavBarMobile() {
                     <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
                 </Menu.Item>
             </Menu>
-            <Menu inverted style={{ borderRadius: '0px', height: '3rem' }}>
-                <Search
-                    style={{ marginLeft: 'auto', marginRight: 'auto' }}
-                    placeholder={t('Search institutions')! + '...'}
-                    showNoResults={false}
-                    onSearchChange={(e, d) => {
-                        institutionStore.setSearchNameParam(d.value!);
-                    }}
-                />
-            </Menu>
-            <CSSTransition
-                in={sidebarOpened}
+            {location.pathname === '/institutions' &&
+                <Menu className={'inverted-mobile'} style={{ borderRadius: '0px', height: '1rem' }}>
+                    <Search
+                        style={{ marginLeft: 'auto', marginRight: 'auto' }}
+                        placeholder={t('Search institutions')! + '...'}
+                        showNoResults={false}
+                        onSearchChange={(e, d) => {
+                            institutionStore.setSearchNameParam(d.value!);
+                        }} />
+                </Menu>}
+            <Transition
+                visible={sidebarOpened}
+                animation='fade right'
                 timeout={400}
-                classNames="sidebar-transition"
-                unmountOnExit
-                appear>
-                <Grid divided style={{ margin: 0, padding: 0, width: '19rem', height: '200vh', backgroundColor: 'rgb(30, 71, 160)', position: 'absolute', top: '7rem', zIndex: 1000 }}>
-                    <Grid.Column textAlign='center' style={{ width: '19rem', padding: 0, marginLeft: '1rem' }}>
+                unmountOnExit>
+                <Grid divided style={{ margin: 0, padding: 0, width: '19rem', height: '200vh', backgroundColor: 'rgb(30, 71, 160)', position: 'absolute', top: '5rem', zIndex: 1000 }}>
+                    <Grid.Column textAlign='center' style={{ width: '19rem', padding: 0, marginRight: '1rem' }}>
                         <Grid.Row style={{ padding: '1rem 0 1rem 0' }}>
                             <Button.Group style={{ padding: '1rem 0 1rem 0' }}>
                                 <Button
@@ -99,12 +99,12 @@ export default observer(function NavBarMobile() {
                                     </>)}
                             </Segment>
                         </Grid.Row>
-                        <Grid.Row>
+                        {location.pathname === '/institutions' && <Grid.Row>
                             <SearchParamsSideBar />
-                        </Grid.Row>
+                        </Grid.Row>}
                     </Grid.Column>
                 </Grid>
-            </CSSTransition>
-        </>
+            </Transition>
+        </div>
     )
 })

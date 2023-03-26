@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '../../../../app/stores/store';
 import ImageModal from './ImageModal';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 
 
 interface Props {
@@ -18,9 +19,10 @@ export default observer(function GalleryImage({ image }: Props) {
     const { commonStore: { editMode }, modalStore, institutionStore } = useStore();
     const { uploading, deleteInstitutionImage, selectedInstitution, setImageStatus } = institutionStore;
     const { t } = useTranslation();
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const [target, setTarget] = useState('');
     return (
-        <div style={{ height: '15rem', display: 'inline-block', padding: '0 0.2rem 0 0.2rem', textAlign: 'left' }}>
+        <div style={{ height: isComputerOrTablet ? '15rem' : '', maxWidth: isComputerOrTablet ? '30rem' : '100%', width: isComputerOrTablet ? '100%' : '', display: 'inline-block', padding: '0 0.2rem 0 0.2rem', overflow: 'hidden' }}>
             <ImageSU
                 src={image.url || '/assets/institutionTitleImagePlaceholder.png'}
                 style={{ objectFit: 'cover', height: '100%', filter: editMode ? 'brightness(50%)' : 'none', boxShadow: '0 1px 2px 0 rgba(34,36,38,.15)' }}

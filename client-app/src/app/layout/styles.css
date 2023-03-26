@@ -24,12 +24,6 @@ html {
   color: #f1f1f1 !important;
 }
 
-.specialtyCard {
-  height: 200px !important;
-  width: 220px !important;
-  color: '#444';
-}
-
 .ui.active.basic.button.customButtonActive {
   color: #fff !important;
   background-color: rgb(255, 200, 0, 1) !important;
@@ -47,6 +41,7 @@ html {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
 .ui.basic.button.image-crud-button:focus {
   color: transparent !important;
   background-color: transparent !important;
@@ -65,11 +60,11 @@ html {
   box-shadow: none !important;
 }
 
-.ui.basic.button.image-crud-button:focus > i {
+.ui.basic.button.image-crud-button:focus>i {
   color: #fff !important;
 }
 
-.ui.basic.button.image-crud-button:hover > i {
+.ui.basic.button.image-crud-button:hover>i {
   color: #fff !important;
 }
 
@@ -86,11 +81,15 @@ html {
   margin: 0 !important;
 }
 
-.masthead {
-  display: flex !important;
+.ui.menu.inverted-mobile {
+  background-color: rgb(30, 71, 160) !important;
+  height: 4rem !important;
   width: 100% !important;
-  height: 100vh !important;
-  align-items: center !important;
+  margin: 0 !important;
+  padding-top: 0.5rem !important;
+}
+
+.masthead {
   background-image: linear-gradient(135deg, rgb(30, 71, 160) 40%, rgb(34, 90, 202) 100%) !important;
 }
 
@@ -138,6 +137,25 @@ html {
 
 .fade-exit {
   opacity: 1;
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 500ms ease-out;
+}
+
+.item.fade.customListItem.visible.transition {
+  display: inline-table !important;
+}
+
+.ui.huge.middle.aligned.list.fade.customTransitionContainer {
+  display: contents !important;
+  z-index: 1 !important;
+}
+
+.ui.huge.middle.aligned.list.fade.customTransitionContainer > .visible.transition {
+  display: inline-block !important;
+  z-index: 1 !important;
 }
 
 .fade-exit-active {

@@ -105,12 +105,11 @@ namespace Application.Specialties
                 }
 
                 var Ids = request.Specialty.ComponentDTOs.Select(x => x.Id).ToList();
-
-                foreach (var component in specialty.Components)
+                foreach (var component in specialty.Components.ToList())
                 {
                     if (!Ids.Contains(component.Id))
                     {
-                        _context.Remove(component);
+                        _context.Components.Remove(component);
                     }
                 }
 

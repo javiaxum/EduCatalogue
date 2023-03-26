@@ -2,6 +2,7 @@ import { useFormikContext } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 import { Button, Card, Grid, Icon, Label } from 'semantic-ui-react';
 import { EducationalComponent } from '../../../../app/models/educationalComponent';
 import { useStore } from '../../../../app/stores/store';
@@ -17,6 +18,7 @@ export default observer(function ComponentListItem({ component, setEduComponents
     const { t, i18n } = useTranslation();
     const { specialtyStore, commonStore: { editMode } } = useStore();
     const [activeForm, setActiveForm] = useState<boolean>(false);
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
 
     const formik = useFormikContext();
     function handleComponentDelete(componentFormValue: EducationalComponent) {
@@ -28,7 +30,7 @@ export default observer(function ComponentListItem({ component, setEduComponents
 
     if (!activeForm)
         return (
-            <Grid.Column style={{ width: '250px', padding: '0.5rem' }}>
+            <Grid.Column style={{ width: '18rem', padding: '0.5rem', margin: isComputerOrTablet ? '0' : '0 auto' }}>
                 <Card className='componentCard' style={{ display: 'flex' }}>
                     <Card.Content style={{ padding: '1rem 1rem 0 1rem' }}>
                         {editMode && <>
@@ -43,7 +45,7 @@ export default observer(function ComponentListItem({ component, setEduComponents
                                 basic
                                 style={{ position: 'absolute', left: 6, top: 8, margin: 0, padding: 0, border: 'none', boxShadow: 'none' }}
                                 onClick={() => handleComponentDelete(component)}>
-                                <Icon name='trash'  />
+                                <Icon name='trash' />
                             </Button>
                         </>}
                         <Card.Header as='a' style={{ padding: '0 0.4rem 0 0.8rem', fontSize: '1.2rem' }}>{component.name}</Card.Header>

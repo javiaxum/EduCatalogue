@@ -2,41 +2,31 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
 import { Grid, Icon } from 'semantic-ui-react';
 import { useStore } from '../../../../app/stores/store';
 import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 
 export default function InstitutionDetailsLocation() {
 
     const { institutionStore } = useStore();
     const {
         selectedInstitution,
-        getCityById } = institutionStore;
+        getCityById,
+        getRegionById } = institutionStore;
     const { t } = useTranslation();
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
 
     return (
-        <Grid style={{ margin: 0 }}>
-            <Grid.Column width={8}>
-                <Grid >
-                    <Grid.Column width={1}>
-                        <Icon name='marker' size='large' color='blue' />
-                    </Grid.Column>
-                    <Grid.Column width={6}>
-                        {t('City') + ': '}
-                        {selectedInstitution && getCityById(selectedInstitution.cityId, selectedInstitution.regionId)?.name}
-                    </Grid.Column>
-                    <Grid.Column width={1}>
-                        <Icon name='home' size='large' color='blue' />
-                    </Grid.Column>
-                    <Grid.Column width={7}>
-                        {t('Address') + ': '}
-                        {selectedInstitution?.streetAddress}
-                    </Grid.Column>
-                </Grid>
-            </Grid.Column>
-            <Grid.Column width={8}>
+        <Grid style={{ width: isComputerOrTablet ? '95%' : '90%', margin: '0 auto' }}>
+            <Grid.Row>
+                <Icon name='point' color='blue' /> {selectedInstitution?.streetAddress},  {" "}
+                {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
+                {getRegionById(selectedInstitution?.regionId!)?.name}
+            </Grid.Row>
+            <Grid.Row>
                 <MapContainer
                     center={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}
-                    zoom={8}
+                    zoom={20}
                     scrollWheelZoom={false}
-                    style={{ overflow: 'hidden', width: '40rem', height: '30rem' }}>
+                    style={{ overflow: 'hidden', width: isComputerOrTablet ? '40rem' : '100%', height: '30rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
@@ -46,7 +36,7 @@ export default function InstitutionDetailsLocation() {
                         </Popup>
                     </Marker>
                 </MapContainer>
-            </Grid.Column>
+            </Grid.Row>
         </Grid>
     )
 }

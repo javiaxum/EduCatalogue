@@ -9,8 +9,8 @@ export default class CommonStore {
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
     editMode: boolean = false;
-    sidebarOpened: boolean = false;
     componentForm: boolean = false;
+    sidebarOpened: boolean = false;
 
     loadAppData = async () => {
         await Promise.all([store.institutionStore.loadInstitutions(),

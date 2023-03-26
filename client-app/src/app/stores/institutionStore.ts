@@ -36,6 +36,7 @@ export default class InstitutionStore {
     imagesPagination: Pagination | null = null;
     imagesPagingParams: ImagesPagingParams = new ImagesPagingParams();
     imagesLoading: boolean = false;
+    imagesLoadingInitial: boolean = true;
 
     selectedSpecialties: string[] = [];
     selectedBranches: string[] = [];
@@ -71,19 +72,19 @@ export default class InstitutionStore {
             () => {
                 this.selectedInstitutionReviews.clear();
                 this.reviewsPagination = null;
-                this.reviewPagingParams = new ReviewsPagingParams(1);
+                this.reviewPagingParams = new ReviewsPagingParams();
                 this.setReviewsLoading(true);
                 this.debouncedLoadReviews();
             })
         reaction(
             () => [
-                this.reviewPagingParams], //existing pagination information should be erased
+                this.reviewPagingParams],
             () => {
                 this.debouncedLoadReviews();
             })
         reaction(
             () => [
-                this.imagesPagingParams], //existing pagination information should be erased
+                this.imagesPagingParams],
             () => {
                 this.debouncedLoadImages();
             })
@@ -140,11 +141,9 @@ export default class InstitutionStore {
                     this.populatedCityRegistry.set(city.id, city)
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -158,11 +157,9 @@ export default class InstitutionStore {
                     this.regionRegistry.set(region.id, region);
                 });
             })
-            this.setLoadingInitial(false);
             this.setLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
             this.setLoading(false);
         }
     }
@@ -198,7 +195,6 @@ export default class InstitutionStore {
     }
 
     debouncedLoadInstitutions = debounce(() => {
-        this.institutionPagingParams = new InstitutionsPagingParams();
         this.institutionsRegistry.clear();
         this.loadInstitutions();
     }, 1500);
@@ -313,6 +309,11 @@ export default class InstitutionStore {
     }, 800);
 
     loadImages = async () => {
+        if (this.selectedInstitutionImages.size === (this.imagesPagingParams.pageNumber * this.imagesPagingParams.pageSize)) {
+            this.setImagesLoadingInitial(false);
+            this.setImagesLoading(false);
+            return;
+        }
         this.setImagesLoading(true);
         try {
             const result = await agent.Images.list(this.selectedInstitution!.id, this.imageAxiosParams);
@@ -320,16 +321,16 @@ export default class InstitutionStore {
                 this.setImagesLoading(false);
                 result.data.forEach((image, index) => {
                     setTimeout(() =>
-                        this.selectedInstitutionImages.set(image.id, image), index * 100)
+                        this.setImagesRegistryItem(image), index * 100)
                 });
             })
-            console.log(result.pagination)
             this.setImagesPagination(result.pagination);
-            this.setLoadingInitial(false);
+            this.setImagesLoadingInitial(false);
+            this.setImagesLoading(false);
         } catch (error) {
             console.log(error);
-            this.setLoadingInitial(false);
-            this.setReviewsLoading(false);
+            this.setImagesLoadingInitial(false);
+            this.setImagesLoading(false);
         }
     }
 
@@ -400,6 +401,10 @@ export default class InstitutionStore {
         this.selectedInstitutionImages.clear();
     }
 
+    setImagesRegistryItem = (item: Image) => {
+        this.selectedInstitutionImages.set(item.id, item);
+    }
+
     setImagesLoading = (state: boolean) => {
         this.imagesLoading = state;
     }
@@ -430,6 +435,10 @@ export default class InstitutionStore {
     }, 800);
 
     loadReviews = async () => {
+        if (this.selectedInstitutionReviews.size === (this.reviewPagingParams.pageNumber * this.reviewPagingParams.pageSize)) {
+            this.setReviewsLoading(false);
+            return;
+        }
         this.setReviewsLoading(true);
         try {
             const result = await agent.Reviews.list(this.selectedInstitution!.id, this.reviewAxiosParams);
@@ -441,7 +450,6 @@ export default class InstitutionStore {
                         this.selectedInstitutionReviews.set(review.id, review), index * 100)
                 });
             })
-            console.log(result.pagination)
             this.setReviewsPagination(result.pagination);
             this.setLoadingInitial(false);
         } catch (error) {
@@ -501,30 +509,25 @@ export default class InstitutionStore {
 
     loadInstitution = async (id: string) => {
         this.setLoading(true);
-        let institution = this.institutionsRegistry.get(id);
-        if (institution) {
-            this.selectedInstitution = institution;
+        if (this.institutionsRegistry.has(id)) {
+            this.selectedInstitution = this.getInstitution(id);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
+            return this.getInstitution(id);
+        }
+        try {
+            const institution = await agent.Institutions.details(id);
+            runInAction(() => {
+                this.selectedInstitution = institution;
+                this.setInstitution(institution);
+            })
             this.setLoadingInitial(false);
             this.setLoading(false);
             return institution;
-        }
-        else {
-            try {
-                const institution = await agent.Institutions.details(id);
-                runInAction(() => {
-                    institution.titleImageUrl = this.institutionsRegistry.get(institution.id)?.titleImageUrl!;
-                    institution.rating = this.institutionsRegistry.get(institution.id)?.rating!;
-                    this.selectedInstitution = institution;
-                    this.institutionsRegistry.set(institution.id, institution);
-                })
-                this.setLoadingInitial(false);
-                this.setLoading(false);
-                return institution;
-            } catch (error) {
-                console.log(error);
-                this.setLoadingInitial(false);
-                this.setLoading(false);
-            }
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+            this.setLoading(false);
         }
     }
 
@@ -569,6 +572,10 @@ export default class InstitutionStore {
 
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
+    }
+
+    setImagesLoadingInitial = (state: boolean) => {
+        this.imagesLoadingInitial = state;
     }
 
     setLoading = (state: boolean) => {

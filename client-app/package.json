@@ -36,6 +36,7 @@
     "react-dom": "^18.2.0",
     "react-dropzone": "^14.2.3",
     "react-i18next": "^12.1.5",
+    "react-image-size": "^2.0.2",
     "react-infinite-scroll-component": "^6.1.0",
     "react-leaflet": "^4.2.0",
     "react-minimal-pie-chart": "^8.4.0",

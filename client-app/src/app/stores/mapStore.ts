@@ -1,10 +1,5 @@
-import { geocoder, geocoders } from "leaflet-control-geocoder";
 import { debounce } from "lodash";
 import { makeAutoObservable, reaction } from "mobx";
-import { number } from "yup";
-import { ServerError } from "../models/serverError";
-import { store } from "./store";
-
 
 export default class MapStore {
     results: any[] = [];
@@ -27,7 +22,6 @@ export default class MapStore {
                 }
             },
             { fireImmediately: true })
-
     }
 
     get geocodingResultOptions() {

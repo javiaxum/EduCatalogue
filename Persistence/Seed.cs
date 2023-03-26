@@ -5091,7 +5091,7 @@ namespace Persistence
                     item.GraduateEmploymentRate = new Random().Next(20, 90);
                     // item.UndergraduateCount = new Random().Next(20, 150);
                     item.Skills = skills1;
-                    item.Scholarship = new Random().Next(0, 12) == 0;
+                    item.FreeEducation = new Random().Next(0, 12) == 0;
                     item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"), await context.Languages.FirstOrDefaultAsync(x => x.Id == "en") };
                     item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
                     item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };

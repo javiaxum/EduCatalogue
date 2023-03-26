@@ -12,6 +12,7 @@ interface Props {
     padding?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     width?: string;
+    fontWeight?: string;
 }
 export default function CustomTextInput(props: Props) {
     const [field, meta] = useField(props.name);
@@ -23,7 +24,7 @@ export default function CustomTextInput(props: Props) {
             <input
                 {...field}
                 {...props}
-                style={{ padding: props.padding, position: 'relative' }}
+                style={{ padding: props.padding, position: 'relative', fontWeight: props.fontWeight}}
             />
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>

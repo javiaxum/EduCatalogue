@@ -1,12 +1,14 @@
 import { Fragment } from 'react';
-import { Grid, Placeholder, Segment } from 'semantic-ui-react';
+import { useMediaQuery } from 'react-responsive';
+import { Grid, List, Placeholder, Segment } from 'semantic-ui-react';
 
 export default function SpecialtiesListItemPlaceholder() {
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     return (
-        <Grid.Column style={{ width: '245px', overflow: 'hidden' }}>
-            <Placeholder>
-                <Placeholder.Image style={{height: '200px'}}/>
+        <Segment basic style={{ display: 'inline-block', width: isComputerOrTablet ? '16rem' : '13rem', overflow: 'hidden', margin: 0, padding: '0.3rem' }}>
+            <Placeholder style={{ height: isComputerOrTablet ? '14rem' : '12rem', padding: 0 }}>
+                <Placeholder.Image />
             </Placeholder>
-        </Grid.Column>
+        </Segment>
     );
 };

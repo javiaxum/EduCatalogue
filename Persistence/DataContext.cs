@@ -46,17 +46,22 @@ namespace Persistence
             .WithMany(m => m.Managers)
             .HasForeignKey(aa => aa.InstitutionId);
 
-            // builder.Entity<InstitutionSpecialty>(x => x.HasKey(aa => new { aa.InstitutionId, aa.SpecialtyId }));
+            builder.Entity<Component>()
+            .HasOne(s => s.Specialty)
+            .WithMany(c => c.Components)
+            .OnDelete(DeleteBehavior.Cascade);
 
-            // builder.Entity<InstitutionSpecialty>()
-            //     .HasOne(i => i.Institution)
-            //     .WithMany(s => s.Specialties)
-            //     .HasForeignKey(si => si.InstitutionId)
-            //     .OnDelete(DeleteBehavior.Cascade);
-            // builder.Entity<InstitutionSpecialty>()
-            //     .HasOne(s => s.Specialty)
-            //     .WithMany(i => i.Institutions)
+            // builder.Entity<Component>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentCoreId }));
+
+            // builder.Entity<Component>()
+            //     .HasOne(i => i.Specialty)
+            //     .WithMany(s => s.Components)
             //     .HasForeignKey(si => si.SpecialtyId)
+            //     .OnDelete(DeleteBehavior.Cascade);
+            // builder.Entity<Component>()
+            //     .HasOne(s => s.ComponentCore)
+            //     .WithMany(i => i.Components)
+            //     .HasForeignKey(si => si.ComponentCoreId)
             //     .OnDelete(DeleteBehavior.Cascade);
 
             // builder.Entity<SpecialtyComponent>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentId }));

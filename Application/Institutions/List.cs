@@ -33,31 +33,24 @@ namespace Application.Institutions
             public async Task<Result<PagedList<InstitutionDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
                 var IsSpecialtiesPredicate = !String.IsNullOrEmpty(request.Params.SpecialtiesPredicate);
-                var IsBranchesPredicate = !String.IsNullOrEmpty(request.Params.BranchesPredicate);
-                if (IsSpecialtiesPredicate) IsBranchesPredicate = false;
+                var IsBranchesPredicate = IsSpecialtiesPredicate ? false : !String.IsNullOrEmpty(request.Params.BranchesPredicate);
                 var IsCitiesPredicate = !String.IsNullOrEmpty(request.Params.CitiesPredicate);
                 var IsMaxTuition = int.TryParse(request.Params.MaxTuition, out int MaxTuition);
                 var IsMinTuition = int.TryParse(request.Params.MinTuition, out int MinTuition);
                 var IsDegree = int.TryParse(request.Params.DegreeId, out int Degree);
                 var IsName = !String.IsNullOrEmpty(request.Params.Name);
-
-                string[] CitiesPredicate;
-                if (IsCitiesPredicate)
-                    CitiesPredicate = request.Params.CitiesPredicate.Split('-');
-                else
-                    CitiesPredicate = new string[0];
+                var CitiesPredicate = IsCitiesPredicate ? request.Params.CitiesPredicate.Split('-') : new string[0];
 
                 var query = _context.Institutions.Where(x =>
                     (!IsCitiesPredicate || CitiesPredicate.Contains(x.City.Id.ToString()))
                     && (!IsName || x.Name.ToLower().Contains(request.Params.Name.ToLower()))
                     && x.Specialties.Any(s =>
                         (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
-                        && (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsMaxTuition || s.TuitionUAH <= MaxTuition)
                         && (!IsMinTuition || s.TuitionUAH >= MinTuition)
                         && (!IsDegree || s.Degree.Id == Degree)));
-                
+
                 var sortedQuery =
                     request.Params.Sorting == "za"
                     ? query.OrderByDescending(x => x.Name)

@@ -124,9 +124,9 @@ export default observer(function SearchParamsList() {
                 value={selectedSkillIds}
                 options={skillOptions}
                 onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSkillIds(data.value)} />
-            <Header as='h4' content={t('Languages')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Header as='h4' content={t('Language')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
-                placeholder={t('Select languages') as string}
+                placeholder={t('Select language') as string}
                 fluid
                 multiple
                 search

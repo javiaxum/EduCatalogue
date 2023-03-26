@@ -44,25 +44,24 @@ namespace Application.Specialties
                 var IsDegreeId = int.TryParse(request.Params.DegreeId, out int Degree);
                 var IsUndergraduatesEnrolled = int.TryParse(request.Params.UndergraduatesEnrolled, out int UndergraduatesEnrolled);
 
-                var skills = new List<int>();
+                var skills = new int[0];
                 if (IsSkillsPredicate)
-                    foreach (var sl in request.Params.SkillsPredicate.Split('-'))
-                        skills.Add(int.Parse(sl));
-                var studyForms = new List<int>();
+                    skills = request.Params.SkillsPredicate.Split('-').Select(x => int.Parse(x)).ToArray();
+                var studyForms = new int[0];
                 if (IsStudyFormsPredicate)
-                    foreach (var sf in request.Params.StudyFormsPredicate.Split('-'))
-                        studyForms.Add(int.Parse(sf));
-                string[] languages = { };
+                    studyForms = request.Params.StudyFormsPredicate.Split('-').Select(x => int.Parse(x)).ToArray();
+                var languages = new string[0];
                 if (IsLanguagesPredicate)
                     languages = request.Params.LanguagesPredicate.Split('-');
 
                 var query = _context.Specialties
-                    .Where(x => x.Institution.Id == request.InstitutionId).Where(s =>
-                       (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
+                    .Where(s => (s.Institution.Id == request.InstitutionId));
+                query = query.Where(s =>
+                        (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
-                        && (!IsSkillsPredicate || skills.All(si => s.Skills.Any(x => x.Id == si)))
-                        && (!IsLanguagesPredicate || languages.All(lg => s.Languages.Any(x => x.Id == lg)))
-                        && (!IsStudyFormsPredicate || studyForms.All(sf => s.StudyForms.Any(x => x.Id == sf)))
+                        && (!IsSkillsPredicate || s.Skills.Any(x => skills.Contains(x.Id)))
+                        && (!IsStudyFormsPredicate || s.StudyForms.Any(x => studyForms.Contains(x.Id)))
+                        && (!IsLanguagesPredicate || s.Languages.Any(x => languages.Contains(x.Id)))
                         && (!IsMaxPrice || s.TuitionUAH <= MaxTuition)
                         && (!IsMinPrice || s.TuitionUAH >= MinTuition)
                         && (!IsDegreeId || s.Degree.Id == Degree));

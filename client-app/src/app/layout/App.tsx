@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import HomePage from '../../features/home/HomePage';
 import NavBar from './NavBar';
@@ -12,6 +12,8 @@ import NavBarMobile from './NavBarMobile';
 import { useMediaQuery } from 'react-responsive';
 import ImageModal from '../../features/Institutions/details/gallery/ImageModal';
 import ModalImageContainer from '../common/modals/ModalImageContainer';
+import { Button, Divider, Transition } from 'semantic-ui-react';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function App() {
   const location = useLocation();
@@ -29,14 +31,15 @@ export default observer(function App() {
   const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
-  if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
+  const { t } = useTranslation();
+  // if (!commonStore.appLoaded) return <LoadingComponent content='Loading app...' />
 
   return (
     <div
       className='scrollableDiv'
       style={{
         overflow: isComputerOrTablet ? 'scroll' : 'hidden',
-        height: location.pathname === '/institutions' ? '120vh' : ''
+        height: (location.pathname === '/institutions' && !isMobile) ? '120vh' : ''
       }}>
       <ModalContainer />
       <ModalImageContainer />
@@ -52,8 +55,35 @@ export default observer(function App() {
             backgroundColor: location.pathname === '/institutions' ? "#f3f3f3" : "#fff"
           }}>
           {isComputerOrTablet && <NavBar />}
-          {isMobile && <NavBarMobile />}
+          {isMobile &&
+            <>
+              <NavBarMobile />
+              <div style={{ height: location.pathname === '/institutions' ? '6rem' : '4rem' }} />
+            </>}
           <Outlet />
+          <Transition
+            visible={institutionStore.selectedInstitutionIds.length > 0}
+            duration={500}
+            unmountOnhide
+            transitionOnMount>
+            <Button.Group>
+              <Button
+                color='facebook'
+                size='huge'
+                as={Link}
+                to='/institutions/comparison'
+                style={{ position: 'fixed', right: '10rem', bottom: '0.1rem', zIndex: 1000, borderRadius: '3px 3px 0 0' }}>
+              </Button>
+              <Button
+                color='facebook'
+                size='huge'
+                as={Link}
+                to='/institutions/comparison'
+                style={{ position: 'fixed', right: '10rem', bottom: '0.1rem', zIndex: 1000, borderRadius: '3px 3px 0 0' }}>
+                {t('Institutions chosen')}: {institutionStore.selectedInstitutionIds.length} {t('Compare Institutions')}
+              </Button>
+            </Button.Group>
+          </Transition>
         </div>}
       {location.pathname !== '/' && <CustomFooter />}
     </div>

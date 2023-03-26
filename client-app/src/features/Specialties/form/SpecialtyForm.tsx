@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Checkbox, Divider, Dropdown, DropdownItemProps, DropdownProps, Grid, Header, Icon, Label, Segment, Table } from 'semantic-ui-react';
+import { Button, Divider, DropdownItemProps, DropdownProps, Grid, Header, Icon, Label, Segment, Table } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
@@ -16,7 +16,8 @@ import CustomSelectInput from '../../../app/common/form/CustomSelectInput';
 import CustomCheckboxInput from '../../../app/common/form/CustomCheckboxInput';
 import { SpecialtyCore } from '../../../app/models/specialtyCore';
 import { useTranslation } from 'react-i18next';
-import { Skill } from '../../../app/models/skill';
+import { useMediaQuery } from 'react-responsive';
+import TableItem from '../../Institutions/details/TableItem';
 
 
 export default observer(function SpecialtyForm() {
@@ -28,7 +29,6 @@ export default observer(function SpecialtyForm() {
         editSpecialty,
         getSpecialtyCore,
         getBranch,
-        getSpecialty,
         loading,
         loadingInitial,
         setLoadingInitial,
@@ -58,12 +58,15 @@ export default observer(function SpecialtyForm() {
     const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
     const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
 
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+
     const validationSchema = Yup.object({
         localSpecialtyCode: Yup.string().required(),
         description: Yup.string().required('Specialty description is required'),
         degreeId: Yup.string().required(),
         tuitionUAH: Yup.number().required(),
-        scholarship: Yup.string().required(),
+        freeEducation: Yup.string().required(),
         acceptanceRate: Yup.string().required(),
         graduationRate: Yup.string().required(),
         graduateEmploymentRate: Yup.string().required(),
@@ -74,9 +77,8 @@ export default observer(function SpecialtyForm() {
         studyFormIds: Yup.array().min(1, "Specify at least a single study form"),
         languageIds: Yup.array().min(1, "Specify at least a single language"),
         skillIds: Yup.array().min(1, "Specify at least a single skill"),
-        componentDTOs: Yup.array().min(1, "Specify at least a component"),
+        componentDTOs: Yup.array().min(1, "Specify at least a single component"),
     })
-
 
     useEffect(() => {
         if (id2) {
@@ -92,10 +94,9 @@ export default observer(function SpecialtyForm() {
         }
         setLoadingInitial(false);
         setEditMode(true);
-    }, [setLoadingInitial, institutionStore.loadInstitution, setSpecialty, setSpecialtyCore, getSpecialtyCore, loadingInitial, setEditMode, id1, id2, loadSpecialty])
+    }, [setLoadingInitial, institutionStore.loadInstitution, setSpecialty, setSpecialtyCore, getSpecialtyCore, loadingInitial, setEditMode, id1, id2, loadSpecialty, commonStore, institutionStore])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
-        console.log(specialty)
         if (id) {
             specialty.id = uuid();
             createSpecialty(specialty, id).then(() => {
@@ -114,55 +115,254 @@ export default observer(function SpecialtyForm() {
             validationSchema={validationSchema}
             enableReinitialize
             initialValues={specialty}
-            onSubmit={values => handleSpecialtyFormSubmit(values)}
-        >
+            onSubmit={values => handleSpecialtyFormSubmit(values)}>
             {({ handleSubmit, isValid, isSubmitting, dirty, getFieldProps, getFieldHelpers }) => (
                 <Form
                     className='ui form'
                     onSubmit={handleSubmit}
                     autoComplete='off'>
-                    <Grid style={{ padding: '20px', color: '#444', minWidth: '1000px', maxWidth: '80%', marginLeft: '10%' }}>
-                        <Grid.Row style={{ height: '63px' }}>
-                            <Header
-                                size='large'
-                                style={{ margin: '0', height: '35px' }}>
-                                {t('Code and specialty')}:
-                            </Header>
-                            <CustomSelectInput
-                                onChange={(event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-                                    setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)));
-                                }}
-                                options={specialtyOptions}
-                                placeholder={t('Select specialty')}
-                                name='localSpecialtyCode' />
-                            <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
+                    {isComputerOrTablet &&
+                        <Grid style={{ padding: 0, color: '#444', width: '80%', minWidth: '65rem', margin: '0 auto' }}>
+                            <Grid.Row style={{ paddingBottom: 0 }}>
+                                <Header
+                                    size='large'
+                                    style={{ color: '#444', width: 'calc(100% - 20rem)' }}>
+                                    <CustomSelectInput
+                                        onChange={(event, data: DropdownProps) =>
+                                            setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)))}
+                                        options={specialtyOptions}
+                                        placeholder={t('Select specialty')}
+                                        name='localSpecialtyCode' />
+                                </Header>
+                                <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
+                                    <Button
+                                        positive
+                                        type='submit'
+                                        content={t('Submit')}
+                                        loading={isSubmitting}
+                                        disabled={!dirty || isSubmitting || !isValid} />
+                                    <Button
+                                        as={Link}
+                                        to={specialty.id ? `/specialties/${specialty.id}` : `/institutions/${id}`}
+                                        onClick={() => setEditMode(false)}
+                                        type='button'
+                                        content={t('Cancel')}
+                                        disabled={isSubmitting} />
+                                </Button.Group>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Grid style={{ width: '100%' }}>
+                                    <Grid.Column width={7}>
+                                        <Table basic='very' compact>
+                                            <Table.Body>
+                                                <Table.Row>
+                                                    <Table.Cell>
+                                                        <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`} />
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                                <Table.Row>
+                                                    <Table.Cell>
+                                                        <Icon
+                                                            name='book'
+                                                            size='big'
+                                                            color='blue' />
+                                                        {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
+                                                    </Table.Cell>
+                                                </Table.Row>
+                                            </Table.Body>
+                                        </Table>
+                                        <Table basic='very' compact>
+                                            <Table.Body>
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='graduation'
+                                                    label={t('Degree')}
+                                                    content={
+                                                        <CustomSelectInput
+                                                            width='14rem'
+                                                            options={degrees}
+                                                            placeholder={t('Degree')}
+                                                            name='degreeId' />} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='clock'
+                                                    label={t('ECTS credits')}
+                                                    content={
+                                                        <CustomTextInput
+                                                            width='7rem'
+                                                            type='number'
+                                                            placeholder={t('ECTS credits')}
+                                                            name='ectsCredits' />} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='dollar'
+                                                    label={t('Tuition')}
+                                                    content={<>
+                                                        <CustomTextInput
+                                                            type='number'
+                                                            placeholder='0'
+                                                            name='tuitionUAH'
+                                                            width='7rem' />
+                                                        <Label content='UAH' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
+                                                        {t('Free education available') + ': '}
+                                                        <CustomCheckboxInput name='scholarship' /></>} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='flag'
+                                                    label={t('Education period')}
+                                                    content={
+                                                        <>
+                                                            <CustomTextInput
+                                                                width='7rem'
+                                                                type='number'
+                                                                placeholder='0'
+                                                                name='startYear' />
+                                                            <Label basic content='-' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                            <CustomTextInput
+                                                                width='7rem'
+                                                                type='number'
+                                                                placeholder='0'
+                                                                name='endYear' />
+                                                        </>} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='user'
+                                                    label={t('Enrolled students count')}
+                                                    content={
+                                                        <CustomTextInput
+                                                            width='7rem'
+                                                            type='number'
+                                                            placeholder={t('Undergraduates enrolled')}
+                                                            name='undergraduatesEnrolled' />} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='percent'
+                                                    label={t('Acceptance rate')}
+                                                    content={
+                                                        <>
+                                                            <CustomTextInput
+                                                                width='5.5rem'
+                                                                type='number'
+                                                                placeholder={t('Specify rate in percents')}
+                                                                name='acceptanceRate' />
+                                                            <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                        </>} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='percent'
+                                                    label={t('Graduation rate')}
+                                                    content={
+                                                        <>
+                                                            <CustomTextInput
+                                                                width='5.5rem'
+                                                                type='number'
+                                                                placeholder={t('Specify rate in percents')}
+                                                                name='graduationRate' />
+                                                            <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                        </>} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='percent'
+                                                    label={t('Graduate employment rate')}
+                                                    content={
+                                                        <>
+                                                            <CustomTextInput
+                                                                width='5.5rem'
+                                                                type='number'
+                                                                placeholder={t('Specify rate in percents')}
+                                                                name='graduateEmploymentRate' />
+                                                            <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                        </>
+                                                    } />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='language'
+                                                    label={t('Language')}
+                                                    content={
+                                                        <CustomSelectInput
+                                                            width='18rem'
+                                                            options={languages}
+                                                            placeholder={t('Education language')}
+                                                            name='languageIds'
+                                                            multiple={true} />} />
+                                                <TableItem
+                                                    loading={(loading || loadingInitial)}
+                                                    icon='address book'
+                                                    label={t('Study form')}
+                                                    content={
+                                                        <CustomSelectInput
+                                                            width='18rem'
+                                                            options={studyForms}
+                                                            placeholder={t('Study forms')}
+                                                            name='studyFormIds'
+                                                            multiple={true} />} />
+                                            </Table.Body>
+                                        </Table>
+                                    </Grid.Column>
+                                    <Grid.Column width={6} stretched>
+                                        <Segment basic style={{ padding: '0' }}>
+                                            <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
+                                            <CustomTextArea rows={16} placeholder={t('Description')} name='description' />
+                                        </Segment>
+                                    </Grid.Column>
+                                    <Grid.Column width={3} stretched>
+                                        <Segment basic style={{ padding: '0' }}>
+                                            <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
+                                            <CustomSelectInput
+                                                options={skillOptions}
+                                                name='skillIds'
+                                                multiple
+                                                placeholder={t('Select skill')} />
+                                        </Segment>
+                                    </Grid.Column>
+                                </Grid>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Header
+                                    content={t('Educational components') + ":"}
+                                    size='huge'
+                                    style={{ color: '#444', margin: 0 }} />
+                            </Grid.Row>
+                            <Grid.Row>
+                                <SpecialtyDetailsComponentList />
+                            </Grid.Row>
+                        </Grid>}
+                    {isMobile &&
+                        <Segment basic style={{ width: '90%', padding: 0, margin: '0 auto' }}>
+                            <Button.Group attached='bottom' style={{ width: '16rem', margin: '1rem 0', height: '35px' }}>
                                 <Button
                                     positive
                                     type='submit'
                                     content={t('Submit')}
                                     loading={isSubmitting}
-                                    disabled={!dirty || isSubmitting || !isValid}
-                                />
+                                    disabled={!dirty || isSubmitting || !isValid} />
                                 <Button
                                     as={Link}
                                     to={specialty.id ? `/specialties/${specialty.id}` : `/institutions/${id}`}
                                     onClick={() => setEditMode(false)}
                                     type='button'
                                     content={t('Cancel')}
-                                    disabled={isSubmitting}
-                                />
+                                    disabled={isSubmitting} />
                             </Button.Group>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Grid style={{ width: '100%' }}>
-                                <Grid.Column width={7}>
-                                    <Table basic='very' compact>
+                            <Grid style={{ padding: 0, color: '#444', margin: 0 }}>
+                                <Grid.Row style={{ paddingBottom: 0 }}>
+                                    <Header
+                                        size='large'
+                                        style={{ color: '#444', width: '100%' }}>
+                                        <CustomSelectInput
+                                            onChange={(event, data: DropdownProps) =>
+                                                setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)))}
+                                            options={specialtyOptions}
+                                            placeholder={t('Select specialty')}
+                                            name='localSpecialtyCode' />
+                                    </Header>
+                                </Grid.Row>
+                                <Grid.Row style={{ paddingTop: 0 }}>
+                                    <Table basic='very' compact unstackable>
                                         <Table.Body>
                                             <Table.Row>
                                                 <Table.Cell>
-                                                    <Label
-                                                        content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`}
-                                                    />
+                                                    <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`} />
                                                 </Table.Cell>
                                             </Table.Row>
                                             <Table.Row>
@@ -176,213 +376,141 @@ export default observer(function SpecialtyForm() {
                                             </Table.Row>
                                         </Table.Body>
                                     </Table>
-                                    <Table basic='very' compact>
+                                    <Table basic='very' compact unstackable>
                                         <Table.Body>
-                                            <Table.Row>
-                                                <Table.Cell style={{ minWidth: '3rem' }}>
-                                                    <Icon
-                                                        name='graduation'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell style={{ minWidth: '10rem', maxWidth: '15rem' }}>
-                                                    {t('Degree')}:
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='graduation'
+                                                label={t('Degree')}
+                                                content={
                                                     <CustomSelectInput
-                                                        width='14rem'
+                                                        width='12rem'
                                                         options={degrees}
                                                         placeholder={t('Degree')}
-                                                        name='degreeId' />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row >
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='clock'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('ECTS credits') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                                        name='degreeId' />} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='clock'
+                                                label={t('ECTS credits')}
+                                                content={
                                                     <CustomTextInput
                                                         width='7rem'
                                                         type='number'
                                                         placeholder={t('ECTS credits')}
-                                                        name='ectsCredits' />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='dollar'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Full price')}:
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                                        name='ectsCredits' />} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='dollar'
+                                                label={t('Tuition')}
+                                                content={<>
                                                     <CustomTextInput
                                                         type='number'
                                                         placeholder='0'
                                                         name='tuitionUAH'
                                                         width='7rem' />
                                                     <Label content='UAH' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
-                                                    {t('Scholarship available') + ': '}
-                                                    <CustomCheckboxInput name='scholarship' />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='flag'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Education period')}:
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <CustomTextInput
-                                                        width='7rem'
-                                                        type='number'
-                                                        placeholder='0'
-                                                        name='startYear' />
-                                                    <Label basic content='-' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
-                                                    <CustomTextInput
-                                                        width='7rem'
-                                                        type='number'
-                                                        placeholder='0'
-                                                        name='endYear' />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='user'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Undergraduates enrolled') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                                    {t('Free education available') + ': '}
+                                                    <CustomCheckboxInput name='scholarship' /></>} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='flag'
+                                                label={t('Education period')}
+                                                content={
+                                                    <div style={{ width: '10rem' }}>
+                                                        <CustomTextInput
+                                                            width='7rem'
+                                                            type='number'
+                                                            placeholder='0'
+                                                            name='startYear' />
+                                                        <Label basic content='-' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                        <CustomTextInput
+                                                            width='7rem'
+                                                            type='number'
+                                                            placeholder='0'
+                                                            name='endYear' />
+                                                    </div>} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='user'
+                                                label={t('Enrolled students count')}
+                                                content={
                                                     <CustomTextInput
                                                         width='7rem'
                                                         type='number'
                                                         placeholder={t('Undergraduates enrolled')}
-                                                        name='undergraduatesEnrolled' />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='percent'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Acceptance rate') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <CustomTextInput
-                                                        width='5.5rem'
-                                                        type='number'
-                                                        placeholder={t('Specify rate in percents')}
-                                                        name='acceptanceRate' />
-                                                    <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='percent'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Graduation rate') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <CustomTextInput
-                                                        width='5.5rem'
-                                                        type='number'
-                                                        placeholder={t('Specify rate in percents')}
-                                                        name='graduationRate' />
-                                                    <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='percent'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Graduate employment rate') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    <CustomTextInput
-                                                        width='5.5rem'
-                                                        type='number'
-                                                        placeholder={t('Specify rate in percents')}
-                                                        name='graduateEmploymentRate' />
-                                                    <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        padding='0.4em 0.2em 0.4em 0.2em'
-                                                        name='language'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Education language') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                                        name='undergraduatesEnrolled' />} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='percent'
+                                                label={t('Acceptance rate')}
+                                                content={
+                                                    <>
+                                                        <CustomTextInput
+                                                            width='5.5rem'
+                                                            type='number'
+                                                            placeholder={t('Specify rate in percents')}
+                                                            name='acceptanceRate' />
+                                                        <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                    </>} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='percent'
+                                                label={t('Graduation rate')}
+                                                content={
+                                                    <>
+                                                        <CustomTextInput
+                                                            width='5.5rem'
+                                                            type='number'
+                                                            placeholder={t('Specify rate in percents')}
+                                                            name='graduationRate' />
+                                                        <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                    </>} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='percent'
+                                                label={t('Graduate employment rate')}
+                                                content={
+                                                    <>
+                                                        <CustomTextInput
+                                                            width='5.5rem'
+                                                            type='number'
+                                                            placeholder={t('Specify rate in percents')}
+                                                            name='graduateEmploymentRate' />
+                                                        <Label content='%' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
+                                                    </>
+                                                } />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='language'
+                                                label={t('Language')}
+                                                content={
                                                     <CustomSelectInput
-                                                        width='18rem'
+                                                        width='12rem'
                                                         options={languages}
                                                         placeholder={t('Education language')}
                                                         name='languageIds'
-                                                        multiple={true} />
-                                                </Table.Cell>
-                                            </Table.Row>
-                                            <Table.Row>
-                                                <Table.Cell>
-                                                    <Icon
-                                                        name='address book'
-                                                        size='big'
-                                                        color='blue' />
-                                                </Table.Cell>
-                                                <Table.Cell>
-                                                    {t('Study forms') + ': '}
-                                                </Table.Cell>
-                                                <Table.Cell>
+                                                        multiple={true} />} />
+                                            <TableItem
+                                                loading={(loading || loadingInitial)}
+                                                icon='address book'
+                                                label={t('Study form')}
+                                                content={
                                                     <CustomSelectInput
-                                                        width='18rem'
+                                                        width='12rem'
                                                         options={studyForms}
                                                         placeholder={t('Study forms')}
                                                         name='studyFormIds'
-                                                        multiple={true} />
-                                                </Table.Cell>
-                                            </Table.Row>
+                                                        multiple={true} />} />
                                         </Table.Body>
                                     </Table>
-                                </Grid.Column>
-                                <Grid.Column width={6} stretched>
-                                    <Segment basic style={{ padding: '0' }}>
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Segment basic style={{ padding: '0', width: '100%' }}>
                                         <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
                                         <CustomTextArea rows={16} placeholder={t('Description')} name='description' />
                                     </Segment>
-                                </Grid.Column>
-                                <Grid.Column width={3} stretched>
+                                </Grid.Row>
+                                <Grid.Row>
                                     <Segment basic style={{ padding: '0' }}>
                                         <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
                                         <CustomSelectInput
@@ -391,20 +519,21 @@ export default observer(function SpecialtyForm() {
                                             multiple
                                             placeholder={t('Select skill')} />
                                     </Segment>
-                                </Grid.Column>
+                                </Grid.Row>
+                                <Grid.Row style={{ padding: '0' }}>
+                                    <Divider />
+                                    <Header
+                                        content={t('Educational components') + ':'}
+                                        size='huge'
+                                        style={{ padding: '0', color: '#444' }} />
+                                </Grid.Row>
+                                <Grid.Row>
+                                    <Segment style={{ height: '30rem', overflowY: 'scroll' }}>
+                                        <SpecialtyDetailsComponentList />
+                                    </Segment>
+                                </Grid.Row>
                             </Grid>
-                        </Grid.Row>
-                        <Grid.Row>
-                            <Divider />
-                            <Header
-                                content={`Educational components:`}
-                                size='huge'
-                                style={{ padding: '0 0 10px 0', color: '#444' }} />
-                        </Grid.Row>
-                        <Grid.Row>
-                            <SpecialtyDetailsComponentList />
-                        </Grid.Row>
-                    </Grid>
+                        </Segment>}
                 </Form >
             )}
         </Formik >
