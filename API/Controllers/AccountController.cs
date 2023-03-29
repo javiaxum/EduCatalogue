@@ -2,27 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using API.DTOs;
 using API.Services;
+using Application.Core;
+using Application.Profiles;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
+using WebPWrecover.Services;
 
 namespace API.Controllers
 {
     [AllowAnonymous]
     [ApiController]
     [Route("/api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseAPIController
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly TokenService _tokenService;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService)
+        private readonly IEmailSender _emailSender;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IEmailSender emailSender)
         {
+            _emailSender = emailSender;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
@@ -34,7 +43,7 @@ namespace API.Controllers
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
-            if (user == null) return Unauthorized("An error has occured while authorizing user");
+            if (user == null) return Unauthorized("An error has occured while authorizing the user");
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDTO.Password, false);
 
@@ -43,13 +52,12 @@ namespace API.Controllers
                 return CreateUserDTO(user, loginDTO.RememberMeSwitch);
             }
 
-            return Unauthorized("An error has occured while authorizing user");
+            return Unauthorized("An error has occured while authorizing the user");
         }
         [HttpPost]
         [Route("register")]
         public async Task<ActionResult<AppUserDTO>> Register(RegisterDTO registerDTO)
         {
-
             if (await _userManager.Users.AnyAsync(x => x.Email == registerDTO.Email))
             {
                 ModelState.AddModelError("email", "Email is already taken");
@@ -71,11 +79,108 @@ namespace API.Controllers
 
             if (result.Succeeded)
             {
+                var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
+                var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+                await _emailSender.SendEmailAsync(user.Email, "Email Verification", $"http://localhost:5172/api/account/confirmEmail?token={tokenEncoded}&email={user.Email}");
                 return CreateUserDTO(user, false);
             }
-
             return BadRequest("An error has occured while registering user");
         }
+
+        [HttpGet]
+        [Route("confirmEmail")]
+        public async Task<IActionResult> Confirm(string token, string email)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null) return Unauthorized("An error has occured while authorizing the user");
+            var tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
+            var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
+            var result = await _userManager.ConfirmEmailAsync(user, tokenDecoded);
+            if (result.Succeeded)
+                return Redirect("http://localhost:3000/emailConfirmed");
+            return BadRequest("An error has occured while confirming the email");
+        }
+
+        [HttpGet]
+        [Route("confirmEmailChange")]
+        public async Task<IActionResult> ConfirmEmailChange(string token, string newEmail, string email)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null) return Unauthorized("An error has occured while authorizing the user");
+            var tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
+            var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
+            var result = await _userManager.ChangeEmailAsync(user, newEmail, tokenDecoded);
+            if (result.Succeeded)
+                return Redirect("http://localhost:3000/emailConfirmed");
+            return BadRequest("An error has occured while confirming the email");
+        }
+
+        [HttpPut]
+        [Route("confirmPasswordChange")]
+        public async Task<IActionResult> ConfirmPasswordChange(string token, string newPassword, string email)
+        {
+            var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null) return Unauthorized("An error has occured while authorizing the user");
+            var tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
+            var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
+            var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, newPassword);
+            if (result.Succeeded)
+                return Redirect("http://localhost:3000/passwordConfirmed");
+            return BadRequest("An error has occured while confirming the email");
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("requestConfirmation")]
+        public async Task<IActionResult> RequestEmailConfirmation()
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return BadRequest("An error has occured while getting the user");
+
+            var confirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
+            var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+            await _emailSender.SendEmailAsync(user.Email, "Email Verification", $"http://localhost:5172/api/account/confirmEmail?token={tokenEncoded}&email={user.Email}");
+            return Ok("A confirmation email message has been sent successfully");
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("requestEmailChange")]
+        public async Task<IActionResult> RequestEmailChange(string newEmail)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return BadRequest("An error has occured while getting the user");
+
+            var confirmationToken = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
+            var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+            await _emailSender.SendEmailAsync(newEmail, "Email Change Confirmation", $"http://localhost:5172/api/account/confirmEmailChange?token={tokenEncoded}&email={user.Email}&newEmail={newEmail}");
+            return Ok("A confirmation email message has been sent successfully");
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("requestPasswordReset")]
+        public async Task<IActionResult> RequestPasswordReset(string email)
+        {
+            var user = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.Email == email);
+            if (user == null)
+                return BadRequest("An error has occured while getting the user");
+
+            var confirmationToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
+            var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
+            await _emailSender.SendEmailAsync(email, "Password Reset Request", $"http://localhost:3000/passwordResetForm/{tokenEncoded}");
+            return Ok("A confirmation email message has been sent successfully");
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<AppUserDTO>> GetCurrentUser()
@@ -85,6 +190,44 @@ namespace API.Controllers
             if (user == null)
                 return BadRequest("An error has occured while getting user");
             return CreateUserDTO(user, false);
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<IActionResult> EditUserInfo(ProfileFormValues formValues)
+        {
+            var user = await _userManager.Users
+            .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return BadRequest("An error has occured while getting user");
+            return HandleResult(await Mediator.Send(new Application.Profiles.EditInfo.Command { User = user, FormValues = formValues }));
+        }
+
+        // [Authorize]
+        // [HttpPut("email")]
+        // public async Task<IActionResult> UpdateUserEmail(string email)
+        // {
+        //     var user = await _userManager.Users
+        //     .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+        //     if (user == null)
+        //         return BadRequest("An error has occured while getting user");
+        //     var result = await _userManager.ChangeEmailAsync(user, email);
+        //     if (result.Succeeded)
+        //         return Ok();
+        // }
+
+        [Authorize]
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> UpdateUserPassword(string oldPassword, string newPassword)
+        {
+            var user = await _userManager.Users
+            .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return BadRequest("An error has occured while getting user");
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (result.Succeeded)
+                return Ok();
+            return BadRequest();
         }
 
         private AppUserDTO CreateUserDTO(AppUser appUser, bool rememberMe)
