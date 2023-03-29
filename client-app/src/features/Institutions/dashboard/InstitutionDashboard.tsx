@@ -1,8 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import { Button, Container, Grid, Pagination } from 'semantic-ui-react';
+import { Button, Container, Grid, Pagination, Transition } from 'semantic-ui-react';
 import PaginationBar from '../../../app/common/pagination/PaginationBar';
 import { InstitutionsPagingParams } from '../../../app/models/pagination';
 import { useStore } from '../../../app/stores/store';
@@ -16,12 +16,20 @@ export default observer(function InstitutionDashboard() {
         loadInstitutions,
         institutionsRegistry,
         setActiveMenuItem } = institutionStore;
+    const [scrollY, setScrollY] = useState<number>(0);
 
     useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener("scroll", handleScroll);
+    }, [])
+    useEffect(() => {
+        if (institutionsRegistry.size === 0)
+            loadInstitutions();
         institutionStore.clearImages();
         setActiveMenuItem('About');
         return () => { commonStore.setSidebarOpened(false) }
-    }, [institutionStore, commonStore.setSidebarOpened, commonStore, setActiveMenuItem])
+    }, [institutionStore, commonStore.setSidebarOpened, commonStore, setActiveMenuItem, institutionsRegistry.size, loadInstitutions])
+
 
     function handleLoad(i: number) {
         setInstitutionPagingParams(new InstitutionsPagingParams(i));
@@ -36,38 +44,50 @@ export default observer(function InstitutionDashboard() {
         <div style={{ backgroundColor: '#f3f3f3' }}>
             {isComputerOrTablet &&
                 <Grid style={{ margin: 0, minWidth: '85rem', backgroundColor: "#f3f3f3", marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem' }}>
-                    <Grid.Column style={{ minWidth: '50px', width: '11%' }}>
+                    <Grid.Column style={{ width: '11%' }}>
                     </Grid.Column>
-                    <Grid.Column style={{ minWidth: '32rem', width: '58%' }}>
+                    <Grid.Column style={{ width: '58%' }}>
                         <InstitutionsList />
                         <Container style={{ textAlign: 'center', paddingTop: '2rem' }}>
-                            <Pagination
-                                totalPages={institutionPagination?.totalPages!}
-                                activePage={institutionPagination?.currentPage}
-                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                            {institutionPagination &&
+                                <Pagination
+                                    totalPages={institutionPagination.totalPages}
+                                    activePage={institutionPagination.currentPage}
+                                    onPageChange={(e, data) => handleLoad(data.activePage as number)} />}
                         </Container>
                     </Grid.Column>
                     <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem' }}>
                         <SearchParamsSideBar />
+                        <Transition
+                            visible={scrollY > 200}
+                            duration={250}
+                            unmountOnhide
+                            transitionOnMount>
+                            <div style={{ position: 'fixed', top: 0, width: '20rem' }}>
+                                <SearchParamsSideBar />
+                            </div>
+                        </Transition>
                     </Grid.Column>
                     <Grid.Column style={{ width: '5%' }} >
                     </Grid.Column>
                 </Grid>}
             {isMobile &&
-                <Grid style={{ margin: 0 }} >
+                <Grid style={{ margin: 0 }}>
                     <Grid.Column style={{ margin: 0, padding: 0 }} stretched>
                         <Container style={{ textAlign: 'center' }}>
-                            <Pagination
-                                totalPages={institutionPagination?.totalPages!}
-                                activePage={institutionPagination?.currentPage}
-                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                            {institutionPagination &&
+                                <Pagination
+                                    totalPages={institutionPagination.totalPages}
+                                    activePage={institutionPagination.currentPage}
+                                    onPageChange={(e, data) => handleLoad(data.activePage as number)} />}
                         </Container>
                         <InstitutionsList />
                         <Container style={{ textAlign: 'center' }}>
-                            <Pagination
-                                totalPages={institutionPagination?.totalPages!}
-                                activePage={institutionPagination?.currentPage}
-                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                            {institutionPagination &&
+                                <Pagination
+                                    totalPages={institutionPagination.totalPages}
+                                    activePage={institutionPagination.currentPage}
+                                    onPageChange={(e, data) => handleLoad(data.activePage as number)} />}
                         </Container>
                     </Grid.Column>
                 </Grid>}

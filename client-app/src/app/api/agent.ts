@@ -9,7 +9,7 @@ import { Region } from "../models/region";
 import { Review, ReviewFormValues } from "../models/review";
 import { Specialty, SpecialtyFormValues } from "../models/specialty";
 import { SpecialtyCore } from "../models/specialtyCore";
-import { Profile } from "../models/profile";
+import { Profile, ProfileInfoFormValues } from "../models/profile";
 import { User, UserFormValues } from "../models/user";
 import { store } from "../stores/store";
 import { Image } from '../../app/models/image';
@@ -143,7 +143,13 @@ const Specialties = {
 const Account = {
     current: () => requests.get<User>("/account"),
     login: (user: UserFormValues) => requests.post<User>("/account/login", user),
-    register: (user: UserFormValues) => requests.post<User>("/account/register", user)
+    register: (user: UserFormValues) => requests.post<User>("/account/register", user),
+    updateInfo: (formValues: ProfileInfoFormValues) => requests.put<void>(`/account`, formValues),
+    updateEmail: (newEmail: string) => requests.put<void>(`/account/requestEmailChange?newEmail=${newEmail}`, {}),
+    sendConfirmMessage: () => requests.get<string>(`/account/requestConfirmation`),
+    requestPasswordReset: (email: string) => requests.put<void>(`/account/requestPasswordReset?email=${email}`, {}),
+    resetPassword: (newPassword: string, email: string, token: string) => requests.put<void>(`/account/confirmPasswordChange?email=${email}&newPassword=${newPassword}&token=${token}`, {}),
+    changePassword: (newPassword: string, oldPassword: string) => requests.put<void>(`/account/changePassword?newPassword=${newPassword}&oldPassword=${oldPassword}`, {}),
 }
 
 const Profiles = {
@@ -154,7 +160,7 @@ const Profiles = {
         return axios.post<Image>('/images/profileImage', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
-    }
+    },
 }
 
 const agent = {

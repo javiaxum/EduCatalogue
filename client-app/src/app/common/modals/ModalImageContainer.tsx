@@ -10,7 +10,7 @@ export default observer(function ModalImageContainer() {
             <Modal
                 open={modalStore.modalFulscreen.open}
                 onClose={modalStore.closeModal}
-                style={{ width: 'fit-content', height: 'fit-content', maxWidth: '80%', maxHeight: '80%', background: 'transparent', boxShadow: 'none', display: 'flex' }}>
+                style={{  background: 'transparent', boxShadow: 'none', display: 'flex' }}>
                 <Modal.Content style={{ background: 'transparent', padding: 0 }}>
                     {modalStore.modalFulscreen.body}
                 </Modal.Content>

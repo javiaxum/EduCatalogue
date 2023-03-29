@@ -88,7 +88,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 <SpecialtyListAddNewItem />}
                         </Grid>
                     </Grid.Column >
-                    <Grid.Column width={5} style={{ padding: 0, top: '-2rem' }}>
+                    <Grid.Column width={5} style={{ padding: 0, top: '-4rem', zIndex: 100 }}>
                         <Segment>
                             <SearchParamsList />
                         </Segment>
@@ -97,13 +97,13 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
             {isMobile &&
                 <Grid style={{ margin: 0, height: '43rem', alignItems: 'flex-start' }}>
                     <Grid.Row style={{ padding: 0 }}>
-                        <Button
-                            style={{ height: '3.4rem' }}
-                            onClick={() => setSidebarOpened(true)}>
-                            <Icon name='options' size='big' />
-                            {t('Filters')}
-                        </Button>
-                        <div style={{ textAlign: 'center', padding: '0 0 0.5rem 0' }}>
+                        <div style={{ textAlign: 'center', padding: '0 0 0.5rem 0', width: '100%' }}>
+                            <Button
+                                style={{ height: '3.4rem' }}
+                                onClick={() => setSidebarOpened(true)}>
+                                <Icon name='options' size='big' />
+                                {t('Filters')}
+                            </Button>
                             <Pagination
                                 ellipsisItem={null}
                                 firstItem={null}

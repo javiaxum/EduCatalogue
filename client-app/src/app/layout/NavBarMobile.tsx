@@ -1,16 +1,14 @@
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
 import { Button, Grid, Icon, Image, Menu, Search, Segment, Transition } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
-import { CSSTransition } from 'react-transition-group';
 import SearchParamsSideBar from '../../features/Institutions/search/SearchParamsSideBar';
 
 export default observer(function NavBarMobile() {
     const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
-    const { setSidebarOpened, sidebarOpened } = commonStore;
+    const { setSidebarOpened, sidebarOpened, comparison } = commonStore;
     const { t, i18n } = useTranslation();
     const location = useLocation();
 
@@ -27,12 +25,12 @@ export default observer(function NavBarMobile() {
                             size='big' />
                     </Button>
                 </Menu.Item>
-                <Menu.Item as={NavLink} to="/">
+                <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
                     <img src='\assets\logo.png' alt='logo' style={{ width: "3rem", height: "3rem", alignSelf: "center" }} />
                     <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
                 </Menu.Item>
             </Menu>
-            {location.pathname === '/institutions' &&
+            {(location.pathname === '/institutions' && !comparison) &&
                 <Menu className={'inverted-mobile'} style={{ borderRadius: '0px', height: '1rem' }}>
                     <Search
                         style={{ marginLeft: 'auto', marginRight: 'auto' }}
@@ -47,7 +45,7 @@ export default observer(function NavBarMobile() {
                 animation='fade right'
                 timeout={400}
                 unmountOnExit>
-                <Grid divided style={{ margin: 0, padding: 0, width: '19rem', height: '200vh', backgroundColor: 'rgb(30, 71, 160)', position: 'absolute', top: '5rem', zIndex: 1000 }}>
+                <Grid divided style={{ margin: 0, padding: 0, width: '19rem', height: '200vh', backgroundColor: 'rgb(30, 71, 160)', position: 'absolute', top: '5rem', zIndex: 3000 }}>
                     <Grid.Column textAlign='center' style={{ width: '19rem', padding: 0, marginRight: '1rem' }}>
                         <Grid.Row style={{ padding: '1rem 0 1rem 0' }}>
                             <Button.Group style={{ padding: '1rem 0 1rem 0' }}>

@@ -6,7 +6,7 @@ interface Props {
     placeholder: string;
     name: string;
     disabled?: boolean;
-    label?: string;
+    label?: any;
     type?: string;
     margin?: string;
     padding?: string;

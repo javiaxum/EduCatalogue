@@ -1,12 +1,9 @@
 body {
   background-color: #fff !important;
-  width: 100% !important;
   margin: 0 !important;
 }
 
-html {
-  width: 100% !important;
-}
+html {}
 
 .root {
   --main-color: rgb(30, 71, 160);
@@ -153,7 +150,7 @@ html {
   z-index: 1 !important;
 }
 
-.ui.huge.middle.aligned.list.fade.customTransitionContainer > .visible.transition {
+.ui.huge.middle.aligned.list.fade.customTransitionContainer>.visible.transition {
   display: inline-block !important;
   z-index: 1 !important;
 }

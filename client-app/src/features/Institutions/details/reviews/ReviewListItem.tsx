@@ -8,9 +8,10 @@ import { useMediaQuery } from 'react-responsive';
 
 interface Props {
     review: Review;
+    avatar?: string;
 }
 
-export default function ReviewListItem({ review }: Props) {
+export default function ReviewListItem({ review, avatar }: Props) {
 
     const { i18n } = useTranslation();
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
@@ -26,7 +27,7 @@ export default function ReviewListItem({ review }: Props) {
                     <Item.Content>
                         <Grid>
                             <Grid.Column width={9}>
-                                <Item.Header as='h5'><Image src={review.author.avatar || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
+                                <Item.Header as='h5'><Image src={review.author.avatar || avatar || '/assets/user.png'} avatar spaced='right' />{review.author.displayName}</Item.Header>
                             </Grid.Column>
                             <Grid.Column width={7} floated='right' style={{maxWidth: '10rem'}}>
                                 <RatingStars rating={review.rating} />

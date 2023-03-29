@@ -10,7 +10,7 @@ import TableItem from '../../Institutions/details/TableItem';
 import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetailsComponentList';
 
 export default observer(function SpecialtyDetails() {
-    const { specialtyStore, commonStore, institutionStore } = useStore()
+    const { specialtyStore, commonStore, institutionStore, profileStore } = useStore()
     const { selectedSpecialty, loadSpecialty, loadingInitial, loading, getSpecialtyCore, getBranch, getSkill, getSpecialtyCoreISCEDString } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
@@ -54,12 +54,12 @@ export default observer(function SpecialtyDetails() {
                                 to={`/institutions/${institutionStore.selectedInstitution?.id}`}
                                 content={t('To institution')}
                             />
-                            <Button
+                            {(institutionStore.isInstitutionManager || profileStore.isOperator) && <Button
                                 onClick={() => commonStore.setEditMode(true)}
                                 as={Link}
                                 to={`/manage/${selectedSpecialty.institutionId}/specialty/${selectedSpecialty.id}`}
                                 content={t('Edit specialty')}
-                            />
+                            />}
                         </Button.Group>
                     </Grid.Row>
                     <Grid.Row>
@@ -146,7 +146,7 @@ export default observer(function SpecialtyDetails() {
                                     <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
                                         <>
                                             {selectedSpecialty.description.slice(0, descriptionOpened ? 6000 : 400)}
-                                            {!descriptionOpened && <>...
+                                            {(!descriptionOpened && selectedSpecialty.description.length > 400) && <>...
                                                 <Button
                                                     type='button'
                                                     basic
@@ -186,11 +186,11 @@ export default observer(function SpecialtyDetails() {
                             as={Link}
                             to={`/institutions/${institutionStore.selectedInstitution?.id}`}
                             content={t('To institution')} />
-                        <Button
+                        {(institutionStore.isInstitutionManager || profileStore.isOperator) && <Button
                             onClick={() => commonStore.setEditMode(true)}
                             as={Link}
                             to={`/manage/${selectedSpecialty.institutionId}/specialty/${selectedSpecialty.id}`}
-                            content={t('Edit specialty')} />
+                            content={t('Edit specialty')} />}
                     </Button.Group>
                     <Grid style={{ padding: 0, color: '#444', margin: 0 }}>
                         <Grid.Row style={{ paddingBottom: 0 }}>
@@ -285,7 +285,7 @@ export default observer(function SpecialtyDetails() {
                                 <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap' }}>
                                     <>
                                         {selectedSpecialty.description.slice(0, descriptionOpened ? 6000 : 400)}
-                                        {!descriptionOpened && <>...
+                                        {(!descriptionOpened && selectedSpecialty.description.length > 400) && <>...
                                             <Button
                                                 type='button'
                                                 basic

@@ -1,9 +1,11 @@
 import { observer } from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Button, Container, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
+import RegisterForm from '../../features/identity/RegisterForm';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
@@ -12,8 +14,8 @@ export default observer(function NavBar() {
     const location = useLocation();
 
     return (
-        <Menu secondary inverted style={{ borderRadius: '0px', minWidth: '85rem' }}>
-            <Menu.Item as={Link} to="/institutions" active={false}>
+        <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
+            <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
                 <img src='\assets\logo.png' alt='logo' style={{ width: "4em", height: "4em", alignSelf: "center" }} />
                 <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
             </Menu.Item>
@@ -45,17 +47,23 @@ export default observer(function NavBar() {
                     </Button>
                 </Button.Group>
             </Menu.Item>
-            {!userStore.isLoggedIn
-                ? (<Menu.Item onClick={() => modalStore.openModalMini(<LoginForm />)} position='right' name='Profile'></Menu.Item>)
-                : (<Menu.Item position='right' name='Profile'>
-                    <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
-                    <Dropdown pointing='top left' text={userStore.user?.displayName} >
-                        <Dropdown.Menu>
-                            <Dropdown.Item as={Link} to={`/profiles/${userStore.user?.username}`} text={t('My Profile')} icon='user' />
-                            <Dropdown.Item onClick={userStore.logout} text={t('Logout')} icon='power' />
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </Menu.Item>)}
+
+            <Menu.Item position='right' name='Profile' style={{paddingRight: userStore.isLoggedIn ? '6rem' : '12rem'}}>
+                <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
+                <Dropdown pointing='top left' text={userStore.user?.displayName} >
+                    <Dropdown.Menu>
+                        {userStore.isLoggedIn ?
+                            <>
+                                <Dropdown.Item as={Link} to={`/profiles/${userStore.user?.username}`} text={t('My Profile')} icon='user' />
+                                <Dropdown.Item onClick={userStore.logout} text={t('Logout')} icon='power' />
+                            </> :
+                            <>
+                                <Dropdown.Item onClick={() => modalStore.openModalMini(<RegisterForm />)} position='right' text={t('Register')}></Dropdown.Item>
+                                <Dropdown.Item onClick={() => modalStore.openModalMini(<LoginForm />)} position='right' text={t('Login')}></Dropdown.Item>
+                            </>}
+                    </Dropdown.Menu>
+                </Dropdown>
+            </Menu.Item>
         </Menu>
     )
 })

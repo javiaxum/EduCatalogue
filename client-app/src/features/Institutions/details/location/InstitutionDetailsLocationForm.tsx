@@ -1,13 +1,14 @@
 import { useFormikContext } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { Checkbox, DropdownProps, Grid, Icon, Search } from 'semantic-ui-react';
+import { Checkbox, DropdownProps, Grid, Icon, Label, Search, Table } from 'semantic-ui-react';
 import CustomSelectInput from '../../../../app/common/form/CustomSelectInput';
 import { useStore } from '../../../../app/stores/store';
 import LeafletControlGeocoder from './LeafletControlGeocoder';
 import { useTranslation } from 'react-i18next';
-import LoadingComponent from '../../../../app/layout/LoadingComponent';
 import { observer } from 'mobx-react-lite';
+import TableItem from '../TableItem';
+import { useMediaQuery } from 'react-responsive';
 
 export default observer(function InstitutionDetailsLocationForm() {
 
@@ -16,7 +17,7 @@ export default observer(function InstitutionDetailsLocationForm() {
         regionRegistry,
         getRegionById,
         selectedInstitution,
-        getCityById } = institutionStore;
+        getCityById, loadingInitial } = institutionStore;
 
     const {
         setCity,
@@ -41,75 +42,72 @@ export default observer(function InstitutionDetailsLocationForm() {
     const handleMarkerDragEnd = (event: any) => {
         setCenter({ lat: event.target._latlng.lat, lng: event.target._latlng.lng });
     };
-    const { t, i18n } = useTranslation();
+
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+
+    const { t } = useTranslation();
 
     return (
-        <Grid>
-            <Grid.Column width={8}>
+        <Grid style={{margin: isMobile ? 0 : ''}}>
+            <Grid.Column width={isMobile ? 16 : 8}>
                 <Grid>
-                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-                        <Grid.Column width={1}>
-                            <Icon name='marker' size='large' color='blue' />
-                        </Grid.Column>
-                        <Grid.Column width={7}>
-                            {t('Region') + ': '}
-                            <CustomSelectInput
-                                onChange={() => {
-                                    formik.getFieldHelpers('cityId').setValue('')
-                                }}
-                                placeholder={t('Select region')}
-                                name='regionId'
-                                options={Array.from(regionRegistry.values()).map(element => ({ text: element.name, value: element.id }))} />
-                        </Grid.Column>
-                        <Grid.Column width={8}>
-                            {t('City') + ': '}
-                            <CustomSelectInput
-                                onChange={(event, data: DropdownProps) => {
-                                    setCity(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!)
-                                }}
-                                placeholder={t('Select city')}
-                                name='cityId'
-                                disabled={!!!formik.getFieldProps('regionId').value}
-                                options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
-                                    .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-                        <Grid.Column width={1}>
-                            <Icon name='home' size='large' color='blue' />
-                        </Grid.Column>
-                        <Grid.Column width={15}>
-                            {t('Address') + ': '}
-                            <Search
-                                style={{ display: 'inline-block' }}
-                                value={formik.getFieldProps('streetAddress').value}
-                                // results={mapStore.geocodingResultOptions}
-                                onSearchChange={(e, d) => {
-                                    formik.getFieldHelpers('streetAddress').setValue(d.value);
-                                    mapStore.setStreet(d.value!);
-                                }}
-                                showNoResults={false}
-                                // onResultSelect={(e, d) => {
-                                //     console.log(d.value!)
-                                // }}
-                                loading={loading} />
-                        </Grid.Column>
-                    </Grid.Row>
-                    <Grid.Row style={{ padding: '1rem 0 0 0' }}>
-                        <Grid.Column width={1}>
-                            <Icon name='home' size='large' color='blue' />
-                        </Grid.Column>
-                        <Grid.Column width={15}>
-                            Зазначити координати самостійно:
-                            <Checkbox
-                                value={draggable ? 'true' : 'false'}
-                                toggle
-                                onChange={() => setDraggable(!draggable)} />
-                        </Grid.Column>
+                    <Grid.Row>
+                        <Table basic='very' compact unstackable>
+                            <Table.Body>
+                                <TableItem
+                                    loading={(loadingInitial)}
+                                    icon='point'
+                                    label={t('Region')}
+                                    content={
+                                        <CustomSelectInput
+                                            onChange={() => formik.getFieldHelpers('cityId').setValue('')}
+                                            placeholder={t('Select region')}
+                                            name='regionId'
+                                            options={Array.from(regionRegistry.values()).map(element => ({ text: element.name, value: element.id }))} />
+                                    } />
+                                <TableItem
+                                    loading={(loadingInitial)}
+                                    icon='point'
+                                    label={t('City')}
+                                    content={
+                                        <CustomSelectInput
+                                            onChange={(event, data: DropdownProps) => setCity(getCityById(data.value as number, formik.getFieldProps('regionId').value)?.name!)}
+                                            placeholder={t('Select city')}
+                                            name='cityId'
+                                            disabled={!!!formik.getFieldProps('regionId').value}
+                                            options={getRegionById(formik.getFieldProps('regionId').value)?.cities.map(element => ({ text: element.name, value: element.id }))
+                                                .sort((a, b) => a.text.localeCompare(b.text)) || [{ text: 'Choose city', value: 0 }]} />
+                                    } />
+                                <TableItem
+                                    loading={(loadingInitial)}
+                                    icon='home'
+                                    label={t('Address')}
+                                    content={
+                                        <Search
+                                            style={{ display: 'inline-block' }}
+                                            value={formik.getFieldProps('streetAddress').value}
+                                            onSearchChange={(e, d) => {
+                                                formik.getFieldHelpers('streetAddress').setValue(d.value);
+                                                mapStore.setStreet(d.value!);
+                                            }}
+                                            showNoResults={false}
+                                            loading={loading} />} />
+                                <TableItem
+                                    loading={(loadingInitial)}
+                                    icon='home'
+                                    label={t('Drag the marker')}
+                                    content={
+                                        <Checkbox
+                                            value={draggable ? 'true' : 'false'}
+                                            toggle
+                                            onChange={() => setDraggable(!draggable)} />} />
+                            </Table.Body>
+                        </Table>
                     </Grid.Row>
                 </Grid>
             </Grid.Column>
-            <Grid.Column width={8}>
+            <Grid.Column width={isMobile ? 16 : 8}>
                 <MapContainer center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '440px' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

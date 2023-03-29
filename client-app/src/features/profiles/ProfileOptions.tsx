@@ -1,5 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 import { useParams } from 'react-router-dom';
 import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
@@ -7,53 +9,50 @@ import { useStore } from '../../app/stores/store';
 import ProfileInstitutionPendingChangesList from './ProfileInstitutionPendingChangesList';
 import ProfileManagedInstitutions from './ProfileManagedInstitutions';
 import ProfileReviews from './ProfileReviews';
-import ProfileSettings from './ProfileSettings';
+import ProfileSettings from './ProfileSettingsGeneral';
+import ProfileSettingsSecurity from './ProfileSettingsSecurity';
 
 interface Props {
     profile: Profile
 }
 
 export default observer(function ProfileOptions({ profile }: Props) {
-    const { commonStore, userStore, profileStore: {isCurrentUser} } = useStore();
-    const [menuItem, setMenuItem] = useState<string>('Profile');
+    const { commonStore, userStore, profileStore: { isCurrentUser } } = useStore();
+    const [menuItem, setMenuItem] = useState<string>('General');
 
-    if(!isCurrentUser) return <></>
+    const { t } = useTranslation();
 
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+    if (!isCurrentUser) return <></>
+
+    const items = [
+        'General',
+        'Security',
+        'Managed institutions',
+        'Pending changes',
+        'Reviews'];
+    const components = [
+        <ProfileSettings profile={profile} />,
+        <ProfileSettingsSecurity profile={profile} />,
+        <ProfileManagedInstitutions institutions={profile.managedInstitutions} />,
+        <ProfileInstitutionPendingChangesList />,
+        <ProfileReviews profile={profile} reviews={profile.reviews} />,
+    ]
     return (
-        <Grid style={{ paddingTop: '10px' }}>
-            <Grid.Column width={16}>
-                <Menu tabular attached='top'>
+        <>
+            <Menu pointing secondary stackable={isMobile} >
+                {items.map((i, index) =>
                     <Menu.Item
-                        name='Profile'
-                        active={menuItem === 'Profile'}
-                        onClick={() => setMenuItem('Profile')}
+                        name={i}
+                        key={index}
+                        active={menuItem === i}
+                        content={t(i)}
+                        onClick={() => setMenuItem(i)}
                     />
-                    <Menu.Item
-                        name='Managed institution'
-                        active={menuItem === 'Managed institutions'}
-                        onClick={() => setMenuItem('Managed institutions')}
-                    />
-                    <Menu.Item
-                        name='Pending changes'
-                        active={menuItem === 'Pending changes'}
-                        onClick={() => setMenuItem('Pending changes')}
-                    />
-                    <Menu.Item
-                        name='Reviews'
-                        active={menuItem === 'Reviews'}
-                        onClick={() => setMenuItem('Reviews')}
-                    />
-                </Menu>
-                <Segment attached='bottom'>
-                    {menuItem === 'Profile' && <ProfileSettings profile={profile} />}
-                    {(menuItem === 'Reviews')
-                        && <ProfileReviews reviews={profile.reviews} />}
-                    {(menuItem === 'Managed institutions')
-                        && <ProfileManagedInstitutions institutions={profile.managedInstitutions} />}
-                    {(menuItem === 'Pending changes')
-                        && <ProfileInstitutionPendingChangesList />}
-                </Segment>
-            </Grid.Column>
-        </Grid>
+                )}
+            </Menu>
+            {components[items.indexOf(menuItem)]}
+        </>
     )
 })

@@ -57,4 +57,44 @@ export default class UserStore {
             console.log(error);
         }
     }
+    requestEmailChange = async (newEmail: string) => {
+        try {
+            console.log(newEmail);
+            const user = await agent.Account.updateEmail(newEmail);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    requestPasswordReset = async (email: string) => {
+        try {
+            const user = await agent.Account.requestPasswordReset(email);
+            console.log(email)
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    resetPassword = async (newPassword: string, email: string, token: string) => {
+        try {
+            const user = await agent.Account.resetPassword(newPassword, email, token);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    changePassword = async (newPassword: string, oldPassword: string) => {
+        try {
+            const user = await agent.Account.changePassword(newPassword, oldPassword);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    requestEmailConfirmationMessage = async () => {
+        try {
+            const user = await agent.Account.sendConfirmMessage();
+            console.log(user);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 }

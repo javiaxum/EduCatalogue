@@ -1,188 +1,503 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import { Button, Container, Grid, Header, Icon, Image, Label, Segment, Table } from 'semantic-ui-react';
-import PaginationBar from '../../../app/common/pagination/PaginationBar';
+import { Button, Container, Image, Header, Icon, Label, Table, Transition } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { Institution } from '../../../app/models/institution';
 import { Specialty } from '../../../app/models/specialty';
 import { useStore } from '../../../app/stores/store';
+import AddInstitutionHeaderCellPlaceholderMobile from '../../Institutions/comparison/AddInstitutionHeaderCellPlaceholderMobile';
+import AddSpecialtyHeaderCellPlaceholderMobile from '../../Institutions/comparison/AddSpecialtyHeaderCellPlaceholderMobile';
+import InstitutionComparisonBoardRow from '../../Institutions/comparison/InstitutionComparisonBoardRow';
+import InstiutionComparisonParameterCellFixedMobile from '../../Institutions/comparison/InstiutionComparisonParameterCellFixedMobile';
 import { router } from '../../routers/Routes';
 
 
 export default observer(function InstitutionComparisonBoard() {
     const { institutionStore, specialtyStore } = useStore();
-    const { selectedSpecialtyIds, loadSpecialty, specialtyRegistry, toggleSelectedSpecialtyId, getSpecialtyCoreISCEDString, getSpecialtyCore } = specialtyStore;
+    const { selectedSpecialtyIds, loadSpecialty, specialtyRegistry, toggleSelectedSpecialtyId, getSpecialtyCoreISCEDString, getSpecialtyCore, getSkill } = specialtyStore;
+
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
-    const [selectedSpecialties, setSelectedSpecialties] = useState<Specialty[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
-    const { t } = useTranslation();
-    useEffect(() => {
-        let specialties = [];
-        loadSpecialties().then(() => {
-            specialties = selectedSpecialtyIds.map((i) => specialtyRegistry.get(i)!);
-            setSelectedSpecialties(specialties);
-            setLoading(false);
-        });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [loadSpecialty])
 
-    async function loadSpecialties() {
-        await Promise.all(selectedSpecialtyIds.map((x) => loadSpecialty(x)));
-    }
+    const [selectedSpecialties, setSelectedSpecialties] = useState<Specialty[]>([]);
+    const [specialtyInstitutions, setSpecialtyInstitutions] = useState<Map<string, Institution>>(new Map<string, Institution>());
+    const [loading, setLoading] = useState<boolean>(true);
+    const [scrollY, setScrollY] = useState<number>(0);
+
+    const { t } = useTranslation();
+
+    useEffect(() => {
+        if (selectedSpecialties.length < selectedSpecialtyIds.length)
+            loadSpecialties().then((result) => {
+                setSelectedSpecialties(Array.from(result.values()));
+                loadInstitutions(Array.from(result.values()).map((s) => s.institutionId)).then((result) => { setSpecialtyInstitutions(result); setLoading(false); })
+            });
+
+        async function loadSpecialties() {
+            let specialties = new Map<string, Specialty>();
+            await Promise.all(selectedSpecialtyIds.map((x) => loadSpecialty(x).then((result) => { if (result) specialties.set(x, result); console.log(result) })));
+            return specialties;
+        }
+        async function loadInstitutions(ids: string[]) {
+            let institutions = new Map<string, Institution>();
+            await Promise.all(ids.map((x) => institutionStore.loadInstitution(x).then((result) => { if (result) institutions.set(x, result); console.log(result) })));
+            return institutions;
+        }
+    }, [institutionStore, loadSpecialty, selectedSpecialties, selectedSpecialtyIds])
+
+    useEffect(() => {
+        const handleScroll = () => setScrollY(window.scrollY);
+        window.addEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+        };
+    }, [])
+
+    useEffect(() => {
+        if (selectedSpecialtyIds.length === 0)
+            router.navigate('/institutions');
+    }, [selectedSpecialtyIds])
+
+    const componentRef = useRef<HTMLDivElement>(null);
+    const handleWindowScroll = (e: any) => {
+        const component = componentRef.current;
+        component!.style.left = `-${e.currentTarget.scrollLeft}px`;
+    };
+
+
     const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
     const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
     const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
 
-    const maxHeight = Math.max(...selectedSpecialties.map((i) => getSpecialtyCore(i.localSpecialtyCode!)?.name.length || 0));
-
     if (loading) return <LoadingComponent />
 
     return (
-        <Table celled padded selectable collapsing style={{margin: '0 auto'}}>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell />
-                    {selectedSpecialties.map((i) =>
-                        <Table.HeaderCell
-                            style={{ minWidth: '200px', height: (maxHeight * 1.1) + 40 }}
-                            key={i.id}>
-                            <Button
-                                basic
-                                floated='right'
-                                style={{ position: 'relative', padding: 0, border: 'none', boxShadow: 'none', width: '1rem', height: '1rem', top: 0, right: 0 }}
-                                onClick={() => {
-                                    setSelectedSpecialties(selectedSpecialties.filter((x) => x.id != i.id))
-                                    toggleSelectedSpecialtyId(i.id)
-                                    if (selectedSpecialtyIds.length === 0) router.navigate('/institutions')
-                                }}>
-                                <Icon name='close' size='small' style={{ left: '0.25rem', bottom: '0.05rem', position: 'relative' }} />
-                            </Button>
-                            <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%' }}>
-                                {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
-                                <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
-                            </Container>
-                        </Table.HeaderCell>)}
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                <Table.Row >
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('TUTITION')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'>
-                            {i.tuitionUAH}
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row >
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('SUBSIDED EDUCATION')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'
-                            positive={!selectedSpecialties.every((s) => s.freeEducation) && i.freeEducation}>
-                            <Icon name={i.freeEducation ? 'check' : 'x'} />
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row >
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('ENROLLED STUDENTS')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'>
-                            <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                {i.undergraduatesEnrolled}
-                            </Header>
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('EMPLOYMENT RATE')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'
-                            positive={selectedSpecialties.reduce((max, specialty) => { return specialty.graduateEmploymentRate > max ? specialty.graduateEmploymentRate : max; }, 0) == i.graduateEmploymentRate}>
-                            <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                {i.graduateEmploymentRate}%
-                            </Header>
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('ECTS CREDITS')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'
-                            positive={selectedSpecialties.reduce((max, specialty) => { return specialty.ectsCredits > max ? specialty.ectsCredits : max; }, 0) == i.ectsCredits}>
-                            <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                {i.ectsCredits}
-                            </Header>
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('DEGREE')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'>
-                            {degrees[i.degreeId - 1].text}
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('LANGUAGE')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'
-                            content={i.languageIds.map((l) => languages[l == "en" ? 0 : 1 as number]?.text).join(", ")}>
-                        </Table.Cell>)}
-                </Table.Row>
-                <Table.Row>
-                    <Table.Cell>
-                        <Header as='h4' textAlign='center' color='grey'>
-                            {t('STUDY FORM')}
-                        </Header>
-                    </Table.Cell>
-                    {selectedSpecialties.map((i) =>
-                        <Table.Cell
-                            key={i.id}
-                            textAlign='center'
-                            content={i.studyFormIds.map((s) => studyForms[s - 1]?.text).join(", ")}>
-                        </Table.Cell>)}
-                </Table.Row>
-            </Table.Body>
-        </Table>
+        <>
+            {isComputerOrTablet &&
+                <>
+                    <div onScroll={(e) => handleWindowScroll(e)} style={{ overflow: 'scroll' }} >
+                        <Transition
+                            visible={scrollY > 300}
+                            duration={200}
+                            transitionOnMount>
+                            <div ref={componentRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: 1000, overflow: 'scroll' }}>
+                                <Table celled padded selectable compact collapsing>
+                                    <Table.Header>
+                                        <Table.Row>
+                                            <Table.HeaderCell style={{ minWidth: '18rem', maxWidth: '18rem' }} />
+                                            {selectedSpecialties.map((i) => {
+                                                const institution = specialtyInstitutions.get(i.institutionId);
+                                                return (
+                                                    <Table.HeaderCell
+                                                        textAlign='center'
+                                                        key={i.id}
+                                                        style={{ minWidth: '18rem', maxWidth: '18rem' }}>
+                                                        <div style={{ margin: '0 auto' }}>
+                                                            <div>
+                                                                <Button
+                                                                    basic
+                                                                    floated='right'
+                                                                    style={{ position: 'relative', padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
+                                                                    onClick={() => {
+                                                                        setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
+                                                                        specialtyStore.toggleSelectedSpecialtyId(i.id)
+                                                                        if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                                    }}>
+                                                                    <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                                                </Button>
+                                                            </div>
+                                                            <Image
+                                                                onClick={() => router.navigate(`/institutions/${i.institutionId}`)}
+                                                                src={institution?.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
+                                                                style={{ margin: '0 auto', objectFit: 'cover', right: '-1.5rem', height: '6rem', width: '6rem', borderRadius: '10px' }} />
+                                                            <div onClick={() => router.navigate(`/institutions/${i.institutionId}`)}>
+                                                                {institution?.name}
+                                                            </div>
+                                                            <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%', display: 'block' }}>
+                                                                {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
+                                                                <Label style={{ display: 'block' }} content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
+                                                            </Container>
+                                                        </div>
+                                                    </Table.HeaderCell>)
+                                            })}
+                                            <Table.HeaderCell style={{ minWidth: '18rem', maxWidth: '18rem' }}>
+                                                <div
+                                                    style={{
+                                                        border: 'dashed 3px #aaa',
+                                                        height: '12rem',
+                                                        width: '12rem',
+                                                        borderRadius: '2rem',
+                                                        textAlign: 'center',
+                                                    }}>
+                                                    <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
+                                                    <Header style={{ color: '#444', margin: 0 }}>
+                                                        {t('Add institution')}
+                                                    </Header>
+                                                </div>
+                                            </Table.HeaderCell>
+                                        </Table.Row>
+                                    </Table.Header>
+                                </Table>
+                            </div>
+                        </Transition>
+                        <Table celled padded selectable compact collapsing style={{ maxWidth: `${(selectedSpecialtyIds.length + 2) * 18}rem` }}>
+                            <Table.Header>
+                                <Table.Row>
+                                    <Table.HeaderCell style={{ minWidth: '18rem', maxWidth: '18rem' }} />
+                                    {selectedSpecialties.map((i) => {
+                                        const institution = specialtyInstitutions.get(i.institutionId);
+                                        return (<Table.HeaderCell
+                                            textAlign='center'
+                                            key={i.id}
+                                            style={{ minWidth: '18rem', maxWidth: '18rem' }}>
+                                            <div style={{ margin: '0 auto' }}>
+                                                <div>
+                                                    <Button
+                                                        basic
+                                                        floated='right'
+                                                        style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
+                                                        onClick={() => {
+                                                            setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
+                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
+                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                        }}>
+                                                        <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                                    </Button>
+                                                </div>
+                                                <Image
+                                                    onClick={() => router.navigate(`/institutions/${i.institutionId}`)}
+                                                    src={institution?.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
+                                                    style={{ margin: '0 auto', objectFit: 'cover', right: '-1.5rem', height: '6rem', width: '6rem', borderRadius: '10px' }} />
+                                                <div onClick={() => router.navigate(`/institutions/${i.institutionId}`)}>
+                                                    {institution?.name}
+                                                </div>
+                                                <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%', display: 'block' }}>
+                                                    {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
+                                                    <Label style={{ display: 'block' }} content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
+                                                </Container>
+                                            </div>
+                                        </Table.HeaderCell>)
+                                    })}
+                                    <Table.HeaderCell style={{ minWidth: '18rem', maxWidth: '18rem' }}>
+                                        <div
+                                            style={{
+                                                border: 'dashed 3px #aaa',
+                                                height: '12rem',
+                                                width: '12rem',
+                                                borderRadius: '2rem',
+                                                textAlign: 'center',
+                                            }}>
+                                            <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
+                                            <Header style={{ color: '#444', margin: 0 }}>
+                                                {t('Add institution')}
+                                            </Header>
+                                        </div>
+                                    </Table.HeaderCell>
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                <InstitutionComparisonBoardRow
+                                    header={t('DEGREE')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {degrees[i.degreeId - 1].text}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ECTS CREDITS')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.ectsCredits}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('TUITION')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.tuitionUAH} UAH
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('FREE EDUCATION')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            <Icon name={i.freeEducation ? 'check' : 'x'} style={{ margin: 0 }} />
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ENROLLED STUDENTS')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.undergraduatesEnrolled}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ACCEPTANCE RATE')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.acceptanceRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.acceptanceRate)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('GRADUATION RATE')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.graduationRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.graduationRate)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('EMPLOYMENT RATE')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.graduateEmploymentRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.graduateEmploymentRate)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('LANGUAGE OF EDUCATION')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.languageIds.map((l) => languages[l == "en" ? 0 : 1 as number]?.text).join(", ")}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('EDUCATION PERIOD')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.startYear + ' - ' + i.endYear}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('STUDY FORM')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.studyFormIds.map((s) => studyForms[s - 1]?.text).join(", ")}
+                                        </Header>)} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('SKILLS')}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.skillIds.map((skill) => <Label key={skill} content={getSkill(skill)?.name} style={{ margin: '0.2rem' }} />)}
+                                        </Header>)} />
+                            </Table.Body>
+                        </Table>
+                    </div>
+                </>}
+            {isMobile &&
+                <>
+                    <div ref={componentRef} style={{ position: 'fixed', zIndex: 1000, overflow: 'scroll' }}>
+                        <Table
+                            celled
+                            padded
+                            selectable
+                            compact
+                            collapsing
+                            unstackable>
+                            <Table.Header>
+                                <Table.Row>
+                                    {selectedSpecialties.map((i) => {
+                                        const institution = specialtyInstitutions.get(i.institutionId);
+                                        return (<Table.HeaderCell
+                                            textAlign='center'
+                                            key={i.id}
+                                            style={{ minWidth: '50vw', maxWidth: '50vw' }}>
+                                            <div style={{ margin: '0 auto' }}>
+                                                <div>
+                                                    <Button
+                                                        basic
+                                                        floated='right'
+                                                        style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
+                                                        onClick={() => {
+                                                            setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
+                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
+                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                        }}>
+                                                        <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                                    </Button>
+                                                </div>
+                                                <Image
+                                                    onClick={() => router.navigate(`/institutions/${i.institutionId}`)}
+                                                    src={institution?.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
+                                                    style={{ margin: '0 auto', objectFit: 'cover', right: '-1.5rem', height: '6rem', width: '6rem', borderRadius: '10px' }} />
+                                                <div onClick={() => router.navigate(`/institutions/${i.institutionId}`)}>
+                                                    {institution?.name}
+                                                </div>
+                                                <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%' }}>
+                                                    {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
+                                                    <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
+                                                </Container>
+                                            </div>
+                                        </Table.HeaderCell>)
+                                    })}
+                                    <AddSpecialtyHeaderCellPlaceholderMobile />
+                                </Table.Row>
+                            </Table.Header>
+                        </Table>
+                    </div>
+                    <div onScroll={(e) => handleWindowScroll(e)} style={{ overflow: 'scroll' }}>
+                        <Table
+                            celled
+                            padded
+                            selectable
+                            compact
+                            collapsing
+                            unstackable>
+                            <Table.Header>
+                                <Table.Row>
+                                    {selectedSpecialties.map((i) => {
+                                        const institution = specialtyInstitutions.get(i.institutionId);
+                                        return (<Table.HeaderCell
+                                            textAlign='center'
+                                            key={i.id}
+                                            style={{ minWidth: '50vw', maxWidth: '50vw' }}>
+                                            <div style={{ margin: '0 auto' }}>
+                                                <div>
+                                                    <Button
+                                                        basic
+                                                        floated='right'
+                                                        style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
+                                                        onClick={() => {
+                                                            setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
+                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
+                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                        }}>
+                                                        <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
+                                                    </Button>
+                                                </div>
+                                                <Image
+                                                    onClick={() => router.navigate(`/institutions/${i.institutionId}`)}
+                                                    src={institution?.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
+                                                    style={{ margin: '0 auto', objectFit: 'cover', right: '-1.5rem', height: '6rem', width: '6rem', borderRadius: '10px' }} />
+                                                <div onClick={() => router.navigate(`/institutions/${i.institutionId}`)}>
+                                                    {institution?.name}
+                                                </div>
+                                                <Container as={Link} to={`/specialties/${i.id}`} style={{ height: 'inherit', width: '100%' }}>
+                                                    {i.localSpecialtyCode} {getSpecialtyCore(i.localSpecialtyCode!)?.name}
+                                                    <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(i.localSpecialtyCode)}`} />
+                                                </Container>
+                                            </div>
+                                        </Table.HeaderCell>)
+                                    })}
+                                    <AddInstitutionHeaderCellPlaceholderMobile />
+                                </Table.Row>
+                            </Table.Header>
+                            <Table.Body>
+                                <InstiutionComparisonParameterCellFixedMobile name={t('DEGREE')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('DEGREE')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {degrees[i.degreeId - 1].text}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('ECTS CREDITS')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ECTS CREDITS')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.ectsCredits}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('TUITION')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('TUITION')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.tuitionUAH} UAH
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('FREE EDUCATION')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('FREE EDUCATION')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            <Icon name={i.freeEducation ? 'check' : 'x'} style={{ margin: 0 }} />
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('ENROLLED STUDENTS')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ENROLLED STUDENTS')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.undergraduatesEnrolled}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('ACCEPTANCE RATE')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('ACCEPTANCE RATE')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.acceptanceRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.acceptanceRate)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('GRADUATION RATE')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('GRADUATION RATE')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.graduationRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.graduationRate)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('EMPLOYMENT RATE')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('EMPLOYMENT RATE')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header
+                                            as='h4'
+                                            style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }}>
+                                            {i.graduateEmploymentRate.toFixed(1)}%
+                                        </Header>)}
+                                    pieChart={true}
+                                    data={selectedSpecialties.map((i) => i.graduateEmploymentRate)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('LANGUAGE OF EDUCATION')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('LANGUAGE OF EDUCATION')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.languageIds.map((l) => languages[l == "en" ? 0 : 1 as number]?.text).join(", ")}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('EDUCATION PERIOD')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('EDUCATION PERIOD')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.startYear + ' - ' + i.endYear}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('STUDY FORM')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('STUDY FORM')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.studyFormIds.map((s) => studyForms[s - 1]?.text).join(", ")}
+                                        </Header>)} />
+                                <InstiutionComparisonParameterCellFixedMobile name={t('SKILLS')} columns={selectedSpecialtyIds.length + 1} />
+                                <InstitutionComparisonBoardRow
+                                    header={t('SKILLS')}
+                                    headerLess={true}
+                                    array={selectedSpecialties.map((i) =>
+                                        <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
+                                            {i.skillIds.map((skill) => <Label key={skill} content={getSkill(skill)?.name} style={{ margin: '0.2rem' }} />)}
+                                        </Header>)} />
+                            </Table.Body>
+                        </Table>
+                    </div>
+                </>}
+        </>
     )
 })

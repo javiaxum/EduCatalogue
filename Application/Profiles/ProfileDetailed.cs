@@ -15,6 +15,9 @@ namespace Application.Profiles
         public bool TwoFactorEnabled { get; set; }
         public string Token { get; set; }
         public string Username { get; set; }
+        public string Company { get; set; }
+        public string SocialAccounts { get; set; }
+        public string Location { get; set; }
         public Image Avatar { get; set; }
         public ICollection<ReviewDTO> Reviews { get; set; }
         public ICollection<ManagedInstitution> ManagedInstitutions { get; set; }

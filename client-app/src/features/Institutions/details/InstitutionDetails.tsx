@@ -94,7 +94,7 @@ export default observer(function InstitutionDetails() {
                         </Segment>
                     </Grid.Row>
                     <Grid.Row style={{ padding: 0, top: '-4rem' }}>
-                        <div style={{ padding: '0 3rem 0 3rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem', minWidth: '85rem' }}>
+                        <div style={{ padding: '0 3rem 0 3rem', minHeight: '50rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem', minWidth: '85rem' }}>
                             <InstitutionDetailsContent />
                         </div>
                     </Grid.Row>
@@ -118,7 +118,7 @@ export default observer(function InstitutionDetails() {
                                 onClick={() => setEditMode(!editMode)}
                                 attached='top'
                                 as={Link}
-                                style={{ zIndex: 100, width: '100%', opacity: 0.5 }}
+                                style={{ zIndex: 500, width: '100%', opacity: 0.5 }}
                                 to={`/manage/${selectedInstitution?.id}`}
                                 content={t('Manage Institution')} />}
                         <Segment
@@ -133,7 +133,7 @@ export default observer(function InstitutionDetails() {
                                     content={selectedInstitution?.name}
                                     style={{ color: '#444', margin: 0 }} />}
                         </Segment>
-                        <div style={{ padding: isComputerOrTablet ? '0 3rem 0 3rem' : 0, marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+                        <div style={{ padding: isComputerOrTablet ? '0 3rem 0 3rem' : 0, minHeight: '50rem', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
                             <InstitutionDetailsContent />
                         </div>
                     </Grid.Row>

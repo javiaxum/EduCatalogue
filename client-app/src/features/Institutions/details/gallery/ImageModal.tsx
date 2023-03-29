@@ -13,7 +13,7 @@ export default function ImageModal({ url }: Props) {
     return (
         <Image
             src={url || '/assets/institutionTitleImagePlaceholder.png'}
-            style={{ margin: 'auto', objectFit: 'cover', width: dimensions?.height > dimensions?.width ? '' : '100%', height: dimensions?.height < dimensions?.width ? '' : '100%' }}
+            style={{ margin: 'auto', objectFit: 'cover', width: dimensions?.height > dimensions?.width ? '' : '80%', height: dimensions?.height < dimensions?.width ? '' : '80%' }}
             onClick={() => modalStore.closeModal()} />
     )
 }

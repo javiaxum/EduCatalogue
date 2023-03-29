@@ -6,9 +6,11 @@ import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function RegisterForm() {
     const { userStore, modalStore } = useStore();
+    const { t } = useTranslation();
     return (
         <Formik
             initialValues={{ email: '', password: '', displayName: '', username: '', error: null }}
@@ -26,11 +28,11 @@ export default observer(function RegisterForm() {
         >
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h3' content='Register' textAlign='left' color='teal' />
-                    <CustomTextInput width='100%' placeholder='DisplayName' name='displayName' />
-                    <CustomTextInput width='100%' placeholder='Username' name='username' />
-                    <CustomTextInput width='100%' placeholder='Email' name='email' />
-                    <CustomTextInput width='100%' placeholder='Password' name='password' type='password' />
+                    <Header as='h3' content={t('Register')} textAlign='left' color='teal' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='DisplayName' name='displayName' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Username' name='username' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Email' name='email' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Password' name='password' type='password' />
                     <ErrorMessage
                         name='error'
                         render={() => <ValidationErrors

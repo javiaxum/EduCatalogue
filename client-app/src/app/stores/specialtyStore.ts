@@ -316,7 +316,7 @@ export default class SpecialtyStore {
         }
     }
 
-    loadPopularSpecialties = async () => {
+    loadPopularSpecialties = async (id?: string) => {
         this.setLoading(true);
         this.specialtyRegistry.clear();
         const params = new URLSearchParams();
@@ -325,7 +325,7 @@ export default class SpecialtyStore {
         params.append('listMostPopular', 'true');
         this.popularSpecialtiesRegistry.clear();
         try {
-            const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, params);
+            const result = await agent.Specialties.list(id ? id : store.institutionStore.selectedInstitution!.id, params);
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
                     setTimeout(() =>

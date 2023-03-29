@@ -26,7 +26,6 @@ namespace Application
         public string EmblemImageUrl { get; set; }
         public string BackgroundImageUrl { get; set; }
         public string ContactInformation { get; set; }
-
         public int UndergraduatesEnrolled { get; set; }
         public double Rating { get; set; }
         public int ReviewsCount { get; set; }

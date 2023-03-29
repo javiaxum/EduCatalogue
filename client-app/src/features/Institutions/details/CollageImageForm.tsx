@@ -54,14 +54,12 @@ export default observer(function CollageImageForm() {
                             type='button'
                             icon='check'
                             onClick={onCrop}
-                            loading={uploading}
-                        />
+                            loading={uploading}/>
                         <Button
                             onClick={() => { files.forEach((file: any) => URL.revokeObjectURL(file.preview)); setFiles([]) }}
                             type='button'
                             icon='cancel'
-                            disabled={uploading}
-                        />
+                            disabled={uploading}/>
                     </Button.Group>
                 </Container>}
         </>

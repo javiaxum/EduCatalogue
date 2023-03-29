@@ -34,7 +34,6 @@ namespace Application.Core
             .ForMember(d => d.StudyFormIds, o => o.MapFrom(s => s.StudyForms.Select(x => x.Id)))
             .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
             .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
-            // .ForMember(d => d.SpecialtyCoverage, o => o.MapFrom(s => s.Specialties.Count()))
             .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.TitleImageId).Url))
             .ForMember(d => d.EmblemImageUrl, o => o.MapFrom(s => s.Images.FirstOrDefault(i => i.Id == s.EmblemImageId).Url))
@@ -43,15 +42,13 @@ namespace Application.Core
             .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id))
             .ForMember(d => d.Rating, o => o.MapFrom(s => s.Reviews.Count() > 0 ? s.Reviews.Select(x => x.Rating).Average() : 0));
 
-            // CreateMap<Institution, InstitutionDetailedDTO>()
-            // .ForMember(d => d.TypeId, o => o.MapFrom(s => s.Type.Id))
-            // .ForMember(d => d.Latitude, o => o.MapFrom(s => s.Coordinates.Latitude))
-            // .ForMember(d => d.Longtitude, o => o.MapFrom(s => s.Coordinates.Longitude))
-            // .ForMember(d => d.CityId, o => o.MapFrom(s => s.City.Id))
-            // .ForMember(d => d.RegionId, o => o.MapFrom(s => s.City.Region.Id));
-
             CreateMap<AppUser, Profiles.ProfileDetailed>()
             .ForMember(d => d.ManagedInstitutions, o => o.MapFrom(s => s.Institutions));
+
+            CreateMap<Profiles.ProfileFormValues, AppUser>()
+            .ForMember(d => d.Location, o => o.MapFrom(s => s.Location))
+            .ForMember(d => d.SocialAccounts, o => o.MapFrom(s => s.SocialAccounts))
+            .ForMember(d => d.Company, o => o.MapFrom(s => s.Company));
 
             CreateMap<AppUserInstitution, Profiles.ManagedInstitution>()
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Institution.Images.FirstOrDefault(i => i.Id == s.Institution.TitleImageId).Url))

@@ -9,6 +9,9 @@ export interface Profile {
     emailConfirmed: boolean
     twoFactorEnabled: boolean;
     avatar?: Image;
+    location?: string;
+    socialAccounts?: string;
+    company?: string;
     reviews: Review[];
     managedInstitutions: ManagedInstitution[];
 }
@@ -25,4 +28,20 @@ export interface ManagedInstitution {
     id: string,
     name: string,
     titleImageUrl: string,
+}
+
+export class ProfileInfoFormValues {
+    displayName: string = '';
+    location?: string = '';
+    socialAccounts?: string = '';
+    company?: string = '';
+
+    constructor(profileInfoFormValues?: Profile | ProfileInfoFormValues) {
+        if (profileInfoFormValues) {
+            this.displayName = profileInfoFormValues.displayName;
+            this.location = profileInfoFormValues.location;
+            this.socialAccounts = profileInfoFormValues.socialAccounts;
+            this.company = profileInfoFormValues.company;
+        }
+    }
 }

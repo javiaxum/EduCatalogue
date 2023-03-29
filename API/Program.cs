@@ -15,11 +15,13 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
+using WebPWrecover.Services;
 
 internal class Program
 {
@@ -69,6 +71,7 @@ internal class Program
             opt.Password.RequireNonAlphanumeric = false;
         })
         .AddEntityFrameworkStores<DataContext>()
+        .AddDefaultTokenProviders()
         .AddSignInManager<SignInManager<AppUser>>();
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["TokenKey"]));
@@ -101,6 +104,8 @@ internal class Program
             {
                 options.MultipartBodyLengthLimit = 60000000;
             });
+        builder.Services.AddTransient<IEmailSender, EmailSender>();
+        builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration.GetSection("SendGrid"));
         var app = builder.Build();
 
         using var scope = app.Services.CreateScope();

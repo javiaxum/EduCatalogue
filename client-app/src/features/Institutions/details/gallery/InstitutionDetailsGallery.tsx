@@ -1,28 +1,20 @@
 import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useMediaQuery } from 'react-responsive';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Button, Dimmer, Grid, Header, List, Loader, Segment, Transition } from 'semantic-ui-react';
 import NewImageUploadWidgetCropper from '../../../../app/common/imageUpload/newImage/NewImageUploadWidgetCropper';
 import NewImageUploadWidgetDropzone from '../../../../app/common/imageUpload/newImage/NewImageUploadWidgetDropzone';
-import ImageUploadWidgetCropper from '../../../../app/common/imageUpload/titleImage/ImageUploadWidgetCropper';
-import ImageUploadWidgetDropzone from '../../../../app/common/imageUpload/titleImage/ImageUploadWidgetDropzone';
-import LoadingComponent from '../../../../app/layout/LoadingComponent';
 import { ImagesPagingParams } from '../../../../app/models/pagination';
 import { useStore } from '../../../../app/stores/store';
 import GalleryImage from './GalleryImage';
 
-
-
 export default observer(function InstitutionDetailsGallery() {
     const { institutionStore, commonStore: { editMode } } = useStore();
     const {
-        selectedInstitution,
         setImage,
         uploading,
-        selectedInstitutionImages,
         imagesPagination,
         imagesLoading,
         imagesLoadingInitial,
@@ -33,8 +25,9 @@ export default observer(function InstitutionDetailsGallery() {
 
     const [files, setFiles] = useState<any>([]);
     const [cropper, setCropper] = useState<Cropper>();
+
+    
     function HandleImageUpload(file: Blob) {
-        console.log(file.size);
         if (id && file.size <= 10485760)
             setImage(file, id).then(() => {
                 files.forEach((file: any) => URL.revokeObjectURL(file.preview));
@@ -66,7 +59,6 @@ export default observer(function InstitutionDetailsGallery() {
             </Transition>
             {!(images.length !== 0 || editMode || imagesLoading) &&
                 <Segment basic style={{ color: '#444', width: '30rem' }}>There are no images available...</Segment>}
-
             {(files && files.length > 0) &&
                 <Grid style={{ width: '50rem' }}>
                     <Grid.Column style={{ width: '25rem' }}>

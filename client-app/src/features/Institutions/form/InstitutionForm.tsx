@@ -188,7 +188,7 @@ export default observer(function InstitutionForm() {
                                 </Segment>
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0, top: '-4rem' }}>
-                                <div style={{ padding: '0 3rem 0 3rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem', minWidth: '85rem' }}>
+                                <div style={{ padding: '0 3rem 0 3rem', minHeight: '50rem', marginLeft: 'auto', marginRight: 'auto', maxWidth: '85rem', minWidth: '85rem' }}>
                                     <InstitutionFormContent />
                                 </div>
                             </Grid.Row>
@@ -206,7 +206,7 @@ export default observer(function InstitutionForm() {
                                         style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '8rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0 }}>
-                                <div style={{width: '100%'}}>
+                                <div style={{ width: '100%' }}>
                                     <Button.Group style={{ margin: 0 }} attached='bottom'>
                                         <Button
                                             positive
@@ -249,7 +249,7 @@ export default observer(function InstitutionForm() {
                                     </div>}
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0 }}>
-                                <div style={{ padding: isComputerOrTablet ? '0 3rem 0 3rem' : 0, marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
+                                <div style={{ padding: isComputerOrTablet ? '0 3rem 0 3rem' : 0, minHeight: '50rem', marginLeft: 'auto', marginRight: 'auto', width: '100%' }}>
                                     <InstitutionFormContent />
                                 </div>
                             </Grid.Row>

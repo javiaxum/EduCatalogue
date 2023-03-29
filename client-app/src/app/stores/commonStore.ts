@@ -1,4 +1,4 @@
-import { makeAutoObservable, reaction } from "mobx";
+import { makeAutoObservable, reaction, runInAction } from "mobx";
 import { ServerError } from "../models/serverError";
 import { store } from "./store";
 
@@ -8,8 +8,9 @@ export default class CommonStore {
     error: ServerError | null = null;
     token: string | null = localStorage.getItem('jwt');
     appLoaded: boolean = false;
-    editMode: boolean = false;
     componentForm: boolean = false;
+    editMode: boolean = false;
+    comparison: string | undefined = undefined;
     sidebarOpened: boolean = false;
 
     loadAppData = async () => {
@@ -29,6 +30,10 @@ export default class CommonStore {
 
     setEditMode = (state: boolean) => {
         this.editMode = state;
+    }
+
+    setComparison = (state: string | undefined) => {
+        this.comparison = state;
     }
 
     setSidebarOpened = (state: boolean) => {

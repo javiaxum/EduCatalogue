@@ -41,7 +41,7 @@ export default observer(function InstitutionDetailsInfo() {
                             <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', width: '80%' }}>
                                 <>
                                     {selectedInstitution?.description.slice(0, descriptionOpened ? 6000 : 400)}
-                                    {!descriptionOpened && <>...
+                                    {(!descriptionOpened && selectedInstitution?.description.length! > 400) && <>...
                                         <Button
                                             type='button'
                                             basic
@@ -216,7 +216,7 @@ export default observer(function InstitutionDetailsInfo() {
                             <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', width: '100%' }}>
                                 <>
                                     {selectedInstitution?.description.slice(0, descriptionOpened ? 6000 : 400)}
-                                    {!descriptionOpened && <>...
+                                    {(!descriptionOpened && selectedInstitution?.description.length! > 400) && <>...
                                         <Button
                                             type='button'
                                             basic

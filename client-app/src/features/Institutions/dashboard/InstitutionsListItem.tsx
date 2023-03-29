@@ -92,7 +92,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                     <Header
                                         as={Link}
                                         to={`/institutions/${institution.id}`}
-                                        style={{ display: 'inline', padding: '0.5rem 0 2rem 0' }}>
+                                        style={{ display: 'block', padding: '0.5rem 0 2rem 0' }}>
                                         {institution.name}</Header>
                                     <div style={{ position: 'relative', right: 0 }}>
                                         <div style={{ display: 'block' }}>

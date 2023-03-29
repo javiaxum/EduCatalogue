@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 import { ReviewFormValues } from '../../../../app/models/review';
 import { useStore } from '../../../../app/stores/store';
 import CustomTextArea from '../../../../app/common/form/CustomTextArea';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 
 export default observer(function ReviewForm() {
     const { institutionStore } = useStore();
@@ -20,8 +22,13 @@ export default observer(function ReviewForm() {
     const [rating, setRating] = useState<number>(0);
     const [chosenRating, setChosenRating] = useState<number>(0);
 
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
+    
+    const { t } = useTranslation();
     const validationSchema = Yup.object({
         rating: Yup.number().required(),
+        reviewMessage: Yup.string().required(),
     })
 
     function handleReviewFormSubmit(review: ReviewFormValues) {
@@ -45,10 +52,8 @@ export default observer(function ReviewForm() {
     }
 
     return (
-        <>
-            <Segment basic style={{ padding: '0' }}>
-                <Header style={{ display: 'inline', margin: '0' }}>Rating: </Header>{elements}
-            </Segment>
+        <div style={{ width: isComputerOrTablet ? '60%' : '100%' }}>
+            <Header style={{ display: 'inline', margin: '0' }}>Rating: </Header>{elements}
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
@@ -56,27 +61,23 @@ export default observer(function ReviewForm() {
                 onSubmit={values => handleReviewFormSubmit(values)}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
                     <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                        <Grid>
-                            <Grid.Column>
-                                <CustomTextArea rows={4} placeholder='Review contents' name='reviewMessage' />
-                                <Button
-                                    positive
-                                    type='submit'
-                                    content='Submit review'
-                                    loading={isSubmitting}
-                                    disabled={!dirty || isSubmitting || !isValid || chosenRating === 0}
-                                    style={{ marginLeft: '', backgroundColor: 'rgb(30, 71, 160)' }} />
-                                <Button
-                                    onClick={() => setReviewForm(false)}
-                                    floated='right'
-                                    type='button'
-                                    content='Cancel'
-                                    disabled={isSubmitting} />
-                            </Grid.Column>
-                        </Grid>
+                        <CustomTextArea rows={4} placeholder={t('Review contents')} name='reviewMessage' />
+                        <Button
+                            positive
+                            type='submit'
+                            content={t('Submit review')}
+                            loading={isSubmitting}
+                            disabled={!dirty || isSubmitting || !isValid || chosenRating === 0}
+                            style={{ marginLeft: '', backgroundColor: 'rgb(30, 71, 160)' }} />
+                        <Button
+                            onClick={() => setReviewForm(false)}
+                            floated='right'
+                            type='button'
+                            content={t('Cancel')}
+                            disabled={isSubmitting} />
                     </Form>
                 )}
             </Formik>
-        </>
+        </div>
     )
 })

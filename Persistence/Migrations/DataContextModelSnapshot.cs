@@ -33,6 +33,9 @@ namespace Persistence.Migrations
                     b.Property<string>("AvatarId")
                         .HasColumnType("text");
 
+                    b.Property<string>("Company")
+                        .HasColumnType("text");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
@@ -46,6 +49,9 @@ namespace Persistence.Migrations
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("boolean");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("text");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("boolean");
@@ -71,6 +77,9 @@ namespace Persistence.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("text");
+
+                    b.Property<string>("SocialAccounts")
                         .HasColumnType("text");
 
                     b.Property<bool>("TwoFactorEnabled")

@@ -26,13 +26,16 @@ export default function InstitutionDetailsLocation() {
                     center={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}
                     zoom={20}
                     scrollWheelZoom={false}
-                    style={{ overflow: 'hidden', width: isComputerOrTablet ? '40rem' : '100%', height: '30rem' }}>
+                    style={{ overflow: 'hidden', width: '100%', minHeight: '40rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <Marker position={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}>
                         <Popup>
-                            A pretty CSS3 popup. <br /> Easily customizable.
+                            {selectedInstitution?.name}, {" "}
+                            {selectedInstitution?.streetAddress},  {" "}
+                            {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
+                            {getRegionById(selectedInstitution?.regionId!)?.name}
                         </Popup>
                     </Marker>
                 </MapContainer>

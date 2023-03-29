@@ -1,14 +1,16 @@
 import React from 'react';
 import { Grid, Item, Image, Header, Divider, Segment } from 'semantic-ui-react';
+import { Profile } from '../../app/models/profile';
 import { Review } from '../../app/models/review';
 import { useStore } from '../../app/stores/store';
 import ReviewListItem from '../Institutions/details/reviews/ReviewListItem';
 
 interface Props {
     reviews: Review[];
+    profile: Profile;
 }
 
-export default function ProfileReviews({ reviews }: Props) {
+export default function ProfileReviews({ reviews, profile }: Props) {
     const { institutionStore } = useStore();
     return (
         <>
@@ -28,7 +30,7 @@ export default function ProfileReviews({ reviews }: Props) {
                                 </Grid>
                             </Segment>
                             <Segment>
-                                <ReviewListItem review={review} key={review.id} />
+                                <ReviewListItem avatar={profile.avatar?.url} review={review} key={review.id} />
                             </Segment>
                         </Segment.Group>
                     )}</>

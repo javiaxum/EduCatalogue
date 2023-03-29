@@ -97,6 +97,16 @@ export default class InstitutionStore {
         else this.selectedInstitutionIds.push(id);
     }
 
+    clearSelectedInstitutionIds = () => {
+        this.selectedInstitutionIds = [];
+        const sleep = (delay: number) => {
+            return new Promise((resolve) => {
+                setTimeout(resolve, delay);
+            })
+        }
+        sleep(2000);
+    }
+
     setSelectedCities = (value: number[]) => {
         this.selectedCities = value;
     }
