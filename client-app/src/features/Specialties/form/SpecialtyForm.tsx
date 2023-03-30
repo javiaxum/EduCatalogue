@@ -109,7 +109,6 @@ export default observer(function SpecialtyForm() {
         }
     }
 
-    if (loadingInitial || loading) return (<LoadingComponent content='Loading specialties form...' />)
     return (
         <Formik
             validationSchema={validationSchema}

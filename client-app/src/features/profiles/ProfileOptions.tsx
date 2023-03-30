@@ -9,7 +9,7 @@ import { useStore } from '../../app/stores/store';
 import ProfileInstitutionPendingChangesList from './ProfileInstitutionPendingChangesList';
 import ProfileManagedInstitutions from './ProfileManagedInstitutions';
 import ProfileReviews from './ProfileReviews';
-import ProfileSettings from './ProfileSettingsGeneral';
+import ProfileSettingsGeneral from './ProfileSettingsGeneral';
 import ProfileSettingsSecurity from './ProfileSettingsSecurity';
 
 interface Props {
@@ -33,7 +33,7 @@ export default observer(function ProfileOptions({ profile }: Props) {
         'Pending changes',
         'Reviews'];
     const components = [
-        <ProfileSettings profile={profile} />,
+        <ProfileSettingsGeneral profile={profile} />,
         <ProfileSettingsSecurity profile={profile} />,
         <ProfileManagedInstitutions institutions={profile.managedInstitutions} />,
         <ProfileInstitutionPendingChangesList />,

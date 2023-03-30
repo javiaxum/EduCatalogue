@@ -12,7 +12,9 @@ namespace Domain
         public Image Avatar { get; set; }
         public string Company { get; set; }
         public string Location { get; set; }
-        public string SocialAccounts { get; set; }
+        public string SocialAccount1 { get; set; }
+        public string SocialAccount2 { get; set; }
+        public string SocialAccount3 { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<AppUserInstitution> Institutions { get; set; } = new List<AppUserInstitution>();
 

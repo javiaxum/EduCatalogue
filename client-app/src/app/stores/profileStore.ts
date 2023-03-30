@@ -1,6 +1,7 @@
 import { makeAutoObservable, runInAction } from "mobx";
+import { toast } from "react-toastify";
 import agent from "../api/agent";
-import { Profile } from "../models/profile";
+import { Profile, ProfileInfoFormValues } from "../models/profile";
 import { store } from "./store";
 
 export default class ProfileStore {
@@ -56,6 +57,32 @@ export default class ProfileStore {
             runInAction(() => {
                 if (this.profile) {
                     this.profile.avatar = response.data;
+                }
+                this.uploading = false;
+            })
+        } catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.uploading = false;
+            })
+        }
+    }
+
+    setProfileBio = async (profileFormValues: ProfileInfoFormValues) => {
+        console.log(profileFormValues);
+        this.uploading = true;
+        try {
+            const response = await agent.Profiles.updateInfo(profileFormValues);
+            runInAction(() => {
+                if (this.profile) {
+                    const newProfile = this.profile;
+                    newProfile.displayName = profileFormValues.displayName;
+                    newProfile.socialAccount1 = profileFormValues.socialAccount1;
+                    newProfile.socialAccount2 = profileFormValues.socialAccount2;
+                    newProfile.socialAccount3 = profileFormValues.socialAccount3;
+                    newProfile.location = profileFormValues.location;
+                    newProfile.company = profileFormValues.company;
+                    this.profile = newProfile;
                 }
                 this.uploading = false;
             })

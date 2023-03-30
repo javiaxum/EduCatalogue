@@ -101,6 +101,10 @@ export default observer(function InstitutionsList() {
                     {placeholders}
                 </div>
             </Transition>
+            {loading &&
+                <div style={{ minHeight: '150rem' }}>
+
+                </div>}
         </>
     )
 })

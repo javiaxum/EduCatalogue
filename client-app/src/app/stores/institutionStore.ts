@@ -42,8 +42,7 @@ export default class InstitutionStore {
     selectedBranches: string[] = [];
     selectedCities: number[] = [];
     institutionsSorting: string = 'az';
-    minTuition: string = '';
-    maxTuition: string = '';
+    tuitionRange: number[] = [0, 500000];
     selectedDegreeId: string = '';
     searchNameParam: string = '';
 
@@ -56,8 +55,7 @@ export default class InstitutionStore {
             () => [
                 this.selectedSpecialties,
                 this.selectedBranches,
-                this.maxTuition,
-                this.minTuition,
+                this.tuitionRange,
                 this.selectedDegreeId,
                 this.searchNameParam,
                 this.institutionsSorting,
@@ -115,12 +113,8 @@ export default class InstitutionStore {
         this.selectedDegreeId = degree;
     }
 
-    setMaxPrice = (value: string) => {
-        this.maxTuition = value;
-    }
-
-    setMinPrice = (value: string) => {
-        this.minTuition = value;
+    setTuitionRange = (value: number[]) => {
+        this.tuitionRange = value;
     }
 
     setSelectedSpeialties = (value: string[]) => {
@@ -153,7 +147,7 @@ export default class InstitutionStore {
             })
             this.setLoading(false);
         } catch (error) {
-            console.log(error);
+            console.log(error); 
             this.setLoading(false);
         }
     }
@@ -197,8 +191,8 @@ export default class InstitutionStore {
         params.append('specialtiesPredicate', specialtiesPredicate);
         params.append('branchesPredicate', branchesPredicate);
         params.append('citiesPredicate', citiesPredicate);
-        params.append('minTuition', this.minTuition.toString());
-        params.append('maxTuition', this.maxTuition.toString());
+        params.append('minTuition', this.tuitionRange[0].toString());
+        params.append('maxTuition', this.tuitionRange[1].toString());
         params.append('degreeId', this.selectedDegreeId);
         params.append('sorting', this.institutionsSorting);
         return params;

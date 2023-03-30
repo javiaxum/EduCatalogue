@@ -124,7 +124,9 @@ namespace API.Controllers
             if (user == null) return Unauthorized("An error has occured while authorizing the user");
             var tokenDecodedBytes = WebEncoders.Base64UrlDecode(token);
             var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
+
             var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, newPassword);
+
             if (result.Succeeded)
                 return Redirect("http://localhost:3000/passwordConfirmed");
             return BadRequest("An error has occured while confirming the email");
@@ -164,7 +166,6 @@ namespace API.Controllers
             return Ok("A confirmation email message has been sent successfully");
         }
 
-        [Authorize]
         [HttpPut]
         [Route("requestPasswordReset")]
         public async Task<IActionResult> RequestPasswordReset(string email)
@@ -173,12 +174,25 @@ namespace API.Controllers
                 .FirstOrDefaultAsync(x => x.Email == email);
             if (user == null)
                 return BadRequest("An error has occured while getting the user");
-
             var confirmationToken = await _userManager.GeneratePasswordResetTokenAsync(user);
             byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
             var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);
             await _emailSender.SendEmailAsync(email, "Password Reset Request", $"http://localhost:3000/passwordResetForm/{tokenEncoded}");
             return Ok("A confirmation email message has been sent successfully");
+        }
+
+        [Authorize]
+        [HttpPut("changePassword")]
+        public async Task<IActionResult> UpdateUserPassword(string oldPassword, string newPassword)
+        {
+            var user = await _userManager.Users
+            .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            if (user == null)
+                return BadRequest("An error has occured while getting user");
+            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            if (result.Succeeded)
+                return Ok();
+            return BadRequest();
         }
 
         [Authorize]
@@ -203,31 +217,21 @@ namespace API.Controllers
             return HandleResult(await Mediator.Send(new Application.Profiles.EditInfo.Command { User = user, FormValues = formValues }));
         }
 
-        // [Authorize]
-        // [HttpPut("email")]
-        // public async Task<IActionResult> UpdateUserEmail(string email)
-        // {
-        //     var user = await _userManager.Users
-        //     .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
-        //     if (user == null)
-        //         return BadRequest("An error has occured while getting user");
-        //     var result = await _userManager.ChangeEmailAsync(user, email);
-        //     if (result.Succeeded)
-        //         return Ok();
-        // }
-
         [Authorize]
-        [HttpPut("changePassword")]
-        public async Task<IActionResult> UpdateUserPassword(string oldPassword, string newPassword)
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteUser()
         {
             var user = await _userManager.Users
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             if (user == null)
                 return BadRequest("An error has occured while getting user");
-            var result = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            var result = await _userManager.DeleteAsync(user);
             if (result.Succeeded)
-                return Ok();
-            return BadRequest();
+            {
+                await _emailSender.SendEmailAsync(ClaimTypes.Email, "Your EduCatalogue account has been deleted successfully", "Thank you for using our services!");
+                return Ok("The user has been deleted successfully");
+            }
+            return BadRequest("An error has occured while deleting the user");
         }
 
         private AppUserDTO CreateUserDTO(AppUser appUser, bool rememberMe)

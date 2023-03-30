@@ -18,7 +18,7 @@ export default function SearchParamsSideBar() {
                     <SearchParamsList />
                 </Segment>}
             {isComputerOrTablet &&
-                <Segment style={{ top: 0, maxHeight: '40rem'}}>
+                <Segment style={{ top: 0 }}>
                     <Header as='h3' content={t('Filtering Options')} />
                     <SearchParamsList />
                 </Segment>}

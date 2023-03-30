@@ -32,8 +32,7 @@ export default class SpecialtyStore {
     selectedSkillIds: number[] = [];
     selectedLanguages: string[] = [];
     selectedStudyForms: number[] = [];
-    minPrice: string = '';
-    maxPrice: string = '';
+    tuitionRange: number[] = [0, 500000];
     selectedDegree: string = '';
     selectedSpecialtyIds: string[] = [];
     selectedSpecialtiesSort: string = 'az';
@@ -50,8 +49,7 @@ export default class SpecialtyStore {
                 this.selectedStudyForms,
                 this.selectedSpecialties,
                 this.selectedBranches,
-                this.maxPrice,
-                this.minPrice,
+                this.tuitionRange,
                 this.selectedDegree],
             () => {
                 this.debouncedLoadSpecialties();
@@ -99,12 +97,8 @@ export default class SpecialtyStore {
         this.selectedDegree = degree;
     }
 
-    setMaxPrice = (value: string) => {
-        this.maxPrice = value;
-    }
-
-    setMinPrice = (value: string) => {
-        this.minPrice = value;
+    setTuitionRange = (value: number[]) => {
+        this.tuitionRange = value;
     }
 
     setSelectedSpeialties = (value: string[]) => {
@@ -275,19 +269,19 @@ export default class SpecialtyStore {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
-        let branchesPredicate = store.specialtyStore.selectedBranches.join('-');
-        let specialtiesPredicate = store.specialtyStore.selectedSpecialties.join('-');
-        let skillsPredicate = store.specialtyStore.selectedSkillIds.join('-');
-        let languagesPredicate = store.specialtyStore.selectedLanguages.join('-');
-        let studyFormsPredicate = store.specialtyStore.selectedStudyForms.join('-');
+        let branchesPredicate = this.selectedBranches.join('-');
+        let specialtiesPredicate =this.selectedSpecialties.join('-');
+        let skillsPredicate = this.selectedSkillIds.join('-');
+        let languagesPredicate = this.selectedLanguages.join('-');
+        let studyFormsPredicate = this.selectedStudyForms.join('-');
         params.append('studyFormsPredicate', studyFormsPredicate);
         params.append('languagesPredicate', languagesPredicate);
         params.append('skillsPredicate', skillsPredicate);
         params.append('specialtiesPredicate', specialtiesPredicate);
         params.append('branchesPredicate', branchesPredicate);
-        params.append('minPrice', store.specialtyStore.minPrice.toString());
-        params.append('maxPrice', store.specialtyStore.maxPrice.toString());
-        params.append('degreeId', store.specialtyStore.selectedDegree);
+        params.append('minPrice', this.tuitionRange[0].toString());
+        params.append('maxPrice', this.tuitionRange[1].toString());
+        params.append('degreeId', this.selectedDegree);
         params.append('sort', this.selectedSpecialtiesSort);
         return params;
     }

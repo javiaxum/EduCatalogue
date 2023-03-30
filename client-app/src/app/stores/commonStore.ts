@@ -11,7 +11,6 @@ export default class CommonStore {
     componentForm: boolean = false;
     editMode: boolean = false;
     comparison: string | undefined = undefined;
-    sidebarOpened: boolean = false;
 
     loadAppData = async () => {
         await Promise.all([store.institutionStore.loadInstitutions(),
@@ -34,10 +33,6 @@ export default class CommonStore {
 
     setComparison = (state: string | undefined) => {
         this.comparison = state;
-    }
-
-    setSidebarOpened = (state: boolean) => {
-        this.sidebarOpened = state;
     }
 
     constructor() {

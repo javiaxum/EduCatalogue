@@ -48,7 +48,7 @@ namespace Application.Profiles
                 _mapper.Map(request.FormValues, user);
 
                 var result = await _context.SaveChangesAsync() > 0;
-                if (!result) return Result<Unit>.Failure("An error has occured while updating an institution");
+                if (!result) return Result<Unit>.Failure("An error has occured while updating the profile");
                 return Result<Unit>.Success(Unit.Value);
             }
         }

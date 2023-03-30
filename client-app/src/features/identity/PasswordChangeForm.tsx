@@ -29,7 +29,7 @@ export default observer(function PasswordChangeForm() {
                 })}>
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h3' content='Password change' textAlign='left' color='teal' />
+                    <Header as='h3' content={t('Password change')} textAlign='left' color='teal' />
                     <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Old Password')} name='oldPassword' type='password' />
                     <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('New Password')} name='newPassword' type='password' />
                     <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Password')} name='repeatPassword' type='password' />

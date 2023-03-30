@@ -144,7 +144,7 @@ const Account = {
     current: () => requests.get<User>("/account"),
     login: (user: UserFormValues) => requests.post<User>("/account/login", user),
     register: (user: UserFormValues) => requests.post<User>("/account/register", user),
-    updateInfo: (formValues: ProfileInfoFormValues) => requests.put<void>(`/account`, formValues),
+    delete: () => requests.delete<void>("/account/delete"),
     updateEmail: (newEmail: string) => requests.put<void>(`/account/requestEmailChange?newEmail=${newEmail}`, {}),
     sendConfirmMessage: () => requests.get<string>(`/account/requestConfirmation`),
     requestPasswordReset: (email: string) => requests.put<void>(`/account/requestPasswordReset?email=${email}`, {}),
@@ -154,6 +154,7 @@ const Account = {
 
 const Profiles = {
     get: () => requests.get<Profile>(`/profile`),
+    updateInfo: (formValues: ProfileInfoFormValues) => requests.put<void>(`/profile/bio`, formValues),
     setProfileImage: (file: Blob) => {
         let formData = new FormData();
         formData.append('File', file)

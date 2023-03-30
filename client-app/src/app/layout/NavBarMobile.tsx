@@ -4,13 +4,15 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button, Grid, Icon, Image, Menu, Search, Segment, Transition } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import { useStore } from '../stores/store';
-import SearchParamsSideBar from '../../features/Institutions/search/SearchParamsSideBar';
+import { useState } from 'react';
 
 export default observer(function NavBarMobile() {
     const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
-    const { setSidebarOpened, sidebarOpened, comparison } = commonStore;
+    const { comparison } = commonStore;
     const { t, i18n } = useTranslation();
     const location = useLocation();
+
+    const [sidebar, setSidebar] = useState(false);
 
     return (
         <div style={{ position: 'fixed', width: '100%', zIndex: 1000 }}>
@@ -18,9 +20,9 @@ export default observer(function NavBarMobile() {
                 <Menu.Item>
                     <Button
                         style={{ border: 0, background: 'none' }}
-                        onClick={() => setSidebarOpened(!sidebarOpened)}>
+                        onClick={() => setSidebar(!sidebar)}>
                         <Icon
-                            inverted={!sidebarOpened}
+                            inverted={!sidebar}
                             name='sidebar'
                             size='big' />
                     </Button>
@@ -41,7 +43,7 @@ export default observer(function NavBarMobile() {
                         }} />
                 </Menu>}
             <Transition
-                visible={sidebarOpened}
+                visible={sidebar}
                 animation='fade right'
                 timeout={400}
                 unmountOnExit>
@@ -97,9 +99,6 @@ export default observer(function NavBarMobile() {
                                     </>)}
                             </Segment>
                         </Grid.Row>
-                        {location.pathname === '/institutions' && <Grid.Row>
-                            <SearchParamsSideBar />
-                        </Grid.Row>}
                     </Grid.Column>
                 </Grid>
             </Transition>

@@ -45,11 +45,7 @@ namespace Application.Core
             CreateMap<AppUser, Profiles.ProfileDetailed>()
             .ForMember(d => d.ManagedInstitutions, o => o.MapFrom(s => s.Institutions));
 
-            CreateMap<Profiles.ProfileFormValues, AppUser>()
-            .ForMember(d => d.Location, o => o.MapFrom(s => s.Location))
-            .ForMember(d => d.SocialAccounts, o => o.MapFrom(s => s.SocialAccounts))
-            .ForMember(d => d.Company, o => o.MapFrom(s => s.Company));
-
+            CreateMap<Profiles.ProfileFormValues, AppUser>();
             CreateMap<AppUserInstitution, Profiles.ManagedInstitution>()
             .ForMember(d => d.TitleImageUrl, o => o.MapFrom(s => s.Institution.Images.FirstOrDefault(i => i.Id == s.Institution.TitleImageId).Url))
             .ForMember(d => d.Id, o => o.MapFrom(s => s.InstitutionId))

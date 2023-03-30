@@ -44,7 +44,6 @@ export default class UserStore {
         store.commonStore.setToken(null);
         this.user = null;
         store.modalStore.closeModal();
-        store.commonStore.setSidebarOpened(false);
     }
 
     getUser = async () => {
@@ -57,9 +56,20 @@ export default class UserStore {
             console.log(error);
         }
     }
+    deleteUser = async () => {
+        try {
+            const user = await agent.Account.delete();
+            runInAction(() => {
+                this.logout();
+                store.profileStore.profile = undefined;
+                router.navigate('/institutions')
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
     requestEmailChange = async (newEmail: string) => {
         try {
-            console.log(newEmail);
             const user = await agent.Account.updateEmail(newEmail);
         } catch (error) {
             console.log(error);
@@ -68,7 +78,6 @@ export default class UserStore {
     requestPasswordReset = async (email: string) => {
         try {
             const user = await agent.Account.requestPasswordReset(email);
-            console.log(email)
         } catch (error) {
             console.log(error);
         }
@@ -92,7 +101,6 @@ export default class UserStore {
     requestEmailConfirmationMessage = async () => {
         try {
             const user = await agent.Account.sendConfirmMessage();
-            console.log(user);
         } catch (error) {
             console.log(error);
         }

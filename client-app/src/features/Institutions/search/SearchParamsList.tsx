@@ -1,10 +1,9 @@
 import { observer } from "mobx-react-lite";
-import react from "react";
+import react, { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Container, Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Search, Select } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
-
-
+import Slider from "@mui/material/Slider";
 
 export default observer(function SearchParamsList() {
     const { specialtyStore, institutionStore, commonStore } = useStore();
@@ -14,10 +13,8 @@ export default observer(function SearchParamsList() {
         selectedDegreeId: selectedDegree,
         setSelectedBranches,
         setSelectedSpeialties,
-        maxTuition: maxPrice,
-        minTuition: minPrice,
-        setMaxPrice,
-        setMinPrice,
+        setTuitionRange,
+        tuitionRange,
         setDegreePredicate,
         setSelectedCities,
         populatedCitiesByName,
@@ -48,31 +45,19 @@ export default observer(function SearchParamsList() {
     return (
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column width={16} style={{ padding: '0' }}>
-                <Container style={{width: 'auto', display: 'inline-block'}}>
-                    <Label
-                        content={t('from')} style={{ padding: '12px' }} />
-                    <Input
-                        placeholder="0"
-                        name="min"
-                        style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                        value={minPrice}
-                        onChange={(e, d) => {
-                            setMinPrice(d.value);
-                        }} />
-                </Container>
-                <Container style={{width: 'auto', display: 'inline-block'}}>
-                    <Label
-                        content={t('to')} style={{ padding: '12px' }} />
-                    <Input
-                        placeholder="0"
-                        name="max"
-                        style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                        value={maxPrice}
-                        onChange={(e, d) => {
-                            setMaxPrice(d.value);
-                        }} />
-                </Container>
+            <Grid.Column width={16} style={{ padding: '0' }} textAlign="center">
+                <Slider
+                    style={{ width: '80%' }}
+                    getAriaLabel={() => 'Tuition range'}
+                    value={tuitionRange}
+                    onChange={(e, value) => { if (Array.isArray(value)) setTuitionRange(value) }}
+                    valueLabelDisplay="auto"
+                    step={10}
+                    min={0}
+                    max={500000} />
+                <Label size="large">
+                    {tuitionRange[0]} UAH - {tuitionRange[1]} UAH
+                </Label>
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>
                 <Divider />
@@ -120,6 +105,7 @@ export default observer(function SearchParamsList() {
             />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Select
+                style={{margin: '0 0 3rem 0'}}
                 fluid
                 clearable
                 placeholder={t('Select degree') as string}

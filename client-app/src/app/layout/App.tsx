@@ -33,14 +33,18 @@ export default observer(function App() {
       router.navigate('/institutions');
   }, [location.pathname, selectedInstitutionIds.length])
 
+
   useEffect(() => {
-    const handleScroll = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", handleScroll);
     if (commonStore.token) {
       userStore.getUser().then(() => loadProfile(), () => userStore.logout());
     }
     commonStore.loadAppData();
-    console.log(commonStore.comparison)
+  }, [])
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", handleScroll);
+
     return () => {
       window.removeEventListener("scroll", handleScroll)
     };

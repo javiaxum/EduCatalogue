@@ -33,7 +33,8 @@ namespace Application.Profiles
 
             public async Task<Result<ProfileDetailed>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var user = await _context.Users.ProjectTo<ProfileDetailed>(_mapper.ConfigurationProvider).FirstOrDefaultAsync(x => x.Username == _usernameAccessor.GetUsername());
+                var user = await _context.Users.ProjectTo<ProfileDetailed>(_mapper.ConfigurationProvider)
+                    .FirstOrDefaultAsync(x => x.Username == _usernameAccessor.GetUsername());
                 return Result<ProfileDetailed>.Success(user);
             }
         }

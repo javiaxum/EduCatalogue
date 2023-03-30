@@ -7,32 +7,27 @@ import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 
-export default observer(function LoginForm() {
+export default observer(function AccountDeleteForm() {
     const { userStore, modalStore } = useStore();
     const { t } = useTranslation();
 
-    const validationSchema = Yup.object({
-        email: Yup.string().required().email(),
-    })
-
     return (
         <Formik
-            validationSchema={validationSchema}
-            initialValues={{ email: '', error: null }}
+            initialValues={{ username: '', error: null }}
             onSubmit={(values, { setErrors }) =>
                 userStore
-                    .requestEmailChange(values.email)
-                    .catch(error => setErrors({ error: 'Invalid email' })).finally(() => modalStore.closeModal())
-            }>
-            {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers }) => (
+                    .deleteUser()
+                    .catch(error => setErrors({ error: 'Invalid username' })).finally(() => modalStore.closeModal())}>
+            {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers, values }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h3' content={t('Change email')} textAlign='left' color='teal' />
-                    <CustomTextInput margin='0.3rem' width='100%' placeholder={t('New email')} name='email' />
+                    <Header as='h3' content={t('Delete account?')} textAlign='left' color='teal' />
+                    <Header as='h5' content={t('Type your username in the field below to confirm account deletion')} textAlign='left' />
+                    <CustomTextInput margin='0.3rem' width='100%' placeholder={t('Username')} name='username' />
                     <ErrorMessage
                         name='error'
                         render={() => <Label style={{ marginBottom: '1em', textAlign: 'left !important' }} basic color='red' content={errors.error} />} />
                     <Button.Group fluid>
-                        <Button positive content={t('Submit change request')} type='submit' loading={isSubmitting} />
+                        <Button negative disabled={values.username !== userStore.user?.username} content={t('Submit delete request')} type='submit' loading={isSubmitting} />
                         <Button content={t('Cancel')} type='button' onClick={() => modalStore.closeModal()} />
                     </Button.Group>
                 </Form>

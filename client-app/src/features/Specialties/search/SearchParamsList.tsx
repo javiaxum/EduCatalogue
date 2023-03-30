@@ -2,6 +2,9 @@ import { observer } from "mobx-react-lite";
 import { useTranslation } from "react-i18next";
 import { Divider, Dropdown, DropdownItemProps, Grid, Header, Input, Label, Select } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
+import { Range, getTrackBackground } from 'react-range';
+import { useState } from "react";
+import { Slider } from "@mui/material";
 
 export default observer(function SearchParamsList() {
     const { specialtyStore } = useStore();
@@ -19,10 +22,8 @@ export default observer(function SearchParamsList() {
         setSelectedSkillIds,
         setSelectedStudyForms,
         setSelectedLanguages,
-        maxPrice,
-        minPrice,
-        setMaxPrice,
-        setMinPrice,
+        tuitionRange,
+        setTuitionRange,
         setDegreePredicate } = specialtyStore;
 
     const { t } = useTranslation();
@@ -46,31 +47,22 @@ export default observer(function SearchParamsList() {
         value: skill.id,
     }));
 
-
     return (
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
-            <Grid.Column width={16} style={{ padding: '0' }}>
-                <Label
-                    content={t('from')} style={{ padding: '12px' }} />
-                <Input
-                    placeholder="0"
-                    name="min"
-                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                    value={minPrice}
-                    onChange={(e, d) => {
-                        setMinPrice(d.value);
-                    }} />
-                <Label
-                    content={t('to')} style={{ padding: '12px' }} />
-                <Input
-                    placeholder="0"
-                    name="max"
-                    style={{ minWidth: '5rem', maxWidth: '6rem' }}
-                    value={maxPrice}
-                    onChange={(e, d) => {
-                        setMaxPrice(d.value);
-                    }} />
+            <Grid.Column width={16} style={{ padding: '0' }} textAlign='center'>
+                <Slider
+                    style={{ width: '80%' }}
+                    getAriaLabel={() => 'Tuition range'}
+                    value={tuitionRange}
+                    onChange={(e, value) => { if (Array.isArray(value)) setTuitionRange(value) }}
+                    valueLabelDisplay="auto"
+                    step={10}
+                    min={0}
+                    max={500000} />
+                <Label size="large">
+                    {tuitionRange[0]} UAH - {tuitionRange[1]} UAH
+                </Label>
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>
                 <Divider />
@@ -137,6 +129,7 @@ export default observer(function SearchParamsList() {
                 onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedLanguages(data.value)} />
             <Header as='h4' content={t('Study form')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Dropdown
+                style={{ margin: '0 0 3rem 0' }}
                 placeholder={t('Select study form') as string}
                 fluid
                 multiple
