@@ -66,12 +66,10 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 activePage={pagination?.currentPage}
                                 onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                         </Container>
-                        <Grid style={{ margin: 0 }}>
+                        <Grid style={{ margin: 0 }} >
                             <Transition
                                 visible={loading}
-                                duration={500}
-                                size='huge'
-                                verticalAlign='middle'>
+                                duration={500}>
                                 <div style={{ display: 'inline-block', position: 'absolute', zIndex: 0, padding: 0 }}>
                                     {placeholders}
                                 </div>
@@ -84,18 +82,19 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                     iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />)}
                             {(specialties.length === 0 && !loading && !editMode) &&
                                 <Segment basic style={{ color: '#444', width: '40rem' }}>{t('No specialties were found')}...</Segment>}
-                            {editMode &&
+                            {(editMode && specialties.length === pagination?.itemsPerPage) &&
                                 <SpecialtyListAddNewItem />}
                         </Grid>
                     </Grid.Column >
                     <Grid.Column width={5} style={{ padding: 0, top: '-4rem', zIndex: 100 }}>
                         <Segment>
                             <SearchParamsList />
+                            <Button icon='trash' onClick={() => specialtyStore.resetSearchParams()} basic style={{ position: 'absolute', right: 0, top: '0.3rem' }} />
                         </Segment>
                     </Grid.Column>
                 </Grid >}
             {isMobile &&
-                <Grid style={{ margin: 0, height: '43rem', alignItems: 'flex-start' }}>
+                <Grid style={{ margin: 0, minHeight: '45rem', alignItems: 'flex-start' }}>
                     <Grid.Row style={{ padding: 0 }}>
                         <div style={{ textAlign: 'center', padding: '0 0 0.5rem 0', width: '100%' }}>
                             <Button
@@ -114,11 +113,11 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 activePage={pagination?.currentPage}
                                 onPageChange={(e, data) => handleLoad(data.activePage as number)} />
                         </div>
-                        <Grid style={{ margin: 0, display: 'contents', alignItems: 'flex-start' }}>
+                        <Grid style={{ margin: 0, display: 'contents', alignItems: 'flex-start', alignContent: 'center' }}>
                             <Transition
                                 visible={loading}
                                 duration={500}>
-                                <div style={{ display: 'inline-block', position: 'absolute', zIndex: 0, padding: 0, left: 0, top: '3.2rem' }}>
+                                <div style={{ display: 'inline-block', position: 'absolute', zIndex: 0, padding: 0, left: 0, top: '3.8rem' }}>
                                     {placeholders}
                                 </div>
                             </Transition>
@@ -130,7 +129,8 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                     iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />)}
                             {(specialties.length === 0 && !loading && !editMode) &&
                                 <Segment basic style={{ color: '#444', width: '40rem' }}>{t('No specialties were found')}...</Segment>}
-                            {editMode && <SpecialtyListAddNewItem />}
+                            {(editMode && specialties.length === pagination?.itemsPerPage) &&
+                                <SpecialtyListAddNewItem />}
                         </Grid>
                     </Grid.Row>
                     <Grid.Row>
@@ -139,13 +139,19 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                             animation='fade left'
                             timeout={400}
                             unmountOnExit>
-                            <Segment style={{ position: 'fixed', top: '5rem', zIndex: 1000, borderRadius: 0 }}>
+                            <Segment style={{ position: 'fixed', top: '5rem', zIndex: 1000, borderRadius: 0, maxHeight: '90vh' }}>
                                 <Button
                                     basic
                                     floated='right'
                                     style={{ position: 'relative', padding: 0, border: 'none', boxShadow: 'none', width: '1rem', height: '1rem', top: 0, right: '1rem' }}
                                     onClick={() => setSidebarOpened(false)}>
                                     <Icon name='close' size='large' style={{ left: '0.25rem', bottom: '0.05rem', position: 'relative' }} />
+                                </Button>
+                                <Button
+                                    size='big'
+                                    onClick={() => specialtyStore.resetSearchParams()}
+                                    style={{ position: 'relative' }}>
+                                    {t('Reset search parameters')}
                                 </Button>
                                 <SearchParamsList />
                             </Segment>

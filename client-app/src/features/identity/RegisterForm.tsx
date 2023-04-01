@@ -20,32 +20,33 @@ export default observer(function RegisterForm() {
             }
             validationSchema={
                 Yup.object({
-                    email: Yup.string().required().email(),
-                    password: Yup.string().required(),
-                    displayName: Yup.string().required(),
-                    username: Yup.string().required(),
+                    email: Yup.string().required(`${t('This is a required field')}`).email(),
+                    password: Yup.string()
+                        .required(`${t('This is a required field')}`)
+                        .min(8, `${t('Password have to be at least 8 characters long')}`)
+                        .matches(/[a-z]/, `${t('Password have to contain Latin letters')}`)
+                        .matches(/[0-9]/, `${t('Password have to contain numbers')}`),
+                    displayName: Yup.string().required(`${t('This is a required field')}`),
+                    username: Yup.string().required(`${t('This is a required field')}`),
                 })}
         >
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h3' content={t('Register')} textAlign='left' color='teal' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='DisplayName' name='displayName' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Username' name='username' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Email' name='email' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder='Password' name='password' type='password' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Display name')} name='displayName' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Username')} name='username' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Email')} name='email' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Password')} name='password' type='password' />
                     <ErrorMessage
                         name='error'
-                        render={() => <ValidationErrors
-                            errors={errors.error}
-                        />}
-                    />
+                        render={() => <ValidationErrors errors={errors.error} />} />
                     <Button.Group fluid>
                         <Button
                             positive
                             content='Register'
                             type='submit'
                             loading={isSubmitting}
-                            disabled={!isValid || isSubmitting} />
+                            disabled={!isValid || isSubmitting || !dirty} />
                         <Button
                             content='Cancel'
                             type='button'

@@ -69,10 +69,9 @@ export default class ProfileStore {
     }
 
     setProfileBio = async (profileFormValues: ProfileInfoFormValues) => {
-        console.log(profileFormValues);
         this.uploading = true;
         try {
-            const response = await agent.Profiles.updateInfo(profileFormValues);
+            await agent.Profiles.updateInfo(profileFormValues);
             runInAction(() => {
                 if (this.profile) {
                     const newProfile = this.profile;

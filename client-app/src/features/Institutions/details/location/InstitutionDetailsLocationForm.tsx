@@ -1,14 +1,14 @@
 import { useFormikContext } from 'formik';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet';
-import { Checkbox, DropdownProps, Grid, Icon, Label, Search, Table } from 'semantic-ui-react';
+import { Checkbox, DropdownProps, Grid, Search, Table } from 'semantic-ui-react';
 import CustomSelectInput from '../../../../app/common/form/CustomSelectInput';
 import { useStore } from '../../../../app/stores/store';
-import LeafletControlGeocoder from './LeafletControlGeocoder';
 import { useTranslation } from 'react-i18next';
 import { observer } from 'mobx-react-lite';
 import TableItem from '../TableItem';
 import { useMediaQuery } from 'react-responsive';
+import FlyTo from './FlyTo';
 
 export default observer(function InstitutionDetailsLocationForm() {
 
@@ -28,6 +28,7 @@ export default observer(function InstitutionDetailsLocationForm() {
         setCenter,
         center } = mapStore;
 
+
     useEffect(() => {
         if (!street) setStreet(formik.getFieldProps('streetAddress').value)
         if (!city) setCity(getCityById(formik.getFieldProps('cityId').value, formik.getFieldProps('regionId').value)?.name!)
@@ -43,13 +44,12 @@ export default observer(function InstitutionDetailsLocationForm() {
         setCenter({ lat: event.target._latlng.lat, lng: event.target._latlng.lng });
     };
 
-    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
     const { t } = useTranslation();
 
     return (
-        <Grid style={{margin: isMobile ? 0 : ''}}>
+        <Grid style={{ margin: isMobile ? 0 : '' }}>
             <Grid.Column width={isMobile ? 16 : 8}>
                 <Grid>
                     <Grid.Row>
@@ -95,7 +95,7 @@ export default observer(function InstitutionDetailsLocationForm() {
                                             loading={loading} />} />
                                 <TableItem
                                     loading={(loadingInitial)}
-                                    icon='home'
+                                    icon='point'
                                     label={t('Drag the marker')}
                                     content={
                                         <Checkbox
@@ -108,24 +108,20 @@ export default observer(function InstitutionDetailsLocationForm() {
                 </Grid>
             </Grid.Column>
             <Grid.Column width={isMobile ? 16 : 8}>
-                <MapContainer center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '440px' }}>
+                <MapContainer center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '25rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                    />
-                    {commonStore.editMode &&
-                        <LeafletControlGeocoder
-                            center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }}
-                        />}
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <Marker
                         draggable={draggable}
                         position={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }}
-                        eventHandlers={{
-                            dragend: handleMarkerDragEnd,
-                        }}
-                    >
-                        <Popup interactive>
-                            A pretty CSS3 popup. <br /> Easily customizable.
+                        eventHandlers={{ dragend: handleMarkerDragEnd }}>
+                        <FlyTo center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} />
+                        <Popup>
+                            {selectedInstitution?.name}, {" "}
+                            {selectedInstitution?.streetAddress},  {" "}
+                            {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
+                            {getRegionById(selectedInstitution?.regionId!)?.name}
                         </Popup>
                     </Marker>
                 </MapContainer>

@@ -54,13 +54,12 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                 <Grid.Row style={{ padding: '0 0 1rem 0' }} >
                                     <Button
                                         basic
+                                        icon='plus'
+                                        label={t('Compare')}
                                         active={isActive}
                                         className={isActive ? 'customButtonActive' : ''}
-                                        style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
-                                        onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
-                                        <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
-                                    </Button>
-                                    <div style={{ color: '#777', padding: '0.7rem' }}>{t('Compare')}</div>
+                                        style={{ width: '3rem', height: '3rem', color: '#444' }}
+                                        onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)} />
                                 </Grid.Row>
                             </Grid>
                         </Grid.Column>
@@ -108,13 +107,12 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                         <Grid.Row>
                             <Button
                                 basic
+                                icon='plus'
+                                label={t('Compare')}
                                 active={isActive}
                                 className={isActive ? 'customButtonActive' : ''}
-                                style={{ position: 'relative', right: 0, margin: 0, padding: 0, top: 0, border: 'none', width: '3rem', height: '3rem' }}
-                                onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)}>
-                                <Icon name='plus' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
-                            </Button>
-                            <div style={{ color: '#777', padding: '0.7rem' }}>{t('Compare')}</div>
+                                style={{ width: '3rem', height: '3rem', color: '#444' }}
+                                onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)} />
                         </Grid.Row>
                         <Grid.Row>
                             <Item.Description>{institution.description.slice(0, 150)}...

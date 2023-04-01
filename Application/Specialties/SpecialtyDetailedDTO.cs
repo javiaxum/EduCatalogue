@@ -11,6 +11,8 @@ namespace Application.Specialties
     {
         public Guid Id { get; set; }
         public Guid InstitutionId { get; set; }
+        public bool Visible { get; set; }
+        public bool Approved { get; set; }
         public string LocalSpecialtyCode { get; set; }
         public string Description { get; set; }
         public int DegreeId { get; set; }

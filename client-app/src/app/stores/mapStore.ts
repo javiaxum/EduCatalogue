@@ -75,9 +75,4 @@ export default class MapStore {
         }
 
     }
-    // this.geocoder.geocode(`${city}, ${street}`, (result) => {
-    //     this.setResults(result);
-
-
-
 }

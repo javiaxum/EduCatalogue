@@ -34,7 +34,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(500);
+    await sleep(1500);
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -86,14 +86,16 @@ const requests = {
 }
 
 const Institutions = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions", { params }).then(responseBody),
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/list", { params }).then(responseBody),
+    pendingChangesList: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/pendingChanges", { params }).then(responseBody),
+    approveChanges: (id: string) => requests.put<void>(`/institutions/approve/${id}`, {}),
+    toggleVisibility: (id: string) => requests.put<void>(`/institutions/toggleVisibility/${id}`, {}),
     details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
     create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
     update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
     delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
     listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", { params }).then(responseBody),
     listRegions: () => requests.get<Region[]>("/institutions/regions"),
-
 }
 
 const Images = {
@@ -129,7 +131,10 @@ const Reviews = {
 }
 
 const Specialties = {
-    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution`, { params }).then(responseBody),
+    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution/list`, { params }).then(responseBody),
+    listPendingChanges: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution/pendingChanges`, { params }).then(responseBody),
+    approveChanges: (id: string) => requests.put<void>(`/specialties/approve/${id}`, {}),
+    toggleVisibility: (id: string) => requests.put<void>(`/specialties/toggleVisibility/${id}`, {}),
     details: (id: string) => requests.get<Specialty>(`/specialties/${id}`),
     listCores: () => requests.get<SpecialtyCore[]>("/specialties/specialtyCores"),
     listBranches: () => requests.get<Branch[]>("/specialties/branches"),
@@ -146,7 +151,12 @@ const Account = {
     register: (user: UserFormValues) => requests.post<User>("/account/register", user),
     delete: () => requests.delete<void>("/account/delete"),
     updateEmail: (newEmail: string) => requests.put<void>(`/account/requestEmailChange?newEmail=${newEmail}`, {}),
-    sendConfirmMessage: () => requests.get<string>(`/account/requestConfirmation`),
+    requestEmailConfirmation: () => requests.get<string>(`/account/requestEmailConfirmation`),
+    twoFactorCheck: (user: UserFormValues) => requests.post<boolean>(`/account/twoFactorCheck`, user),
+    requestTwoFactorActivationCode: () => requests.get<string>(`/account/requestTwoFactorActivationCode`),
+    requestTwoFactorDeactivationCode: () => requests.get<string>(`/account/requestTwoFactorDeactivationCode`),
+    confirmTwoFactorActivationCode: (code: string) => requests.put<void>(`/account/confirmTwoFactorActivationCode?code=${code}`, {}),
+    confirmTwoFactorDeactivationCode: (code: string) => requests.put<void>(`/account/confirmTwoFactorDeactivationCode?code=${code}`, {}),
     requestPasswordReset: (email: string) => requests.put<void>(`/account/requestPasswordReset?email=${email}`, {}),
     resetPassword: (newPassword: string, email: string, token: string) => requests.put<void>(`/account/confirmPasswordChange?email=${email}&newPassword=${newPassword}&token=${token}`, {}),
     changePassword: (newPassword: string, oldPassword: string) => requests.put<void>(`/account/changePassword?newPassword=${newPassword}&oldPassword=${oldPassword}`, {}),

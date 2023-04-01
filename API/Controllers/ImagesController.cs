@@ -30,6 +30,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new DeleteProfileImage.Command { Id = id }));
         }
+        [AllowAnonymous]
         [HttpGet("{id}/list")]
         public async Task<ActionResult> ListImages([FromQuery] ImageParams param, Guid id)
         {

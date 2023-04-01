@@ -17,12 +17,31 @@ namespace API.Controllers
 {
     public class InstitutionsController : BaseAPIController
     {
-        [HttpGet]
         [AllowAnonymous]
+        [HttpGet("list")]
         public async Task<IActionResult> GetInstitutions([FromQuery] InstitutionParams param)
         {
             return HandlePagedResult(await Mediator.Send(new Application.Institutions.List.Query { Params = param }));
         }
+        [Authorize(Policy = "IsOperator")]
+        [HttpGet("pendingChanges")]
+        public async Task<IActionResult> GetInstitutionsForModeration([FromQuery] InstitutionParams param)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Institutions.ListForModeration.Query { Params = param }));
+        }
+        [Authorize(Policy = "IsOperator")]
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveChanges(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Institutions.ApproveChanges.Command { Id = id }));
+        }
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [HttpPut("toggleVisibility/{id}")]
+        public async Task<IActionResult> ToggleVisibility(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Institutions.ToggleVisibility.Command { Id = id }));
+        }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetInstitution(Guid id)
         {
@@ -68,6 +87,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Reviews.Create.Command { Id = id, Review = review }));
         }
+        [AllowAnonymous]
         [HttpGet("{id}/reviews")]
         public async Task<ActionResult> ListInstitutionReviews([FromQuery] ReviewParams param, Guid id)
         {

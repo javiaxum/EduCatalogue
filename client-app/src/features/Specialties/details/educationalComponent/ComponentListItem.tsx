@@ -30,32 +30,30 @@ export default observer(function ComponentListItem({ component, setEduComponents
 
     if (!activeForm)
         return (
-            <Grid.Column style={{ width: '18rem', padding: '0.5rem', margin: isComputerOrTablet ? '0' : '0 auto' }}>
-                <Card className='componentCard' style={{ display: 'flex' }}>
-                    <Card.Content style={{ padding: '1rem 1rem 0 1rem' }}>
-                        {editMode && <>
-                            <Button
-                                basic
-                                style={{ position: 'absolute', right: -4, top: 8, margin: 0, padding: 0, border: 'none', boxShadow: 'none' }}
-                                onClick={() => setActiveForm(!activeForm)}>
-                                <Icon name='edit' />
-                            </Button>
-                            <Button
-                                floated='right'
-                                basic
-                                style={{ position: 'absolute', left: 6, top: 8, margin: 0, padding: 0, border: 'none', boxShadow: 'none' }}
-                                onClick={() => handleComponentDelete(component)}>
-                                <Icon name='trash' />
-                            </Button>
-                        </>}
-                        <Card.Header as='a' style={{ padding: '0 0.4rem 0 0.8rem', fontSize: '1.2rem' }}>{component.name}</Card.Header>
-                    </Card.Content>
-                    <Card.Meta style={{ padding: '0.3rem 0 1rem 1rem' }} >
-                        {t('ECTS credits') + ": " + component.ectsCredits}
-                        {component.isOptional && <Label content={t('Optional')} attached='bottom right' />}
-                    </Card.Meta>
-                </Card>
-            </Grid.Column>
+            <Card  style={{ display: 'flex', width: '18rem', margin: isComputerOrTablet ? '0.2rem' : '0.2rem auto' }}>
+                <Card.Content style={{ padding: '1rem 1rem 0 1rem' }}>
+                    {editMode && <>
+                        <Button
+                            basic
+                            style={{ position: 'absolute', right: -4, top: 8, margin: 0, padding: 0, border: 'none', boxShadow: 'none' }}
+                            onClick={() => setActiveForm(!activeForm)}>
+                            <Icon name='edit' />
+                        </Button>
+                        <Button
+                            floated='right'
+                            basic
+                            style={{ position: 'absolute', left: 6, top: 8, margin: 0, padding: 0, border: 'none', boxShadow: 'none' }}
+                            onClick={() => handleComponentDelete(component)}>
+                            <Icon name='trash' />
+                        </Button>
+                    </>}
+                    <Card.Header as='a' style={{ padding: '0 0.4rem 0 0.8rem', fontSize: '1.2rem' }}>{component.name}</Card.Header>
+                </Card.Content>
+                <Card.Meta style={{ padding: '0.3rem 0 1rem 1rem' }} >
+                    {t('ECTS credits') + ": " + component.ectsCredits}
+                    {component.isOptional && <Label content={t('Optional')} attached='bottom right' />}
+                </Card.Meta>
+            </Card>
         )
     else
         return (

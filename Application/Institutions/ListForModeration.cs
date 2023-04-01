@@ -13,7 +13,7 @@ using Persistence;
 
 namespace Application.Institutions
 {
-    public class List
+    public class ListForModeration
     {
         public class Query : IRequest<Result<PagedList<InstitutionDTO>>>
         {
@@ -42,8 +42,7 @@ namespace Application.Institutions
                 var CitiesPredicate = IsCitiesPredicate ? request.Params.CitiesPredicate.Split('-') : new string[0];
 
                 var query = _context.Institutions.Include(s => s.Specialties).Where(x =>
-                    x.Approved == true
-                    && x.Visible == true
+                    x.Approved == false
                     && (!IsCitiesPredicate || CitiesPredicate.Contains(x.City.Id.ToString()))
                     && (!IsName || x.Name.ToLower().Contains(request.Params.Name.ToLower()))
                     && x.Specialties.Any(s =>

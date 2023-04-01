@@ -15,10 +15,7 @@ export default function AddSpecialtyHeaderCellPlaceholderMobile() {
                     borderRadius: '2rem',
                     textAlign: 'center',
                 }}>
-                <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                <Header style={{ color: '#444', margin: 0 }}>
-                    {t('Add specialty')}
-                </Header>
+                <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
             </div>
         </Table.HeaderCell>
     )

@@ -1,6 +1,6 @@
 import { useField } from 'formik';
-import React from 'react';
-import { Form, Label, StrictHeaderProps } from 'semantic-ui-react';
+import React, { useState } from 'react';
+import { Button, Form, Icon, Label, StrictHeaderProps } from 'semantic-ui-react';
 
 interface Props {
     placeholder: string;
@@ -15,6 +15,7 @@ interface Props {
     fontWeight?: string;
 }
 export default function CustomTextInput(props: Props) {
+    const [type, setType] = useState(props.type);
     const [field, meta] = useField(props.name);
     return (
         <Form.Field
@@ -24,8 +25,16 @@ export default function CustomTextInput(props: Props) {
             <input
                 {...field}
                 {...props}
-                style={{ padding: props.padding, position: 'relative', fontWeight: props.fontWeight}}
-            />
+                type={type}
+                style={{ padding: props.padding, position: 'relative', fontWeight: props.fontWeight }} />
+            {props.type === 'password' &&
+                <Button
+                    basic
+                    icon={type !== 'password' ? 'eye' : 'eye slash'}
+                    type='button'
+                    className='show-password'
+                    style={{ position: 'absolute', right: '0', boxShadow: 'none' }}
+                    onClick={() => setType(type === 'password' ? 'text' : 'password')} />}
             {meta.touched && meta.error ? (
                 <Label basic color='red'>{meta.error}</Label>
             ) : (null)}

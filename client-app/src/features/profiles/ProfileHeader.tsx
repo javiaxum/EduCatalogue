@@ -6,6 +6,8 @@ import { Profile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
 import ProfileAvatarUploadWidgetCropper from './profileAvatar/ProfileAvatarUploadWidgetCropper';
 import ProfileAvatarUploadWidgetDropzone from './profileAvatar/ProfileAvatarUploadWidgetDropzone';
+import { useTranslation } from 'react-i18next';
+import { useMediaQuery } from 'react-responsive';
 
 export default observer(function ProfileHeader() {
     const { commonStore, modalStore, profileStore } = useStore();
@@ -15,6 +17,10 @@ export default observer(function ProfileHeader() {
     const { username } = useParams();
     const [files, setFiles] = useState<any>([]);
     const [cropper, setCropper] = useState<Cropper>();
+    const { t } = useTranslation();
+    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+    const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+    const imageSize = isComputerOrTablet ? "12rem" : "16rem";
 
     function HandleImageUpload(file: Blob) {
         if (username)
@@ -38,25 +44,25 @@ export default observer(function ProfileHeader() {
         })
     }, [files])
 
-    if (!profile) return <></>
+    if (!profile) return <></>;
 
     return (
-        <Segment>
-            <Grid style={{ paddingTop: '10px', minWidth: '1000px' }}>
-                <Grid.Column style={{ width: '14rem' }}>
+        <Segment style={{ paddingTop: '2rem', width: '100%' }}>
+            <Grid>
+                <Grid.Column style={{ width: isComputerOrTablet ? '14rem' : '100%' }} textAlign='center'>
                     {!editMode
-                        ? <Image avatar style={{ minHeight: '12rem', minWidth: '12rem', height: '12rem', width: '12rem', margin: '0.5rem' }} src={profile.avatar?.url || '/assets/user.png'} />
+                        ? <Image avatar style={{ minHeight: imageSize, minWidth: imageSize, height: imageSize, width: imageSize, margin: '0.5rem' }} src={profile.avatar?.url || '/assets/user.png'} />
                         : <>
                             {files && files.length == 0 &&
                                 <ProfileAvatarUploadWidgetDropzone
+                                    imageSize={imageSize}
                                     setFiles={setFiles}
                                     imageUrl={profile.avatar?.url || '/assets/user.png'} />}
                             {files && files.length > 0 && <>
-                                <div className='img-preview' style={{ borderRadius: '1000px', minHeight: '12rem', minWidth: '12rem', overflow: 'hidden', }} />
+                                <div className='img-preview' style={{ borderRadius: '1000rem', minHeight: imageSize, minWidth: imageSize, overflow: 'hidden', }} />
                             </>}
                             {files && files.length > 0 &&
                                 <>
-                                    <Header as='h3' content='Image preview' />
                                     <ProfileAvatarUploadWidgetCropper setCropper={setCropper} imagePreview={files[0].preview} />
                                     <Button.Group widths={2}>
                                         <Button
@@ -76,17 +82,17 @@ export default observer(function ProfileHeader() {
                                 </>}
                         </>}
                 </Grid.Column >
-                <Grid.Column style={{ width: '400px', paddingTop: '4rem' }}>
+                <Grid.Column style={{ width: '30rem', paddingTop: isComputerOrTablet ? '4rem' : 0 }}>
                     <Header as='h1' content={profile.displayName} />
                     {!editMode
                         ? <Button
                             onClick={() => setEditMode(!editMode)}>
-                            Set profile image<Icon name='image' style={{ padding: '0 0 0 0.5rem', margin: '0' }} />
+                            {t('Set profile image')}<Icon name='image' style={{ padding: '0 0 0 0.5rem', margin: '0' }} />
                         </Button>
                         : <Button
                             onClick={() => setEditMode(false)}
                             type='button'
-                            content='Cancel'
+                            content={t('Cancel')}
                         />}
                 </Grid.Column >
             </Grid >

@@ -65,10 +65,41 @@ html {}
   color: #fff !important;
 }
 
-.componentCard {
-  min-height: 100px !important;
-  width: 250px !important;
-  color: '#444';
+.ui.basic.button.show-password {
+  transition: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.show-password:focus {
+  transition: none !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.show-password:active {
+  transition: none !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.show-password:hover {
+  transition: none !important;
+  color: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ui.basic.button.show-password:focus>i {
+  transition: none !important;
+  color: #333333 !important;
+}
+
+.ui.basic.button.show-password:hover>i {
+  transition: none !important;
+  color: #333333 !important;
 }
 
 .ui.inverted.menu {
@@ -202,4 +233,10 @@ html {}
   height: 15px;
   background: #1b1b1b;
   cursor: pointer;
+}
+
+.bkgr-img-preview {
+  width: 100% !important;
+  min-width: 100% !important;
+  display: relative !important;
 }

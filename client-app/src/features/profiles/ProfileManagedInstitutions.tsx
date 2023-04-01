@@ -12,7 +12,7 @@ export default function ProfileManagedInstitutions({ institutions }: Props) {
     return (
         <>
             {!institutions || institutions.length === 0 ? <Segment basic content='There are no institutions you have been added to...' /> : <>{institutions.map((institution) =>
-                <Segment.Group>
+                <Segment.Group style={{width: '100%'}}>
                     <Card key={institution.id} as={Link} to={`/institutions/${institution.id}`} style={{ width: '100%', height: '7rem', padding: '1.5rem 0 0 0' }}>
                         <Grid>
                             <Grid.Column width={2} style={{ padding: '0.5rem 1rem 1rem 3rem' }}>

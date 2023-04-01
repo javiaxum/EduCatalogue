@@ -40,19 +40,21 @@ export default observer(function ProfileOptions({ profile }: Props) {
         <ProfileReviews profile={profile} reviews={profile.reviews} />,
     ]
     return (
-        <>
-            <Menu pointing secondary stackable={isMobile} >
-                {items.map((i, index) =>
-                    <Menu.Item
-                        name={i}
-                        key={index}
-                        active={menuItem === i}
-                        content={t(i)}
-                        onClick={() => setMenuItem(i)}
-                    />
-                )}
-            </Menu>
-            {components[items.indexOf(menuItem)]}
-        </>
+        <Grid style={{ width: '100%', margin: 0 }}>
+            <Grid.Row >
+                <Menu pointing secondary stackable={isMobile} style={{ width: '100%', textAlign: 'center' }}>
+                    {items.map((i, index) =>
+                        <Menu.Item
+                            name={i}
+                            key={index}
+                            active={menuItem === i}
+                            content={t(i)}
+                            onClick={() => setMenuItem(i)} />)}
+                </Menu>
+            </Grid.Row>
+            <Grid.Row>
+                {components[items.indexOf(menuItem)]}
+            </Grid.Row>
+        </Grid>
     )
 })

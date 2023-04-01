@@ -7,8 +7,6 @@ import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
 import { useTranslation } from 'react-i18next';
-import { router } from '../routers/Routes';
-import { useParams } from 'react-router-dom';
 
 export default observer(function PasswordChangeForm() {
     const { userStore, modalStore } = useStore();
@@ -23,16 +21,20 @@ export default observer(function PasswordChangeForm() {
             }}
             validationSchema={
                 Yup.object({
-                    oldPassword: Yup.string().required(),
-                    newPassword: Yup.string().required(),
-                    repeatPassword: Yup.string().required(),
+                    oldPassword: Yup.string().required(`${t('This is a required field')}`),
+                    newPassword: Yup.string()
+                        .required(`${t('This is a required field')}`)
+                        .min(8, `${t('Password have to be at least 8 characters long')}`)
+                        .matches(/[a-z]/, `${t('Password have to contain Latin letters')}`)
+                        .matches(/[0-9]/, `${t('Password have to contain numbers')}`),
+                    repeatPassword: Yup.string().required(`${t('This is a required field')}`).oneOf([Yup.ref('oldPassword'), null], `${t('Passwords must match')}`),
                 })}>
-            {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
+            {({ handleSubmit, isSubmitting, errors, isValid, dirty, values }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h3' content={t('Password change')} textAlign='left' color='teal' />
                     <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Old Password')} name='oldPassword' type='password' />
                     <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('New Password')} name='newPassword' type='password' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Password')} name='repeatPassword' type='password' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Repeat new password')} name='repeatPassword' type='password' />
                     <ErrorMessage
                         name='error'
                         render={() => <ValidationErrors errors={errors.error} />} />
@@ -42,7 +44,7 @@ export default observer(function PasswordChangeForm() {
                             content={t('Submit')}
                             type='submit'
                             loading={isSubmitting}
-                            disabled={!isValid || isSubmitting} />
+                            disabled={(!isValid || isSubmitting || !dirty)} />
                         <Button
                             content={t('Cancel')}
                             type='button'

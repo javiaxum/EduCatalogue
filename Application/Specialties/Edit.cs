@@ -48,6 +48,7 @@ namespace Application.Specialties
 
                 _mapper.Map(request.Specialty, specialty);
                 var specialtyCore = await _context.SpecialtyCores.FirstOrDefaultAsync((x) => x.Id == request.Specialty.LocalSpecialtyCode);
+                specialty.Approved = false;
                 if (specialtyCore.Id != specialty.SpecialtyCore.Id)
                     specialty.SpecialtyCore = specialtyCore;
 

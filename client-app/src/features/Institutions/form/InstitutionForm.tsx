@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 
 export default observer(function InstitutionForm() {
-    const { institutionStore, commonStore, specialtyStore } = useStore();
+    const { institutionStore, commonStore, specialtyStore, profileStore } = useStore();
     const {
         loadInstitution,
         loadingInitial,
@@ -55,12 +55,11 @@ export default observer(function InstitutionForm() {
             cropper.getCroppedCanvas().toBlob(blob => HandleImageUpload(blob!))
         }
     }
+    const { t } = useTranslation();
 
     const validationSchema = Yup.object({
-        name: Yup.string().required('Institution name is required'),
-
+        name: Yup.string().required(),
     })
-    const { t } = useTranslation();
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
@@ -123,7 +122,7 @@ export default observer(function InstitutionForm() {
                                                 setFiles={setFiles}
                                                 imageUrl={selectedInstitution?.backgroundImageUrl || '/assets/placeholder.png'} />}
                                         {(files && files.length > 0) &&
-                                            <div className='bkgr-img-preview' style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
+                                            <div className='bkgr-img-preview' style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '13rem', minWidth: '100%', overflowY: 'hidden', zIndex: -100 }} />}
                                     </>}
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0, top: '-4rem' }}>

@@ -56,21 +56,17 @@ export default class SpecialtyStore {
             })
     }
 
-    // reset() {
-    //     this.specialtyRegistry = new Map<string, Specialty>();
-    //     this.loadingInitial = true;
-    //     this.loading = false;
-    //     this.pagination = null;
-    //     this.pagingParams = new SpecialtiesPagingParams();
-    //     this.selectedSpecialties = [];
-    //     this.selectedBranches = [];
-    //     this.selectedSkillIds = [];
-    //     this.minPrice = '';
-    //     this.maxPrice = '';
-    //     this.selectedDegree = '';
-    //     this.selectedSpecialtyIds = [];
-    //     this.selectedSpecialtiesSort = 'az';
-    // }
+    resetSearchParams = () => {
+        this.selectedSpecialties = [];
+        this.selectedBranches = [];
+        this.selectedSkillIds = [];
+        this.selectedLanguages = [];
+        this.selectedStudyForms = [];
+        this.tuitionRange = [0, 500000];
+        this.selectedDegree = '';
+        this.selectedSpecialtyIds = [];
+        this.selectedSpecialtiesSort = 'az';
+    }
     get popularSpecialties() {
         return Array.from(this.popularSpecialtiesRegistry.values());
     }
@@ -270,7 +266,7 @@ export default class SpecialtyStore {
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
         params.append('pageSize', this.pagingParams.pageSize.toString());
         let branchesPredicate = this.selectedBranches.join('-');
-        let specialtiesPredicate =this.selectedSpecialties.join('-');
+        let specialtiesPredicate = this.selectedSpecialties.join('-');
         let skillsPredicate = this.selectedSkillIds.join('-');
         let languagesPredicate = this.selectedLanguages.join('-');
         let studyFormsPredicate = this.selectedStudyForms.join('-');
@@ -279,8 +275,8 @@ export default class SpecialtyStore {
         params.append('skillsPredicate', skillsPredicate);
         params.append('specialtiesPredicate', specialtiesPredicate);
         params.append('branchesPredicate', branchesPredicate);
-        params.append('minPrice', this.tuitionRange[0].toString());
-        params.append('maxPrice', this.tuitionRange[1].toString());
+        params.append('minTuition', this.tuitionRange[0].toString());
+        params.append('maxTuition', this.tuitionRange[1].toString());
         params.append('degreeId', this.selectedDegree);
         params.append('sort', this.selectedSpecialtiesSort);
         return params;
@@ -294,7 +290,9 @@ export default class SpecialtyStore {
         this.setLoading(true);
         this.specialtyRegistry.clear();
         try {
-            const result = await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
+            const result = store.userStore.showPendingChanges ?
+                await agent.Specialties.listPendingChanges(store.institutionStore.selectedInstitution!.id, this.axiosParams) :
+                await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
                     setTimeout(() =>
@@ -306,6 +304,38 @@ export default class SpecialtyStore {
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);
+            this.setLoading(false);
+        }
+    }
+
+    approveChanges = async (id: string) => {
+        this.setLoading(true);
+        try {
+            const result = await agent.Specialties.approveChanges(id);
+            runInAction(() => {
+                if (this.selectedSpecialty)
+                    this.selectedSpecialty.approved = true;
+            })
+            this.setLoading(false);
+            return result;
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    toggleVisibility = async (id: string) => {
+        this.setLoading(true);
+        try {
+            const result = await agent.Specialties.toggleVisibility(id);
+            runInAction(() => {
+                if (this.selectedSpecialty)
+                    this.selectedSpecialty.visible = !this.selectedSpecialty.visible;
+            })
+            this.setLoading(false);
+            return result;
+        } catch (error) {
+            console.log(error);
             this.setLoading(false);
         }
     }

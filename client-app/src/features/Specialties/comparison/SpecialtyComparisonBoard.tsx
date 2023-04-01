@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Button, Container, Image, Header, Icon, Label, Table, Transition } from 'semantic-ui-react';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { Institution } from '../../../app/models/institution';
@@ -15,9 +15,14 @@ import InstiutionComparisonParameterCellFixedMobile from '../../Institutions/com
 import { router } from '../../routers/Routes';
 
 
-export default observer(function InstitutionComparisonBoard() {
+export default observer(function SpecialtyComparisonBoard() {
     const { institutionStore, specialtyStore } = useStore();
-    const { selectedSpecialtyIds, loadSpecialty, specialtyRegistry, toggleSelectedSpecialtyId, getSpecialtyCoreISCEDString, getSpecialtyCore, getSkill } = specialtyStore;
+    const { selectedSpecialtyIds,
+        loadSpecialty,
+        toggleSelectedSpecialtyId,
+        getSpecialtyCoreISCEDString,
+        getSpecialtyCore,
+        getSkill } = specialtyStore;
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
@@ -26,6 +31,7 @@ export default observer(function InstitutionComparisonBoard() {
     const [specialtyInstitutions, setSpecialtyInstitutions] = useState<Map<string, Institution>>(new Map<string, Institution>());
     const [loading, setLoading] = useState<boolean>(true);
     const [scrollY, setScrollY] = useState<number>(0);
+    const location = useLocation();
 
     const { t } = useTranslation();
 
@@ -57,9 +63,9 @@ export default observer(function InstitutionComparisonBoard() {
     }, [])
 
     useEffect(() => {
-        if (selectedSpecialtyIds.length === 0)
+        if (selectedSpecialtyIds.length === 0 && location.pathname === '/specialties/comparison')
             router.navigate('/institutions');
-    }, [selectedSpecialtyIds])
+    }, [location.pathname, selectedSpecialtyIds])
 
     const componentRef = useRef<HTMLDivElement>(null);
     const handleWindowScroll = (e: any) => {
@@ -103,8 +109,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                                     style={{ position: 'relative', padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
                                                                     onClick={() => {
                                                                         setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
-                                                                        specialtyStore.toggleSelectedSpecialtyId(i.id)
-                                                                        if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                                        toggleSelectedSpecialtyId(i.id)
                                                                     }}>
                                                                     <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
                                                                 </Button>
@@ -131,11 +136,9 @@ export default observer(function InstitutionComparisonBoard() {
                                                         width: '12rem',
                                                         borderRadius: '2rem',
                                                         textAlign: 'center',
+                                                        margin: '0 auto'
                                                     }}>
-                                                    <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                                                    <Header style={{ color: '#444', margin: 0 }}>
-                                                        {t('Add institution')}
-                                                    </Header>
+                                                    <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
                                                 </div>
                                             </Table.HeaderCell>
                                         </Table.Row>
@@ -161,8 +164,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                         style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
                                                         onClick={() => {
                                                             setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
-                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
-                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                            toggleSelectedSpecialtyId(i.id)
                                                         }}>
                                                         <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
                                                     </Button>
@@ -189,11 +191,9 @@ export default observer(function InstitutionComparisonBoard() {
                                                 width: '12rem',
                                                 borderRadius: '2rem',
                                                 textAlign: 'center',
+                                                margin: '0 auto'
                                             }}>
-                                            <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                                            <Header style={{ color: '#444', margin: 0 }}>
-                                                {t('Add institution')}
-                                            </Header>
+                                            <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
                                         </div>
                                     </Table.HeaderCell>
                                 </Table.Row>
@@ -313,8 +313,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                         style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
                                                         onClick={() => {
                                                             setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
-                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
-                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                            toggleSelectedSpecialtyId(i.id)
                                                         }}>
                                                         <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
                                                     </Button>
@@ -362,8 +361,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                         style={{ position: 'relative', right: 0, padding: 0, border: 'none', boxShadow: 'none', width: '3rem', height: '3rem' }}
                                                         onClick={() => {
                                                             setSelectedSpecialties(selectedSpecialties.filter((x) => x.id !== i.id))
-                                                            specialtyStore.toggleSelectedSpecialtyId(i.id)
-                                                            if (institutionStore.selectedInstitutionIds.length === 0) router.navigate('/institutions')
+                                                            toggleSelectedSpecialtyId(i.id)
                                                         }}>
                                                         <Icon name='close' size='large' style={{ left: '0.5rem', bottom: '0.05rem', position: 'relative' }} />
                                                     </Button>

@@ -5,8 +5,8 @@ import { Grid, List, Placeholder, Segment } from 'semantic-ui-react';
 export default function SpecialtiesListItemPlaceholder() {
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     return (
-        <Segment basic style={{ display: 'inline-block', width: isComputerOrTablet ? '16rem' : '13rem', overflow: 'hidden', margin: 0, padding: '0.3rem' }}>
-            <Placeholder style={{ height: isComputerOrTablet ? '14rem' : '12rem', padding: 0 }}>
+        <Segment basic style={{ display: 'inline-block', width: isComputerOrTablet ? '16rem' : '100vw', overflow: 'hidden', margin: 0, padding: '0.3rem' }}>
+            <Placeholder style={{ width: isComputerOrTablet ? '16rem' : '100%', height: isComputerOrTablet ? '14rem' : '8rem', padding: 0 }}>
                 <Placeholder.Image />
             </Placeholder>
         </Segment>

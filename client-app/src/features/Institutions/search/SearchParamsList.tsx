@@ -54,7 +54,7 @@ export default observer(function SearchParamsList() {
                     valueLabelDisplay="auto"
                     step={10}
                     min={0}
-                    max={500000} />
+                    max={1000000} />
                 <Label size="large">
                     {tuitionRange[0]} UAH - {tuitionRange[1]} UAH
                 </Label>

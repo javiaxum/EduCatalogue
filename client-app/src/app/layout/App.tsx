@@ -19,7 +19,7 @@ import SpecialtyComparisonBoard from '../../features/Specialties/comparison/Spec
 export default observer(function App() {
   const location = useLocation();
   const { commonStore, userStore, institutionStore, specialtyStore, profileStore: { loadProfile } } = useStore();
-  const { selectedInstitutionIds, loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities } = institutionStore;
+  const { selectedInstitutionIds, loadCitiesWithInstitutions: loadCitiesWithInstitutionsCount, loadInstitutions, loadRegionsWithCities, selectedInstitution } = institutionStore;
   const { loadSpecialtyCores, loadBranches, loadSkills, selectedSpecialtyIds } = specialtyStore;
   const [scrollY, setScrollY] = useState<number>(0);
   const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
@@ -28,10 +28,14 @@ export default observer(function App() {
 
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname])
   useEffect(() => {
-
     if (selectedInstitutionIds.length === 0 && location.pathname === '/institutions/comparison')
       router.navigate('/institutions');
   }, [location.pathname, selectedInstitutionIds.length])
+  useEffect(() => {
+    if (selectedSpecialtyIds.length === 0 && location.pathname === '/specialties/comparison')
+      if (selectedInstitution)
+        router.navigate(`/institutions/${selectedInstitution?.id}`);
+  }, [location.pathname, selectedSpecialtyIds.length])
 
 
   useEffect(() => {

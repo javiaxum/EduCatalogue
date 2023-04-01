@@ -11,6 +11,7 @@ import { router } from '../../routers/Routes';
 import AddInstitutionHeaderCellPlaceholderMobile from './AddInstitutionHeaderCellPlaceholderMobile';
 import InstitutionComparisonBoardRow from './InstitutionComparisonBoardRow';
 import InstiutionComparisonParameterCellFixedMobile from './InstiutionComparisonParameterCellFixedMobile';
+import { useLocation } from 'react-router-dom';
 
 
 export default observer(function InstitutionComparisonBoard() {
@@ -23,6 +24,7 @@ export default observer(function InstitutionComparisonBoard() {
     const [scrollY, setScrollY] = useState<number>(0);
 
     const { t } = useTranslation();
+    const location = useLocation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
@@ -42,7 +44,7 @@ export default observer(function InstitutionComparisonBoard() {
         };
     }, [])
     useEffect(() => {
-        if (selectedInstitutionIds.length === 0)
+        if (selectedInstitutionIds.length === 0 && location.pathname === '/institutions/comparison')
             router.navigate('/institutions');
     })
 
@@ -126,9 +128,6 @@ export default observer(function InstitutionComparisonBoard() {
                                                         textAlign: 'center',
                                                     }}>
                                                     <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                                                    <Header style={{ color: '#444', margin: 0 }}>
-                                                        {t('Add institution')}
-                                                    </Header>
                                                 </div>
                                             </Table.HeaderCell>
                                         </Table.Row>
@@ -176,11 +175,9 @@ export default observer(function InstitutionComparisonBoard() {
                                                 width: '12rem',
                                                 borderRadius: '2rem',
                                                 textAlign: 'center',
+                                                margin: '0 auto'
                                             }}>
-                                            <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                                            <Header style={{ color: '#444', margin: 0 }}>
-                                                {t('Add institution')}
-                                            </Header>
+                                            <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
                                         </div>
                                     </Table.HeaderCell>
                                 </Table.Row>
@@ -396,7 +393,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                 </div>
                                                 <Image
                                                     onClick={() => router.navigate(`/institutions/${i.id}`)}
-                                                    src={'/assets/institutionTitleImagePlaceholder.png'}
+                                                    src={i.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
                                                     style={{ margin: '0 auto', objectFit: 'cover', right: '-1.5rem', height: '6rem', width: '6rem', borderRadius: '10px' }} />
                                                 <div onClick={() => router.navigate(`/institutions/${i.id}`)}>
                                                     {i.name}

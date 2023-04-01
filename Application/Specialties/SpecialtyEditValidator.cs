@@ -13,7 +13,20 @@ namespace Application.Specialties
         public SpecialtyEditValidator()
         {
             RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
-            
+            RuleFor(x => x.Visible).NotEmpty();
+            RuleFor(x => x.Description).NotEmpty();
+            RuleFor(x => x.DegreeId).NotEmpty();
+            RuleFor(x => x.TuitionUAH).NotEmpty();
+            RuleFor(x => x.AcceptanceRate).NotEmpty();
+            RuleFor(x => x.GraduationRate).NotEmpty();
+            RuleFor(x => x.UndergraduatesEnrolled).NotEmpty();
+            RuleFor(x => x.EctsCredits).NotEmpty();
+            RuleFor(x => x.StartYear).NotEmpty();
+            RuleFor(x => x.EndYear).NotEmpty();
+            RuleFor(x => x.StudyFormIds).NotEmpty();
+            RuleFor(x => x.LanguageIds).NotEmpty();
+            RuleFor(x => x.SkillIds).NotEmpty();
+            RuleFor(x => x.ComponentDTOs).NotEmpty();
         }
     }
 }

@@ -2,16 +2,19 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Link } from 'react-router-dom';
-import { Button, Container, Dimmer, Grid, Icon, Pagination, Segment, Transition } from 'semantic-ui-react';
-import PaginationBar from '../../../app/common/pagination/PaginationBar';
+import { Button, Container, Dimmer, Grid, Icon, Segment, Transition } from 'semantic-ui-react';
 import { InstitutionsPagingParams } from '../../../app/models/pagination';
 import { useStore } from '../../../app/stores/store';
 import SearchParamsList from '../search/SearchParamsList';
 import SearchParamsSideBar from '../search/SearchParamsSideBar';
 import InstitutionsList from './InstitutionsList';
+import Pagination from '@mui/material/Pagination';
 
-export default observer(function InstitutionDashboard() {
+interface Props {
+    pending?: boolean;
+}
+
+export default observer(function InstitutionDashboard({ pending }: Props) {
     const { institutionStore, commonStore } = useStore();
     const { setInstitutionPagingParams,
         institutionPagination,
@@ -24,6 +27,7 @@ export default observer(function InstitutionDashboard() {
         const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener("scroll", handleScroll);
     }, [])
+
     useEffect(() => {
         if (institutionsRegistry.size === 0)
             loadInstitutions();
@@ -50,13 +54,20 @@ export default observer(function InstitutionDashboard() {
                 animation='fade left'
                 timeout={400}
                 unmountOnExit>
-                <Segment style={{ position: 'fixed', zIndex: 2000, borderRadius: 0 }}>
+                <Segment style={{ position: 'fixed', zIndex: 2000, borderRadius: 0, maxHeight: '100vh' }}>
                     <Button
                         basic
+                        size='big'
                         floated='right'
-                        style={{ position: 'relative', padding: 0, border: 'none', boxShadow: 'none', width: '1rem', height: '1rem', top: 0, right: '1rem' }}
+                        style={{ position: 'relative', padding: 0, boxShadow: 'none', width: '1rem', height: '1rem', top: 0, right: '0.5rem' }}
                         onClick={() => setRightSidebar(false)}>
                         <Icon name='close' size='large' style={{ left: '0.25rem', bottom: '0.05rem', position: 'relative' }} />
+                    </Button>
+                    <Button
+                        size='big'
+                        onClick={() => institutionStore.resetSearchParams()}
+                        style={{ position: 'relative' }}>
+                        {t('Reset search parameters')}
                     </Button>
                     <SearchParamsList />
                 </Segment>
@@ -73,13 +84,14 @@ export default observer(function InstitutionDashboard() {
                     </Grid.Column>
                     <Grid.Column style={{ width: '58%' }}>
                         <InstitutionsList />
-                        <Container style={{ textAlign: 'center', paddingTop: '2rem' }}>
-                            {institutionPagination &&
-                                <Pagination
-                                    totalPages={institutionPagination.totalPages}
-                                    activePage={institutionPagination.currentPage}
-                                    onPageChange={(e, data) => handleLoad(data.activePage as number)} />}
-                        </Container>
+                        {institutionPagination &&
+                            <Pagination
+                                size='large'
+                                variant="outlined" shape="rounded"
+                                style={{ margin: '3rem auto 0 auto', width: 'fit-content' }}
+                                count={institutionPagination.totalPages}
+                                page={institutionPagination.currentPage}
+                                onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                     </Grid.Column>
                     <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem' }}>
                         <SearchParamsSideBar />
@@ -107,10 +119,12 @@ export default observer(function InstitutionDashboard() {
                         </Button>
                         {institutionPagination &&
                             <Pagination
-                                style={{ margin: '7rem auto 0 auto' }}
-                                totalPages={institutionPagination.totalPages}
-                                activePage={institutionPagination.currentPage}
-                                onPageChange={(e, data) => { handleLoad(data.activePage as number); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
+                                size='large'
+                                variant="outlined" shape="rounded"
+                                style={{ margin: '7rem auto 0 auto', width: 'fit-content' }}
+                                count={institutionPagination.totalPages}
+                                page={institutionPagination.currentPage}
+                                onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                         <div style={{ height: '6rem' }}>
 
                         </div>
@@ -121,10 +135,12 @@ export default observer(function InstitutionDashboard() {
                     <Grid.Row>
                         {institutionPagination &&
                             <Pagination
-                                style={{ margin: '1rem auto 0 auto' }}
-                                totalPages={institutionPagination.totalPages}
-                                activePage={institutionPagination.currentPage}
-                                onPageChange={(e, data) => { handleLoad(data.activePage as number); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
+                                size='large'
+                                variant="outlined" shape="rounded"
+                                style={{ margin: '3rem auto 0 auto', width: 'fit-content' }}
+                                count={institutionPagination.totalPages}
+                                page={institutionPagination.currentPage}
+                                onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                     </Grid.Row>
                     <Grid.Row>
 

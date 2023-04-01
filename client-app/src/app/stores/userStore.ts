@@ -7,6 +7,8 @@ import { store } from "./store";
 export default class UserStore {
     user: User | null = null;
     rememberMeSwitch: boolean = false;
+    loading: boolean = false;
+    showPendingChanges: boolean = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -16,27 +18,47 @@ export default class UserStore {
         return !!this.user;
     }
 
+    toggleShowPendingChanges = () => {
+        this.showPendingChanges = !this.showPendingChanges;
+        store.institutionStore.resetSearchParams();
+        store.specialtyStore.resetSearchParams();
+    }
+
+    setLoading = (state: boolean) => {
+        this.loading = state;
+    }
+
     login = async (creds: UserFormValues) => {
+        this.setLoading(true);
         try {
             const user = await agent.Account.login(creds);
-            store.commonStore.setToken(user.token);
-            runInAction(() => this.user = user);
+            runInAction(() => {
+                store.commonStore.setToken(user.token);
+                this.user = user;
+            });
+            this.setLoading(false);
             router.navigate('/institutions');
             store.modalStore.closeModal();
             store.profileStore.loadProfile();
         } catch (error) {
-            throw error;
+            console.log(error);
+            this.setLoading(false);
         }
     }
     register = async (creds: UserFormValues) => {
+        this.setLoading(true);
         try {
             const user = await agent.Account.register(creds);
             store.commonStore.setToken(user.token);
-            runInAction(() => this.user = user);
+            runInAction(() => {
+                this.user = user;
+                this.setLoading(false);
+            });
             router.navigate('/institutions');
             store.modalStore.closeModal();
         } catch (error) {
-            throw error;
+            console.log(error);
+            this.setLoading(false);
         }
     }
 
@@ -44,6 +66,8 @@ export default class UserStore {
         store.commonStore.setToken(null);
         this.user = null;
         store.modalStore.closeModal();
+        router.navigate('/institutions')
+        store.profileStore.profile = undefined;
     }
 
     getUser = async () => {
@@ -98,11 +122,75 @@ export default class UserStore {
             console.log(error);
         }
     }
+
     requestEmailConfirmationMessage = async () => {
         try {
-            const user = await agent.Account.sendConfirmMessage();
+            const user = await agent.Account.requestEmailConfirmation();
         } catch (error) {
             console.log(error);
+        }
+    }
+
+    request2FAActivationCode = async () => {
+        this.setLoading(true);
+        try {
+            const user = await agent.Account.requestTwoFactorActivationCode();
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    request2FADeactivationCode = async () => {
+        this.setLoading(true);
+        try {
+            const user = await agent.Account.requestTwoFactorDeactivationCode();
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    confirm2FAActivation = async (code: string) => {
+        this.setLoading(true);
+        try {
+            const user = await agent.Account.confirmTwoFactorActivationCode(code);
+            runInAction(() => {
+                store.profileStore.profile!.twoFactorEnabled = true;
+            })
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    confirm2FADeactivation = async (code: string) => {
+        this.setLoading(true);
+        try {
+            const user = await agent.Account.confirmTwoFactorDeactivationCode(code);
+            runInAction(() => {
+                store.profileStore.profile!.twoFactorEnabled = false;
+            })
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    get2FAStatus = async (user: UserFormValues) => {
+        this.setLoading(true);
+        try {
+            console.log(this.loading)
+            const result = await agent.Account.twoFactorCheck(user);
+            this.setLoading(false);
+            return result;
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
         }
     }
 }

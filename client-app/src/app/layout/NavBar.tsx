@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { Button, Container, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
@@ -9,9 +9,10 @@ import RegisterForm from '../../features/identity/RegisterForm';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
-    const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
+    const { modalStore, userStore, profileStore, commonStore, institutionStore, specialtyStore } = useStore()
     const { t, i18n } = useTranslation();
     const location = useLocation();
+    const { id } = useParams();
 
     return (
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
@@ -28,6 +29,11 @@ export default observer(function NavBar() {
                             institutionStore.setSearchNameParam(d.value!);
                         }} />}
             </Menu.Item>
+            {profileStore.isOperator && <Menu.Item>
+                <Button positive active={userStore.showPendingChanges} onClick={() => userStore.toggleShowPendingChanges()}>
+                    {t(userStore.showPendingChanges ? 'Hide pending changes' : 'Show pending changes')}
+                </Button>
+            </Menu.Item>}
             {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
             <Menu.Item position='right' style={{ marginRight: '0', position: 'relative' }}>
                 <Button.Group>
@@ -47,8 +53,7 @@ export default observer(function NavBar() {
                     </Button>
                 </Button.Group>
             </Menu.Item>
-
-            <Menu.Item position='right' name='Profile' style={{paddingRight: userStore.isLoggedIn ? '6rem' : '12rem'}}>
+            <Menu.Item position='right' name='Profile' style={{ paddingRight: userStore.isLoggedIn ? '6rem' : '12rem' }}>
                 <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
                 <Dropdown pointing='top left' text={userStore.user?.displayName} >
                     <Dropdown.Menu>

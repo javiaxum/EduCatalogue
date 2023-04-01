@@ -13,6 +13,8 @@ namespace Application
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public bool Visible { get; set; }
+        public bool Approved { get; set; }
         public string Description { get; set; }
         public int Accreditation { get; set; }
         public int TypeId { get; set; }

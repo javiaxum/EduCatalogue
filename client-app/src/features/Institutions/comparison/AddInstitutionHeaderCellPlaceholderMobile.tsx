@@ -14,11 +14,9 @@ export default function AddInstitutionHeaderCellPlaceholderMobile() {
                     width: '12rem',
                     borderRadius: '2rem',
                     textAlign: 'center',
+                    margin: '0 auto'
                 }}>
-                <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
-                <Header style={{ color: '#444', margin: 0 }}>
-                    {t('Add institution')}
-                </Header>
+                <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
             </div>
         </Table.HeaderCell>
     )

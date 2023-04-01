@@ -21,10 +21,10 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
     useEffect(() => {
         let formValues = new ProfileInfoFormValues(profileStore.profile);
         setProfileFormValues(formValues);
-    }, [profileStore.profile])
+    }, [profileStore.profile, profileStore.uploading])
 
     const validationSchema = Yup.object({
-        displayName: Yup.string().required('Display name is required'),
+        displayName: Yup.string().required(`${t('This is a required field')}`),
         location: Yup.string(),
         company: Yup.string(),
         socialAccount1: Yup.string(),
@@ -33,7 +33,7 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
     })
 
     function handleProfileFormSubmit(profileFormValues: ProfileInfoFormValues) {
-        profileStore.setProfileBio(profileFormValues).then();
+        profileStore.setProfileBio(profileFormValues);
     }
 
     return (
@@ -42,9 +42,9 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                 validationSchema={validationSchema}
                 enableReinitialize
                 initialValues={profileFormValues}
-                onSubmit={(values, { resetForm }) => { handleProfileFormSubmit(values); resetForm() }}>
+                onSubmit={(values) => handleProfileFormSubmit(values)}>
                 {({ handleSubmit, isValid, isSubmitting, dirty, getFieldHelpers, getFieldProps, resetForm }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' style={{ width: '100%' }}>
                         <Segment>
                             <Grid columns={2} stackable >
                                 <Divider vertical />
@@ -107,7 +107,7 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                                     as='h4'
                                                     content={t('Location')}
                                                     style={{ margin: '1rem 0 0 0' }} />}
-                                            placeholder='Location'
+                                            placeholder={t('Location')}
                                             name='location' />
                                     </Grid.Row>
                                     <Grid.Row>
@@ -118,17 +118,17 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                         <CustomTextInput
                                             margin='0 0 0.2rem 0'
                                             width='80%'
-                                            placeholder='Social account'
+                                            placeholder={t('Link')}
                                             name='socialAccount1' />
                                         <CustomTextInput
                                             margin='0 0 0.2rem 0'
                                             width='80%'
-                                            placeholder='Social account'
+                                            placeholder={t('Link')}
                                             name='socialAccount2' />
                                         <CustomTextInput
                                             margin='0 0 0.2rem 0'
                                             width='80%'
-                                            placeholder='Social account'
+                                            placeholder={t('Link')}
                                             name='socialAccount3' />
                                     </Grid.Row>
                                     <Grid.Row>
@@ -145,7 +145,7 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                 </Grid.Column>
                             </Grid>
                         </Segment>
-                        {dirty &&
+                        {(dirty) &&
                             <Button
                                 positive
                                 disabled={!isValid || isSubmitting}

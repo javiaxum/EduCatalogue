@@ -8,6 +8,8 @@ namespace Domain
     public class Specialty
     {
         public Guid Id { get; set; }
+        public bool Visible { get; set; }
+        public bool Approved { get; set; }
         public Institution Institution { get; set; }
         public SpecialtyCore SpecialtyCore { get; set; }
         public string Description { get; set; }

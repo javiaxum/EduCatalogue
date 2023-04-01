@@ -43,6 +43,7 @@ namespace Application.Institutions
                 if (institution == null) return null;
 
                 _mapper.Map(request.Institution, institution);
+                institution.Approved = false;
                 institution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == request.Institution.CityId);
                 foreach (var language in institution.Languages)
                     if (!request.Institution.LanguageIds.Contains(language.Id)) language.Institutions.Remove(institution);

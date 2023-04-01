@@ -13,7 +13,7 @@ using Persistence;
 
 namespace Application.Specialties
 {
-    public class List
+    public class ListForModeration
     {
         public class Query : IRequest<Result<PagedList<SpecialtyDTO>>>
         {
@@ -57,8 +57,7 @@ namespace Application.Specialties
                 var query = _context.Specialties
                     .Where(s => (s.Institution.Id == request.InstitutionId));
                 query = query.Where(s =>
-                        s.Approved == true
-                        && s.Visible == true
+                        s.Approved == false
                         && (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                         && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
                         && (!IsSkillsPredicate || s.Skills.Any(x => skills.Contains(x.Id)))

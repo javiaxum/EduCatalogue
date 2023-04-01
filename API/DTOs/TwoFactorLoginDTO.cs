@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace API.DTOs
 {
-    public class LoginDTO
+    public class TwoFactorLoginDTO
     {
         public string Email { get; set; }
         public string Password { get; set; }

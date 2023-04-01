@@ -18,11 +18,12 @@ import { SpecialtyCore } from '../../../app/models/specialtyCore';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import TableItem from '../../Institutions/details/TableItem';
+import ConfirmDeleteSpecialty from '../../Institutions/details/specialties/ConfirmDeleteSpecialty';
 
 
 export default observer(function SpecialtyForm() {
 
-    const { specialtyStore, commonStore, institutionStore } = useStore();
+    const { specialtyStore, commonStore, institutionStore, modalStore, profileStore } = useStore();
     const {
         loadSpecialty,
         createSpecialty,
@@ -34,7 +35,9 @@ export default observer(function SpecialtyForm() {
         setLoadingInitial,
         getSpecialtyCoreISCEDString,
         specialtyCoresById,
-        skillsById } = specialtyStore;
+        skillsById,
+        toggleVisibility,
+        selectedSpecialty } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
@@ -62,18 +65,18 @@ export default observer(function SpecialtyForm() {
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
     const validationSchema = Yup.object({
-        localSpecialtyCode: Yup.string().required(),
-        description: Yup.string().required('Specialty description is required'),
-        degreeId: Yup.string().required(),
-        tuitionUAH: Yup.number().required(),
-        freeEducation: Yup.string().required(),
-        acceptanceRate: Yup.string().required(),
-        graduationRate: Yup.string().required(),
-        graduateEmploymentRate: Yup.string().required(),
-        undergraduatesEnrolled: Yup.string().required(),
-        ectsCredits: Yup.number().required(),
-        startYear: Yup.number().required(),
-        endYear: Yup.number().required(),
+        localSpecialtyCode: Yup.string().required(`${t('Choose specialty')}`),
+        description: Yup.string().required(`${t('Description is a required field')}`),
+        degreeId: Yup.number().required(`${t('Degree is a required field')}`)
+            .min(1, `${t('Invalid degree')}`)
+            .max(3, `${t('Invalid degree')}`),
+        tuitionUAH: Yup.number().required(`${t('Tuition is a required field')}`),
+        acceptanceRate: Yup.number().required(`${t('Acceptance rate is a required field')}`),
+        graduationRate: Yup.number().required(`${t('Graduation rate is a required field')}`),
+        graduateEmploymentRate: Yup.number().required(`${t('Graduate employment rate is a required field')}`),
+        undergraduatesEnrolled: Yup.number().required(`${t('Enrolled undergraduates is a required field')}`),
+        startYear: Yup.number().required(`${t('Start year is a required field')}`),
+        endYear: Yup.number().required(`${t('End year undergraduates is a required field')}`),
         studyFormIds: Yup.array().min(1, "Specify at least a single study form"),
         languageIds: Yup.array().min(1, "Specify at least a single language"),
         skillIds: Yup.array().min(1, "Specify at least a single skill"),
@@ -115,7 +118,7 @@ export default observer(function SpecialtyForm() {
             enableReinitialize
             initialValues={specialty}
             onSubmit={values => handleSpecialtyFormSubmit(values)}>
-            {({ handleSubmit, isValid, isSubmitting, dirty, getFieldProps, getFieldHelpers }) => (
+            {({ handleSubmit, isValid, isSubmitting, dirty, getFieldProps, getFieldHelpers, values }) => (
                 <Form
                     className='ui form'
                     onSubmit={handleSubmit}
@@ -125,15 +128,23 @@ export default observer(function SpecialtyForm() {
                             <Grid.Row style={{ paddingBottom: 0 }}>
                                 <Header
                                     size='large'
-                                    style={{ color: '#444', width: 'calc(100% - 20rem)' }}>
+                                    style={{ color: '#444', width: 'calc(100% - 29rem)' }}>
                                     <CustomSelectInput
+                                        loading={(loading || loadingInitial)}
                                         onChange={(event, data: DropdownProps) =>
                                             setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)))}
                                         options={specialtyOptions}
                                         placeholder={t('Select specialty')}
                                         name='localSpecialtyCode' />
                                 </Header>
-                                <Button.Group style={{ width: '16rem', margin: '0 0 0 auto', height: '35px' }}>
+                                <Button.Group style={{ width: '28rem', margin: '0 0 0 auto', height: '35px' }}>
+                                    <Button
+                                        type='button'
+                                        loading={loading}
+                                        onClick={() => toggleVisibility(selectedSpecialty?.id!).then(() => getFieldHelpers('visibility').setValue(!selectedSpecialty?.visible))}>
+                                        <Icon name={selectedSpecialty?.visible ? 'eye slash' : 'eye'} />
+                                        {t(selectedSpecialty?.visible ? 'Hide specialty' : 'Show specialty')}
+                                    </Button>
                                     <Button
                                         positive
                                         type='submit'
@@ -301,13 +312,14 @@ export default observer(function SpecialtyForm() {
                                     <Grid.Column width={6} stretched>
                                         <Segment basic style={{ padding: '0' }}>
                                             <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
-                                            <CustomTextArea rows={16} placeholder={t('Description')} name='description' />
+                                            <CustomTextArea rows={16} placeholder={t('Description')} name='description' loading={(loading || loadingInitial)} />
                                         </Segment>
                                     </Grid.Column>
                                     <Grid.Column width={3} stretched>
                                         <Segment basic style={{ padding: '0' }}>
                                             <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
                                             <CustomSelectInput
+                                                loading={(loading || loadingInitial)}
                                                 options={skillOptions}
                                                 name='skillIds'
                                                 multiple
@@ -343,12 +355,19 @@ export default observer(function SpecialtyForm() {
                                     content={t('Cancel')}
                                     disabled={isSubmitting} />
                             </Button.Group>
+                            <Button
+                                basic
+                                size='large'
+                                icon='trash'
+                                type='button'
+                                onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} />
                             <Grid style={{ padding: 0, color: '#444', margin: 0 }}>
                                 <Grid.Row style={{ paddingBottom: 0 }}>
                                     <Header
                                         size='large'
                                         style={{ color: '#444', width: '100%' }}>
                                         <CustomSelectInput
+                                            loading={(loading || loadingInitial)}
                                             onChange={(event, data: DropdownProps) =>
                                                 setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)))}
                                             options={specialtyOptions}
@@ -506,13 +525,14 @@ export default observer(function SpecialtyForm() {
                                 <Grid.Row>
                                     <Segment basic style={{ padding: '0', width: '100%' }}>
                                         <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
-                                        <CustomTextArea rows={16} placeholder={t('Description')} name='description' />
+                                        <CustomTextArea loading={(loading || loadingInitial)} rows={16} placeholder={t('Description')} name='description' />
                                     </Segment>
                                 </Grid.Row>
                                 <Grid.Row>
                                     <Segment basic style={{ padding: '0' }}>
                                         <Header as='h4' content={t('Skills')} dividing style={{ marginBottom: '5px' }} />
                                         <CustomSelectInput
+                                            loading={(loading || loadingInitial)}
                                             options={skillOptions}
                                             name='skillIds'
                                             multiple
@@ -527,14 +547,15 @@ export default observer(function SpecialtyForm() {
                                         style={{ padding: '0', color: '#444' }} />
                                 </Grid.Row>
                                 <Grid.Row>
-                                    <Segment style={{ height: '30rem', overflowY: 'scroll' }}>
+                                    <Segment style={{ height: '30rem', width: '100%', overflowY: 'scroll' }}>
                                         <SpecialtyDetailsComponentList />
                                     </Segment>
                                 </Grid.Row>
                             </Grid>
                         </Segment>}
                 </Form >
-            )}
+            )
+            }
         </Formik >
     )
 })

@@ -85,7 +85,7 @@ internal class Program
                 ValidateIssuer = false,
                 ValidateAudience = false
             };
-        });
+        }).AddTwoFactorRememberMeCookie();
         builder.Services.AddAuthorization(opt =>
         {
             opt.AddPolicy("IsInstitutionManagerOrOperator", policy =>

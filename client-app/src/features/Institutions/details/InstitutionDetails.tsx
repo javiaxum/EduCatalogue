@@ -67,7 +67,7 @@ export default observer(function InstitutionDetails() {
                                     <Placeholder.Line />
                                     <Placeholder.Line />
                                 </Placeholder> :
-                                <div style={{ display: 'inline-block', width: 'calc(100% - 13rem)' }}>
+                                <div style={{ display: 'inline-block', width: 'calc(100% - 25rem)' }}>
                                     <Header
                                         size='huge'
                                         content={selectedInstitution?.name}
@@ -83,14 +83,23 @@ export default observer(function InstitutionDetails() {
                                         {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
                                     </div>
                                 </div>}
-                            {(isInstitutionManager || profileStore.isOperator) &&
-                                <Button
-                                    onClick={() => setEditMode(!editMode)}
-                                    as={Link}
-                                    floated='right'
-                                    to={`/manage/${selectedInstitution?.id}`}
-                                    style={{ display: 'inline-block', width: '12rem' }}
-                                    content={t('Manage Institution')} />}
+                            <Button.Group style={{ position: 'absolute', width: '23rem', right: '2rem' }}>
+                                {(profileStore.isOperator && !institutionStore.selectedInstitution?.approved) &&
+                                    <Button
+                                        type='button'
+                                        positive
+                                        loading={institutionStore.loading}
+                                        onClick={() => institutionStore.approveChanges(id!)}>
+                                        {t('Approve changes')}
+                                    </Button>}
+                                {(isInstitutionManager || profileStore.isOperator) &&
+                                    <Button
+                                        onClick={() => setEditMode(!editMode)}
+                                        as={Link}
+                                        floated='right'
+                                        to={`/manage/${selectedInstitution?.id}`}
+                                        content={t('Manage Institution')} />}
+                            </Button.Group>
                         </Segment>
                     </Grid.Row>
                     <Grid.Row style={{ padding: 0, top: '-4rem' }}>
@@ -98,7 +107,7 @@ export default observer(function InstitutionDetails() {
                             <InstitutionDetailsContent />
                         </div>
                     </Grid.Row>
-                </Grid>}
+                </Grid >}
             {isMobile &&
                 <Grid style={{ margin: 0, backgroundColor: '#fff' }}>
                     <Grid.Row style={{ padding: 0, zIndex: 1 }}>

@@ -2,6 +2,8 @@ import { EducationalComponent } from "./educationalComponent";
 
 export interface Specialty {
     id: string;
+    approved: boolean;
+    visible: boolean;
     institutionId: string;
     description: string;
     localSpecialtyCode: string;
@@ -30,6 +32,7 @@ export class Specialty implements Specialty {
 export class SpecialtyFormValues {
     id?: string = undefined;
     institutionId?: string = undefined;
+    visible: boolean = false;
     localSpecialtyCode: string = '';
     description: string = '';
     degreeId: number = 1;
@@ -52,6 +55,7 @@ export class SpecialtyFormValues {
             this.id = specialty.id;
             this.institutionId = specialty.institutionId;
             this.localSpecialtyCode = specialty.localSpecialtyCode;
+            this.visible = specialty.visible;
             this.description = specialty.description;
             this.degreeId = specialty.degreeId;
             this.tuitionUAH = specialty.tuitionUAH;

@@ -3,6 +3,6 @@ import { Segment } from 'semantic-ui-react';
 
 export default function ProfileInstitutionPendingChangesList() {
     return (
-        <Segment basic content='There are no pending changes...' />
+        <Segment basic style={{width: '100%'}} content='There are no pending changes...' />
     )
 }

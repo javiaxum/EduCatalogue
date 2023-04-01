@@ -1,6 +1,8 @@
 export interface Institution {
     id: string;
     name: string;
+    approved: boolean;
+    visible: boolean;
     description: string;
     accreditation: number;
     typeId: number;

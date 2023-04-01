@@ -16,10 +16,28 @@ namespace API.Controllers
     public class SpecialtiesController : BaseAPIController
     {
         [AllowAnonymous]
-        [HttpGet("{id}/institution")]
+        [HttpGet("{id}/institution/list")]
         public async Task<IActionResult> GetSpecialties([FromQuery] SpecialtyParams param, Guid id)
         {
             return HandlePagedResult(await Mediator.Send(new Application.Specialties.List.Query { Params = param, InstitutionId = id }));
+        }
+        [AllowAnonymous]
+        [HttpGet("{id}/institution/pendingChanges")]
+        public async Task<IActionResult> GetSpecialtiesPendingChanges([FromQuery] SpecialtyParams param, Guid id)
+        {
+            return HandlePagedResult(await Mediator.Send(new Application.Specialties.ListForModeration.Query { Params = param, InstitutionId = id }));
+        }
+        [Authorize(Policy = "IsOperator")]
+        [HttpPut("approve/{id}")]
+        public async Task<IActionResult> ApproveChanges(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Specialties.ApproveChanges.Command { Id = id }));
+        }
+        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [HttpPut("toggleVisibility/{id}")]
+        public async Task<IActionResult> ToggleVisibility(Guid id)
+        {
+            return HandleResult(await Mediator.Send(new Application.Specialties.ToggleVisibility.Command { Id = id }));
         }
         [AllowAnonymous]
         [HttpGet("specialtyCores")]
@@ -45,6 +63,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListComponentCores.Query { }));
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetSpecialty(Guid id)
         {

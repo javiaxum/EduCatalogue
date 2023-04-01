@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Menu } from 'semantic-ui-react';
+import { Button, Icon, Menu } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import InstitutionDetailsInfoForm from '../form/InstitutionDetailsInfoForm';
 import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
@@ -11,9 +11,11 @@ import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsS
 
 export default observer(function InstitutionDetailsContent() {
     const { t } = useTranslation();
-    const { institutionStore: { setActiveMenuItem, activeMenuItem } } = useStore();
+    const { institutionStore, commonStore } = useStore();
+    const { setActiveMenuItem, activeMenuItem, toggleVisibility, selectedInstitution, loading } = institutionStore;
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
+    const visible = selectedInstitution?.visible!;
 
     const items = [
         'About',
@@ -40,6 +42,10 @@ export default observer(function InstitutionDetailsContent() {
                         onClick={() => setActiveMenuItem(i)}
                     />
                 )}
+                <Menu.Item loading={loading} onClick={() => toggleVisibility(selectedInstitution?.id!)}>
+                    <Icon name={visible ? 'eye slash' : 'eye'} />
+                    {t(visible ? 'Hide institution' : 'Show institution')}
+                </Menu.Item>
             </Menu>
             {components[items.indexOf(activeMenuItem)]}
         </>

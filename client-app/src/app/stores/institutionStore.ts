@@ -147,7 +147,7 @@ export default class InstitutionStore {
             })
             this.setLoading(false);
         } catch (error) {
-            console.log(error); 
+            console.log(error);
             this.setLoading(false);
         }
     }
@@ -180,6 +180,16 @@ export default class InstitutionStore {
         this.activeMenuItem = itemName;
     }
 
+    resetSearchParams = () => {
+        this.selectedSpecialties = [];
+        this.selectedBranches = [];
+        this.selectedBranches = [];
+        this.selectedSpecialties = [];
+        this.selectedCities = [];
+        this.tuitionRange = [0, 500000];
+        this.selectedDegreeId = '';
+        this.institutionsSorting = 'az';
+    }
     get institutionAxiosParams() {
         const params = new URLSearchParams();
         params.append('name', this.searchNameParam);
@@ -198,6 +208,38 @@ export default class InstitutionStore {
         return params;
     }
 
+    approveChanges = async (id: string) => {
+        this.setLoading(true);
+        try {
+            const result = await agent.Institutions.approveChanges(id);
+            runInAction(() => {
+                if (this.selectedInstitution)
+                    this.selectedInstitution.approved = true;
+            })
+            this.setLoading(false);
+            return result;
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
+    toggleVisibility = async (id: string) => {
+        this.setLoading(true);
+        try {
+            const result = await agent.Institutions.toggleVisibility(id);
+            runInAction(() => {
+                if (this.selectedInstitution)
+                    this.selectedInstitution.visible = !this.selectedInstitution.visible;
+            })
+            this.setLoading(false);
+            return result;
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
     debouncedLoadInstitutions = debounce(() => {
         this.institutionsRegistry.clear();
         this.loadInstitutions();
@@ -206,7 +248,10 @@ export default class InstitutionStore {
     loadInstitutions = async () => {
         try {
             this.setLoading(true);
-            const result = await agent.Institutions.list(this.institutionAxiosParams);
+
+            const result = store.userStore.showPendingChanges ?
+                await agent.Institutions.pendingChangesList(this.institutionAxiosParams) :
+                await agent.Institutions.list(this.institutionAxiosParams);
             runInAction(() => {
                 this.setLoading(false);
                 result.data.forEach((institution, index) => {

@@ -32,7 +32,7 @@ export default observer(function NavBarMobile() {
                     <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
                 </Menu.Item>
             </Menu>
-            {(location.pathname === '/institutions' && !comparison) &&
+            {(location.pathname === '/institutions') &&
                 <Menu className={'inverted-mobile'} style={{ borderRadius: '0px', height: '1rem' }}>
                     <Search
                         style={{ marginLeft: 'auto', marginRight: 'auto' }}
