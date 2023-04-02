@@ -198,7 +198,7 @@ export default observer(function InstitutionDetailsInfoForm() {
                                     <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='address book'
-                                        label={t('Scholarships')}
+                                        label={t('Free education available')}
                                         content={<Icon name={selectedInstitution?.scholarship ? 'check' : 'x'} size='large' />} />
                                 </Table.Body>
                             </Table>
@@ -363,7 +363,7 @@ export default observer(function InstitutionDetailsInfoForm() {
                                 <TableItem
                                     loading={(loading || loadingInitial)}
                                     icon='address book'
-                                    label={t('Scholarships')}
+                                    label={t('Free education available')}
                                     content={<Icon name={selectedInstitution?.scholarship ? 'check' : 'x'} size='large' />} />
                             </Table.Body>
                         </Table>

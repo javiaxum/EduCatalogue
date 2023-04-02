@@ -1,11 +1,14 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
-import { Button, Checkbox, Header, Label } from 'semantic-ui-react';
+import { Button, Checkbox, Divider, Header, Icon, Label } from 'semantic-ui-react';
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import PasswordResetRequestForm from './PasswordResetRequestForm';
 import { useEffect, useState } from 'react';
+import FacebookLogin from '@greatsumini/react-facebook-login';
+import { Link } from 'react-router-dom';
+import * as Yup from 'yup';
 
 export default observer(function LoginForm() {
     const { userStore, modalStore } = useStore();
@@ -14,6 +17,13 @@ export default observer(function LoginForm() {
 
     return (
         <Formik
+            validationSchema={
+                Yup.object({
+                    email: Yup.string().required(`${t('This is a required field')}`).email(`${t('This should be a valid email')}`),
+                    password: Yup.string()
+                        .required(`${t('This is a required field')}`)
+                })
+            }
             initialValues={{ email: '', password: '', code: '', error: null, rememberMeSwitch: false }}
             onSubmit={(values, { setErrors, setSubmitting, resetForm }) => {
                 if (values.code.length === 0)
@@ -34,7 +44,7 @@ export default observer(function LoginForm() {
                         .finally(() => { setSubmitting(false); resetForm(); setTwoFactor(false); })
                 }
             }}>
-            {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers }) => (
+            {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers, isValid, dirty }) => (
                 <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
                     <Header as='h3' content={t('Login')} textAlign='left' color='teal' />
                     <CustomTextInput margin='0.3rem' width='100%' placeholder='Email' name='email' />
@@ -50,11 +60,36 @@ export default observer(function LoginForm() {
                             getFieldHelpers('rememberMeSwitch').setValue(!getFieldProps('rememberMeSwitch').value)
                         }}
                     />
-                    <a onClick={() => { modalStore.closeModal(); modalStore.openModalMini(<PasswordResetRequestForm />) }} style={{ padding: '0 0 0 4rem' }}>{t('Forgot password?')}</a>
+                    <Button
+                        color='blue'
+                        compact
+                        basic
+                        onClick={() => { modalStore.closeModal(); modalStore.openModalMini(<PasswordResetRequestForm />) }}
+                        style={{ display: 'inline', position: 'absolute', right: 0 }}>
+                        {t('Forgot password?')}
+                    </Button>
                     <Button.Group fluid>
-                        <Button positive content={t('Login')} type='submit' loading={isSubmitting} />
+                        <Button positive content={t('Login')} type='submit' disabled={!isValid || isSubmitting || !dirty} loading={isSubmitting} />
                         <Button content={t('Cancel')} type='button' onClick={() => modalStore.closeModal()} />
                     </Button.Group>
+                    <Divider />
+                    <Button
+                        style={{ width: '100%', textAlign: 'center' }}
+                        as={FacebookLogin}
+                        appId='1181277965779433'
+                        loading={userStore.fbLoading}
+                        size='huge'
+                        inverted
+                        color='facebook'
+                        onSuccess={(response: any) => {
+                            userStore.fbLogin(response.accessToken);
+                        }}
+                        onFail={(response: any) => {
+                            console.log('Login failure')
+                        }}>
+                        {t('Sign in with Facebook')}
+                        <Icon name='facebook' size='large' style={{ right: '-1.2rem', position: 'relative', top: '-0.3rem' }} />
+                    </Button>
                 </Form>)}
         </Formik>
     )

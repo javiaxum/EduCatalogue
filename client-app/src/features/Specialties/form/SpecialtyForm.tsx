@@ -127,9 +127,10 @@ export default observer(function SpecialtyForm() {
                         <Grid style={{ padding: 0, color: '#444', width: '80%', minWidth: '65rem', margin: '0 auto' }}>
                             <Grid.Row style={{ paddingBottom: 0 }}>
                                 <Header
-                                    size='large'
-                                    style={{ color: '#444', width: 'calc(100% - 29rem)' }}>
+                                    size='medium'
+                                    style={{ color: '#444', width: 'calc(100% - 37rem)' }}>
                                     <CustomSelectInput
+                                        padding='0.2rem'
                                         loading={(loading || loadingInitial)}
                                         onChange={(event, data: DropdownProps) =>
                                             setSpecialtyCore(new SpecialtyCore(getSpecialtyCore(data.value as string)))}
@@ -137,7 +138,14 @@ export default observer(function SpecialtyForm() {
                                         placeholder={t('Select specialty')}
                                         name='localSpecialtyCode' />
                                 </Header>
-                                <Button.Group style={{ width: '28rem', margin: '0 0 0 auto', height: '35px' }}>
+                                <Button.Group style={{ width: '37rem', margin: '0 0 0 auto', height: '35px' }}>
+                                    <Button
+                                        negative
+                                        size='large'
+                                        type='button'
+                                        onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} >
+                                        <Icon name='trash' style={{position: 'relative', bottom: '0.2rem'}} />
+                                    </Button>
                                     <Button
                                         type='button'
                                         loading={loading}
@@ -162,7 +170,7 @@ export default observer(function SpecialtyForm() {
                             </Grid.Row>
                             <Grid.Row>
                                 <Grid style={{ width: '100%' }}>
-                                    <Grid.Column width={7}>
+                                    <Grid.Column width={8}>
                                         <Table basic='very' compact>
                                             <Table.Body>
                                                 <Table.Row>
@@ -309,7 +317,7 @@ export default observer(function SpecialtyForm() {
                                             </Table.Body>
                                         </Table>
                                     </Grid.Column>
-                                    <Grid.Column width={6} stretched>
+                                    <Grid.Column width={5} stretched>
                                         <Segment basic style={{ padding: '0' }}>
                                             <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
                                             <CustomTextArea rows={16} placeholder={t('Description')} name='description' loading={(loading || loadingInitial)} />

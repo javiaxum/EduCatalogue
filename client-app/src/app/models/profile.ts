@@ -16,6 +16,7 @@ export interface Profile {
     company: string;
     reviews: Review[];
     managedInstitutions: ManagedInstitution[];
+    pendingChanges: PendingChange[];
 }
 
 export class Profile implements Profile {
@@ -30,6 +31,24 @@ export interface ManagedInstitution {
     id: string,
     name: string,
     titleImageUrl: string,
+}
+
+export interface PendingChange {
+    id: string,
+    name: string,
+    institutionName: string,
+    titleImageUrl: string,
+}
+
+export interface UserRegistryItem {
+    username: string;
+    displayName: string;
+    avatar?: Image;
+    location: string;
+    socialAccount1: string;
+    socialAccount2: string;
+    socialAccount3: string;
+    company: string;
 }
 
 export class ProfileInfoFormValues {

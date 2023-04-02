@@ -8,6 +8,8 @@ using API.DTOs;
 using API.Services;
 using Application.Core;
 using Application.Profiles;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -20,7 +22,6 @@ using WebPWrecover.Services;
 
 namespace API.Controllers
 {
-    [AllowAnonymous]
     [ApiController]
     [Route("/api/[controller]")]
     public class AccountController : BaseAPIController
@@ -29,14 +30,23 @@ namespace API.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly TokenService _tokenService;
         private readonly IEmailSender _emailSender;
-        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IEmailSender emailSender)
+        private readonly IConfiguration _configuration;
+        private readonly HttpClient _httpClient;
+        private readonly IMapper _mapper;
+        public AccountController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, TokenService tokenService, IEmailSender emailSender, IConfiguration configuration, IMapper mapper)
         {
+            _mapper = mapper;
+            _configuration = configuration;
             _emailSender = emailSender;
             _tokenService = tokenService;
             _signInManager = signInManager;
             _userManager = userManager;
+            _httpClient = new HttpClient
+            {
+                BaseAddress = new System.Uri("https://graph.facebook.com")
+            };
         }
-
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AppUserDTO>> Login(LoginDTO loginDTO)
         {
@@ -62,13 +72,13 @@ namespace API.Controllers
 
             return Unauthorized("An error has occured while authorizing the user");
         }
-
+        [AllowAnonymous]
         [HttpPost("twoFactorCheck")]
         public async Task<ActionResult<bool>> TwoFactorCheck(LoginDTO loginDTO)
         {
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.Email == loginDTO.Email);
 
-            if (user == null) return Unauthorized("An error has occured while authorizing the user");
+            if (user == null) return false;
 
             if (user.TwoFactorEnabled)
             {
@@ -78,7 +88,7 @@ namespace API.Controllers
             }
             return false;
         }
-
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<AppUserDTO>> Register(RegisterDTO registerDTO)
         {
@@ -111,7 +121,7 @@ namespace API.Controllers
             }
             return BadRequest("An error has occured while registering user");
         }
-
+        [AllowAnonymous]
         [HttpGet("confirmEmail")]
         public async Task<IActionResult> Confirm(string token, string email)
         {
@@ -124,7 +134,7 @@ namespace API.Controllers
                 return Redirect("http://localhost:3000/emailConfirmed");
             return BadRequest("An error has occured while confirming the email");
         }
-
+        [AllowAnonymous]
         [HttpGet("confirmEmailChange")]
         public async Task<IActionResult> ConfirmEmailChange(string token, string newEmail, string email)
         {
@@ -137,7 +147,7 @@ namespace API.Controllers
                 return Redirect("http://localhost:3000/emailConfirmed");
             return BadRequest("An error has occured while confirming the email");
         }
-
+        [AllowAnonymous]
         [HttpPut("confirmPasswordChange")]
         public async Task<IActionResult> ConfirmPasswordChange(string token, string newPassword, string email)
         {
@@ -184,7 +194,7 @@ namespace API.Controllers
             await _emailSender.SendEmailAsync(newEmail, "Email Change Confirmation", $"http://localhost:5172/api/account/confirmEmailChange?token={tokenEncoded}&email={user.Email}&newEmail={newEmail}");
             return Ok("Confirmation email message has been sent successfully");
         }
-
+        [AllowAnonymous]
         [HttpPut("requestPasswordReset")]
         public async Task<IActionResult> RequestPasswordReset(string email)
         {
@@ -279,6 +289,13 @@ namespace API.Controllers
             return BadRequest();
         }
 
+        [Authorize(Policy = "IsOperator")]
+        [HttpPut("toggleInstitutionManager")]
+        public async Task<IActionResult> ToggleInstitutionManager([FromQuery] string username, Guid institutionId)
+        {
+            return HandleResult(await Mediator.Send(new Application.Profiles.ToggleInstitutionManager.Command { InstitutionId = institutionId, Username = username  }));
+        }
+
         [Authorize]
         [HttpGet]
         public async Task<ActionResult<AppUserDTO>> GetCurrentUser()
@@ -287,6 +304,35 @@ namespace API.Controllers
             .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
             if (user == null)
                 return BadRequest("An error has occured while getting user");
+            return CreateUserDTO(user, false);
+        }
+
+        [AllowAnonymous]
+        [HttpPost("FbLogin")]
+        public async Task<ActionResult<AppUserDTO>> FbLogin(string accessToken)
+        {
+            var fbVerifyKeys = _configuration["Facebook:AppId"] + "|" + _configuration["Facebook:AppSecret"];
+            var verifyToken = await _httpClient.GetAsync($"debug_token?input_token={accessToken}&access_token={fbVerifyKeys}");
+            if (!verifyToken.IsSuccessStatusCode)
+                return Unauthorized();
+
+            var fbUrl = $"me?access_token={accessToken}&fields=name,email,picture.width(100).height(100)";
+            var facebookInfo = await _httpClient.GetFromJsonAsync<Facebook>(fbUrl);
+            var user = await _userManager.Users.Include(a => a.Avatar).FirstOrDefaultAsync(x => x.Email == facebookInfo.Email);
+            if (user != null)
+            {
+                return CreateUserDTO(user, false);
+            }
+
+            user = new AppUser
+            {
+                Email = facebookInfo.Email,
+                DisplayName = facebookInfo.Name,
+                UserName = facebookInfo.Email,
+                Avatar = new Image { Id = $"fb_{facebookInfo.Id}", Url = facebookInfo.Picture.Data.Url },
+            };
+            var result = await _userManager.CreateAsync(user);
+            if (!result.Succeeded) return BadRequest("Problem creating Facebook user");
             return CreateUserDTO(user, false);
         }
 

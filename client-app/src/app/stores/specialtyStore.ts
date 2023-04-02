@@ -395,9 +395,10 @@ export default class SpecialtyStore {
     createSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {
         try {
             await agent.Specialties.create(specialty, institutionId);
-            let newSpecialty = new Specialty(specialty);
-            this.setSpecialty(newSpecialty);
             runInAction(() => {
+                let newSpecialty = new Specialty(specialty);
+                newSpecialty.approved = false;
+                this.setSpecialty(newSpecialty);
                 this.selectedSpecialty = newSpecialty;
             })
         } catch (error) {
@@ -410,6 +411,7 @@ export default class SpecialtyStore {
             runInAction(() => {
                 if (specialty.id) {
                     let editedSpecialty = { ...this.getSpecialty(specialty.id), ...specialty };
+                    editedSpecialty.approved = false;
                     this.setSpecialty(editedSpecialty as Specialty);
                     this.selectedSpecialty = editedSpecialty as Specialty;
                 }

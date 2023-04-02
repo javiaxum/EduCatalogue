@@ -213,8 +213,10 @@ export default class InstitutionStore {
         try {
             const result = await agent.Institutions.approveChanges(id);
             runInAction(() => {
-                if (this.selectedInstitution)
+                if (this.selectedInstitution) {
                     this.selectedInstitution.approved = true;
+                    this.institutionsRegistry.set(this.selectedInstitution?.id, this.selectedInstitution);
+                }
             })
             this.setLoading(false);
             return result;
@@ -599,6 +601,7 @@ export default class InstitutionStore {
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };
+                    editedInstitution.approved = false;
                     this.institutionsRegistry.set(institution.id, editedInstitution as Institution);
                     this.selectedInstitution = editedInstitution as Institution;
                 }

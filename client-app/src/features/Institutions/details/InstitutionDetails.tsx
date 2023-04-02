@@ -20,7 +20,7 @@ export default observer(function InstitutionDetails() {
         setReviewPagingParams,
         setImagesPagingParams,
         getRegionById,
-        activeMenuItem } = institutionStore;
+        activeMenuItem, loadingInitial} = institutionStore;
     const { editMode, setEditMode } = commonStore;
     const { id } = useParams();
 
@@ -62,12 +62,12 @@ export default observer(function InstitutionDetails() {
                     <Grid.Row style={{ padding: 0, top: '-4rem' }}>
                         <Segment style={{ margin: 0, padding: '1rem 3rem 1rem 3rem', left: '15%', width: '70%', borderRadius: '5px', boxShadow: 'none', border: 'none', zIndex: 2 }}>
                             {loading ?
-                                <Placeholder style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 13rem)', height: '6rem' }}>
+                                <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '6rem' }}>
                                     <Placeholder.Line />
                                     <Placeholder.Line />
                                     <Placeholder.Line />
                                 </Placeholder> :
-                                <div style={{ display: 'inline-block', width: 'calc(100% - 25rem)' }}>
+                                <div style={{ display: 'inline-block', width: '100%' }}>
                                     <Header
                                         size='huge'
                                         content={selectedInstitution?.name}
@@ -82,24 +82,23 @@ export default observer(function InstitutionDetails() {
                                     <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
                                         {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
                                     </div>
+                                    <Button.Group style={{ position: 'absolute', width: 'fit-content', right: 0, bottom: '1rem' }}>
+                                        {(profileStore.isOperator && !selectedInstitution?.approved && !loadingInitial && !loading) &&
+                                            <Button
+                                                type='button'
+                                                positive
+                                                onClick={() => institutionStore.approveChanges(id!)}>
+                                                {t('Approve changes')}
+                                            </Button>}
+                                        {(isInstitutionManager || profileStore.isOperator) &&
+                                            <Button
+                                                onClick={() => commonStore.setEditMode(!commonStore.editMode)}
+                                                as={Link}
+                                                floated='right'
+                                                to={`/manage/${selectedInstitution?.id}`}
+                                                content={t('Manage Institution')} />}
+                                    </Button.Group>
                                 </div>}
-                            <Button.Group style={{ position: 'absolute', width: '23rem', right: '2rem' }}>
-                                {(profileStore.isOperator && !institutionStore.selectedInstitution?.approved) &&
-                                    <Button
-                                        type='button'
-                                        positive
-                                        loading={institutionStore.loading}
-                                        onClick={() => institutionStore.approveChanges(id!)}>
-                                        {t('Approve changes')}
-                                    </Button>}
-                                {(isInstitutionManager || profileStore.isOperator) &&
-                                    <Button
-                                        onClick={() => setEditMode(!editMode)}
-                                        as={Link}
-                                        floated='right'
-                                        to={`/manage/${selectedInstitution?.id}`}
-                                        content={t('Manage Institution')} />}
-                            </Button.Group>
                         </Segment>
                     </Grid.Row>
                     <Grid.Row style={{ padding: 0, top: '-4rem' }}>

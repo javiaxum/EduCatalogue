@@ -11,26 +11,26 @@ import { router } from '../routers/Routes';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-export default observer(function PasswordResetRequestForm() {
-    const { userStore, modalStore } = useStore();
+export default observer(function ToggleInstitutionManagerForm() {
+    const { userStore, modalStore, institutionStore } = useStore();
     const { t } = useTranslation();
     const { token } = useParams();
     return (
         <Formik
-            initialValues={{ email: '', error: null }}
+            initialValues={{ username: '', error: null }}
             onSubmit={(values, { setErrors }) => {
                 userStore
-                    .requestPasswordReset(values.email).then(() => toast.success(t('Password reset letter has been sent successfully!')))
+                    .toggleInstitutionManager(values.username, institutionStore.selectedInstitution?.id!).then(() => toast.success(t('Manager has been toggled successfully!')))
                     .catch(error => setErrors({ error })).finally(() => modalStore.closeModal())
             }}
             validationSchema={
                 Yup.object({
-                    email: Yup.string().required(),
+                    username: Yup.string().required(),
                 })} >
             {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-                    <Header as='h3' content={t('Enter account email for password reset')} textAlign='left' color='teal' />
-                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Email')} name='email' />
+                    <Header as='h3' content={t('Toggle institution manager')} textAlign='left' color='teal' />
+                    <CustomTextInput margin='0.4rem 0' width='100%' placeholder={t('Username')} name='username' />
                     <ErrorMessage
                         name='error'
                         render={() => <ValidationErrors errors={errors.error} />}
@@ -45,7 +45,7 @@ export default observer(function PasswordResetRequestForm() {
                         <Button
                             content={t('Cancel')}
                             type='button'
-                            onClick={() => { modalStore.closeModal(); router.navigate('/institutions') }} />
+                            onClick={() => { modalStore.closeModal(); }} />
                     </Button.Group>
                 </Form>
             )}

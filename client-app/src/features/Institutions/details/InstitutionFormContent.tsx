@@ -8,14 +8,18 @@ import InstitutionDetailsGallery from './gallery/InstitutionDetailsGallery';
 import InstitutionDetailsLocationForm from './location/InstitutionDetailsLocationForm';
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
 import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsSpecialtiesList';
+import { useFormikContext } from 'formik';
+import { Link } from 'react-router-dom';
+import ToggleInstitutionManagerForm from '../../identity/ToggleInstitutionManagerForm';
 
 export default observer(function InstitutionDetailsContent() {
     const { t } = useTranslation();
-    const { institutionStore, commonStore } = useStore();
-    const { setActiveMenuItem, activeMenuItem, toggleVisibility, selectedInstitution, loading } = institutionStore;
+    const { institutionStore, commonStore, userStore, modalStore, profileStore } = useStore();
+    const { setActiveMenuItem, activeMenuItem, toggleVisibility, selectedInstitution, loading, loadingInitial } = institutionStore;
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
     const visible = selectedInstitution?.visible!;
+    const formik = useFormikContext();
 
     const items = [
         'About',
@@ -42,11 +46,19 @@ export default observer(function InstitutionDetailsContent() {
                         onClick={() => setActiveMenuItem(i)}
                     />
                 )}
-                <Menu.Item loading={loading} onClick={() => toggleVisibility(selectedInstitution?.id!)}>
-                    <Icon name={visible ? 'eye slash' : 'eye'} />
-                    {t(visible ? 'Hide institution' : 'Show institution')}
+                <Menu.Item onClick={() => toggleVisibility(selectedInstitution?.id!)}>
+                    {(!loading && !loadingInitial) &&
+                        <>
+                            <Icon name={visible ? 'eye slash' : 'eye'} />
+                            {t(visible ? 'Hide institution' : 'Show institution')}
+                        </>}
                 </Menu.Item>
+                {profileStore.isOperator && <Menu.Item onClick={() => modalStore.openModalMini(<ToggleInstitutionManagerForm />)}>
+                    {(!loading && !loadingInitial) &&
+                        <Icon name='user' />}
+                </Menu.Item>}
             </Menu>
+
             {components[items.indexOf(activeMenuItem)]}
         </>
     )

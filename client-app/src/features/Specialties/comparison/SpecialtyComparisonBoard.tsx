@@ -44,12 +44,12 @@ export default observer(function SpecialtyComparisonBoard() {
 
         async function loadSpecialties() {
             let specialties = new Map<string, Specialty>();
-            await Promise.all(selectedSpecialtyIds.map((x) => loadSpecialty(x).then((result) => { if (result) specialties.set(x, result); console.log(result) })));
+            await Promise.all(selectedSpecialtyIds.map((x) => loadSpecialty(x).then((result) => { if (result) specialties.set(x, result);  })));
             return specialties;
         }
         async function loadInstitutions(ids: string[]) {
             let institutions = new Map<string, Institution>();
-            await Promise.all(ids.map((x) => institutionStore.loadInstitution(x).then((result) => { if (result) institutions.set(x, result); console.log(result) })));
+            await Promise.all(ids.map((x) => institutionStore.loadInstitution(x).then((result) => { if (result) institutions.set(x, result);  })));
             return institutions;
         }
     }, [institutionStore, loadSpecialty, selectedSpecialties, selectedSpecialtyIds])

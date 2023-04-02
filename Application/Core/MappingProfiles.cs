@@ -91,6 +91,7 @@ namespace Application.Core
             CreateMap<StudyForm, StudyFormDTO>();
 
             CreateMap<Review, ReviewDTO>()
+            .ForMember(d => d.InstitutionName, o => o.MapFrom(s => s.Institution.Name))
             .ForMember(d => d.InstitutionId, o => o.MapFrom(s => s.Institution.Id));
 
             CreateMap<Branch, Branch>();

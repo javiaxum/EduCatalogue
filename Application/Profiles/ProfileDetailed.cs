@@ -23,5 +23,6 @@ namespace Application.Profiles
         public Image Avatar { get; set; }
         public ICollection<ReviewDTO> Reviews { get; set; }
         public ICollection<ManagedInstitution> ManagedInstitutions { get; set; }
+        public ICollection<PendingChange> PendingChanges { get; set; }
     }
 }

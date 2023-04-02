@@ -1,18 +1,20 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useLocation, useParams } from 'react-router-dom';
-import { NavLink } from 'react-router-dom';
-import { Button, Container, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Button, Dropdown, Image, Menu, Search } from 'semantic-ui-react';
 import LoginForm from '../../features/identity/LoginForm';
 import RegisterForm from '../../features/identity/RegisterForm';
 import { useStore } from '../stores/store';
 
 export default observer(function NavBar() {
-    const { modalStore, userStore, profileStore, commonStore, institutionStore, specialtyStore } = useStore()
+    const { modalStore, userStore, profileStore, commonStore, institutionStore } = useStore()
     const { t, i18n } = useTranslation();
     const location = useLocation();
-    const { id } = useParams();
+
+    useEffect(() => {
+        i18n.changeLanguage('ua');
+    }, [])
 
     return (
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
@@ -40,14 +42,14 @@ export default observer(function NavBar() {
                     <Button
                         className='languageToggler'
                         style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                        active={i18n.language == 'en'}
+                        active={i18n.language === 'en'}
                         onClick={() => { i18n.changeLanguage('en'); }}>
                         Eng
                     </Button>
                     <Button
                         className='languageToggler'
                         style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                        active={i18n.language == 'ua'}
+                        active={i18n.language === 'ua'}
                         onClick={() => { i18n.changeLanguage('ua'); }}>
                         Укр
                     </Button>

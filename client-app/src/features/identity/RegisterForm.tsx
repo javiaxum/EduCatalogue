@@ -1,12 +1,13 @@
 import { ErrorMessage, Form, Formik } from 'formik';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { Button, Header } from 'semantic-ui-react';
+import { Button, Divider, Header, Icon } from 'semantic-ui-react';
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
 import { useTranslation } from 'react-i18next';
+import FacebookLogin from '@greatsumini/react-facebook-login';
 
 export default observer(function RegisterForm() {
     const { userStore, modalStore } = useStore();
@@ -20,7 +21,7 @@ export default observer(function RegisterForm() {
             }
             validationSchema={
                 Yup.object({
-                    email: Yup.string().required(`${t('This is a required field')}`).email(),
+                    email: Yup.string().required(`${t('This is a required field')}`).email(`${t('This should be a valid email')}`),
                     password: Yup.string()
                         .required(`${t('This is a required field')}`)
                         .min(8, `${t('Password have to be at least 8 characters long')}`)
@@ -43,15 +44,33 @@ export default observer(function RegisterForm() {
                     <Button.Group fluid>
                         <Button
                             positive
-                            content='Register'
+                            content={t('Register')}
                             type='submit'
                             loading={isSubmitting}
                             disabled={!isValid || isSubmitting || !dirty} />
                         <Button
-                            content='Cancel'
+                            content={t('Cancel')}
                             type='button'
                             onClick={() => modalStore.closeModal()} />
                     </Button.Group>
+                    <Divider />  
+                    <Button
+                        style={{width: '100%', textAlign: 'center'}}
+                        as={FacebookLogin}
+                        appId='1181277965779433'
+                        loading={userStore.fbLoading}
+                        size='huge'
+                        inverted
+                        color='facebook'
+                        onSuccess={(response: any) => {
+                            userStore.fbLogin(response.accessToken);
+                        }}
+                        onFail={(response: any) => {
+                            console.log('Login failure')
+                        }}>
+                        {t('Sign in with Facebook')}
+                        <Icon name='facebook' size='large' style={{right: '-1.2rem', position: 'relative', top: '-0.3rem'}} />
+                    </Button>
                 </Form>
             )}
         </Formik>

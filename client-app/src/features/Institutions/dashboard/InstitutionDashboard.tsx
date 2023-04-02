@@ -86,6 +86,8 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                         <InstitutionsList />
                         {institutionPagination &&
                             <Pagination
+                                hidePrevButton
+                                hideNextButton
                                 size='large'
                                 variant="outlined" shape="rounded"
                                 style={{ margin: '3rem auto 0 auto', width: 'fit-content' }}
@@ -135,6 +137,8 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                     <Grid.Row>
                         {institutionPagination &&
                             <Pagination
+                                hidePrevButton
+                                hideNextButton
                                 size='large'
                                 variant="outlined" shape="rounded"
                                 style={{ margin: '3rem auto 0 auto', width: 'fit-content' }}

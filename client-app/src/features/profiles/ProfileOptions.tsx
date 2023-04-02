@@ -1,9 +1,8 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { useParams } from 'react-router-dom';
-import { Button, Grid, Header, Item, Menu, Segment } from 'semantic-ui-react';
+import { Grid, Menu } from 'semantic-ui-react';
 import { Profile } from '../../app/models/profile';
 import { useStore } from '../../app/stores/store';
 import ProfileInstitutionPendingChangesList from './ProfileInstitutionPendingChangesList';
@@ -17,12 +16,11 @@ interface Props {
 }
 
 export default observer(function ProfileOptions({ profile }: Props) {
-    const { commonStore, userStore, profileStore: { isCurrentUser } } = useStore();
+    const { profileStore: { isCurrentUser } } = useStore();
     const [menuItem, setMenuItem] = useState<string>('General');
 
     const { t } = useTranslation();
 
-    const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
     if (!isCurrentUser) return <></>
 
@@ -36,8 +34,8 @@ export default observer(function ProfileOptions({ profile }: Props) {
         <ProfileSettingsGeneral profile={profile} />,
         <ProfileSettingsSecurity profile={profile} />,
         <ProfileManagedInstitutions institutions={profile.managedInstitutions} />,
-        <ProfileInstitutionPendingChangesList />,
-        <ProfileReviews profile={profile} reviews={profile.reviews} />,
+        <ProfileInstitutionPendingChangesList profile={profile}/>,
+        <ProfileReviews profile={profile} />,
     ]
     return (
         <Grid style={{ width: '100%', margin: 0 }}>

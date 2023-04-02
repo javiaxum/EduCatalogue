@@ -3,11 +3,14 @@ import { router } from "../../features/routers/Routes";
 import agent from "../api/agent";
 import { User, UserFormValues } from "../models/user";
 import { store } from "./store";
+import { UserRegistryItem } from "../models/profile";
 
 export default class UserStore {
     user: User | null = null;
+    usersRegistry = new Map<string, UserRegistryItem>();
     rememberMeSwitch: boolean = false;
     loading: boolean = false;
+    fbLoading: boolean = false;
     showPendingChanges: boolean = false;
 
     constructor() {
@@ -22,6 +25,17 @@ export default class UserStore {
         this.showPendingChanges = !this.showPendingChanges;
         store.institutionStore.resetSearchParams();
         store.specialtyStore.resetSearchParams();
+    }
+
+    toggleInstitutionManager = async (username: string, institutionId: string) => {
+        this.setLoading(true);
+        try {
+            await agent.Account.toggleInstitutionManager(username, institutionId);
+            this.setLoading(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
     }
 
     setLoading = (state: boolean) => {
@@ -43,6 +57,29 @@ export default class UserStore {
         } catch (error) {
             console.log(error);
             this.setLoading(false);
+        }
+    }
+
+    setFbLogin = (state: boolean) => {
+        this.fbLoading = state;
+    }
+
+
+    fbLogin = async (accessToken: string) => {
+        this.setFbLogin(true);
+        try {
+            const user = await agent.Account.fbLogin(accessToken);
+            runInAction(() => {
+                store.commonStore.setToken(user.token);
+                this.user = user;
+                this.setFbLogin(false);
+            });
+            router.navigate('/institutions');
+            store.modalStore.closeModal();
+            store.profileStore.loadProfile();
+        } catch (error) {
+            console.log(error);
+            this.setFbLogin(false);
         }
     }
     register = async (creds: UserFormValues) => {
@@ -82,7 +119,7 @@ export default class UserStore {
     }
     deleteUser = async () => {
         try {
-            const user = await agent.Account.delete();
+            await agent.Account.delete();
             runInAction(() => {
                 this.logout();
                 store.profileStore.profile = undefined;
@@ -94,14 +131,14 @@ export default class UserStore {
     }
     requestEmailChange = async (newEmail: string) => {
         try {
-            const user = await agent.Account.updateEmail(newEmail);
+            await agent.Account.updateEmail(newEmail);
         } catch (error) {
             console.log(error);
         }
     }
     requestPasswordReset = async (email: string) => {
         try {
-            const user = await agent.Account.requestPasswordReset(email);
+            await agent.Account.requestPasswordReset(email);
         } catch (error) {
             console.log(error);
         }
@@ -109,7 +146,7 @@ export default class UserStore {
 
     resetPassword = async (newPassword: string, email: string, token: string) => {
         try {
-            const user = await agent.Account.resetPassword(newPassword, email, token);
+            await agent.Account.resetPassword(newPassword, email, token);
         } catch (error) {
             console.log(error);
         }
@@ -117,7 +154,7 @@ export default class UserStore {
 
     changePassword = async (newPassword: string, oldPassword: string) => {
         try {
-            const user = await agent.Account.changePassword(newPassword, oldPassword);
+            await agent.Account.changePassword(newPassword, oldPassword);
         } catch (error) {
             console.log(error);
         }
@@ -125,7 +162,7 @@ export default class UserStore {
 
     requestEmailConfirmationMessage = async () => {
         try {
-            const user = await agent.Account.requestEmailConfirmation();
+            await agent.Account.requestEmailConfirmation();
         } catch (error) {
             console.log(error);
         }
@@ -134,7 +171,7 @@ export default class UserStore {
     request2FAActivationCode = async () => {
         this.setLoading(true);
         try {
-            const user = await agent.Account.requestTwoFactorActivationCode();
+            await agent.Account.requestTwoFactorActivationCode();
             this.setLoading(false);
         } catch (error) {
             console.log(error);
@@ -145,7 +182,7 @@ export default class UserStore {
     request2FADeactivationCode = async () => {
         this.setLoading(true);
         try {
-            const user = await agent.Account.requestTwoFactorDeactivationCode();
+            await agent.Account.requestTwoFactorDeactivationCode();
             this.setLoading(false);
         } catch (error) {
             console.log(error);
@@ -156,7 +193,7 @@ export default class UserStore {
     confirm2FAActivation = async (code: string) => {
         this.setLoading(true);
         try {
-            const user = await agent.Account.confirmTwoFactorActivationCode(code);
+            await agent.Account.confirmTwoFactorActivationCode(code);
             runInAction(() => {
                 store.profileStore.profile!.twoFactorEnabled = true;
             })
@@ -170,7 +207,7 @@ export default class UserStore {
     confirm2FADeactivation = async (code: string) => {
         this.setLoading(true);
         try {
-            const user = await agent.Account.confirmTwoFactorDeactivationCode(code);
+            await agent.Account.confirmTwoFactorDeactivationCode(code);
             runInAction(() => {
                 store.profileStore.profile!.twoFactorEnabled = false;
             })
@@ -184,7 +221,6 @@ export default class UserStore {
     get2FAStatus = async (user: UserFormValues) => {
         this.setLoading(true);
         try {
-            console.log(this.loading)
             const result = await agent.Account.twoFactorCheck(user);
             this.setLoading(false);
             return result;

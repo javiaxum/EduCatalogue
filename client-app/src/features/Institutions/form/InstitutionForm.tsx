@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Grid, Image, Header, Placeholder, Segment } from 'semantic-ui-react';
+import { Button, Grid, Image, Header, Placeholder, Segment, Dropdown, DropdownItemProps } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import { Form, Formik } from 'formik';
@@ -100,6 +100,8 @@ export default observer(function InstitutionForm() {
                 router.navigate(`/institutions/${institution.id}`));
         }
     }
+
+
     return (
         <Formik
             validationSchema={validationSchema}
@@ -146,12 +148,12 @@ export default observer(function InstitutionForm() {
                                             </Button.Group>
                                         </Segment>}
                                     {loading ?
-                                        <Placeholder style={{ display: 'inline-block', color: '#444', width: 'calc(100% - 23rem)', height: '6rem' }}>
+                                        <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '6rem' }}>
                                             <Placeholder.Line />
                                             <Placeholder.Line />
                                             <Placeholder.Line />
                                         </Placeholder> :
-                                        <div style={{ display: 'inline-block', width: 'calc(100% - 23rem)' }}>
+                                        <div style={{ display: 'inline-block', width: '100%' }}>
                                             <Header
                                                 size='huge'
                                                 style={{ color: '#444', margin: 0 }} >
@@ -167,23 +169,22 @@ export default observer(function InstitutionForm() {
                                             <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
                                                 {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
                                             </div>
+                                            <Button.Group style={{ position: 'absolute', width: 'fit-content', right: 0, bottom: '1rem' }}>
+                                                <Button
+                                                    positive
+                                                    type='submit'
+                                                    content={t('Submit')}
+                                                    loading={isSubmitting}
+                                                    disabled={!dirty || isSubmitting || !isValid} />
+                                                <Button
+                                                    as={Link}
+                                                    to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
+                                                    onClick={() => setEditMode(false)}
+                                                    type='button'
+                                                    content={t('Cancel')}
+                                                    disabled={isSubmitting} />
+                                            </Button.Group>
                                         </div>}
-                                    <Button.Group style={{ position: 'absolute', width: '22rem', right: '2rem' }}>
-                                        <Button
-                                            positive
-                                            type='submit'
-                                            content={t('Submit')}
-                                            loading={isSubmitting}
-                                            disabled={!dirty || isSubmitting || !isValid} />
-                                        <Button
-                                            as={Link}
-                                            to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
-                                            onClick={() => setEditMode(false)}
-                                            floated='right'
-                                            type='button'
-                                            content={t('Cancel')}
-                                            disabled={isSubmitting} />
-                                    </Button.Group>
                                 </Segment>
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0, top: '-4rem' }}>

@@ -15,6 +15,7 @@ import { store } from "../stores/store";
 import { Image } from '../../app/models/image';
 import { Skill } from "../models/skill";
 import { ComponentCore } from "../models/componentCore";
+import { getI18n } from "react-i18next";
 
 
 axios.defaults.baseURL = 'http://localhost:5172/api';
@@ -61,14 +62,14 @@ axios.interceptors.response.use(async response => {
             }
             break;
         case 401:
-            toast.error("Unauthorized");
+            toast.error(getI18n().t('Authorization error'));
             break;
         case 403:
-            toast.error("Forbidden");
+            toast.error(getI18n().t('Access is forbidden'));
             break;
         case 404:
             router.navigate('/not-found')
-            toast.error("Not Found");
+            toast.error(getI18n().t('Page was not found'));
             break;
         case 500:
             store.commonStore.setServerError(data);
@@ -148,9 +149,11 @@ const Specialties = {
 const Account = {
     current: () => requests.get<User>("/account"),
     login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+    fbLogin: (accessToken: string) => requests.post<User>(`/account/fbLogin?accessToken=${accessToken}`, {}),
     register: (user: UserFormValues) => requests.post<User>("/account/register", user),
     delete: () => requests.delete<void>("/account/delete"),
     updateEmail: (newEmail: string) => requests.put<void>(`/account/requestEmailChange?newEmail=${newEmail}`, {}),
+    toggleInstitutionManager: (username: string, institutionId: string) => requests.put<void>(`/account/toggleInstitutionManager?username=${username}&institutionId=${institutionId}`, {}),
     requestEmailConfirmation: () => requests.get<string>(`/account/requestEmailConfirmation`),
     twoFactorCheck: (user: UserFormValues) => requests.post<boolean>(`/account/twoFactorCheck`, user),
     requestTwoFactorActivationCode: () => requests.get<string>(`/account/requestTwoFactorActivationCode`),

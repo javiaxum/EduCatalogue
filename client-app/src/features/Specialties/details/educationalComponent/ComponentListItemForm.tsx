@@ -50,11 +50,7 @@ export default observer(function ComponentListItemForm({ component, setActiveFor
         let eduComponents = formik.getFieldProps('componentDTOs').value.slice() as EducationalComponent[];
         let newComponent = new EducationalComponent(componentFormValue);
         if (component.id) {
-            console.log('id')
-            console.log(newComponent)
             var index = eduComponents.indexOf(component);
-            console.log(eduComponents[index])
-
             eduComponents[index] = newComponent;
             setEduComponents(eduComponents);
             formik.getFieldHelpers('componentDTOs').setValue(eduComponents);

@@ -13,6 +13,8 @@ namespace Application.Reviews
         public Profile Author { get; set; }
         public string ReviewMessage { get; set; }
         public Guid InstitutionId { get; set; }
+        public string InstitutionName { get; set; }
+        public string TitleImageUrl { get; set; }
         public int Rating { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }

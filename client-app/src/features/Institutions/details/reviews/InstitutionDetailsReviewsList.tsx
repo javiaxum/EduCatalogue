@@ -76,7 +76,6 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                         options={t("reviewSortingOptions", { returnObjects: true })}
                         value={reviewSorting}
                         onChange={(e, d) => {
-                            console.log(d.value)
                             setReviewSorting(d.value as string)
                         }} />
                 </Grid.Row>}

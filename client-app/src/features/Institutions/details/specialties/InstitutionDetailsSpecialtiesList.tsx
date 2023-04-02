@@ -2,13 +2,14 @@ import { observer } from 'mobx-react-lite';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Button, Container, Dimmer, Grid, Icon, List, Pagination, Segment, Transition } from 'semantic-ui-react';
+import { Button, Container, Dimmer, Grid, Icon, List, Segment, Transition } from 'semantic-ui-react';
 import { SpecialtiesPagingParams } from '../../../../app/models/pagination';
 import { useStore } from '../../../../app/stores/store';
 import SearchParamsList from '../../../Specialties/search/SearchParamsList';
 import SpecialtiesListItemPlaceholder from './SpecialtiesListItemPlaceholder';
 import SpecialtyListAddNewItem from './SpecialtyListAddNewItem';
 import SpecialtyListItem from './SpecialtyListItem';
+import Pagination from '@mui/material/Pagination';
 
 export default observer(function InstitutionDetailsSpecialtiesList() {
     const { commonStore, specialtyStore } = useStore();
@@ -57,14 +58,14 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                     <Grid.Column width={11} style={{ padding: 0 }}>
                         <Container style={{ textAlign: 'center', padding: '0 0 0.5rem 0' }}>
                             <Pagination
-                                ellipsisItem={null}
-                                firstItem={null}
-                                lastItem={null}
-                                boundaryRange={0}
-                                siblingRange={2}
-                                totalPages={pagination?.totalPages!}
-                                activePage={pagination?.currentPage}
-                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                                hidePrevButton
+                                hideNextButton
+                                size='large'
+                                variant="outlined" shape="rounded"
+                                style={{ margin: '0 auto', width: 'fit-content' }}
+                                count={pagination?.totalPages}
+                                page={pagination?.currentPage}
+                                onChange={(e, data) => { handleLoad(data) }} />
                         </Container>
                         <Grid style={{ margin: 0 }} >
                             <Transition
@@ -104,14 +105,14 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 {t('Filters')}
                             </Button>
                             <Pagination
-                                ellipsisItem={null}
-                                firstItem={null}
-                                lastItem={null}
-                                boundaryRange={0}
-                                siblingRange={1}
-                                totalPages={pagination?.totalPages!}
-                                activePage={pagination?.currentPage}
-                                onPageChange={(e, data) => handleLoad(data.activePage as number)} />
+                                hidePrevButton
+                                hideNextButton
+                                size='large'
+                                variant="outlined" shape="rounded"
+                                style={{ margin: '3rem auto 0 auto', width: '100%' }}
+                                count={pagination?.totalPages}
+                                page={pagination?.currentPage}
+                                onChange={(e, data) => { handleLoad(data) }} />
                         </div>
                         <Grid style={{ margin: 0, display: 'contents', alignItems: 'flex-start', alignContent: 'center' }}>
                             <Transition

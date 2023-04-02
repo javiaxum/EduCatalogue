@@ -39,6 +39,7 @@ export class InstitutionFormValues {
     id?: string = undefined;
     name: string = '';
     description: string = '';
+    visible: boolean = false;
     accreditation: number = 0;
     typeId: number = 0;
     cityId: number = 0;
@@ -56,6 +57,7 @@ export class InstitutionFormValues {
             this.id = institution.id;
             this.name = institution.name;
             this.description = institution.description;
+            this.visible = institution.visible;
             this.accreditation = institution.accreditation;
             this.typeId = institution.typeId;
             this.cityId = institution.cityId;

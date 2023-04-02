@@ -5,6 +5,8 @@ export interface Review {
     author: Profile;
     reviewMessage: string;
     institutionId: string;
+    institutionName: string;
+    titleImageUrl: string;
     rating: number;
     createdAt: Date;
 }

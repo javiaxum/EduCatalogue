@@ -51,18 +51,17 @@ export default observer(function SpecialtyDetails() {
                                     style={{ padding: '0.5rem' }} />}
                         </Header>
                         <Button.Group style={{ width: '25rem', margin: '0 0 0 auto', height: '35px' }}>
-                            {(profileStore.isOperator && !specialtyStore.selectedSpecialty?.approved) &&
+                            {(profileStore.isOperator && !selectedSpecialty?.approved && !loadingInitial && !loading) &&
                                 <Button
                                     type='button'
                                     positive
-                                    loading={specialtyStore.loading}
                                     onClick={() => specialtyStore.approveChanges(id!)}>
                                     {t('Approve changes')}
                                 </Button>}
                             <Button
                                 onClick={() => commonStore.setEditMode(false)}
                                 as={Link}
-                                to={`/institutions/${institutionStore.selectedInstitution?.id}`}
+                                to={`/institutions/${selectedSpecialty?.institutionId}`}
                                 content={t('To institution')}
                             />
                             {(institutionStore.isInstitutionManager || profileStore.isOperator) && <Button
