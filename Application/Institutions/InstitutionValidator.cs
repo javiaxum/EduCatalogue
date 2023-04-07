@@ -12,10 +12,8 @@ namespace Application.Institutions
         public InstitutionValidator()
         {
             RuleFor(x => x.Name).NotEmpty();
-            RuleFor(x => x.Visible).NotEmpty();
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.Accreditation).NotEmpty();
-            RuleFor(x => x.TypeId).NotEmpty();
             RuleFor(x => x.CityId).NotEmpty();
             RuleFor(x => x.RegionId).NotEmpty();
             RuleFor(x => x.Latitude).NotEmpty();

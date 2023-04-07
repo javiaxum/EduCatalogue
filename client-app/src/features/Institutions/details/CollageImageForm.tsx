@@ -44,7 +44,7 @@ export default observer(function CollageImageForm() {
                     setFiles={setFiles}
                     imageUrl={selectedInstitution?.titleImageUrl || '/assets/placeholder.png'} />}
             {(files && files.length > 0) &&
-                <Container style={{ height: '100%' }}>
+                <Container style={{ maxHeight: '30.6rem' }}>
                     <ImageUploadWidgetCropper
                         setCropper={setCropper}
                         imagePreview={files[0].preview} />

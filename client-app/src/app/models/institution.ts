@@ -5,7 +5,6 @@ export interface Institution {
     visible: boolean;
     description: string;
     accreditation: number;
-    typeId: number;
     cityId: number;
     regionId: number;
     latitude: number;
@@ -41,7 +40,6 @@ export class InstitutionFormValues {
     description: string = '';
     visible: boolean = false;
     accreditation: number = 0;
-    typeId: number = 0;
     cityId: number = 0;
     regionId: number = 0;
     latitude: number = 0.0;
@@ -59,7 +57,6 @@ export class InstitutionFormValues {
             this.description = institution.description;
             this.visible = institution.visible;
             this.accreditation = institution.accreditation;
-            this.typeId = institution.typeId;
             this.cityId = institution.cityId;
             this.regionId = institution.regionId;
             this.latitude = institution.latitude;

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Transition, Placeholder } from 'semantic-ui-react';
 
 interface Props {
@@ -13,16 +12,14 @@ export default function FadePlaceholderAnimationWrapper({ loading, children, pla
         <>
             <Transition
                 visible={!loading}
-                duration={500}
-                size='huge'
-                verticalAlign='middle'>
+                duration={200}
+                transitionOnMount>
                 {children}
             </Transition>
             <Transition
                 visible={loading}
-                duration={500}
-                size='huge'
-                verticalAlign='middle'>
+                duration={200}
+                transitionOnMount>
                 {placeholder}
             </Transition>
         </>

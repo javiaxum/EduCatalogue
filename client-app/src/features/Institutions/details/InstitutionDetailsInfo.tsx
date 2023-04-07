@@ -1,18 +1,19 @@
 import { observer } from 'mobx-react-lite';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
-import { Button, Divider, Grid, Header, Icon, Image, Search, Segment, Table } from 'semantic-ui-react';
+import { Button, Divider, Grid, Header, Icon, Image, Placeholder, Search, Segment, Table } from 'semantic-ui-react';
 import { Specialty } from '../../../app/models/specialty';
 import { useStore } from '../../../app/stores/store';
 import TableItem from './TableItem';
 import TableItemLink from './TableItemLink';
 import TitleCollage from './TitleCollage';
+import FadePlaceholderAnimationWrapper from '../../../app/common/animations/FadeAnimationWrapper';
 
 export default observer(function InstitutionDetailsInfo() {
     const { institutionStore, specialtyStore } = useStore();
     const { popularSpecialties, getSpecialtyCore, specialtyCoreRegistry } = specialtyStore;
-    const { loading, selectedInstitution, getCityById, getRegionById, loadingInitial } = institutionStore;
+    const { loading, selectedInstitution, getCityById, getRegionById, loadingInitial, setActiveMenuItem } = institutionStore;
     const { t } = useTranslation();
     const { arabToRoman } = require('roman-numbers');
     const [descriptionOpened, setDescriptionOpened] = useState(false);
@@ -32,11 +33,20 @@ export default observer(function InstitutionDetailsInfo() {
                 <Grid style={{ width: '90%', margin: '0 auto' }}>
                     <Grid.Row>
                         <TitleCollage />
+                        <Button
+                            className='show-photos'
+                            content={t('Show all photos')}
+                            inverted
+                            style={{ position: 'absolute', bottom: '2rem', right: '1rem', backgroundColor: 'rgba(51, 51, 51, 0.775)' }}
+                            type='button'
+                            onClick={() => setActiveMenuItem('Gallery')} />
                     </Grid.Row>
                     <Grid.Row>
                         <Header
                             as='h1'
                             content={t('Overview')} />
+                    </Grid.Row>
+                    <Grid.Row>
                         <div>
                             <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', width: '80%' }}>
                                 <>
@@ -69,7 +79,7 @@ export default observer(function InstitutionDetailsInfo() {
                                                 loading={(loading || loadingInitial)}
                                                 icon='money'
                                                 label={t('Average tuition')}
-                                                content={Math.round(selectedInstitution?.averageTuitionUAH! / 100) + '00 UAH'} />
+                                                content={selectedInstitution?.averageTuitionUAH ? (Math.round(selectedInstitution?.averageTuitionUAH! / 100) + '00 UAH') : 0} />
                                             <TableItemLink
                                                 loading={(loading || loadingInitial)}
                                                 icon='chain'
@@ -80,12 +90,13 @@ export default observer(function InstitutionDetailsInfo() {
                                         </Table.Body>
                                     </Table>
                                 </Grid.Column>
-                                <Grid.Column width={8}>
-                                    <Icon name='point' color='blue' /> {selectedInstitution?.streetAddress},  {" "}
-                                    {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
-                                    {getRegionById(selectedInstitution?.regionId!)?.name} <br /><br />
-                                    {selectedInstitution?.contactInformation}
-                                </Grid.Column>
+                                {selectedInstitution?.streetAddress && selectedInstitution?.cityId && selectedInstitution?.regionId &&
+                                    <Grid.Column width={8}>
+                                        <Icon name='point' style={{ color: 'rgb(38, 94, 213)' }} /> {selectedInstitution?.streetAddress},  {" "}
+                                        {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
+                                        {getRegionById(selectedInstitution?.regionId!)?.name} <br /><br />
+                                        {selectedInstitution?.contactInformation}
+                                    </Grid.Column>}
                             </Grid>
                         </Segment>
                     </Grid.Row>
@@ -168,7 +179,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='address book'
-                                        label={t('Scholarships')}
+                                        label={t('Free education')}
                                         content={<Icon name={selectedInstitution?.scholarship ? 'check' : 'x'} size='large' />} />
                                 </Table.Body>
                             </Table>
@@ -204,14 +215,35 @@ export default observer(function InstitutionDetailsInfo() {
                     </Grid.Row>
                 </Grid>}
             {isMobile &&
-                <Grid style={{ width: '95%', margin: '0 auto' }}>
-                    <Grid.Row>
-                        <TitleCollage />
+                <Grid style={{ width: '100%', margin: 0 }}>
+                    <Grid.Row style={{ padding: 0 }}>
+                        <FadePlaceholderAnimationWrapper
+                            loading={loadingInitial || loading}
+                            placeholder={
+                                <Placeholder style={{ width: '100%', minHeight: '24rem', maxWidth: '100%' }}>
+                                    <Placeholder.Image />
+                                </Placeholder>}>
+                            <div style={{ height: '24rem', width: '100%' }}>
+                                <Image
+                                    alt='TitleImage'
+                                    src={selectedInstitution?.titleImageUrl || '/assets/placeholder.png'}
+                                    style={{ objectFit: 'cover', height: '100%', width: '100%', overflow: 'hidden' }} />
+                                <Button
+                                    className='show-photos'
+                                    content={t('Show all photos')}
+                                    inverted
+                                    style={{ position: 'absolute', bottom: '1rem', right: '1rem', backgroundColor: 'rgba(51, 51, 51, 0.775)' }}
+                                    type='button'
+                                    onClick={() => setActiveMenuItem('Gallery')} />
+                            </div>
+                        </FadePlaceholderAnimationWrapper>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Header
                             as='h1'
                             content={t('Overview')} />
+                    </Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <div>
                             <pre style={{ fontFamily: 'inherit', whiteSpace: 'pre-wrap', width: '100%' }}>
                                 <>
@@ -229,7 +261,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </pre>
                         </div>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Table basic='very' compact unstackable>
                             <Table.Body>
                                 <TableItem
@@ -258,11 +290,11 @@ export default observer(function InstitutionDetailsInfo() {
                             </Table.Body>
                         </Table>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Segment style={{ margin: '0 auto', width: '100%' }}>
                             <Grid divided>
                                 <Grid.Column width={2}>
-                                    <Icon name='info' size='large' color='blue' style={{ display: 'inline' }} />
+                                    <Icon name='info' size='large' style={{ display: 'inline', color: 'rgb(38, 94, 213)' }} />
                                 </Grid.Column>
                                 <Grid.Column width={14}>
                                     {selectedInstitution?.contactInformation}
@@ -270,7 +302,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Grid>
                         </Segment>
                     </Grid.Row>
-                    <Grid.Row verticalAlign='middle'>
+                    <Grid.Row verticalAlign='middle' style={{ padding: '0 1rem' }}>
                         <Header icon style={{ margin: 0 }}>
                             <Icon name='graduation' style={{ margin: 0 }} />
                         </Header>
@@ -279,7 +311,7 @@ export default observer(function InstitutionDetailsInfo() {
                             content={t('Students')}
                             style={{ margin: '1rem 0 0 0' }} />
                     </Grid.Row>
-                    <Grid.Row style={{ padding: 0 }}>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Table basic='very' compact unstackable>
                             <Table.Body>
                                 <TableItem
@@ -300,7 +332,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Table.Body>
                         </Table>
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Segment textAlign='center' style={{ margin: '0 auto' }}>
                             <Header as={'h2'} style={{ margin: 0 }}>
                                 {selectedInstitution?.undergraduatesEnrolled}
@@ -310,7 +342,7 @@ export default observer(function InstitutionDetailsInfo() {
                             </Header>
                         </Segment>
                     </Grid.Row>
-                    <Grid.Row verticalAlign='middle'>
+                    <Grid.Row verticalAlign='middle' style={{ padding: '0 1rem' }}>
                         <Header icon style={{ margin: 0 }}>
                             <Icon name='universal access' style={{ margin: '0 0.5rem 0 0' }} />
                         </Header>
@@ -319,7 +351,7 @@ export default observer(function InstitutionDetailsInfo() {
                             content={t('Specialties')}
                             style={{ margin: '1rem 0 0 0' }} />
                     </Grid.Row>
-                    <Grid.Row>
+                    <Grid.Row style={{ padding: '1rem' }}>
                         <Table basic='very' compact unstackable>
                             <Table.Body>
                                 <TableItem
@@ -345,7 +377,7 @@ export default observer(function InstitutionDetailsInfo() {
                                 <TableItem
                                     loading={(loading || loadingInitial)}
                                     icon='address book'
-                                    label={t('Scholarships')}
+                                    label={t('Free education')}
                                     content={<Icon name={selectedInstitution?.scholarship ? 'check' : 'x'} size='large' />} />
                             </Table.Body>
                         </Table>

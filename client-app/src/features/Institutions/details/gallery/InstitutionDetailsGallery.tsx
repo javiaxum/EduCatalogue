@@ -9,6 +9,7 @@ import NewImageUploadWidgetDropzone from '../../../../app/common/imageUpload/new
 import { ImagesPagingParams } from '../../../../app/models/pagination';
 import { useStore } from '../../../../app/stores/store';
 import GalleryImage from './GalleryImage';
+import { useTranslation } from 'react-i18next';
 
 export default observer(function InstitutionDetailsGallery() {
     const { institutionStore, commonStore: { editMode } } = useStore();
@@ -19,14 +20,14 @@ export default observer(function InstitutionDetailsGallery() {
         imagesLoading,
         imagesLoadingInitial,
         setImagesPagingParams,
-        images,
-        clearImages } = institutionStore;
-    const { id } = useParams();
+        images } = institutionStore;
 
+    const { id } = useParams();
+    const { t } = useTranslation();
     const [files, setFiles] = useState<any>([]);
     const [cropper, setCropper] = useState<Cropper>();
 
-    
+
     function HandleImageUpload(file: Blob) {
         if (id && file.size <= 10485760)
             setImage(file, id).then(() => {
@@ -58,7 +59,7 @@ export default observer(function InstitutionDetailsGallery() {
                 <Dimmer inverted />
             </Transition>
             {!(images.length !== 0 || editMode || imagesLoading) &&
-                <Segment basic style={{ color: '#444', width: '30rem' }}>There are no images available...</Segment>}
+                <Segment basic style={{ color: '#444', width: '30rem' }}>{t('There are no images available')}...</Segment>}
             {(files && files.length > 0) &&
                 <Grid style={{ width: '50rem' }}>
                     <Grid.Column style={{ width: '25rem' }}>
@@ -94,6 +95,7 @@ export default observer(function InstitutionDetailsGallery() {
                 style={{ overflow: 'hidden' }}
                 dataLength={(imagesPagination?.itemsPerPage! * imagesPagination?.currentPage!) || 0}
                 next={handleLoad}
+                scrollThreshold={0.5}
                 hasMore={!imagesLoading && !!imagesPagination
                     && imagesPagination.currentPage < imagesPagination.totalPages}
                 loader={<></>}>
@@ -103,14 +105,17 @@ export default observer(function InstitutionDetailsGallery() {
                 as={List}
                 duration={500}
                 size='huge'
-                verticalAlign='middle'>
+                verticalAlign='middle'
+                style={{ margin: 0 }}>
                 {editMode &&
-                    <Segment basic style={{ width: '15rem', height: '15rem', padding: '0.2rem', margin: '0.4rem 0' }}>
-                        {(files && files.length === 0) &&
-                            <NewImageUploadWidgetDropzone
-                                size='15rem'
-                                setFiles={setFiles} />}
-                    </Segment>}
+                    <List.Item className='customListItem'>
+                        <Segment basic style={{ width: '15rem', height: '15rem', padding: 0, display: 'inline-table' }}>
+                            {(files && files.length === 0 && id) &&
+                                <NewImageUploadWidgetDropzone
+                                    size='15rem'
+                                    setFiles={setFiles} />}
+                        </Segment>
+                    </List.Item>}
                 {images.map((image) =>
                     <List.Item
                         className='customListItem'

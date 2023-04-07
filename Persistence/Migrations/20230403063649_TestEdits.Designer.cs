@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Persistence;
@@ -11,9 +12,11 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230403063649_TestEdits")]
+    partial class TestEdits
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,12 +303,6 @@ namespace Persistence.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<double>("Rating")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("ReviewsCount")
-                        .HasColumnType("integer");
-
                     b.Property<string>("SiteURL")
                         .HasColumnType("text");
 
@@ -314,6 +311,9 @@ namespace Persistence.Migrations
 
                     b.Property<string>("TitleImageId")
                         .HasColumnType("text");
+
+                    b.Property<int?>("TypeId")
+                        .HasColumnType("integer");
 
                     b.Property<bool>("Visible")
                         .HasColumnType("boolean");
@@ -324,7 +324,25 @@ namespace Persistence.Migrations
 
                     b.HasIndex("CoordinatesId");
 
+                    b.HasIndex("TypeId");
+
                     b.ToTable("Institutions");
+                });
+
+            modelBuilder.Entity("Domain.InstitutionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InstitutionTypes");
                 });
 
             modelBuilder.Entity("Domain.Language", b =>
@@ -787,9 +805,15 @@ namespace Persistence.Migrations
                         .WithMany()
                         .HasForeignKey("CoordinatesId");
 
+                    b.HasOne("Domain.InstitutionType", "Type")
+                        .WithMany("Institutions")
+                        .HasForeignKey("TypeId");
+
                     b.Navigation("City");
 
                     b.Navigation("Coordinates");
+
+                    b.Navigation("Type");
                 });
 
             modelBuilder.Entity("Domain.Review", b =>
@@ -1001,6 +1025,11 @@ namespace Persistence.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Specialties");
+                });
+
+            modelBuilder.Entity("Domain.InstitutionType", b =>
+                {
+                    b.Navigation("Institutions");
                 });
 
             modelBuilder.Entity("Domain.Region", b =>

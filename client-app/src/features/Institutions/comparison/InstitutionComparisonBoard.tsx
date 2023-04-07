@@ -12,13 +12,14 @@ import AddInstitutionHeaderCellPlaceholderMobile from './AddInstitutionHeaderCel
 import InstitutionComparisonBoardRow from './InstitutionComparisonBoardRow';
 import InstiutionComparisonParameterCellFixedMobile from './InstiutionComparisonParameterCellFixedMobile';
 import { useLocation } from 'react-router-dom';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 
 
 export default observer(function InstitutionComparisonBoard() {
     const { institutionStore, specialtyStore } = useStore();
     const { selectedInstitutionIds, loadInstitution, institutionsRegistry, getCityById, getRegionById } = institutionStore;
     const { specialtyCoreRegistry, loadPopularSpecialties, getSpecialtyCore } = specialtyStore;
-
+    const [loading, setLoading] = useState(true);
     const [selectedInstitutions, setSelectedInstitutions] = useState<Institution[]>([]);
     const [popularSpecialties, setPopularSpecialties] = useState<Map<string, Specialty[]>>(new Map<string, Specialty[]>());
     const [scrollY, setScrollY] = useState<number>(0);
@@ -46,7 +47,7 @@ export default observer(function InstitutionComparisonBoard() {
     useEffect(() => {
         if (selectedInstitutionIds.length === 0 && location.pathname === '/institutions/comparison')
             router.navigate('/institutions');
-    })
+    },[location.pathname, selectedInstitutionIds])
 
     const componentRef = useRef<HTMLDivElement>(null);
     const handleWindowScroll = (e: any) => {
@@ -55,14 +56,16 @@ export default observer(function InstitutionComparisonBoard() {
     };
 
     useEffect(() => {
-        const localPopularSpecialties = new Map<string, Specialty[]>();
-        if (selectedInstitutions.length < selectedInstitutionIds.length)
-            loadInstitutions().then(() => {
-                setSelectedInstitutions(selectedInstitutionIds.map((i) => institutionsRegistry.get(i)!));
-                setPopularSpecialties(localPopularSpecialties);
-                selectedInstitutions.map((i) => institutionsRegistry.get(i.id)!)
-                loadSpecialties().then((result) => { setPopularSpecialties(result); })
-            });
+        setLoading(true);
+        if (selectedInstitutions.length < selectedInstitutionIds.length) {
+            Promise.all([
+                loadSpecialties().then((result) => { setPopularSpecialties(result); }),
+                loadInstitutions().then(() => {
+                    setSelectedInstitutions(selectedInstitutionIds.map((i) => institutionsRegistry.get(i)!));
+                    selectedInstitutions.map((i) => institutionsRegistry.get(i.id)!)
+                })
+            ]).then().finally(() => setLoading(false))
+        }
         async function loadInstitutions() {
             await Promise.all(selectedInstitutionIds.map((x) => loadInstitution(x)));
         }
@@ -71,10 +74,12 @@ export default observer(function InstitutionComparisonBoard() {
             await Promise.all(selectedInstitutionIds.map((x) => loadPopularSpecialties(x).then((result) => { if (result) specialties.set(x, result) })));
             return specialties;
         }
-    }, [loadInstitution, loadPopularSpecialties, setPopularSpecialties, popularSpecialties, selectedInstitutionIds, institutionsRegistry, selectedInstitutions])
+    }, [])
 
     const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
     const studyForms = t("studyFormOptions", { returnObjects: true }) as [{ text: string; value: number }]
+
+    if (loading) return <LoadingComponent />
 
     return (
         <>
@@ -82,7 +87,7 @@ export default observer(function InstitutionComparisonBoard() {
                 <>
                     <div onScroll={(e) => handleWindowScroll(e)} style={{ overflow: 'scroll' }} >
                         <Transition
-                            visible={scrollY > 300}
+                            visible={scrollY > 200}
                             duration={200}
                             transitionOnMount>
                             <div ref={componentRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: 1000, overflow: 'scroll' }}>

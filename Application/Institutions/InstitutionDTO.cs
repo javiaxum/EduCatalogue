@@ -17,7 +17,6 @@ namespace Application
         public bool Approved { get; set; }
         public string Description { get; set; }
         public int Accreditation { get; set; }
-        public int TypeId { get; set; }
         public int CityId { get; set; }
         public int RegionId { get; set; }
         public double Latitude { get; set; }

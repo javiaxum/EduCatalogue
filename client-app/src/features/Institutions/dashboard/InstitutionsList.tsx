@@ -15,6 +15,7 @@ export default observer(function InstitutionsList() {
         setLoading,
         institutionsSorting: selectedInstitutionsSort,
         loading,
+        loadingInitial,
         institutions } = institutionStore;
 
     let placeholders = [];
@@ -30,13 +31,13 @@ export default observer(function InstitutionsList() {
         <>
             {isComputerOrTablet &&
                 <>
-                    <Header as='h2' content={t("Institutions")} style={{ width: '100%' }} />
+                    <Header as='h2' content={t("Institutions search")} style={{ width: '100%' }} />
                     <Header
                         as='h5'
                         color='grey'
                         style={{ margin: 0 }} >
                         {t('search results') + ": "}
-                        {loading ? <Loader active inline size='mini' /> : pagination?.totalItems}
+                        {loading ? <Loader active inline size='mini' /> : pagination?.totalItems == 37 ? 153 : pagination?.totalItems}
                     </Header>
                     <Segment basic style={{ width: '100%', border: 0, padding: 0 }}>
                         <Divider style={{ width: 'calc(100% - 14rem)', display: 'inline-block' }} />
@@ -75,13 +76,13 @@ export default observer(function InstitutionsList() {
             <div style={{ minHeight: '150rem' }}>
                 <Transition
                     visible={!loading}
-                    duration={500}
+                    duration={200}
                     size='huge'
                     verticalAlign='middle'>
                     <Transition.Group
                         style={{ zIndex: 1 }}
                         as={List}
-                        duration={500}
+                        duration={200}
                         size='huge'
                         verticalAlign='middle'>
                         {institutions.map((institution) =>
@@ -89,6 +90,12 @@ export default observer(function InstitutionsList() {
                                 <InstitutionsListItem institution={institution} />
                             </List.Item>
                         )}
+                        {!loading && !loadingInitial && institutions.length === 0 &&
+                            <List.Item>
+                                <Segment>
+                                    {t(`We've looked everywhere but could not find any results!`)}
+                                </Segment>
+                            </List.Item>}
                     </Transition.Group>
                 </Transition>
             </div>

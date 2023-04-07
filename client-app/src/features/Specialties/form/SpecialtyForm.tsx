@@ -19,7 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import TableItem from '../../Institutions/details/TableItem';
 import ConfirmDeleteSpecialty from '../../Institutions/details/specialties/ConfirmDeleteSpecialty';
-
+import { Breadcrumbs, Link as MLink } from '@mui/material';
 
 export default observer(function SpecialtyForm() {
 
@@ -41,7 +41,7 @@ export default observer(function SpecialtyForm() {
     const { setEditMode } = commonStore;
     const { id } = useParams();
     const { id1, id2 } = useParams();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
     const [specialtyCore, setSpecialtyCore] = useState<SpecialtyCore>(new SpecialtyCore());
@@ -97,7 +97,7 @@ export default observer(function SpecialtyForm() {
         }
         setLoadingInitial(false);
         setEditMode(true);
-    }, [setLoadingInitial, institutionStore.loadInstitution, setSpecialty, setSpecialtyCore, getSpecialtyCore, loadingInitial, setEditMode, id1, id2, loadSpecialty, commonStore, institutionStore])
+    }, [])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
         if (id) {
@@ -125,7 +125,23 @@ export default observer(function SpecialtyForm() {
                     autoComplete='off'>
                     {isComputerOrTablet &&
                         <Grid style={{ padding: 0, color: '#444', width: '80%', minWidth: '65rem', margin: '0 auto' }}>
-                            <Grid.Row style={{ paddingBottom: 0 }}>
+                            <Grid.Row style={{ padding: '0 1rem 0 1rem' }}>
+                                <Breadcrumbs aria-label="breadcrumb">
+                                    <Link
+                                        to="/institutions">
+                                        {t('Search')}
+                                    </Link>
+                                    <Link
+                                        to={`/institutions/${specialty.institutionId}`}>
+                                        {t('Institution')}
+                                    </Link>
+                                    <Link
+                                        to={`/specialties/${specialty?.id}`}>
+                                        {t('Specialty')} {specialty?.localSpecialtyCode ? specialty?.localSpecialtyCode : ''}
+                                    </Link>
+                                </Breadcrumbs>
+                            </Grid.Row>
+                            <Grid.Row style={{ padding: '0 1rem 0 1rem' }}>
                                 <Header
                                     size='medium'
                                     style={{ color: '#444', width: 'calc(100% - 37rem)' }}>
@@ -141,10 +157,11 @@ export default observer(function SpecialtyForm() {
                                 <Button.Group style={{ width: '37rem', margin: '0 0 0 auto', height: '35px' }}>
                                     <Button
                                         negative
+                                        style={{ width: '3rem' }}
                                         size='large'
                                         type='button'
                                         onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} >
-                                        <Icon name='trash' style={{position: 'relative', bottom: '0.2rem'}} />
+                                        <Icon name='trash' style={{ position: 'relative', bottom: '0.2rem', right: '0.5rem' }} />
                                     </Button>
                                     <Button
                                         type='button'
@@ -183,7 +200,7 @@ export default observer(function SpecialtyForm() {
                                                         <Icon
                                                             name='book'
                                                             size='big'
-                                                            color='blue' />
+                                                            style={{ color: 'rgb(38, 94, 213)' }} />
                                                         {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
                                                     </Table.Cell>
                                                 </Table.Row>
@@ -362,13 +379,29 @@ export default observer(function SpecialtyForm() {
                                     type='button'
                                     content={t('Cancel')}
                                     disabled={isSubmitting} />
+                                <Button
+                                    negative
+                                    style={{ maxWidth: '3rem' }}
+                                    size='large'
+                                    type='button'
+                                    onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} >
+                                    <Icon name='trash' style={{ position: 'relative', bottom: '0.2rem', right: '0.5rem' }} />
+                                </Button>
                             </Button.Group>
-                            <Button
-                                basic
-                                size='large'
-                                icon='trash'
-                                type='button'
-                                onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} />
+                            <Breadcrumbs aria-label="breadcrumb">
+                                <Link
+                                    to="/institutions">
+                                    {t('Search')}
+                                </Link>
+                                <Link
+                                    to={`/institutions/${specialty.institutionId}`}>
+                                    {t('Institution')}
+                                </Link>
+                                <Link
+                                    to={`/specialties/${specialty?.id}`}>
+                                    {t('Specialty')} {specialty?.localSpecialtyCode ? specialty?.localSpecialtyCode : ''}
+                                </Link>
+                            </Breadcrumbs>
                             <Grid style={{ padding: 0, color: '#444', margin: 0 }}>
                                 <Grid.Row style={{ paddingBottom: 0 }}>
                                     <Header
@@ -388,7 +421,12 @@ export default observer(function SpecialtyForm() {
                                         <Table.Body>
                                             <Table.Row>
                                                 <Table.Cell>
-                                                    <Label content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(specialtyCore.id)}`} />
+                                                    {specialtyCore && <>
+                                                        <Label style={{ margin: '0.1rem' }}>
+                                                            {t('ISCED code')}: {i18n.language === 'uk' ? getSpecialtyCoreISCEDString(specialtyCore.id!) : ''}
+                                                        </Label>
+                                                        {i18n.language !== 'uk' && specialtyCore.iscedCores.map((i) => <Label key={i.id} style={{ margin: '0.1rem' }} content={i.id + " " + i.name} />)}
+                                                    </>}
                                                 </Table.Cell>
                                             </Table.Row>
                                             <Table.Row>
@@ -396,7 +434,7 @@ export default observer(function SpecialtyForm() {
                                                     <Icon
                                                         name='book'
                                                         size='big'
-                                                        color='blue' />
+                                                        style={{ color: 'rgb(38, 94, 213)' }} />
                                                     {t('Knowledge branch')}: {specialtyCore.id && specialtyCore.id.slice(0, 2)} {specialtyCore.id && getBranch(specialtyCore.id.slice(0, 2))?.name}
                                                 </Table.Cell>
                                             </Table.Row>
@@ -420,6 +458,8 @@ export default observer(function SpecialtyForm() {
                                                 label={t('ECTS credits')}
                                                 content={
                                                     <CustomTextInput
+                                                        min={0}
+                                                        max={1000}
                                                         width='7rem'
                                                         type='number'
                                                         placeholder={t('ECTS credits')}

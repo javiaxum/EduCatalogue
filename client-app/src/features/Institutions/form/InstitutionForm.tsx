@@ -12,29 +12,29 @@ import { router } from '../../routers/Routes';
 import BackgroundUploadWidgetDropzone from '../../../app/common/imageUpload/backgroundImage/BackgroundUploadWidgetDropzone';
 import BackgroundImageUploadWidgetCropper from '../../../app/common/imageUpload/backgroundImage/BackgroundImageUploadWidgetCropper';
 import InstitutionFormContent from '../details/InstitutionFormContent';
-import { ImagesPagingParams, ReviewsPagingParams } from '../../../app/models/pagination';
+import { ImagesPagingParams, ReviewsPagingParams, SpecialtiesPagingParams } from '../../../app/models/pagination';
 import RatingStars from '../../../app/common/rating/RatingStars';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
+import { Breadcrumbs, Link as MLink } from '@mui/material';
 
 export default observer(function InstitutionForm() {
     const { institutionStore, commonStore, specialtyStore, profileStore } = useStore();
     const {
         loadInstitution,
-        loadingInitial,
         loading,
         createInstitution,
         editInstitution,
         setLoadingInitial,
-        loadRegionsWithCities,
+        setImagesLoadingInitial,
         selectedInstitution,
         uploading,
+        setSelectedInstitutionId,
         setBackgroundImage,
-        setImagesPagingParams,
         setReviewPagingParams,
         getRegionById,
-        clearImages,
-        activeMenuItem } = institutionStore;
+        loadImages,
+        loadReviews } = institutionStore;
     const { id } = useParams();
     const { editMode, setEditMode } = commonStore;
 
@@ -59,36 +59,51 @@ export default observer(function InstitutionForm() {
 
     const validationSchema = Yup.object({
         name: Yup.string().required(),
+        description: Yup.string().required(),
+        accreditation: Yup.string().required(),
+        cityId: Yup.number().required(),
+        regionId: Yup.number().required(),
+        latitude: Yup.number().required(),
+        longtitude: Yup.number().required(),
+        streetAddress: Yup.string().required(),
+        siteURL: Yup.string().required(),
     })
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
 
+
     useEffect(() => {
         setEditMode(true);
-        if (id)
-            loadInstitution(id)
-                .then(institution => {
-                    let formValues = new InstitutionFormValues(institution);
-                    setInstitution(formValues);
-                    specialtyStore.loadSpecialties();
-                    specialtyStore.loadPopularSpecialties();
-                    setReviewPagingParams(new ReviewsPagingParams());
-                    if (activeMenuItem !== 'Gallery') {
-                        setImagesPagingParams(new ImagesPagingParams());
-                        setReviewPagingParams(new ReviewsPagingParams());
-                    }
-                });
+        if (id) {
+            setSelectedInstitutionId(id);
+            setReviewPagingParams(new ReviewsPagingParams());
+            specialtyStore.setPagingParams(new SpecialtiesPagingParams());
+            Promise.all([
+                specialtyStore.loadSpecialties(id),
+                specialtyStore.loadPopularSpecialties(id),
+                loadImages(),
+                loadReviews(),
+                loadInstitution(id)]).then(() => setLoadingInitial(false))
+            loadInstitution(id).then(institution => {
+                let formValues = new InstitutionFormValues(institution);
+                setInstitution(formValues);
+            });
+        }
         else {
             let formValues = new InstitutionFormValues(institution);
             setInstitution(formValues)
             setLoadingInitial(false);
+            setImagesLoadingInitial(false);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
+
+    useEffect(() => {
         return (() => {
             files.forEach((file: any) => URL.revokeObjectURL(file.preview));
         })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [files, loadInstitution, id, editMode, setLoadingInitial, setInstitution, setEditMode, loadRegionsWithCities, clearImages])
+    }, [files])
 
     function handleInstitutionFormSubmit(institution: InstitutionFormValues) {
         if (!institution.id) {
@@ -100,7 +115,9 @@ export default observer(function InstitutionForm() {
                 router.navigate(`/institutions/${institution.id}`));
         }
     }
-
+    const regionName = getRegionById(selectedInstitution?.regionId!)?.name;
+    const cityName = institutionStore.getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name;
+    const regionsToExclude = [1, 2, 27];
 
     return (
         <Formik
@@ -148,28 +165,40 @@ export default observer(function InstitutionForm() {
                                             </Button.Group>
                                         </Segment>}
                                     {loading ?
-                                        <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '6rem' }}>
-                                            <Placeholder.Line />
-                                            <Placeholder.Line />
+                                        <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '5rem', maxWidth: '100%' }}>
                                             <Placeholder.Line />
                                         </Placeholder> :
                                         <div style={{ display: 'inline-block', width: '100%' }}>
+                                            <Breadcrumbs aria-label="breadcrumb">
+                                                <Link
+                                                    to="/institutions">
+                                                    {t('Search')}
+                                                </Link>
+                                                <Link
+                                                    to={`/institutions/${selectedInstitution?.id}`}>
+                                                    {t('Institution')}
+                                                </Link>
+                                            </Breadcrumbs>
                                             <Header
                                                 size='huge'
                                                 style={{ color: '#444', margin: 0 }} >
-                                                <CustomTextInput fontWeight='600' padding='0.2rem' width='100%' placeholder='Name' name='name' />
+                                                <CustomTextInput fontWeight='600' padding='0.2rem' width='100%' placeholder={t('Institution name')} name='name' />
                                             </Header>
-                                            <div style={{ display: 'block', color: '#888', padding: '0 0 1rem 0' }}>
-                                                {getRegionById(selectedInstitution?.regionId!)?.name}, {" "}
-                                                {institutionStore.getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}
-                                            </div>
-                                            <div style={{ display: 'inline-block' }}>
-                                                <RatingStars rating={selectedInstitution?.rating!} />
-                                            </div>
-                                            <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
-                                                {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
-                                            </div>
-                                            <Button.Group style={{ position: 'absolute', width: 'fit-content', right: 0, bottom: '1rem' }}>
+                                            {regionName && cityName &&
+                                                <div style={{ display: 'block', color: '#888', padding: '0 0 1rem 0' }}>
+                                                    {regionName}
+                                                    {regionsToExclude.includes(selectedInstitution?.regionId!) ? "" : ", " + cityName}
+                                                </div>}
+                                            {selectedInstitution?.rating && selectedInstitution.reviewsCount &&
+                                                <>
+                                                    <div style={{ display: 'inline-block' }}>
+                                                        <RatingStars rating={selectedInstitution.rating} />
+                                                    </div>
+                                                    <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
+                                                        {t('Reviews')} {selectedInstitution.reviewsCount}
+                                                    </div>
+                                                </>}
+                                            <Button.Group style={{ position: 'absolute', width: 'fit-content', right: 0 }}>
                                                 <Button
                                                     positive
                                                     type='submit'
@@ -195,16 +224,6 @@ export default observer(function InstitutionForm() {
                         </Grid>}
                     {isMobile &&
                         <Grid style={{ margin: 0, backgroundColor: '#fff' }}>
-                            <Grid.Row style={{ padding: 0, zIndex: 1 }}>
-                                {loading
-                                    ? <Placeholder
-                                        style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '8rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} >
-                                        <Placeholder.Image />
-                                    </Placeholder>
-                                    : <Image
-                                        src={selectedInstitution?.backgroundImageUrl || '/assets/YFCNU.jpg'}
-                                        style={{ filter: 'brightness(80%)', objectFit: 'cover', height: '8rem', minWidth: '100%', overflow: 'hidden', zIndex: -100 }} />}
-                            </Grid.Row>
                             <Grid.Row style={{ padding: 0 }}>
                                 <div style={{ width: '100%' }}>
                                     <Button.Group style={{ margin: 0 }} attached='bottom'>
@@ -216,7 +235,7 @@ export default observer(function InstitutionForm() {
                                             disabled={!dirty || isSubmitting || !isValid} />
                                         <Button
                                             as={Link}
-                                            to={institution.id ? `/institutions/${institution.id}` : '/institutions'}
+                                            to={`/institutions/${id}`}
                                             onClick={() => setEditMode(false)}
                                             floated='right'
                                             type='button'
@@ -224,28 +243,42 @@ export default observer(function InstitutionForm() {
                                             disabled={isSubmitting} />
                                     </Button.Group>
                                 </div>
+                            </Grid.Row>
+                            <Grid.Row style={{ padding: '1rem' }}>
+                                <Breadcrumbs aria-label="breadcrumb">
+                                    <Link
+                                        to="/institutions">
+                                        {t('Search')}
+                                    </Link>
+                                    <Link
+                                        to={`/institutions/${selectedInstitution?.id}`}>
+                                        {t('Institution')}
+                                    </Link>
+                                </Breadcrumbs>
+                            </Grid.Row>
+                            <Grid.Row>
                                 {loading ?
-                                    <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '6rem' }}>
-                                        <Placeholder.Line />
-                                        <Placeholder.Line />
+                                    <Placeholder style={{ display: 'inline-block', color: '#444', width: '100%', height: '6rem', maxWidth: '100%' }}>
                                         <Placeholder.Line />
                                     </Placeholder> :
                                     <div style={{ display: 'inline-block', width: '100%' }}>
                                         <Header
                                             size='huge'
                                             style={{ color: '#444', margin: 0 }} >
-                                            <CustomTextInput fontWeight='600' padding='0.2rem' width='100%' placeholder='Name' name='name' />
+                                            <CustomTextInput fontWeight='600' padding='0.2rem' width='100%' placeholder={t('Institution name')} name='name' />
                                         </Header>
-                                        <div style={{ display: 'block', color: '#888', padding: '0 0 1rem 0' }}>
-                                            {getRegionById(selectedInstitution?.regionId!)?.name}, {" "}
-                                            {institutionStore.getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}
-                                        </div>
-                                        <div style={{ display: 'inline-block' }}>
-                                            <RatingStars rating={selectedInstitution?.rating!} />
-                                        </div>
-                                        <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
-                                            {selectedInstitution?.reviewsCount} {t('Reviews_Dashboard_plural')}
-                                        </div>
+                                        <Grid style={{ padding: '1rem', width: '100%', margin: 0 }}>
+                                            {selectedInstitution?.rating && selectedInstitution.reviewsCount &&
+                                                <Grid.Column style={{ width: '10rem', padding: 0 }}>
+                                                    <RatingStars rating={selectedInstitution.rating} />
+                                                    {t('Reviews')} {selectedInstitution.reviewsCount}
+                                                </Grid.Column>}
+                                            {regionName && cityName &&
+                                                <Grid.Column floated='right' style={{ width: 'fit-content', color: '#888', padding: '0 0 1rem 0' }}>
+                                                    {regionName}
+                                                    {regionsToExclude.includes(selectedInstitution?.regionId!) ? "" : ", " + cityName}
+                                                </Grid.Column>}
+                                        </Grid>
                                     </div>}
                             </Grid.Row>
                             <Grid.Row style={{ padding: 0 }}>

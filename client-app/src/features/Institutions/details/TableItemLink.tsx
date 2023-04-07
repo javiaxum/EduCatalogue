@@ -15,7 +15,7 @@ export default function TableItemLink({ loading, label, icon, }: Props) {
                 <Icon
                     name={icon as SemanticICONS || 'x'}
                     size='large'
-                    color='blue' />
+                    style={{color: 'rgb(38, 94, 213)'}} />
             </Table.Cell>
             <Table.Cell>
                 {!loading ?

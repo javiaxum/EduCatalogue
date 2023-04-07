@@ -41,8 +41,11 @@ namespace Application.Institutions
             {
                 var institution = await _context.Institutions.Include(x => x.Languages).Include(x => x.StudyForms).FirstOrDefaultAsync(x => x.Id == request.Institution.Id);
                 if (institution == null) return null;
-
+                var rating = institution.Rating;
+                var reviewsCount = institution.ReviewsCount;
                 _mapper.Map(request.Institution, institution);
+                institution.Rating = rating;
+                institution.ReviewsCount = reviewsCount;
                 institution.Approved = false;
                 institution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == request.Institution.CityId);
                 foreach (var language in institution.Languages)

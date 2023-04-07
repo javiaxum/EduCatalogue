@@ -49,8 +49,8 @@ export default observer(function InstitutionDetailsLocationForm() {
     const { t } = useTranslation();
 
     return (
-        <Grid style={{ margin: isMobile ? 0 : '' }}>
-            <Grid.Column width={isMobile ? 16 : 8}>
+        <Grid style={{ margin: isMobile ? 0 : '', width: isMobile ? '100%' : '' }}>
+            <Grid.Column width={isMobile ? 16 : 8} style={{ padding: isMobile ? '2rem' : '' }}>
                 <Grid>
                     <Grid.Row>
                         <Table basic='very' compact unstackable>
@@ -107,7 +107,7 @@ export default observer(function InstitutionDetailsLocationForm() {
                     </Grid.Row>
                 </Grid>
             </Grid.Column>
-            <Grid.Column width={isMobile ? 16 : 8}>
+            <Grid.Column width={isMobile ? 16 : 8} style={{ padding: isMobile ? 0 : '' }}>
                 <MapContainer center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '25rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

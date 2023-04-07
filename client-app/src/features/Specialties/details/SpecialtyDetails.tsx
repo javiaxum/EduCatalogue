@@ -4,19 +4,23 @@ import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Divider, Grid, Header, Icon, Label, Placeholder, Segment, Table } from 'semantic-ui-react';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import TableItem from '../../Institutions/details/TableItem';
 import SpecialtyDetailsComponentList from './educationalComponent/SpecialtyDetailsComponentList';
+import { Breadcrumbs, Link as MLink } from '@mui/material';
 
 export default observer(function SpecialtyDetails() {
     const { specialtyStore, commonStore, institutionStore, profileStore } = useStore()
-    const { selectedSpecialty, loadSpecialty, loadingInitial, loading, getSpecialtyCore, getBranch, getSkill, getSpecialtyCoreISCEDString } = specialtyStore;
+    const { selectedSpecialty, loadSpecialty, loading, getSpecialtyCore, getBranch, getSkill, getSpecialtyCoreISCEDString } = specialtyStore;
     const { setEditMode } = commonStore;
     const { id } = useParams();
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [descriptionOpened, setDescriptionOpened] = useState(false);
+    const [loadingInitial, setLoadingInitial] = useState(true);
 
+    useEffect(() => {
+        setLoadingInitial(false)
+    }, [])
     useEffect(() => {
         if (id) loadSpecialty(id);
         setEditMode(false);
@@ -33,14 +37,32 @@ export default observer(function SpecialtyDetails() {
     const specialtyStudyForms = selectedSpecialty?.studyFormIds.map((i) => studyForms[i - 1]?.text).join(", ");
 
     const specialtyCoreString = getSpecialtyCore(selectedSpecialty?.localSpecialtyCode!)?.name || '';
+    const isActive = specialtyStore.selectedSpecialtyIds.includes(id!);
+
     return (
         <>
             {isComputerOrTablet &&
                 <Grid style={{ padding: 0, color: '#444', minWidth: '65rem', width: '80%', margin: '0 auto' }}>
                     <Grid.Row>
+                        <Breadcrumbs aria-label="breadcrumb">
+                            <Link
+                                to="/institutions">
+                                {t('Search')}
+                            </Link>
+                            <Link
+                                to={`/institutions/${selectedSpecialty?.institutionId}`}>
+                                {t('Institution')}
+                            </Link>
+                            <Link
+                                to={`/specialties/${selectedSpecialty?.id}`}>
+                                {t('Specialty')} {selectedSpecialty?.localSpecialtyCode ? selectedSpecialty?.localSpecialtyCode : ''}
+                            </Link>
+                        </Breadcrumbs>
+                    </Grid.Row>
+                    <Grid.Row>
                         <Header
                             size='large'
-                            style={{ margin: '0', height: '35px', color: '#444', width: 'calc(100% - 30rem)' }}>
+                            style={{ margin: '0', height: '35px', color: '#444', width: 'calc(100% - 25rem)' }}>
                             {(loading || loadingInitial) ?
                                 <Placeholder>
                                     <Placeholder.Line />
@@ -50,7 +72,7 @@ export default observer(function SpecialtyDetails() {
                                     content={`${selectedSpecialty?.localSpecialtyCode} ${specialtyCoreString}`}
                                     style={{ padding: '0.5rem' }} />}
                         </Header>
-                        <Button.Group style={{ width: '25rem', margin: '0 0 0 auto', height: '35px' }}>
+                        <Button.Group style={{ width: '20rem', margin: '0 0 0 auto', height: '35px' }}>
                             {(profileStore.isOperator && !selectedSpecialty?.approved && !loadingInitial && !loading) &&
                                 <Button
                                     type='button'
@@ -58,12 +80,6 @@ export default observer(function SpecialtyDetails() {
                                     onClick={() => specialtyStore.approveChanges(id!)}>
                                     {t('Approve changes')}
                                 </Button>}
-                            <Button
-                                onClick={() => commonStore.setEditMode(false)}
-                                as={Link}
-                                to={`/institutions/${selectedSpecialty?.institutionId}`}
-                                content={t('To institution')}
-                            />
                             {(institutionStore.isInstitutionManager || profileStore.isOperator) && <Button
                                 onClick={() => commonStore.setEditMode(true)}
                                 as={Link}
@@ -73,6 +89,15 @@ export default observer(function SpecialtyDetails() {
                         </Button.Group>
                     </Grid.Row>
                     <Grid.Row>
+                        {id &&
+                            <Button
+                                basic
+                                active={isActive}
+                                icon='plus'
+                                label={t('Compare')}
+                                className={isActive ? 'customButtonActive' : ''}
+                                style={{ width: '3rem', height: '3rem', color: '#444' }}
+                                onClick={() => specialtyStore.toggleSelectedSpecialtyId(id)} />}
                         <Grid style={{ width: '100%' }}>
                             <Grid.Column width={7}>
                                 <Table basic='very' compact>
@@ -83,8 +108,12 @@ export default observer(function SpecialtyDetails() {
                                                     <Placeholder>
                                                         <Placeholder.Line />
                                                     </Placeholder> :
-                                                    <Label
-                                                        content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty?.localSpecialtyCode || '')}`} />}
+                                                    <>
+                                                        <Label style={{ margin: '0.1rem' }}>
+                                                            {t('ISCED code')}: {i18n.language === 'uk' ? getSpecialtyCoreISCEDString(selectedSpecialty?.localSpecialtyCode!) : ''}
+                                                        </Label>
+                                                        {i18n.language !== 'uk' && getSpecialtyCore(selectedSpecialty?.localSpecialtyCode!)?.iscedCores.map((i) => <Label key={i.id} style={{ margin: '0.1rem' }} content={i.id + " " + i.name} />)}
+                                                    </>}
                                             </Table.Cell>
                                         </Table.Row>
                                         <Table.Row>
@@ -97,7 +126,7 @@ export default observer(function SpecialtyDetails() {
                                                         <Icon
                                                             name='book'
                                                             size='big'
-                                                            color='blue' />
+                                                            style={{ color: 'rgb(38, 94, 213)' }} />
                                                         {t('Knowledge branch')}: {selectedSpecialty?.localSpecialtyCode.slice(0, 2)} {getBranch('' + selectedSpecialty?.localSpecialtyCode.slice(0, 2))?.name}
                                                     </>}
                                             </Table.Cell>
@@ -116,12 +145,12 @@ export default observer(function SpecialtyDetails() {
                                             icon='clock'
                                             label={t('ECTS credits')}
                                             content={selectedSpecialty?.ectsCredits} />
-                                        <TableItem
+                                        {selectedSpecialty?.tuitionUAH && <TableItem
                                             loading={(loading || loadingInitial)}
                                             icon='dollar'
                                             label={t('Tuition')}
-                                            content={<>{selectedSpecialty?.tuitionUAH} UAH <br></br>
-                                                {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />
+                                            content={<>{Math.round(selectedSpecialty?.tuitionUAH / 100)}00 UAH<br></br>
+                                                {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />}
                                         <TableItem
                                             loading={(loading || loadingInitial)}
                                             icon='flag'
@@ -218,21 +247,30 @@ export default observer(function SpecialtyDetails() {
                 </Grid>}
             {isMobile &&
                 <Segment basic style={{ width: '90%', padding: 0, margin: '0 auto' }}>
-                    <Button.Group style={{ margin: '1rem 0' }} attached='bottom'>
+                    {(institutionStore.isInstitutionManager || profileStore.isOperator) &&
                         <Button
-                            onClick={() => commonStore.setEditMode(false)}
-                            as={Link}
-                            to={`/institutions/${institutionStore.selectedInstitution?.id}`}
-                            content={t('To institution')} />
-                        {(institutionStore.isInstitutionManager || profileStore.isOperator) && <Button
+                            attached='bottom'
                             onClick={() => commonStore.setEditMode(true)}
                             as={Link}
                             to={`/manage/${selectedSpecialty?.institutionId}/specialty/${selectedSpecialty?.id}`}
                             content={t('Edit specialty')} />}
-                    </Button.Group>
+                    <Breadcrumbs aria-label="breadcrumb">
+                        <Link
+                            to="/institutions">
+                            {t('Search')}
+                        </Link>
+                        <Link
+                            to={`/institutions/${selectedSpecialty?.institutionId}`}>
+                            {t('Institution')}
+                        </Link>
+                        <Link
+                            to={`/specialties/${selectedSpecialty?.id}`}>
+                            {t('Specialty')} {selectedSpecialty?.localSpecialtyCode ? selectedSpecialty?.localSpecialtyCode : ''}
+                        </Link>
+                    </Breadcrumbs>
                     <Grid style={{ padding: 0, color: '#444', margin: 0 }}>
                         <Grid.Row style={{ paddingBottom: 0 }}>
-                            {(loading || loadingInitial) ?
+                            {(loading || loadingInitial || !specialtyCoreString) ?
                                 <Placeholder style={{ height: '35px', width: '100%' }}>
                                     <Placeholder.Line />
                                 </Placeholder> :
@@ -254,8 +292,12 @@ export default observer(function SpecialtyDetails() {
                                                 <Placeholder>
                                                     <Placeholder.Line />
                                                 </Placeholder> :
-                                                <Label
-                                                    content={`${t('ISCED code')}: ${getSpecialtyCoreISCEDString(selectedSpecialty?.localSpecialtyCode + '')}`} />}
+                                                <>
+                                                    <Label style={{ margin: '0.1rem' }}>
+                                                        {t('ISCED code')}: {i18n.language === 'uk' ? getSpecialtyCoreISCEDString(selectedSpecialty?.localSpecialtyCode!) : ''}
+                                                    </Label>
+                                                    {i18n.language !== 'uk' && getSpecialtyCore(selectedSpecialty?.localSpecialtyCode!)?.iscedCores.map((i) => <Label key={i.id} style={{ margin: '0.1rem' }} content={i.id + " " + i.name} />)}
+                                                </>}
                                         </Table.Cell>
                                     </Table.Row>
                                     <Table.Row>
@@ -268,13 +310,22 @@ export default observer(function SpecialtyDetails() {
                                                     <Icon
                                                         name='book'
                                                         size='big'
-                                                        color='blue' />
+                                                        style={{ color: 'rgb(38, 94, 213)' }} />
                                                     {t('Knowledge branch')}: {selectedSpecialty?.localSpecialtyCode.slice(0, 2)} {getBranch('' + selectedSpecialty?.localSpecialtyCode.slice(0, 2))?.name}
                                                 </>}
                                         </Table.Cell>
                                     </Table.Row>
                                 </Table.Body>
                             </Table>
+                            {id &&
+                                <Button
+                                    basic
+                                    active={isActive}
+                                    icon='plus'
+                                    label={t('Compare')}
+                                    className={isActive ? 'customButtonActive' : ''}
+                                    style={{ width: '100%', height: '3rem', color: '#444' }}
+                                    onClick={() => specialtyStore.toggleSelectedSpecialtyId(id)} />}
                             <Table basic='very' compact unstackable>
                                 <Table.Body>
                                     <TableItem
@@ -287,12 +338,12 @@ export default observer(function SpecialtyDetails() {
                                         icon='clock'
                                         label={t('ECTS credits')}
                                         content={selectedSpecialty?.ectsCredits} />
-                                    <TableItem
+                                    {selectedSpecialty?.tuitionUAH && <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='dollar'
                                         label={t('Tuition')}
-                                        content={<>{selectedSpecialty?.tuitionUAH} UAH <br></br>
-                                            {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />
+                                        content={<>{Math.round(selectedSpecialty?.tuitionUAH / 100)}00 UAH<br></br>
+                                            {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />}
                                     <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='flag'

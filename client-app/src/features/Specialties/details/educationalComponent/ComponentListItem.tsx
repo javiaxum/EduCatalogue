@@ -30,7 +30,7 @@ export default observer(function ComponentListItem({ component, setEduComponents
 
     if (!activeForm)
         return (
-            <Card  style={{ display: 'flex', width: '18rem', margin: isComputerOrTablet ? '0.2rem' : '0.2rem auto' }}>
+            <Card  style={{ display: 'flex', width: '18rem', minHeight: '6rem', margin: isComputerOrTablet ? '0.2rem' : '0.2rem auto' }}>
                 <Card.Content style={{ padding: '1rem 1rem 0 1rem' }}>
                     {editMode && <>
                         <Button

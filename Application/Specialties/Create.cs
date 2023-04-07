@@ -81,7 +81,8 @@ namespace Application.Specialties
                     newComponent.Id = componentDTO.Id;
                     _context.Components.Add(newComponent);
                 }
-
+                specialty.Approved = false;
+                specialty.Visible = false;
                 _context.Specialties.Add(specialty);
 
                 var result = await _context.SaveChangesAsync() > 0;

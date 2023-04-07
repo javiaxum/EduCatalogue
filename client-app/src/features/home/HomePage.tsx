@@ -20,7 +20,7 @@ export default observer(function HomePage() {
             </Grid.Row>
             <Grid.Row style={{ padding: 0 }}>
                 {userStore.isLoggedIn ?
-                    <Button size='big' inverted as={Link} to={`/institutions`} content='To Institutions' style={{ height: 'fit-content' }} /> :
+                    <Button size='big' inverted as={Link} to={`/institutions`} content={t('To Institutions Search')} style={{ height: 'fit-content' }} /> :
                     <>
                         <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<LoginForm />)} content={t('Login')} />
                         <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<RegisterForm />)} content={t('Register')} />

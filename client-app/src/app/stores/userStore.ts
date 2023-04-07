@@ -51,7 +51,6 @@ export default class UserStore {
                 this.user = user;
             });
             this.setLoading(false);
-            router.navigate('/institutions');
             store.modalStore.closeModal();
             store.profileStore.loadProfile();
         } catch (error) {
@@ -101,10 +100,10 @@ export default class UserStore {
 
     logout = () => {
         store.commonStore.setToken(null);
+        store.profileStore.profile = undefined;
         this.user = null;
         store.modalStore.closeModal();
         router.navigate('/institutions')
-        store.profileStore.profile = undefined;
     }
 
     getUser = async () => {

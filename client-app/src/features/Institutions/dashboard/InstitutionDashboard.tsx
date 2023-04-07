@@ -31,14 +31,12 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
     useEffect(() => {
         if (institutionsRegistry.size === 0)
             loadInstitutions();
-        institutionStore.clearImages();
         setActiveMenuItem('About');
-    }, [institutionStore, commonStore, setActiveMenuItem, institutionsRegistry.size, loadInstitutions])
+    }, [institutionsRegistry.size, loadInstitutions])
 
 
     function handleLoad(i: number) {
         setInstitutionPagingParams(new InstitutionsPagingParams(i));
-        institutionsRegistry.clear();
         loadInstitutions();
     }
 
@@ -121,6 +119,8 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                         </Button>
                         {institutionPagination &&
                             <Pagination
+                                hidePrevButton
+                                hideNextButton
                                 size='large'
                                 variant="outlined" shape="rounded"
                                 style={{ margin: '7rem auto 0 auto', width: 'fit-content' }}
@@ -141,7 +141,7 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                                 hideNextButton
                                 size='large'
                                 variant="outlined" shape="rounded"
-                                style={{ margin: '3rem auto 0 auto', width: 'fit-content' }}
+                                style={{ margin: '1rem auto 0 auto', width: 'fit-content' }}
                                 count={institutionPagination.totalPages}
                                 page={institutionPagination.currentPage}
                                 onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}

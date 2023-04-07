@@ -22,7 +22,7 @@ export default function ReviewListItem({ review, avatar }: Props) {
             duration={500}
             unmountOnhide
             transitionOnMount>
-            <Segment style={{ minHeight: '9rem', width: isComputerOrTablet ? '50rem' : '100%', color: '#444', margin: '0.2rem' }}>
+            <Segment style={{ minHeight: '9rem', width: isComputerOrTablet ? '50rem' : '100%', color: '#444', margin:'0.2rem' }}>
                 <Item>
                     <Item.Content>
                         <Grid>
@@ -31,7 +31,7 @@ export default function ReviewListItem({ review, avatar }: Props) {
                             </Grid.Column>
                             <Grid.Column width={7} floated='right' style={{maxWidth: '10rem'}}>
                                 <RatingStars rating={review.rating} />
-                                {format(review.createdAt, 'dd-MMM yyyy', { locale: i18n.language == 'ua' ? uk : enUS })}
+                                {format(review.createdAt, 'dd-MMM yyyy', { locale: i18n.language == 'uk' ? uk : enUS })}
                             </Grid.Column>
                         </Grid>
                         <Item.Description>{review.reviewMessage}</Item.Description>

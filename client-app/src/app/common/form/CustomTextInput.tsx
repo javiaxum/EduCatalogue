@@ -7,6 +7,8 @@ interface Props {
     name: string;
     disabled?: boolean;
     label?: any;
+    min?: number;
+    max?: number;
     type?: string;
     margin?: string;
     padding?: string;
@@ -26,6 +28,8 @@ export default function CustomTextInput(props: Props) {
                 {...field}
                 {...props}
                 type={type}
+                min={props.min}
+                max={props.max}
                 style={{ padding: props.padding, position: 'relative', fontWeight: props.fontWeight }} />
             {props.type === 'password' &&
                 <Button

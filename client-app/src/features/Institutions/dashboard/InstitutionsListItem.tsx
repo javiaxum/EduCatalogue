@@ -15,7 +15,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
     const { institutionStore } = useStore();
     const isActive = institutionStore.selectedInstitutionIds.includes(institution.id);
 
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
@@ -31,24 +31,24 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                 src={institution.titleImageUrl || '/assets/institutionTitleImagePlaceholder.png'}
                                 style={{ width: '12rem', height: '12rem', borderRadius: '10px 0 0 0 ', objectFit: 'cover' }} />
                         </Grid.Column>
-                        <Grid.Column style={{ width: 'calc(100% - 14rem)' }}>
-                            <Grid style={{ width: '100%', padding: '0 0 0 5%' }}>
-                                <Grid.Row style={{ paddingBottom: '0' }}>
+                        <Grid.Column style={{ width: 'calc(100% - 14rem)', paddingRight: 0 }}>
+                            <Grid style={{ padding: '0 0 0 0.5rem' }}>
+                                <Grid.Row>
                                     <Header
                                         as={Link}
                                         to={`/institutions/${institution.id}`}
-                                        style={{ maxWidth: 'calc(100% - 15rem)' }}>
+                                        style={{ width: '100%' }}>
                                         {institution.name}</Header>
+                                </Grid.Row>
+                                <Grid.Row style={{ padding: '0 0 1rem 0' }}>
                                     <div style={{ position: 'absolute', right: 0 }}>
                                         <div style={{ display: 'block' }}>
                                             <RatingStars rating={institution.rating} />
                                         </div>
                                         <div style={{ color: '#777', display: 'block', marginLeft: '1rem' }}>
-                                            {institution.reviewsCount} {t('Reviews_Dashboard_plural')}
+                                            {t('Reviews')} {institution.reviewsCount}
                                         </div>
                                     </div>
-                                </Grid.Row>
-                                <Grid.Row style={{ padding: '0 0 1rem 0' }}>
                                     <Item.Meta>{institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}</Item.Meta>
                                 </Grid.Row>
                                 <Grid.Row style={{ padding: '0 0 1rem 0' }} >
@@ -98,7 +98,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                             <RatingStars rating={institution.rating} />
                                         </div>
                                         <div style={{ color: '#777', display: 'inline', marginLeft: '1rem' }}>
-                                            {institution.reviewsCount} {t('Reviews_Dashboard_plural')}
+                                            {t('Reviews')} {institution.reviewsCount}
                                         </div>
                                     </div>
                                 </Grid.Row>
@@ -111,7 +111,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                 label={t('Compare')}
                                 active={isActive}
                                 className={isActive ? 'customButtonActive' : ''}
-                                style={{ width: '3rem', height: '3rem', color: '#444' }}
+                                style={{ height: '3rem', color: '#444' }}
                                 onClick={() => institutionStore.toggleSelectedInstitutionId(institution.id)} />
                         </Grid.Row>
                         <Grid.Row>

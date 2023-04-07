@@ -12,23 +12,168 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            // Seed institution types
-            if (!context.InstitutionTypes.Any())
-            {
-                var types = new List<InstitutionType>
+            List<string> reviewStrings = new List<string>();
+            reviewStrings.Add("Я не міг побажати кращого досвіду навчання в університеті, ніж той, який я отримав. Підтримуюча спільнота, чудові викладачі, різноманітні академічні програми та численні можливості для особистого зростання роблять його одним із найкращих університетів країни.");
+            reviewStrings.Add("Час, проведений у університеті, був справді кардинальним досвідом. Академічні програми є першокласними, викладачі пристрасні та обізнані, а спільнота кампусу привітна та інклюзивна. Я дуже рекомендую цей університет усім, хто прагне отримати виняткову освіту.");
+            reviewStrings.Add("Якщо ви шукаєте університет, який надає винятковий академічний досвід разом із широкими можливостями для особистісного зростання — це місце для вас. Завдяки своїй пристрасній спільноті, викладачам світового рівня та різноманітним академічним програмам він справді виділяється як один із найкращих університетів країни.");
+            reviewStrings.Add("Цей університет перевершив усі мої очікування. Підтримуюче співтовариство, різноманітні академічні програми та численні можливості для особистого зростання та участі роблять його видатним університетом. Я настійно рекомендую його всім, хто прагне трансформаційного досвіду вищої освіти.");
+            reviewStrings.Add("Підтримуюча спільнота, чудові викладачі, різноманітні академічні програми та численні можливості для особистого зростання роблять його одним із найкращих університетів країни.");
+            reviewStrings.Add("Завдяки своїй пристрасній спільноті, викладачам світового рівня та різноманітним академічним програмам він справді виділяється як один із найкращих університетів");
+            reviewStrings.Add("Я дуже рекомендую цей університет усім, хто прагне отримати виняткову освіту.");
+            reviewStrings.Add("Підтримуюче співтовариство, різноманітні академічні програми та численні можливості для особистого зростання та участі роблять його видатним університетом.");
+            reviewStrings.Add("Завдяки різноманітним академічним пропозиціям і широким можливостям для особистого зростання та залучення");
+            reviewStrings.Add("Як нещодавній випускник , я можу засвідчити його виняткові академічні програми, пристрасний викладач і гостинну спільноту. Завдяки різноманітним академічним пропозиціям і широким можливостям для особистого зростання та залучення");
+
+
+            var componentCores1 = new List<ComponentCore>();
+            var componentsCoreStrings1 = new List<string>
                 {
-                    new InstitutionType
-                    {
-                        Name="Public",
-                    },
-                    new InstitutionType
-                    {
-                        Name="Private",
-                    }
+                    // "Цивільне право",
+                    // "Правові висновки Верховного Cуду",
+                    // "Нотаріальний процес",
+                    // "Порівняльне цивільне право і процес",
+                    // "Школа прикладної юриспруденції",
+                    // "Практична підготовка",
+                    // "Дискретна математика",
+                    // "Математичний аналіз",
+                    // "Фізика",
+                    // "Вступ до комп'ютерних наук",
+                    // "Іноземна мова",
+                    // "Теорія ймовірностей та математична статистика",
+                    // "Комп'ютерні технології обробки та візуалізації даних",
+                    // "Алгоритмізація та програмування",
+                    // "Оптимізаційні методи та моделі",
+                    // "Штучний інтелект",
+                    // "Управління ІТ-проектами",
+                    // "Технологія Java",
+                    // "Адміністрування серверних систем",
+                    // "Web-технології",
+                    // "Інженерна та комп'ютерна графіка",
+                    // "Технології аналізу даних",
+                    // "Технології створення програмних продуктів",
+                    // "Правознавство",
+                    // "Психологія",
+                    // "Ораторське мистецтво",
+                    // "Безпека життя",
+                    // "Історія української культури",
+                    // "Ораторське мистецтво",
+                    // "Менеджмент",
+                    // "Філософія",
+                    // "Соціологія",
+                    // "Логіка",
+                    // "Бухгалтерський облік",
+                    // "Організація баз даних та знань",
+                    // "Архітектура обчислювальних систем",
+                    // "Теорія управління в інформаційних системах",
+                    "Анімація",
+                    "Основи програмної інженерії",
+                    "3D графіка та моделювання",
+                    "Технології моделювання",
+                    "Технології кібербезпеки",
+                    "Ігрові рушії",
+                    "Проєктування користувацьких інтерфейсів",
+                    "Економіка",
+                    "Операційні системи",
+                    "Об'єктно-орієнтоване програмування",
+                    "Архітектура комп'ютера",
+                    "Бази даних",
+                    "Основи мережевих технологій",
+                    "Лінійна алгебра та аналітична геометрія",
                 };
-                await context.InstitutionTypes.AddRangeAsync(types);
-                await context.SaveChangesAsync();
+            foreach (var componentStr in componentsCoreStrings1)
+            {
+                componentCores1.Add(new ComponentCore
+                {
+                    Name = componentStr,
+                });
             }
+            await context.ComponentCores.AddRangeAsync(componentCores1);
+            await context.SaveChangesAsync();
+            // var skills2 = new List<string>
+            // {
+            //     "ASP.NET",
+            //     ".NET",
+            //     "EntityFramework",
+            //     "ORM",
+            //     "Debugging",
+            //     "SSMS",
+            //     "Version Control",
+            //     "Visual Studio",
+            //     "SQL Server",
+            //     "Spring Boot",
+            // };
+            // var filteredSkills2 = skills2.Distinct().ToList();
+            // var skillObjectList2 = new List<Skill>();
+            // foreach (var item in filteredSkills2)
+            // {
+            //     skillObjectList2.Add(new Skill
+            //     {
+            //         Name = item
+            //     });
+            // }
+            // await context.AddRangeAsync(skillObjectList2);
+            // await context.SaveChangesAsync();
+            // foreach (var item in context.Reviews.ToList())
+            // {
+            //     context.Remove(item);
+
+            // }
+            // await context.SaveChangesAsync();
+
+            // foreach (var item in context.Institutions.ToList())
+            // {
+            //     var reviews = new List<Review>();
+            //     var reviewRate = new Random().Next(1, 10);
+            //     for (int i = 0; i < 10; i++)
+            //     {
+            //         if (new Random().Next(0, reviewRate) == 1) continue;
+            //         var date = new DateTime(2022, new Random().Next(7, 10), new Random().Next(1, 25));
+            //         var review = new Review
+            //         {
+            //             Institution = item,
+            //             Author = await userManager.FindByEmailAsync($"testmail{1 + i}@test.com"),
+            //             ReviewMessage = reviewStrings[i],
+            //             Rating = new Random().Next(4, 6),
+            //             CreatedAt = date.ToUniversalTime()
+            //         };
+            //         reviews.Add(review);
+            //     }
+            //     await context.AddRangeAsync(reviews);
+            // }
+            // await context.SaveChangesAsync();
+            // foreach (var item in context.Institutions.ToList())
+            // {
+            //     if (item.Reviews != null && item.Reviews.Count > 0)
+            //     {
+            //         item.Rating = item.Reviews.Select(r => r.Rating).Average();
+            //         item.ReviewsCount = item.Reviews.Count;
+            //     }
+            // }
+
+            // foreach (var item in context.Institutions.ToList())
+            // {
+            //     item.Approved = true;
+            //     item.Visible = true;
+            // }
+            // foreach (var item in context.Specialties.ToList())
+            // {
+            //     item.Approved = true;
+            //     item.Visible = true;
+            // }
+            // foreach (var item in context.Specialties.Include(x => x.Components).ToList())
+            // {
+            //     var componentsECTSCreds1 = item.Components.Select(x => x.ECTSCredits).Sum();
+            //     item.EctsCredits = 240;
+            //     item.UndergraduatesEnrolled = new Random().Next(20, 190);
+            //     item.AcceptanceRate = new Random().Next(5, 90);
+            //     item.GraduationRate = new Random().Next(50, 90);
+            //     item.GraduateEmploymentRate = new Random().Next(50, 90);
+            // }
+            // foreach (var item in context.Components.ToList())
+            // {
+            //     item.ECTSCredits = new Random().Next(0, 30) == 1 ? 12 : 6;
+            // }
+            // await context.SaveChangesAsync();
 
             // Seed states with cities
             if (!context.Regions.Any())
@@ -123,7 +268,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Вінницька",
+                        Name = "Вінницька область",
                         Cities = new List<City>
                         {
                             new City
@@ -202,7 +347,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Волинська",
+                        Name = "Волинська область",
                         Cities = new List<City>
                         {
                             new City
@@ -253,7 +398,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Дніпропетровська",
+                        Name = "Дніпропетровська область",
                         Cities = new List<City>
                         {
                             new City
@@ -340,7 +485,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Донецька",
+                        Name = "Донецька область",
                         Cities = new List<City>
                         {
                             new City
@@ -555,7 +700,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Житомирська",
+                        Name = "Житомирська область",
                         Cities = new List<City>
                         {
                             new City
@@ -610,7 +755,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Закарпатська",
+                        Name = "Закарпатська область",
                         Cities = new List<City>
                         {
                             new City
@@ -661,7 +806,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Запорізька",
+                        Name = "Запорізька область",
                         Cities = new List<City>
                         {
                             new City
@@ -724,7 +869,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Івано-Франківська",
+                        Name = "Івано-Франківська область",
                         Cities = new List<City>
                         {
                             new City
@@ -791,7 +936,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Київська",
+                        Name = "Київська область",
                         Cities = new List<City>
                         {
                             new City
@@ -902,7 +1047,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Кіровоградська",
+                        Name = "Кіровоградська область",
                         Cities = new List<City>
                         {
                             new City
@@ -957,7 +1102,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Луганська",
+                        Name = "Луганська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1112,7 +1257,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Львівська",
+                        Name = "Львівська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1295,7 +1440,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Миколаївська",
+                        Name = "Миколаївська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1338,7 +1483,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Одеська",
+                        Name = "Одеська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1421,7 +1566,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Полтавська",
+                        Name = "Полтавська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1492,7 +1637,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Рівненська",
+                        Name = "Рівненська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1543,7 +1688,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Сумська",
+                        Name = "Сумська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1610,7 +1755,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Тернопільська",
+                        Name = "Тернопільська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1689,7 +1834,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Харківська",
+                        Name = "Харківська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1764,7 +1909,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Херсонська",
+                        Name = "Херсонська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1807,7 +1952,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Хмельницька",
+                        Name = "Хмельницька область",
                         Cities = new List<City>
                         {
                             new City
@@ -1866,7 +2011,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Черкаська",
+                        Name = "Черкаська область",
                         Cities = new List<City>
                         {
                             new City
@@ -1937,7 +2082,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Чернівецька",
+                        Name = "Чернівецька область",
                         Cities = new List<City>
                         {
                             new City
@@ -1992,7 +2137,7 @@ namespace Persistence
                     },
                     new Region
                     {
-                        Name = "Чернігівська",
+                        Name = "Чернігівська область",
                         Cities = new List<City>
                         {
                             new City
@@ -3862,7 +4007,6 @@ namespace Persistence
                         Name = "Львівський національний медичний університет імені Данила Галицького",
                         Description = "Львівський національний медичний університет імені Данила Галицького (ЛНМУ; лат. Universitatis Medicinalis Leopoliensis) — один з найбільших та найстаріших медичних навчальних закладів України. Готує спеціалістів за напрямами: медицина, медико-профілактична справа, стоматологія та фармація. За даними міжнародної бази Scopus університет посідає перше місце серед медичних вишів України",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        // UndergraduateCount = 5150,
                         StreetAddress = "вул. Пекарська, 69",
                         SiteURL = "new.meduniv.lviv.ua",
                         ContactInformation = "0231231028"
@@ -3872,7 +4016,6 @@ namespace Persistence
                         Name = "Київський національний університет імені Тараса Шевченка",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 32000,
                         StreetAddress = "вул. Володимирська, 60",
                         SiteURL = "knu.ua",
                         ContactInformation = "6683328733"
@@ -3882,7 +4025,6 @@ namespace Persistence
                         Name = "Буковинський державний медичний університет",
                         Description = "один із найбільших закладів вищої освіти м. Чернівці. Це сучасний багатопрофільний заклад вищої медичної освіти, включений до загального реєстру Всесвітньої організації охорони здоров'я, Великої Хартії університетів, Європейської асоціації університету, що здійснює підготовку здобувачів вищої освіти за ступеневою системою освіти. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        // UndergraduateCount = 5284,
                         StreetAddress = "Театральна площа, 2",
                         SiteURL = "www.bsmu.edu.ua",
                         ContactInformation = "23474623659"
@@ -3892,7 +4034,6 @@ namespace Persistence
                         Name = "Тернопільський національний медичний університет",
                         Description = "державний заклад вищої освіти України, розташований у місті Києві. За рейтингами ВНЗ, на 2020 рік посідав 1 місце і є найбільшим університетом за кількістю студентів і спеціальностей. З 2009 до 2014 року мав статус автономного дослідницького університету",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        // UndergraduateCount = 6530,
                         StreetAddress = "Майдан Волі, 1",
                         SiteURL = "tdmu.edu.ua",
                         ContactInformation = "023sdads8"
@@ -3902,7 +4043,6 @@ namespace Persistence
                         Name = "Львівський національний університет імені Івана Франка",
                         Description = "один із найстаріших університетів України й Східної Європи та найпрестижніших в Україні. Є спадкоємцем колегіуму (1608—1661) та академії (1661—1773) єзуїтів, Йосифинського університету (1784—1805), Львівського ліцею (1805—1817), Університету Франца I (1817—1918), Львівського університету Яна-Казимира (1919—1939), Львівського державного університету імені Івана Франка (1939—1999).",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        // UndergraduateCount = 25000,
                         StreetAddress = "вул. Університетська, 1",
                         SiteURL = "lnu.edu.ua",
                         ContactInformation = "0322 603 402"
@@ -3912,7 +4052,6 @@ namespace Persistence
                         Name = "Національний університет «Києво-Могилянська академія»",
                         Description = "Національний університет «Києво-Могилянська академія» це заклад вищої освіти в Україні. Заснований 1615 року. Розміщується в корпусах історичної Києво-Могилянської академії, від якої отримав свою назву. Університетське містечко розташоване на Подолі в Києві, між Контрактовою площею та набережною Дніпра. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 4422,
                         StreetAddress = "вулиця Григорія Сковороди, 2",
                         SiteURL = "www.ukma.edu.ua",
                         ContactInformation = "044 425 6059"
@@ -3922,7 +4061,6 @@ namespace Persistence
                         Name = "Державний торговельно-економічний університет",
                         Description = "вищий навчальний заклад Міністерства освіти і науки України в Києві, Україна. Заснований як Київський філіал Всесоюзного заочного інституту радянської торгівлі в 1946 році. Знаходиться у Деснянському районі на території Лісового масиву між вулицями Кіото і Мілютенка.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 36600,
                         StreetAddress = "вулиця Кіото, 19",
                         SiteURL = "knute.edu.ua",
                         ContactInformation = "044 513 3348"
@@ -3932,7 +4070,6 @@ namespace Persistence
                         Name = "Прикарпатський національний університет імені Василя Стефаника",
                         Description = "Прикарпатський національний університет імені Василя Стефаника є одним з найстаріших вищих навчальних закладів Івано-Франківської області. Згідно з указом Президента України від 26 серпня 1992 р. його створено на базі педагогічного інституту, заснованого 1940 р. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Івано-Франківськ"),
-                        // UndergraduateCount = 18000,
                         StreetAddress = "вулиця Шевченка, 57",
                         SiteURL = "pnu.edu.ua",
                         ContactInformation = "0342 531 574"
@@ -3942,7 +4079,6 @@ namespace Persistence
                         Name = "Національний технічний університет «Дніпровська політехніка»",
                         Description = "Національний технічний університет «Дніпро́вська політе́хніка» — державний заклад вищої освіти, багатогалузевий технічний університет, найстаріший заклад вищої освіти в м. Дніпро, перший заклад вищої гірничої освіти України. Має статус національного.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        // UndergraduateCount = 8260,
                         StreetAddress = "проспект Дмитра Яворницького, 19",
                         SiteURL = "nmu.org.ua",
                         ContactInformation = "056 744 1411"
@@ -3952,7 +4088,6 @@ namespace Persistence
                         Name = "Київський національний університет технологій та дизайну",
                         Description = "Ки́ївський націона́льний університе́т техноло́гій та диза́йну — вищий навчальний заклад в Україні IV рівня акредитації, заснований 1930 року. В університеті навчається більше 10 тис. Київський національний університет технологій та дизайну увійшов у рейтинг «ТОР-100 кращих дизайнерських шкіл світу» і посів 71 місце.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 15000,
                         StreetAddress = "вулиця Немировича-Данченка, 2",
                         SiteURL = "knutd.com.ua",
                         ContactInformation = "044 256 2975"
@@ -3962,7 +4097,6 @@ namespace Persistence
                         Name = "Волинський національний університет імені Лесі Українки",
                         Description = "державний вищий навчальний заклад IV рівня акредитації у місті Луцьк, Україна. Заснований у 1940 році, впродовж історії змінював назви: Луцький державний учительський інститут, Луцький державний педагогічний інститут; у статусі університету мав назви Волинського державного, Волинського національного і Східноєвропейського національного. З 2020 року повернув назву Волинський національний університет. Названий на честь письменниці Лесі Українки.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Луцьк"),
-                        // UndergraduateCount = 12369,
                         StreetAddress = "проспект Волі, 13",
                         SiteURL = "vnu.edu.ua",
                         ContactInformation = "0332 720 123"
@@ -3972,7 +4106,6 @@ namespace Persistence
                         Name = "Національний університет «Полтавська політехніка імені Юрія Кондратюка»",
                         Description = "Університет володіє сучасними матеріально-технічними ресурсами. 9 навчальних корпусів із загальною площею 87 000 м², безпечні сприятливі умови для високоякісного навчання. Бібліотека налічує приблизно 500 тисяч одиниць літератури, 5 читальних залів з 400 місцями, 55 навчальних лабораторій та 10 науково-дослідницьких, споряджених стаціонарним обладнанням, 26 комп'ютерних класів у розпорядженні студентів і викладачів. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Полтава"),
-                        // UndergraduateCount = 10000,
                         StreetAddress = "Першотравневий проспект, 24",
                         SiteURL = "nupp.edu.ua",
                         ContactInformation = "05325 61604"
@@ -3982,7 +4115,6 @@ namespace Persistence
                         Name = "Дніпропетровський державний університет внутрішніх справ",
                         Description = "Університет заснований 16 березня 1966, як Дніпропетровська спеціальна середня школа міліції МВС СРСР. В 1992 вона була реорганізована в Дніпропетровське училище міліції МВС України. 1 вересня 1997 училище міліції було перетворено у вищий навчальний заклад — Дніпропетровський юридичний інститут МВС України. 1998 р. заклад з вул. Артема, 147 переїхав до приміщень колишнього Дніпропетровського військового зенітно-ракетного училища за адресою просп. Гагарина, 26. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Дніпро"),
-                        // UndergraduateCount = 0,
                         StreetAddress = "проспект Гагаріна, 26",
                         SiteURL = "dduvs.in.ua",
                         ContactInformation = "Не зазначено"
@@ -3992,7 +4124,6 @@ namespace Persistence
                         Name = "Запорізький державний медичний університет",
                         Description = "Запорізький державний медичний університет — заклад вищої освіти в Україні. Запорізький державний медичний університет — це сучасний навчальний центр, що має вищий (IV) ступінь акредитації. Університет — один з найстаріших вищих медичних навчальних закладів України.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Запоріжжя"),
-                        // UndergraduateCount = 8879,
                         StreetAddress = "проспект Маяковського, 26",
                         SiteURL = "www.zsmu.edu.ua",
                         ContactInformation = "0612 246 469"
@@ -4002,7 +4133,6 @@ namespace Persistence
                         Name = "Чернівецький національний університет імені Юрія Федьковича",
                         Description = "Чернівецький національний університет імені Юрія Федьковича — державний вищий заклад освіти 4-го рівня акредитації у місті Чернівці.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Чернівці"),
-                        // UndergraduateCount = 19227,
                         StreetAddress = "вулиця Коцюбинського, 2",
                         SiteURL = "www.chnu.edu.ua",
                         ContactInformation = "0372 584 810"
@@ -4012,7 +4142,6 @@ namespace Persistence
                         Name = "Національний університет біоресурсів і природокористування України",
                         Description = "Націона́льний університе́т біоресу́рсів і природокористува́ння Украї́ни, є провідним вищим аграрним закладом освіти України. З 2009 до 2014 року мав статус автономного дослідницького університету. Розташований у місті Києві. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 0,
                         StreetAddress = "вулиця Героїв Оборони, 15",
                         SiteURL = "www.nubip.edu.ua",
                         ContactInformation = "044 527 8205"
@@ -4022,7 +4151,6 @@ namespace Persistence
                         Name = "Західноукраїнський національний універиситет",
                         Description = "Західноукраїнський національний університет — вищий навчальний заклад України IV-го рівня акредитації в м. Тернополі. Університет здійснює підготовку майже 25 тисяч студентів на всіх рівнях вищої освіти. ЗУНУ є підписантом Великої хартії університетів та членом Асоціації європейських університетів.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Тернопіль"),
-                        // UndergraduateCount = 14963,
                         StreetAddress = "вулиця Львівська, 11",
                         SiteURL = "wunu.edu.ua",
                         ContactInformation = "0352 517 575"
@@ -4032,7 +4160,6 @@ namespace Persistence
                         Name = "Національний педагогічний університет імені М. П. Драгоманова",
                         Description = "З осені 1989 року колектив вишу став активно домагатися повернення інститутові несправедливо відібраного в середині 20-х років імені Михайла Петровича Драгоманова. Це питання постійно стало порушуватися на зборах викладачів і студентів, засіданнях ради інституту і рад філологічного, історичного, педагогічного та інших факультетів й у статтях в періодичній пресі. Усі ці вимоги й акції завершилися перемогою справедливості: в 1993 році інститутові було повернуто ім'я видатного українського вченого-енциклопедиста, борця за вільну українську школу М. П. Драгоманова. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
-                        // UndergraduateCount = 36000,
                         StreetAddress = "вулиця Пирогова, 9",
                         SiteURL = "www.npu.edu.ua",
                         ContactInformation = "044 239 3017"
@@ -4042,7 +4169,6 @@ namespace Persistence
                         Name = "Хмельницький національний університет",
                         Description = "вищий навчальний заклад на Поділлі, який готує спеціалістів із багатьох галузей знань і проводить навчальну, методичну, наукову та виховну роботу. Університет засновано 1962 року. Пройшов шлях від загальнотехнічного факультету Українського поліграфічного інституту до Хмельницького національного університету, який має найвищий IV рівень акредитації. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Хмельницький"),
-                        // UndergraduateCount = 9759,
                         StreetAddress = "вулиця Інститутська, 11",
                         SiteURL = "khnu.km.ua",
                         ContactInformation = "0382 670 276"
@@ -4052,7 +4178,6 @@ namespace Persistence
                         Name = "Вінницький національний технічний університет",
                         Description = "український заклад вищої освіти четвертого рівня акредитації, який здійснює підготовку фахівців інженерно-технічного профілю. Заклад є центром освіти, науки та культури Подільського регіону. ",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Вінниця"),
-                        // UndergraduateCount = 6000,
                         StreetAddress = "Хмельницьке шосе, 95",
                         SiteURL = "vntu.edu.ua",
                         ContactInformation = "0432 560 848"
@@ -4062,7 +4187,6 @@ namespace Persistence
                         Name = "Житомирський державний університет імені Івана Франка",
                         Description = "найстаріший вищий навчальний заклад Житомирщини. Заснований у 1919 році як «Волинський педагогічний інститут».",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Житомир"),
-                        // UndergraduateCount = 4456,
                         StreetAddress = "вулиця Велика Бердичівська, 40",
                         SiteURL = "zu.edu.ua",
                         ContactInformation = "0412 431 417"
@@ -4072,7 +4196,6 @@ namespace Persistence
                         Name = "Харківський політехнічний інститут",
                         Description = "Національний технічний університет «Харківський політехнічний інститут», до 1929 Харківський технологічний інститут, з 1975 Харківський ордена Леніна політехнічний інститут імені В. І. Леніна — заснований в 1885 році в Харкові. Другий технологічний інститут в Російській імперії після санкт-петербурзького.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        // UndergraduateCount = 12000,
                         StreetAddress = "вулиця Кирпичова, 2",
                         SiteURL = "kpi.kharkov.ua",
                         ContactInformation = "057 707 6634"
@@ -4082,7 +4205,6 @@ namespace Persistence
                         Name = "Харківський національний медичний університет",
                         Description = "Ха́рківський націона́льний меди́чний університе́т, раніше Харківський державний медичний інститут. Вищий навчальний заклад, метою якого є підготовка медичних фахівців та підвищення кваліфікації, формування на базі університету науково-виробничого кластеру.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Харків"),
-                        // UndergraduateCount = 6167,
                         StreetAddress = "проспект Науки, 4",
                         SiteURL = "knmu.edu.ua",
                         ContactInformation = "057 707 7380"
@@ -4092,7 +4214,6 @@ namespace Persistence
                         Name = "Ужгородський національний університет",
                         Description = "Ужгородський національний університет є членом Асоціації університетів Карпатського регіону (ACRU), яка входить до Асоціації європейських університетів (EUA) та є асоційованим членом Міжнародної асоціації університетів (IAU). Виш співпрацює зі 125 партнерами з різних країн, зокрема з такими, як Карлів університет, Технічний університет у м. Прага (Чехія), Університет Корвіна, Університет держави і права ім. Л.Кошута (Угорщина), Кошицький університет ім. П. Й. Шафарика, Університет ім. Я. А. Коменського (Словаччина), Університет м. Орадеа, Клузький університет м. Бабеш-Бояї (Румунія), Інститут германістики Університету м. Ландау, Університет Регенсбургу (Німеччина), Асоціація гомеопатичної медицини м. Рим (Італія), Загребський університет (Хорватія), Словацьким медичним університетом (Братислава) та іншими. У 2020 році укладено 7 нових міжнародних білатеральних угод, 7 угод з реалізації міжнародних проєктів та 8 угод з метою супроводу академічної мобільності Erasmus+.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Ужгород"),
-                        // UndergraduateCount = 14460,
                         StreetAddress = "вулиця Університетська, 14",
                         SiteURL = "uzhnu.edu.ua",
                         ContactInformation = "0312 643 084"
@@ -4102,12 +4223,26 @@ namespace Persistence
                         Name = "Національний університет «Львівська Політехніка»",
                         Description = "найстаріший технічний заклад вищої освіти України та Східної Європи, заснований у 1816 році як Реальна школа з дозволу австрійського імператора Франца І.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Львів"),
-                        // UndergraduateCount = 35000,
                         StreetAddress = "вул. Степана Бандери, 12",
                         SiteURL = "lp.edu.ua",
                         ContactInformation = "0322 582 111"
                     },
                 };
+                var alphabet = new[] { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T " };
+                for (int i = 0; i < 12; i++)
+                {
+                    var letter = alphabet[i];
+                    institutions.Add(
+                    new Institution
+                    {
+                        Name = $"Університет {letter}",
+                        Description = $"технічний заклад вищої освіти України, заснований у {new Random().Next(1992, 2005)} році. Розташований у місті Києві.",
+                        City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Київ"),
+                        StreetAddress = $"вул. {letter}, {20 - i}",
+                        SiteURL = "",
+                        ContactInformation = "380 44 000 00 00"
+                    });
+                }
                 await context.Institutions.AddRangeAsync(institutions);
                 await context.SaveChangesAsync();
 
@@ -4140,7 +4275,6 @@ namespace Persistence
                 {
                     "Цивільне право",
                     "Правові висновки Верховного Cуду",
-                    "Альтернативні способи вирішення суперечок",
                     "Нотаріальний процес",
                     "Порівняльне цивільне право і процес",
                     "Школа прикладної юриспруденції",
@@ -4255,12 +4389,17 @@ namespace Persistence
                 await context.StudyForms.AddRangeAsync(studyForms);
                 await context.SaveChangesAsync();
             }
-            List<string> reviewStrings = new List<string>();
-            reviewStrings.Add("I couldn't have asked for a better university experience than what I received at [University Name]. The supportive community, excellent faculty, diverse academic programs, and abundant opportunities for personal growth make it stand out as one of the best universities in the country.");
-            reviewStrings.Add("My time at [University Name] was a truly transformative experience. The academic programs are top-notch, the faculty are passionate and knowledgeable, and the campus community is welcoming and inclusive. I highly recommend this university to anyone seeking an exceptional education.");
-            reviewStrings.Add("If you're looking for a university that provides an exceptional academic experience along with ample opportunities for personal growth, [University Name] is the place for you. With its passionate community, world-class faculty, and diverse academic programs, it truly stands out as one of the best universities in the country.");
-            reviewStrings.Add("[University Name] exceeded all my expectations and then some. The supportive community, diverse academic programs, and numerous opportunities for personal growth and involvement make it an outstanding university. I highly recommend it to anyone seeking a transformative higher education experience.");
-            reviewStrings.Add("As a recent graduate of [University Name], I can attest to its exceptional academic programs, passionate faculty, and welcoming community. With its diverse academic offerings and ample opportunities for personal growth and involvement, [University Name] is truly one of the best universities in the country.");
+            // List<string> reviewStrings = new List<string>();
+            // reviewStrings.Add("Я не міг побажати кращого досвіду навчання в університеті, ніж той, який я отримав. Підтримуюча спільнота, чудові викладачі, різноманітні академічні програми та численні можливості для особистого зростання роблять його одним із найкращих університетів країни.");
+            // reviewStrings.Add("Час, проведений у університеті, був справді кардинальним досвідом. Академічні програми є першокласними, викладачі пристрасні та обізнані, а спільнота кампусу привітна та інклюзивна. Я дуже рекомендую цей університет усім, хто прагне отримати виняткову освіту.");
+            // reviewStrings.Add("Якщо ви шукаєте університет, який надає винятковий академічний досвід разом із широкими можливостями для особистісного зростання — це місце для вас. Завдяки своїй пристрасній спільноті, викладачам світового рівня та різноманітним академічним програмам він справді виділяється як один із найкращих університетів країни.");
+            // reviewStrings.Add("Цей університет перевершив усі мої очікування. Підтримуюче співтовариство, різноманітні академічні програми та численні можливості для особистого зростання та участі роблять його видатним університетом. Я настійно рекомендую його всім, хто прагне трансформаційного досвіду вищої освіти.");
+            // reviewStrings.Add("Підтримуюча спільнота, чудові викладачі, різноманітні академічні програми та численні можливості для особистого зростання роблять його одним із найкращих університетів країни.");
+            // reviewStrings.Add("Завдяки своїй пристрасній спільноті, викладачам світового рівня та різноманітним академічним програмам він справді виділяється як один із найкращих університетів");
+            // reviewStrings.Add("Я дуже рекомендую цей університет усім, хто прагне отримати виняткову освіту.");
+            // reviewStrings.Add("Підтримуюче співтовариство, різноманітні академічні програми та численні можливості для особистого зростання та участі роблять його видатним університетом.");
+            // reviewStrings.Add("Завдяки різноманітним академічним пропозиціям і широким можливостям для особистого зростання та залучення");
+            // reviewStrings.Add("Як нещодавній випускник , я можу засвідчити його виняткові академічні програми, пристрасний викладач і гостинну спільноту. Завдяки різноманітним академічним пропозиціям і широким можливостям для особистого зростання та залучення");
 
             // Seed Reviews
             if (!context.Reviews.Any())
@@ -4269,35 +4408,30 @@ namespace Persistence
                 {
                     var reviews = new List<Review>();
                     var reviewRate = new Random().Next(1, 10);
-                    for (int i = 1; i < 50; i++)
+                    for (int i = 0; i < 10; i++)
                     {
                         if (new Random().Next(0, reviewRate) == 1) continue;
                         var review = new Review
                         {
                             Institution = item,
-                            Author = await userManager.FindByEmailAsync($"testmail{i}@test.com"),
-                            ReviewMessage = reviewStrings[new Random().Next(0, 5)],
+                            Author = await userManager.FindByEmailAsync($"testmail{1 + i}@test.com"),
+                            ReviewMessage = reviewStrings[new Random().Next(0, 10)],
                             Rating = new Random().Next(2, 6)
                         };
                         reviews.Add(review);
                     }
                     await context.AddRangeAsync(reviews);
-                    await context.SaveChangesAsync();
                 }
+                await context.SaveChangesAsync();
             }
             if (!context.Specialties.Any())
             {
                 foreach (var item in context.Institutions.ToList())
                 {
 
-                    var descriptionString = @"
-                    Університетська спеціальність, також відома як спеціалізація, — це цілеспрямована область навчання, яка дозволяє студентам поглиблено досліджувати певний предмет або сферу інтересів. Обираючи університетську спеціальність, студенти можуть розвинути високий рівень знань і майстерності в обраній галузі навчання. Вони також можуть отримати практичні навички та знання, які мають відношення до їхньої майбутньої кар’єри чи академічної діяльності.
+                    var descriptionString = @"Університетська спеціальність, також відома як спеціалізація, — це цілеспрямована область навчання, яка дозволяє студентам поглиблено досліджувати певний предмет або сферу інтересів. Обираючи університетську спеціальність, студенти можуть розвинути високий рівень знань і майстерності в обраній галузі навчання. Вони також можуть отримати практичні навички та знання, які мають відношення до їхньої майбутньої кар’єри чи академічної діяльності.
 
 Університетські спеціальності можуть охоплювати широкий спектр предметів і дисциплін, включаючи науку, технології, інженерію, математику, соціальні науки, гуманітарні науки, мистецтво тощо. Кожна університетська спеціальність має власний унікальний набір вимог, результатів навчання та очікувань, які покликані підготувати студентів до успіху в обраній сфері.
-
-Однією з ключових особливостей університетської спеціальності є вимога до відданості та працьовитості. Очікується, що студенти, які обирають університетську спеціальність, будуть високомотивованими та відданими навчанню. Вони повинні володіти сильним критичним мисленням, аналітичними та дослідницькими навичками, а також бути готовими брати участь у незалежних дослідженнях.
-
-Іншим важливим аспектом університетської спеціальності є зосередженість на практичному застосуванні та реальному досвіді. Студентам надається можливість отримати практичний досвід через стажування, кооперативні програми, дослідницькі проекти та інші форми експериментального навчання. Це дозволяє їм розвивати практичні навички та знання, які цінують роботодавці та аспіранти.
                     ";
                     var specialties = new List<Specialty>();
                     foreach (var sc in context.SpecialtyCores.ToList())
@@ -4308,7 +4442,7 @@ namespace Persistence
                         {
                             SpecialtyCore = sc,
                             Description = descriptionString,
-                            TuitionUAH = new Random().Next(60000, 400000),
+                            TuitionUAH = new Random().Next(50000, 150000),
                             StartYear = 2023,
                             EndYear = 2027,
                             Institution = item,
@@ -4317,8 +4451,8 @@ namespace Persistence
                     }
 
                     await context.AddRangeAsync(specialties);
-                    await context.SaveChangesAsync();
                 }
+                await context.SaveChangesAsync();
             }
 
             //Seed components into specialties
@@ -4342,8 +4476,8 @@ namespace Persistence
                         });
                     }
                     await context.AddRangeAsync(components);
-                    await context.SaveChangesAsync();
                 }
+                await context.SaveChangesAsync();
             }
             // Seed Skills to Specialties
             if (!context.Skills.Any())
@@ -5085,22 +5219,20 @@ namespace Persistence
                         skills1.Add(await context.Skills.FirstOrDefaultAsync(x => x.Id == sIndex));
                     }
                     var componentsECTSCreds = item.Components.Select(x => x.ECTSCredits).Sum();
-                    item.EctsCredits = (componentsECTSCreds + new Random().Next(0, 2) == 1 ? 20 : 40);
+                    item.EctsCredits = componentsECTSCreds + (new Random().Next(0, 2) == 1 ? 20 : 40);
+                    item.UndergraduatesEnrolled = new Random().Next(20, 190);
                     item.AcceptanceRate = new Random().Next(5, 90);
                     item.GraduationRate = new Random().Next(20, 90);
                     item.GraduateEmploymentRate = new Random().Next(20, 90);
-                    // item.UndergraduateCount = new Random().Next(20, 150);
                     item.Skills = skills1;
                     item.FreeEducation = new Random().Next(0, 12) == 0;
                     item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"), await context.Languages.FirstOrDefaultAsync(x => x.Id == "en") };
                     item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
                     item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };
-                    await context.SaveChangesAsync();
                 }
+                await context.SaveChangesAsync();
                 foreach (var item in context.Institutions.ToList())
                 {
-                    item.Type = await context.InstitutionTypes.FirstOrDefaultAsync(x => x.Id == 1);
-                    // item.UndergraduateCount = item.Specialties.Select(x => x.UndergraduateCount).Sum() + new Random().Next(0, 5000); ;
                     item.Accreditation = new Random().Next(3, 5);
                     item.Coordinates = new Coordinates { Latitude = 49.320175149, Longitude = 32.6557279 };
                     item.StudyForms = new List<StudyForm>
@@ -5114,6 +5246,12 @@ namespace Persistence
                         await context.Languages.FirstOrDefaultAsync(x => x.Id == "uk"),
                         await context.Languages.FirstOrDefaultAsync(x => x.Id == "en"),
                     };
+                    var reviews = context.Reviews.Where(r => r.Institution.Id == item.Id).ToList();
+                    if (reviews != null && reviews.Count > 0)
+                    {
+                        item.Rating = reviews.Select(r => r.Rating).Average();
+                        item.ReviewsCount = reviews.Count;
+                    }
                     await context.SaveChangesAsync();
                 }
             }

@@ -12,6 +12,7 @@ import { Image } from "../models/image";
 
 export default class InstitutionStore {
     institutionsRegistry = new Map<string, Institution>();
+    selectedInstitutionId: string | undefined = undefined;
     selectedInstitution: Institution | undefined = undefined;
     institutionPagingParams: InstitutionsPagingParams = new InstitutionsPagingParams();
     institutionPagination: Pagination | null = null;
@@ -42,7 +43,7 @@ export default class InstitutionStore {
     selectedBranches: string[] = [];
     selectedCities: number[] = [];
     institutionsSorting: string = 'az';
-    tuitionRange: number[] = [0, 500000];
+    tuitionRange: number[] = [0, 300000];
     selectedDegreeId: string = '';
     searchNameParam: string = '';
 
@@ -50,6 +51,22 @@ export default class InstitutionStore {
 
     constructor() {
         makeAutoObservable(this);
+
+        reaction(
+            () => [
+                this.reviewPagingParams],
+            () => {
+                this.debouncedLoadReviews();
+            })
+
+        reaction(
+            () => [
+                this.reviewTargetRating,
+                this.reviewSorting],
+            () => {
+                this.clearReviews();
+                this.debouncedLoadReviews();
+            })
 
         reaction(
             () => [
@@ -62,29 +79,6 @@ export default class InstitutionStore {
                 this.selectedCities],
             () => {
                 this.debouncedLoadInstitutions();
-            })
-        reaction(
-            () => [
-                this.reviewSorting,
-                this.reviewTargetRating],
-            () => {
-                this.selectedInstitutionReviews.clear();
-                this.reviewsPagination = null;
-                this.reviewPagingParams = new ReviewsPagingParams();
-                this.setReviewsLoading(true);
-                this.debouncedLoadReviews();
-            })
-        reaction(
-            () => [
-                this.reviewPagingParams],
-            () => {
-                this.debouncedLoadReviews();
-            })
-        reaction(
-            () => [
-                this.imagesPagingParams],
-            () => {
-                this.debouncedLoadImages();
             })
     }
 
@@ -105,6 +99,16 @@ export default class InstitutionStore {
         sleep(2000);
     }
 
+    clearImages = () => {
+        this.selectedInstitutionImages.clear();
+    }
+    clearReviews = () => {
+        this.selectedInstitutionReviews.clear();
+    }
+    clearSelectedInstitution = () => {
+        this.selectedInstitution = undefined;
+    }
+
     setSelectedCities = (value: number[]) => {
         this.selectedCities = value;
     }
@@ -117,8 +121,12 @@ export default class InstitutionStore {
         this.tuitionRange = value;
     }
 
-    setSelectedSpeialties = (value: string[]) => {
+    setSelectedSpecialties = (value: string[]) => {
         this.selectedSpecialties = value;
+    }
+
+    setSelectedInstitutionId = (id: string) => {
+        this.selectedInstitutionId = id;
     }
 
     setSearchNameParam = (value: string) => {
@@ -128,7 +136,6 @@ export default class InstitutionStore {
     setSelectedBranches = (value: string[]) => {
         this.selectedBranches = value;
     }
-    //implement an image delete handler
 
     get populatedCitiesByName() {
         return Array.from(this.populatedCityRegistry.values()).sort((a, b) => a.name.localeCompare(b.name));
@@ -243,14 +250,13 @@ export default class InstitutionStore {
     }
 
     debouncedLoadInstitutions = debounce(() => {
-        this.institutionsRegistry.clear();
         this.loadInstitutions();
     }, 1500);
 
     loadInstitutions = async () => {
         try {
             this.setLoading(true);
-
+            this.institutionsRegistry.clear();
             const result = store.userStore.showPendingChanges ?
                 await agent.Institutions.pendingChangesList(this.institutionAxiosParams) :
                 await agent.Institutions.list(this.institutionAxiosParams);
@@ -258,7 +264,7 @@ export default class InstitutionStore {
                 this.setLoading(false);
                 result.data.forEach((institution, index) => {
                     setTimeout(() =>
-                        this.setInstiutionRegistryItem(institution), index * 100)
+                        this.setInstiutionRegistryItem(institution), index * 50)
                 });
             })
             this.setInstiutionsPagination(result.pagination);
@@ -360,28 +366,30 @@ export default class InstitutionStore {
     }, 800);
 
     loadImages = async () => {
-        if (this.selectedInstitutionImages.size === (this.imagesPagingParams.pageNumber * this.imagesPagingParams.pageSize)) {
-            this.setImagesLoadingInitial(false);
-            this.setImagesLoading(false);
-            return;
-        }
-        this.setImagesLoading(true);
-        try {
-            const result = await agent.Images.list(this.selectedInstitution!.id, this.imageAxiosParams);
-            runInAction(() => {
+        if (this.imagesPagingParams.pageNumber === 1)
+            this.selectedInstitutionImages.clear();
+        if (this.selectedInstitutionId) {
+            if (this.selectedInstitutionImages.size === (this.imagesPagingParams.pageNumber * this.imagesPagingParams.pageSize)) {
+                this.setImagesLoadingInitial(false);
                 this.setImagesLoading(false);
-                result.data.forEach((image, index) => {
-                    setTimeout(() =>
-                        this.setImagesRegistryItem(image), index * 100)
-                });
-            })
-            this.setImagesPagination(result.pagination);
-            this.setImagesLoadingInitial(false);
-            this.setImagesLoading(false);
-        } catch (error) {
-            console.log(error);
-            this.setImagesLoadingInitial(false);
-            this.setImagesLoading(false);
+                return;
+            }
+            this.setImagesLoading(true);
+            try {
+                const result = await agent.Images.list(this.selectedInstitutionId, this.imageAxiosParams);
+                this.setImagesLoading(false);
+                this.setImagesLoadingInitial(false);
+                runInAction(() => {
+                    result.data.forEach((image, index) => {
+                        this.setImagesRegistryItem(image)
+                    });
+                })
+                this.setImagesPagination(result.pagination);
+            } catch (error) {
+                console.log(error);
+                this.setImagesLoadingInitial(false);
+                this.setImagesLoading(false);
+            }
         }
     }
 
@@ -444,14 +452,6 @@ export default class InstitutionStore {
         }
     }
 
-    clearImagesPagination = () => {
-        this.imagesPagination = null;
-    }
-
-    clearImages = () => {
-        this.selectedInstitutionImages.clear();
-    }
-
     setImagesRegistryItem = (item: Image) => {
         this.selectedInstitutionImages.set(item.id, item);
     }
@@ -492,7 +492,7 @@ export default class InstitutionStore {
         }
         this.setReviewsLoading(true);
         try {
-            const result = await agent.Reviews.list(this.selectedInstitution!.id, this.reviewAxiosParams);
+            const result = await agent.Reviews.list(this.selectedInstitutionId!, this.reviewAxiosParams);
             runInAction(() => {
                 this.setReviewsLoading(false);
                 result.data.forEach((review, index) => {
@@ -521,17 +521,10 @@ export default class InstitutionStore {
     createReview = async (review: ReviewFormValues, institutionId: string) => {
         try {
             await agent.Reviews.create(institutionId, review);
+            this.setReviewPagingParams(new ReviewsPagingParams(1));
         } catch (error) {
             console.log(error);
         }
-    }
-
-    clearReviewsPagination = () => {
-        this.reviewsPagination = null;
-    }
-
-    clearInstitutionReviews = () => {
-        this.selectedInstitutionReviews.clear();
     }
 
     setReviewsLoading = (state: boolean) => {
@@ -560,12 +553,6 @@ export default class InstitutionStore {
 
     loadInstitution = async (id: string) => {
         this.setLoading(true);
-        if (this.institutionsRegistry.has(id)) {
-            this.selectedInstitution = this.getInstitution(id);
-            this.setLoadingInitial(false);
-            this.setLoading(false);
-            return this.getInstitution(id);
-        }
         try {
             const institution = await agent.Institutions.details(id);
             runInAction(() => {

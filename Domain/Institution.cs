@@ -14,7 +14,6 @@ namespace Domain
         public bool Approved { get; set; }
         public string Description { get; set; }
         public int Accreditation { get; set; }
-        public InstitutionType Type { get; set; } 
         public City City { get; set; }
         public Coordinates Coordinates { get; set; }
         public string StreetAddress { get; set; }
@@ -23,6 +22,8 @@ namespace Domain
         public string EmblemImageId { get; set; }
         public string BackgroundImageId { get; set; }
         public string ContactInformation { get; set; }
+        public double Rating { get; set; }
+        public int ReviewsCount { get; set; }
         public ICollection<StudyForm> StudyForms { get; set; }
         public ICollection<Language> Languages { get; set; }
         public ICollection<Image> Images { get; set; } = new List<Image>();

@@ -15,7 +15,6 @@ namespace Application.Core
         public string MaxTuition { get; set; }
         public string DegreeId { get; set; }
         public string Sorting { get; set; } 
-        public int UndergraduatesEnrolled { get; set; }
     }
 
 }

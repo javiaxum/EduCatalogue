@@ -46,8 +46,10 @@ namespace Application.Reviews
                 request.Review.Institution = institution;
 
                 _context.Reviews.Add(request.Review);
-                var result = await _context.SaveChangesAsync() > 0;
+                institution.Rating = ((institution.Rating * institution.ReviewsCount) + request.Review.Rating) / (institution.ReviewsCount + 1);
+                institution.ReviewsCount = institution.ReviewsCount + 1;
 
+                var result = await _context.SaveChangesAsync() > 0;
                 if (!result) return Result<Unit>.Failure("An error has occured while creating a review");
 
                 return Result<Unit>.Success(Unit.Value);

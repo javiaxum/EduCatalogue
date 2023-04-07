@@ -9,7 +9,7 @@ import InstitutionDetailsLocationForm from './location/InstitutionDetailsLocatio
 import InstitutionDetailsReviewsList from './reviews/InstitutionDetailsReviewsList';
 import InstitutionDetailsSpecialtiesList from './specialties/InstitutionDetailsSpecialtiesList';
 import { useFormikContext } from 'formik';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import ToggleInstitutionManagerForm from '../../identity/ToggleInstitutionManagerForm';
 
 export default observer(function InstitutionDetailsContent() {
@@ -19,7 +19,7 @@ export default observer(function InstitutionDetailsContent() {
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
     const visible = selectedInstitution?.visible!;
-    const formik = useFormikContext();
+    const { id } = useParams();
 
     const items = [
         'About',
@@ -37,28 +37,32 @@ export default observer(function InstitutionDetailsContent() {
     return (
         <>
             <Menu pointing secondary stackable={isMobile} style={{ width: isComputerOrTablet ? '37rem' : '' }}>
-                {items.map((i, index) =>
-                    <Menu.Item
-                        name={i}
-                        key={index}
-                        active={activeMenuItem === i}
-                        content={t(i)}
-                        onClick={() => setActiveMenuItem(i)}
-                    />
+                {items.map((i, index) => {
+                    if (!id && (index === 1 || index === 2 || index === 4)) return <></>;
+                    return (
+                        <Menu.Item
+                            name={i}
+                            key={index}
+                            active={activeMenuItem === i}
+                            content={t(i)}
+                            onClick={() => setActiveMenuItem(i)} />)
+                }
                 )}
-                <Menu.Item onClick={() => toggleVisibility(selectedInstitution?.id!)}>
-                    {(!loading && !loadingInitial) &&
-                        <>
-                            <Icon name={visible ? 'eye slash' : 'eye'} />
-                            {t(visible ? 'Hide institution' : 'Show institution')}
-                        </>}
-                </Menu.Item>
-                {profileStore.isOperator && <Menu.Item onClick={() => modalStore.openModalMini(<ToggleInstitutionManagerForm />)}>
-                    {(!loading && !loadingInitial) &&
-                        <Icon name='user' />}
-                </Menu.Item>}
+                {id &&
+                    <>
+                        {profileStore.isOperator && id &&
+                            <Menu.Item onClick={() => modalStore.openModalMini(<ToggleInstitutionManagerForm />)}>
+                                {(!loading && !loadingInitial) &&
+                                    <Icon name='user' />}
+                                {t('Add user')}
+                            </Menu.Item>}
+                        {profileStore.isOperator && id &&
+                            <Menu.Item onClick={() => toggleVisibility(selectedInstitution?.id!)}>
+                                <Icon name={visible ? 'eye slash' : 'eye'} />
+                                {t(visible ? 'Hide institution' : 'Show institution')}
+                            </Menu.Item>}
+                    </>}
             </Menu>
-
             {components[items.indexOf(activeMenuItem)]}
         </>
     )

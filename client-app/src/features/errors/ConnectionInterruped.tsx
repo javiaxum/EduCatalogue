@@ -1,16 +1,15 @@
-import React from 'react';
+import { Button, Header, Icon, Segment } from "semantic-ui-react";
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Button, Header, Icon, Segment } from 'semantic-ui-react';
 
-export default function NotFound() {
+export default function ConnectionInterruped() {
     const { t } = useTranslation();
-    
+
     return (
         <Segment textAlign='center'>
             <Header>
-                <Icon name='search' />
-                {t(`We've looked everywhere but could not find what you are looking for!`)}
+                <Icon name='unlink' />
+                {t('Connection has been interrupted')}! {t('Check your network connection')}.
             </Header>
             <Segment.Inline>
                 <Button as={Link} to='/institutions' content={t('Return to institutions search')} />

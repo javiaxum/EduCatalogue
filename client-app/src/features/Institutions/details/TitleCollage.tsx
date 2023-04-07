@@ -1,7 +1,6 @@
 import { observer } from 'mobx-react-lite';
-import { Grid, Image, Placeholder, Segment, Transition } from 'semantic-ui-react';
+import { Grid, Image, Placeholder, Segment } from 'semantic-ui-react';
 import FadePlaceholderAnimationWrapper from '../../../app/common/animations/FadeAnimationWrapper';
-import FadeAnimationWrapper from '../../../app/common/animations/FadeAnimationWrapper';
 import { useStore } from '../../../app/stores/store';
 import CollageImageForm from './CollageImageForm';
 

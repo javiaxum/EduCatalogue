@@ -18,7 +18,7 @@ export default observer(function SearchParamsList() {
         selectedStudyForms,
         selectedDegree,
         setSelectedBranches,
-        setSelectedSpeialties,
+        setSelectedSpecialties,
         setSelectedSkillIds,
         setSelectedStudyForms,
         setSelectedLanguages,
@@ -52,14 +52,14 @@ export default observer(function SearchParamsList() {
             <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column width={16} style={{ padding: '0' }} textAlign='center'>
                 <Slider
-                    style={{ width: '80%' }}
+                    style={{ width: '80%', color: 'rgb(38, 94, 213)' }}
                     getAriaLabel={() => 'Tuition range'}
                     value={tuitionRange}
                     onChange={(e, value) => { if (Array.isArray(value)) setTuitionRange(value) }}
                     valueLabelDisplay="auto"
                     step={10}
-                    min={0}
-                    max={1000000} />
+                    min={30000}
+                    max={300000} />
                 <Label size="large">
                     {tuitionRange[0]} UAH - {tuitionRange[1]} UAH
                 </Label>
@@ -78,9 +78,10 @@ export default observer(function SearchParamsList() {
                 value={selectedBranches}
                 options={branchOptions}
                 onChange={(e, data) => {
+                    let values = data.value as string[];
                     setSelectedBranches(data.value as string[])
-                    if (selectedSpecialties?.length !== 0 && selectedBranches.length !== 0) {
-                        setSelectedSpeialties(selectedSpecialties.filter((x) => !selectedBranches.includes(x.slice(0, 2))));
+                    if (selectedSpecialties?.length != 0 && values.length !== 0) {
+                        setSelectedSpecialties(selectedSpecialties.filter((x) => values.includes(x.slice(0, 2))));
                     }
                 }}
             />
@@ -94,7 +95,13 @@ export default observer(function SearchParamsList() {
                 clearable
                 value={selectedSpecialties}
                 options={specialtyOptions}
-                onChange={(event: React.SyntheticEvent<HTMLElement>, data: any) => setSelectedSpeialties(data.value)}
+                onChange={(event, data) => {
+                    let values = data.value as string[];
+                    setSelectedSpecialties(data.value as string[])
+                    if (selectedBranches?.length != 0 && values.length !== 0) {
+                        setSelectedBranches(selectedBranches.filter((x) => values.find((s) => s.slice(0, 2) == x)));
+                    }
+                }}
             />
             <Header as='h4' content={t('Degree')} style={{ padding: '1rem 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Select

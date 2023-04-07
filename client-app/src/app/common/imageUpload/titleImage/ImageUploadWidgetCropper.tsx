@@ -10,6 +10,7 @@ interface Props {
 export default function ImageUploadWidgetCropper({imagePreview, setCropper}: Props) {
     return (
         <Cropper
+        style={{maxHeight: '30.6rem'}}
             src={imagePreview}
             initialAspectRatio={1}
             aspectRatio={1}

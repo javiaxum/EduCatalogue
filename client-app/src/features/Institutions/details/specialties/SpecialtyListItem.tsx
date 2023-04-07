@@ -32,11 +32,11 @@ export default observer(function SpecialtyListItem({ specialty, specialtyCore, i
                 <Card as={Link} to={`/specialties/${specialty.id}`} style={{ display: 'block', margin: 0, height: isComputerOrTablet ? '14rem' : '8rem', width: isComputerOrTablet ? '16rem' : '100%' }}>
                     <Card.Content>
                         <Card.Header style={{ width: isComputerOrTablet ? '11rem' : '' }}>
-                            {isComputerOrTablet ? specialtyCore.name.slice(0, 50) : specialtyCore.name}{(specialtyCore.name.length > 50 && isComputerOrTablet) && "..."}
+                            {specialtyCore.name}
                         </Card.Header>
-                        <Card.Description>{t('Specialty code') + ': '} {specialtyCore.id}</Card.Description>
-                        <Card.Description>{t('ISCED code') + ': '} {iscedCodeString}</Card.Description>
-                        {isComputerOrTablet && <Card.Description>{specialty.description.slice(0, 65)} {specialty.description.length > 65 && '...'}</Card.Description>}
+                        <Card.Description>{t('Specialty code')}: {specialtyCore.id}</Card.Description>
+                        <Card.Description>{t('ISCED code')}: {iscedCodeString}</Card.Description>
+                        <Card.Description>{t('Price')}: {Math.round(specialty.tuitionUAH/100)}00 UAH</Card.Description>
                     </Card.Content>
                 </Card>
                 <Button

@@ -61,8 +61,8 @@ export default observer(function NavBarMobile() {
                                 <Button
                                     className='languageToggler'
                                     style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                                    active={i18n.language == 'ua'}
-                                    onClick={() => { i18n.changeLanguage('ua'); }}>
+                                    active={i18n.language == 'uk'}
+                                    onClick={() => { i18n.changeLanguage('uk'); }}>
                                     Укр
                                 </Button>
                             </Button.Group>

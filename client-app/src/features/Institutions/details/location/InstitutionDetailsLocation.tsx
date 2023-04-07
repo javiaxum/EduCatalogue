@@ -15,9 +15,9 @@ export default function InstitutionDetailsLocation() {
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
 
     return (
-        <Grid style={{ width: isComputerOrTablet ? '95%' : '90%', margin: '0 auto' }}>
+        <Grid style={{ width: isComputerOrTablet ? '95%' : '100%', margin: '0 auto' }}>
             <Grid.Row>
-                <Icon name='point' color='blue' /> {selectedInstitution?.streetAddress},  {" "}
+                <Icon name='point' style={{ color: 'rgb(38, 94, 213)' }} /> {selectedInstitution?.streetAddress},  {" "}
                 {getCityById(selectedInstitution?.cityId!, selectedInstitution?.regionId!)?.name}, {" "}
                 {getRegionById(selectedInstitution?.regionId!)?.name}
             </Grid.Row>

@@ -61,11 +61,10 @@ export default observer(function LoginForm() {
                         }}
                     />
                     <Button
-                        color='blue'
                         compact
                         basic
                         onClick={() => { modalStore.closeModal(); modalStore.openModalMini(<PasswordResetRequestForm />) }}
-                        style={{ display: 'inline', position: 'absolute', right: 0 }}>
+                        style={{color: 'rgb(38, 94, 213)', display: 'inline', position: 'absolute', right: 0 }}>
                         {t('Forgot password?')}
                     </Button>
                     <Button.Group fluid>

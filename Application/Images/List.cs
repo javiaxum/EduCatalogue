@@ -37,8 +37,9 @@ namespace Application.Images
 
             public async Task<Result<PagedList<ImageDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.InstitutionId);
                 var query = _context.Images
-                    .Where(x => x.Institution.Id == request.InstitutionId)
+                    .Where(x => x.Institution.Id == request.InstitutionId && x.Id != institution.TitleImageId && x.Id != institution.BackgroundImageId && x.Id != institution.EmblemImageId)
                     .ProjectTo<ImageDTO>(_mapper.ConfigurationProvider);
 
                 return Result<PagedList<ImageDTO>>.Success(

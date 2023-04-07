@@ -9,7 +9,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './features/routers/Routes';
 import { initReactI18next } from 'react-i18next';
 import en from '../src/app/translation/en.json';
-import ua from '../src/app/translation/ua.json';
+import uk from '../src/app/translation/uk.json';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
@@ -21,7 +21,7 @@ i18n
   .use(initReactI18next)
   .init({
     resources: {
-      ua: { translation: ua },
+      uk: { translation: uk },
       en: { translation: en },
     },
     fallbackLng: 'en',

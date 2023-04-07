@@ -27,16 +27,6 @@ export default observer(function App() {
   const { t } = useTranslation();
 
   useEffect(() => { window.scrollTo(0, 0); }, [location.pathname])
-  useEffect(() => {
-    if (selectedInstitutionIds.length === 0 && location.pathname === '/institutions/comparison')
-      router.navigate('/institutions');
-  }, [location.pathname, selectedInstitutionIds.length])
-  useEffect(() => {
-    if (selectedSpecialtyIds.length === 0 && location.pathname === '/specialties/comparison')
-      if (selectedInstitution)
-        router.navigate(`/institutions/${selectedInstitution?.id}`);
-  }, [location.pathname, selectedSpecialtyIds.length])
-
 
   useEffect(() => {
     if (commonStore.token) {
@@ -68,7 +58,7 @@ export default observer(function App() {
           {location.pathname === '/institutions/comparison' && <InstitutionComparisonBoard />}
           {location.pathname === '/specialties/comparison' && <SpecialtyComparisonBoard />}
         </div> :
-        <div style={{ overflow: isComputerOrTablet ? 'scroll' : 'hidden' }}>
+        <div style={{ overflowX: (isComputerOrTablet && location.pathname !== '/') ? 'scroll' : 'hidden' }}>
           <ModalContainer />
           <ModalImageContainer />
           <ToastContainer
@@ -82,7 +72,7 @@ export default observer(function App() {
               {isMobile &&
                 <>
                   <NavBarMobile />
-                  <div style={{ height: location.pathname === '/institutions' ? '6rem' : '4rem' }} />
+                  <div style={{ height: location.pathname === '/institutions' ? '6rem' : '5rem' }} />
                 </>}
               <Outlet />
               <div style={{ left: isMobile ? '0' : '', width: isMobile ? '100%' : '22rem', position: 'fixed', bottom: 0, zIndex: 2000 }}>
@@ -94,7 +84,7 @@ export default observer(function App() {
                   unmountOnhide
                   transitionOnMount>
                   <Button
-                    style={{ backgroundColor: '#1e47a0', position: 'relative', bottom: '0.1rem', borderRadius: '3px 3px 0 0' }}
+                    style={{ backgroundColor: 'rgb(38, 94, 213)', position: 'relative', bottom: '0.1rem', borderRadius: '3px 3px 0 0' }}
                     as={Link}
                     to='/institutions/comparison'
                     onClick={() => commonStore.setComparison('institutions')}>
@@ -114,7 +104,7 @@ export default observer(function App() {
                   <Button
                     as={Link}
                     to='/specialties/comparison'
-                    style={{ backgroundColor: '#1e47a0', position: 'relative', botton: '0.1rem', borderRadius: '3px 3px 0 0' }}
+                    style={{ backgroundColor: 'rgb(38, 94, 213)', position: 'relative', botton: '0.1rem', borderRadius: '3px 3px 0 0' }}
                     onClick={() => commonStore.setComparison('specialties')}>
                     <Icon name='universal access' inverted style={{ display: 'inline-block' }} />
                     <Header inverted as='h4' style={{ display: 'inline-block', margin: 0 }}>
@@ -129,7 +119,7 @@ export default observer(function App() {
                 unmountOnhide
                 transitionOnMount>
                 <Button
-                  style={{ width: '4rem', height: '4rem', backgroundColor: '#1e47a0', position: 'fixed', right: 0, bottom: '7rem', zIndex: 1000, borderRadius: '3px' }}
+                  style={{ width: '4rem', height: '4rem', backgroundColor: 'rgb(38, 94, 213)', position: 'fixed', right: 0, bottom: '7rem', zIndex: 1000, borderRadius: '3px' }}
                   type='button'
                   onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
                   <Icon name='arrow up' size='large' inverted style={{ position: 'absolute', top: '1.2rem', left: '1.455rem' }} />

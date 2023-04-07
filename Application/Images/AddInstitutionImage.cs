@@ -44,6 +44,9 @@ namespace Application.Images
                     try
                     {
                         deleteResult = await _imageAccessor.DeleteImage(institution.TitleImageId);
+                        var titleImage = await _context.Images.FirstOrDefaultAsync(x => x.Id == institution.TitleImageId);
+                        if (titleImage != null)
+                            _context.Images.Remove(titleImage);
                     }
                     catch (System.Exception)
                     {
@@ -54,6 +57,22 @@ namespace Application.Images
                     try
                     {
                         deleteResult = await _imageAccessor.DeleteImage(institution.BackgroundImageId);
+                        var backgroundImage = await _context.Images.FirstOrDefaultAsync(x => x.Id == institution.BackgroundImageId);
+                        if (backgroundImage != null)
+                            _context.Images.Remove(backgroundImage);
+                    }
+                    catch (System.Exception)
+                    {
+                        deleteResult = "Ok";
+                    }
+
+                if (!String.IsNullOrEmpty(institution.EmblemImageId) && request.Params.isEmblemImage)
+                    try
+                    {
+                        deleteResult = await _imageAccessor.DeleteImage(institution.EmblemImageId);
+                        var emblemImage = await _context.Images.FirstOrDefaultAsync(x => x.Id == institution.EmblemImageId);
+                        if (emblemImage != null)
+                            _context.Images.Remove(emblemImage);
                     }
                     catch (System.Exception)
                     {
@@ -75,6 +94,8 @@ namespace Application.Images
                     institution.TitleImageId = image.Id;
                 else if (request.Params.isBackgroundImage)
                     institution.BackgroundImageId = image.Id;
+                else if (request.Params.isEmblemImage)
+                    institution.EmblemImageId = image.Id;
                 institution.Images.Add(image);
 
                 var result = await _context.SaveChangesAsync() > 0;

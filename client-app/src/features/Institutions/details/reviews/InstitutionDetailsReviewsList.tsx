@@ -19,28 +19,18 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
         setReviewForm,
         setReviewSorting,
         setReviewPagingParams,
-        clearReviewsPagination,
         reviewSorting,
         reviewPagingParams,
         selectedInstitution,
         selectedInstitutionReviews,
         setReviewTargetRating,
         reviewTargetRating,
-        clearInstitutionReviews,
         reviews } = institutionStore;
     const { editMode } = commonStore;
     const { t } = useTranslation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' });
-
-    useEffect(() => {
-        setReviewPagingParams(new ReviewsPagingParams());
-        return () => {
-            clearInstitutionReviews();
-            clearReviewsPagination();
-        }
-    }, [clearInstitutionReviews, clearReviewsPagination, setReviewPagingParams])
 
     function handleLoad() {
         if (!reviewsPagination || reviewsPagination?.currentPage! < reviewsPagination?.totalPages!)
@@ -70,17 +60,6 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
         <Grid style={{ padding: isComputerOrTablet ? 0 : '1rem', width: '100%', margin: 0 }}>
             {!reviewForm &&
                 <Grid.Row style={{ padding: 0 }}>
-                    {isComputerOrTablet && buttons}
-                    <Select
-                        style={{ width: isMobile ? '100%' : '' }}
-                        options={t("reviewSortingOptions", { returnObjects: true })}
-                        value={reviewSorting}
-                        onChange={(e, d) => {
-                            setReviewSorting(d.value as string)
-                        }} />
-                </Grid.Row>}
-            <Grid.Row>
-                <Grid style={{ padding: '20px 0 0 0' }}>
                     {(reviews.length > 0 && !!!reviews.find((x) => x.author.username === userStore.user?.username)) && <>
                         {!reviewForm ?
                             <Button
@@ -90,9 +69,19 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 onClick={() => setReviewForm(true)} />
                             : <ReviewForm />}
                     </>}
-                    <Grid.Row>
-                        {((!selectedInstitutionReviews && reviewsPagination) || (reviews.length === 0 && !editMode && !reviewsLoading)) &&
-                            <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>There are no reviews available...</Segment>}
+                    <Select
+                        style={{ width: isMobile ? '100%' : 'fit-content', marginLeft: '25rem' }}
+                        options={t("reviewSortingOptions", { returnObjects: true })}
+                        value={reviewSorting}
+                        onChange={(e, d) => {
+                            setReviewSorting(d.value as string)
+                        }} />
+                </Grid.Row>}
+            <Grid.Row>
+                <Grid style={{ padding: '20px 0 0 0', width: '100%' }}>
+                    <Grid.Row >
+                        {(!selectedInstitutionReviews && reviews.length === 0 && !editMode && !reviewsLoading) &&
+                            <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>{t('There are no reviews available')}...</Segment>}
                         <InfiniteScroll
                             scrollThreshold={0.5}
                             dataLength={(reviewsPagination?.itemsPerPage! * reviewsPagination?.currentPage!) || 0}
@@ -111,7 +100,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                         <Transition
                             visible={reviewsLoading}
                             duration={500} >
-                            <Loader inline active={true} size='small' style={{ display: 'block', position: 'relative', top: 0 }} />
+                            <Loader inline active={true} size='small' style={{ display: 'block', position: 'relative', top: 0, left: '50%' }} />
                         </Transition>
                     </Grid.Row>
                 </Grid>

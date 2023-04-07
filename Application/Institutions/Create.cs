@@ -47,6 +47,20 @@ namespace Application.Institutions
                 _mapper.Map(request.Institution, newInstitution);
                 newInstitution.City = await _context.Cities.FirstOrDefaultAsync(x => x.Id == request.Institution.CityId);
 
+                newInstitution.Languages = new List<Language>();
+                foreach (var languageId in request.Institution.LanguageIds)
+                {
+                    var language = await _context.Languages.FirstOrDefaultAsync(x => x.Id == languageId);
+                    newInstitution.Languages.Add(language);
+                }
+
+                newInstitution.StudyForms = new List<StudyForm>();
+                foreach (var studyFormId in request.Institution.StudyFormIds)
+                {
+                    var studyForm = await _context.StudyForms.FirstOrDefaultAsync(x => x.Id == studyFormId);
+                    newInstitution.StudyForms.Add(studyForm);
+                }
+
                 var manager = new AppUserInstitution
                 {
                     Manager = user,
@@ -54,7 +68,10 @@ namespace Application.Institutions
                 };
 
                 newInstitution.Managers.Add(manager);
-
+                newInstitution.Visible = false;
+                newInstitution.Approved = false;
+                newInstitution.ReviewsCount = 0;
+                newInstitution.Rating = 0;
                 _context.Institutions.Add(newInstitution);
 
                 var result = await _context.SaveChangesAsync() > 0;

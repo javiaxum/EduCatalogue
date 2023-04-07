@@ -32,7 +32,7 @@ export default class SpecialtyStore {
     selectedSkillIds: number[] = [];
     selectedLanguages: string[] = [];
     selectedStudyForms: number[] = [];
-    tuitionRange: number[] = [0, 500000];
+    tuitionRange: number[] = [0, 300000];
     selectedDegree: string = '';
     selectedSpecialtyIds: string[] = [];
     selectedSpecialtiesSort: string = 'az';
@@ -52,7 +52,8 @@ export default class SpecialtyStore {
                 this.tuitionRange,
                 this.selectedDegree],
             () => {
-                this.debouncedLoadSpecialties();
+                if (store.institutionStore.selectedInstitutionId)
+                    this.debouncedLoadSpecialties(store.institutionStore.selectedInstitutionId);
             })
     }
 
@@ -97,7 +98,7 @@ export default class SpecialtyStore {
         this.tuitionRange = value;
     }
 
-    setSelectedSpeialties = (value: string[]) => {
+    setSelectedSpecialties = (value: string[]) => {
         this.selectedSpecialties = value;
     }
 
@@ -141,6 +142,8 @@ export default class SpecialtyStore {
             .map(element => (element))
             .sort((a, b) => a.id - b.id)
     }
+
+
 
     getSpecialtyCoreISCEDString = (id: string) => {
         const specialtyCore = this.specialtyCoreRegistry.get(id);
@@ -264,7 +267,7 @@ export default class SpecialtyStore {
     get axiosParams() {
         const params = new URLSearchParams();
         params.append('pageNumber', this.pagingParams.pageNumber.toString());
-        params.append('pageSize', this.pagingParams.pageSize.toString());
+        params.append('pageSize', store.commonStore.editMode ? '5' : this.pagingParams.pageSize.toString());
         let branchesPredicate = this.selectedBranches.join('-');
         let specialtiesPredicate = this.selectedSpecialties.join('-');
         let skillsPredicate = this.selectedSkillIds.join('-');
@@ -282,22 +285,24 @@ export default class SpecialtyStore {
         return params;
     }
 
-    debouncedLoadSpecialties = debounce(() => {
-        this.loadSpecialties();
+    debouncedLoadSpecialties = debounce((id: string) => {
+        this.loadSpecialties(id);
     }, 800);
 
-    loadSpecialties = async () => {
+    loadSpecialties = async (id: string) => {
         this.setLoading(true);
         this.specialtyRegistry.clear();
         try {
             const result = store.userStore.showPendingChanges ?
-                await agent.Specialties.listPendingChanges(store.institutionStore.selectedInstitution!.id, this.axiosParams) :
-                await agent.Specialties.list(store.institutionStore.selectedInstitution!.id, this.axiosParams);
+                await agent.Specialties.listPendingChanges(store.institutionStore.selectedInstitutionId!, this.axiosParams) :
+                await agent.Specialties.list(store.institutionStore.selectedInstitutionId!, this.axiosParams);
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
                     setTimeout(() =>
                         this.setSpecialty(specialty), index * 100));
+                console.log(result.pagination)
             })
+
             this.setPagination(result.pagination);
             this.setLoadingInitial(false);
             this.setLoading(false);
@@ -340,7 +345,7 @@ export default class SpecialtyStore {
         }
     }
 
-    loadPopularSpecialties = async (id?: string) => {
+    loadPopularSpecialties = async (id: string) => {
         this.setLoading(true);
         this.specialtyRegistry.clear();
         const params = new URLSearchParams();
@@ -349,7 +354,7 @@ export default class SpecialtyStore {
         params.append('listMostPopular', 'true');
         this.popularSpecialtiesRegistry.clear();
         try {
-            const result = await agent.Specialties.list(id ? id : store.institutionStore.selectedInstitution!.id, params);
+            const result = await agent.Specialties.list(id, params);
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
                     setTimeout(() =>

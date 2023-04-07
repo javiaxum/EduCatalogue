@@ -35,7 +35,7 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(1500);
+    await sleep(500);
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -62,7 +62,7 @@ axios.interceptors.response.use(async response => {
             }
             break;
         case 401:
-            toast.error(getI18n().t('Authorization error'));
+            toast.warning(getI18n().t('Session has expired, please sign in again'));
             break;
         case 403:
             toast.error(getI18n().t('Access is forbidden'));

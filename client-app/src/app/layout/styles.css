@@ -2,9 +2,9 @@ body {
   background-color: #fff !important;
   margin: 0 !important;
 }
-
-html {}
-
+.root {
+  --main-color: rgb(38, 94, 213);
+}
 .root {
   --main-color: rgb(30, 71, 160);
 }
@@ -23,7 +23,7 @@ html {}
 
 .ui.active.basic.button.customButtonActive {
   color: #fff !important;
-  background-color: rgb(255, 200, 0, 1) !important;
+  background-color: rgb(255, 200, 0, 1) !important; 
   box-shadow: none !important;
 }
 
@@ -32,6 +32,27 @@ html {}
   border: none !important;
   box-shadow: none !important;
 }
+
+.ui.inverted.button.show-photos {
+  color: #e4e4e4 !important;
+  box-shadow: none !important;
+}
+
+.ui.inverted.button.show-photos:focus {
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.ui.inverted.button.show-photos:active {
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.ui.inverted.button.show-photos:hover {
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
 
 .ui.basic.button.image-crud-button {
   color: transparent !important;
