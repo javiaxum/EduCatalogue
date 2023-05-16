@@ -37,7 +37,7 @@ export default observer(function InstitutionsList() {
                         color='grey'
                         style={{ margin: 0 }} >
                         {t('search results') + ": "}
-                        {loading ? <Loader active inline size='mini' /> : pagination?.totalItems == 37 ? 153 : pagination?.totalItems}
+                        {loading ? <Loader active inline size='mini' /> : pagination?.totalItems}
                     </Header>
                     <Segment basic style={{ width: '100%', border: 0, padding: 0 }}>
                         <Divider style={{ width: 'calc(100% - 14rem)', display: 'inline-block' }} />

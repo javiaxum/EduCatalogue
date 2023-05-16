@@ -20,10 +20,10 @@ export default observer(function NavBar() {
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
             <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
                 <img src='\assets\logo.png' alt='logo' style={{ width: "4em", height: "4em", alignSelf: "center" }} />
-                <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
+                <div style={{ fontSize: "22px", marginLeft: "10px" }}>EDUA</div>
             </Menu.Item>
             <Menu.Item>
-                {location.pathname === '/institutions' &&
+                {location.pathname === '/institutions' &&   
                     <Search
                         placeholder={t('Search institutions')! + '...'}
                         showNoResults={false}
@@ -37,7 +37,7 @@ export default observer(function NavBar() {
                 </Button>
             </Menu.Item>}
             {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
-            <Menu.Item position='right' style={{ marginRight: '0', position: 'relative' }}>
+            {/* <Menu.Item position='right'>
                 <Button.Group>
                     <Button
                         className='languageToggler'
@@ -54,14 +54,14 @@ export default observer(function NavBar() {
                         Укр
                     </Button>
                 </Button.Group>
-            </Menu.Item>
-            <Menu.Item position='right' name='Profile' style={{ paddingRight: userStore.isLoggedIn ? '6rem' : '12rem' }}>
+            </Menu.Item> */}
+            <Menu.Item name='Profile' position='right' >
                 <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
-                <Dropdown pointing='top left' text={userStore.user?.displayName} >
+                <Dropdown pointing='top right' text={profileStore.profile?.displayName} >
                     <Dropdown.Menu>
                         {userStore.isLoggedIn ?
                             <>
-                                <Dropdown.Item as={Link} to={`/profiles/${userStore.user?.username}`} text={t('My Profile')} icon='user' />
+                                <Dropdown.Item as={Link} to={`/profiles/${profileStore.profile?.username}`} text={t('My Profile')} icon='user' />
                                 <Dropdown.Item onClick={userStore.logout} text={t('Logout')} icon='power' />
                             </> :
                             <>

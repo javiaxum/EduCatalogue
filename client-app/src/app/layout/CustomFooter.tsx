@@ -1,22 +1,21 @@
 import { useTranslation } from 'react-i18next';
-import { Grid, List } from 'semantic-ui-react';
+import { Button, Divider, Grid, List, Segment, Image } from 'semantic-ui-react';
+import { router } from '../../features/routers/Routes';
+import { Link } from 'react-router-dom';
 
 export default function CustomFooter() {
     const { t } = useTranslation();
     return (
         <footer>
-            <Grid style={{ color: '#444', top: 0, background: '#eee', margin: 0, height: '24rem', minWidth: '85rem', padding: 0 }}>
+            <Grid style={{ color: '#444', top: 0, background: '#eee', margin: 0, minWidth: '85rem', padding: 0 }}>
                 <Grid.Row>
-                    <Grid.Column style={{ width: '15rem' }}>
-                        <List link >
-                            <List.Item as='a'>{t('About us')}</List.Item>
-                            <List.Item as='a'>{t('Contact us')}</List.Item>
-                            <List.Item as='a'>{t('FAQ')}</List.Item>
-                        </List>
-                    </Grid.Column>
-                    <Grid.Column width={7}>
-                        <p>@EduCatalogue 2023</p>
-                    </Grid.Column>
+                    <Link className='footer-link' to='/about' style={{ color: '#888', fontWeight: 600, padding: '0 2rem', display: 'inline-block' }}>{t('About us')}</Link>
+                    <Link className='footer-link' to='/contacts' style={{ color: '#888', fontWeight: 600, padding: '0 2rem', display: 'inline-block' }}>{t('Contact us')}</Link>
+                    <Link className='footer-link' to='/faq' style={{ color: '#888', fontWeight: 600, padding: '0 2rem', display: 'inline-block' }}>{t('FAQ')}</Link>
+                </Grid.Row>
+                <Divider style={{ width: '10rem' }} />
+                <Grid.Row>
+                    <Segment basic style={{ color: '#aaa', fontWeight: 600, padding: '1rem 5rem 2rem 5rem' }}>@EDUA 2023</Segment>
                 </Grid.Row>
             </Grid>
         </footer>

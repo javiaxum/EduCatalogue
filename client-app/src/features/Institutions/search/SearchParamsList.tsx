@@ -44,7 +44,7 @@ export default observer(function SearchParamsList() {
 
     return (
         <Grid style={{ padding: '0.4rem' }}>
-            <Header as='h4' content={t('Price')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
+            <Header as='h4' content={t('Tuition')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />
             <Grid.Column width={16} style={{ padding: '0' }} textAlign="center">
                 <Slider
                     style={{ width: '80%', color: 'rgb(38, 94, 213)' }}

@@ -6,13 +6,14 @@ import { Button, Checkbox, Dimmer, Header, Label, Segment } from 'semantic-ui-re
 import CustomTextInput from '../../app/common/form/CustomTextInput';
 import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
+import { toast } from 'react-toastify';
 
 export default observer(function LoginForm() {
     const { userStore, modalStore } = useStore();
     const { t } = useTranslation();
 
     const validationSchema = Yup.object({
-        email: Yup.string().required().email(),
+        email: Yup.string().required(`${t('This is a required field')}`).email(`${t('This should be a valid email')}`),
     })
 
     return (
@@ -21,7 +22,7 @@ export default observer(function LoginForm() {
             initialValues={{ email: '', error: null }}
             onSubmit={(values, { setErrors }) =>
                 userStore
-                    .requestEmailChange(values.email)
+                    .requestEmailChange(values.email).then(() => toast.success(t('Email change request has been sent successfully!')))
                     .catch(error => setErrors({ error: 'Invalid email' })).finally(() => modalStore.closeModal())
             }>
             {({ handleSubmit, isSubmitting, errors, getFieldProps, getFieldHelpers }) => (

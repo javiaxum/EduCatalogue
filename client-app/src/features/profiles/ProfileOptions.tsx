@@ -34,13 +34,17 @@ export default observer(function ProfileOptions({ profile }: Props) {
         <ProfileSettingsGeneral profile={profile} />,
         <ProfileSettingsSecurity profile={profile} />,
         <ProfileManagedInstitutions institutions={profile.managedInstitutions} />,
-        <ProfileInstitutionPendingChangesList profile={profile}/>,
+        <ProfileInstitutionPendingChangesList profile={profile} />,
         <ProfileReviews profile={profile} />,
     ]
     return (
         <Grid style={{ width: '100%', margin: 0 }}>
             <Grid.Row >
-                <Menu pointing secondary stackable={isMobile} style={{ width: '100%', textAlign: 'center' }}>
+                <Menu
+                    pointing
+                    secondary
+                    stackable={isMobile}
+                    style={{ width: '100%', textAlign: 'center' }}>
                     {items.map((i, index) =>
                         <Menu.Item
                             name={i}

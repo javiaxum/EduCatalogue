@@ -7,6 +7,7 @@ import { useStore } from '../../app/stores/store';
 import * as Yup from 'yup';
 import ValidationErrors from '../errors/ValidationErrors';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 export default observer(function PasswordChangeForm() {
     const { userStore, modalStore } = useStore();
@@ -16,7 +17,7 @@ export default observer(function PasswordChangeForm() {
             initialValues={{ oldPassword: '', newPassword: '', repeatPassword: '', error: null }}
             onSubmit={(values, { setErrors }) => {
                 userStore
-                    .changePassword(values.newPassword, values.oldPassword)
+                    .changePassword(values.newPassword, values.oldPassword).then(() => toast.success(t('Password has been changed successfully!')))
                     .catch(error => setErrors({ error })).finally(() => modalStore.closeModal())
             }}
             validationSchema={
@@ -27,7 +28,7 @@ export default observer(function PasswordChangeForm() {
                         .min(8, `${t('Password have to be at least 8 characters long')}`)
                         .matches(/[a-z]/, `${t('Password have to contain Latin letters')}`)
                         .matches(/[0-9]/, `${t('Password have to contain numbers')}`),
-                    repeatPassword: Yup.string().required(`${t('This is a required field')}`).oneOf([Yup.ref('oldPassword'), null], `${t('Passwords must match')}`),
+                    repeatPassword: Yup.string().required(`${t('This is a required field')}`).oneOf([Yup.ref('newPassword'), null], `${t('Passwords must match')}`),
                 })}>
             {({ handleSubmit, isSubmitting, errors, isValid, dirty, values }) => (
                 <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>

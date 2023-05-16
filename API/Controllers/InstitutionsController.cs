@@ -26,7 +26,7 @@ namespace API.Controllers
         [Authorize(Policy = "IsOperator")]
         [HttpGet("pendingChanges")]
         public async Task<IActionResult> GetInstitutionsForModeration([FromQuery] InstitutionParams param)
-        {
+        {   
             return HandlePagedResult(await Mediator.Send(new Application.Institutions.ListForModeration.Query { Params = param }));
         }
         [Authorize(Policy = "IsOperator")]

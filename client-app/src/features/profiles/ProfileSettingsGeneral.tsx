@@ -8,6 +8,7 @@ import { observer } from 'mobx-react-lite';
 import { useStore } from '../../app/stores/store';
 import { useTranslation } from 'react-i18next';
 import EmailChangeForm from '../identity/EmailChangeForm';
+import { toast } from 'react-toastify';
 
 interface Props {
     profile: Profile;
@@ -80,7 +81,7 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                             style={{ margin: '3rem 0 0 0' }} />
                                         <Input defaultValue={profile.email || ''} disabled style={{ display: 'block', padding: '0 0 0.2rem 0' }} />
                                         {!profile.emailConfirmed ?
-                                            <Button animated negative type='button' style={{ width: 'fit-content' }} onClick={() => userStore.requestEmailConfirmationMessage()}>
+                                            <Button animated negative type='button' style={{ width: '15rem', height: 'fit-content'}} onClick={() => userStore.requestEmailConfirmationMessage()}>
                                                 <Button.Content visible content={t('Email is not confirmed')} />
                                                 <Button.Content hidden content={t('Send confirmation message')} />
                                             </Button> :
@@ -137,9 +138,9 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                             label={
                                                 <Header
                                                     as='h4'
-                                                    content={t('Company')}
+                                                    content={t('Organization')}
                                                     style={{ margin: '1rem 0 0 0' }} />}
-                                            placeholder='Company'
+                                            placeholder={t('Organization name')}
                                             name='company' />
                                     </Grid.Row>
                                 </Grid.Column>

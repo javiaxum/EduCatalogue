@@ -50,30 +50,6 @@ namespace Persistence
             .WithMany(c => c.Components)
             .OnDelete(DeleteBehavior.Cascade);
 
-            // builder.Entity<Component>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentCoreId }));
-
-            // builder.Entity<Component>()
-            //     .HasOne(i => i.Specialty)
-            //     .WithMany(s => s.Components)
-            //     .HasForeignKey(si => si.SpecialtyId)
-            //     .OnDelete(DeleteBehavior.Cascade);
-            // builder.Entity<Component>()
-            //     .HasOne(s => s.ComponentCore)
-            //     .WithMany(i => i.Components)
-            //     .HasForeignKey(si => si.ComponentCoreId)
-            //     .OnDelete(DeleteBehavior.Cascade);
-
-            // builder.Entity<SpecialtyComponent>(x => x.HasKey(aa => new { aa.SpecialtyId, aa.ComponentId }));
-
-            // builder.Entity<SpecialtyComponent>()
-            //     .HasOne(s => s.Specialty)
-            //     .WithMany(c => c.Components)
-            //     .OnDelete(DeleteBehavior.Cascade);
-            // builder.Entity<SpecialtyComponent>()
-            //     .HasOne(c => c.Component)
-            //     .WithMany(s => s.Specialties)
-            //     .OnDelete(DeleteBehavior.Cascade);
-
             builder.Entity<Review>()
                 .HasOne(i => i.Institution)
                 .WithMany(r => r.Reviews)

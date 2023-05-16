@@ -114,7 +114,7 @@ export default observer(function App() {
                 </Transition>
               </div>
               <Transition
-                visible={scrollY > 300}
+                visible={scrollY > 600}
                 duration={500}
                 unmountOnhide
                 transitionOnMount>

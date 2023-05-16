@@ -131,6 +131,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                         width: '12rem',
                                                         borderRadius: '2rem',
                                                         textAlign: 'center',
+                                                        margin: '0 auto'
                                                     }}>
                                                     <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
                                                 </div>

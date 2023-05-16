@@ -20,7 +20,7 @@ export default observer(function PasswordResetRequestForm() {
             initialValues={{ email: '', error: null }}
             onSubmit={(values, { setErrors }) => {
                 userStore
-                    .requestPasswordReset(values.email).then(() => toast.success(t('Password reset letter has been sent successfully!')))
+                    .requestPasswordReset(values.email).then(() => toast.success(t('The letter for email change has been sent successfully!')))
                     .catch(error => setErrors({ error })).finally(() => modalStore.closeModal())
             }}
             validationSchema={

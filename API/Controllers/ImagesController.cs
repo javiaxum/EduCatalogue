@@ -14,7 +14,7 @@ namespace API.Controllers
     public class ImagesController : BaseAPIController
     {
         [HttpPost("profileImage")]
-        public async Task<ActionResult> Add([FromForm] AddProfileAvatar.Command command)
+        public async Task<ActionResult> AddProfileImage([FromForm] AddProfileAvatar.Command command)
         {
             return HandleResult(await Mediator.Send(command));
         }

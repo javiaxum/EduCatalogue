@@ -261,3 +261,10 @@ body {
   min-width: 100% !important;
   display: relative !important;
 }
+
+.footer-link {
+  
+}
+.footer-link:hover {
+  text-decoration: underline;
+}

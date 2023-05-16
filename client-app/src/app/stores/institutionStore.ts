@@ -9,6 +9,7 @@ import { Review, ReviewFormValues } from "../models/review";
 import { Region } from "../models/region";
 import { debounce } from "lodash";
 import { Image } from "../models/image";
+import { off } from "process";
 
 export default class InstitutionStore {
     institutionsRegistry = new Map<string, Institution>();
@@ -193,7 +194,7 @@ export default class InstitutionStore {
         this.selectedBranches = [];
         this.selectedSpecialties = [];
         this.selectedCities = [];
-        this.tuitionRange = [0, 500000];
+        this.tuitionRange = [0, 300000];
         this.selectedDegreeId = '';
         this.institutionsSorting = 'az';
     }
@@ -263,8 +264,7 @@ export default class InstitutionStore {
             runInAction(() => {
                 this.setLoading(false);
                 result.data.forEach((institution, index) => {
-                    setTimeout(() =>
-                        this.setInstiutionRegistryItem(institution), index * 50)
+                    this.setInstiutionRegistryItem(institution)
                 });
             })
             this.setInstiutionsPagination(result.pagination);

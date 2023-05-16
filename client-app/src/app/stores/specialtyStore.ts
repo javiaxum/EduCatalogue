@@ -63,7 +63,7 @@ export default class SpecialtyStore {
         this.selectedSkillIds = [];
         this.selectedLanguages = [];
         this.selectedStudyForms = [];
-        this.tuitionRange = [0, 500000];
+        this.tuitionRange = [0, 300000];
         this.selectedDegree = '';
         this.selectedSpecialtyIds = [];
         this.selectedSpecialtiesSort = 'az';
@@ -298,8 +298,7 @@ export default class SpecialtyStore {
                 await agent.Specialties.list(store.institutionStore.selectedInstitutionId!, this.axiosParams);
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
-                    setTimeout(() =>
-                        this.setSpecialty(specialty), index * 100));
+                    this.setSpecialty(specialty));
                 console.log(result.pagination)
             })
 
@@ -394,7 +393,6 @@ export default class SpecialtyStore {
             this.setLoadingInitial(false);
             this.setLoading(false);
         }
-
     }
 
     createSpecialty = async (specialty: SpecialtyFormValues, institutionId: string) => {

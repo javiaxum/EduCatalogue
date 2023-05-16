@@ -6,19 +6,20 @@ import ServerError from "../errors/ServerError";
 import EmailConfirmed from "../identity/EmailConfirmed";
 import PasswordConfirmed from "../identity/PasswordConfirmed";
 import PasswordResetForm from "../identity/PasswordResetForm";
-import InstitutionComparisonBoard from "../Institutions/comparison/InstitutionComparisonBoard";
 import InstitutionDashboard from "../Institutions/dashboard/InstitutionDashboard";
 import InstitutionDetails from "../Institutions/details/InstitutionDetails";
 import InstitutionForm from "../Institutions/form/InstitutionForm";
 import ProfilePage from "../profiles/ProfilePage";
 import SpecialtyDetails from "../Specialties/details/SpecialtyDetails";
 import SpecialtyForm from "../Specialties/form/SpecialtyForm";
+import AboutPage from "../home/AboutPage";
 
 export const routes: RouteObject[] = [
     {
         path: '/',
         element: <App />,
         children: [
+            { path: 'about', element: <AboutPage /> },
             { path: 'passwordResetForm/:token', element: <PasswordResetForm /> },
             { path: 'passwordConfirmed', element: <PasswordConfirmed /> },
             { path: 'emailConfirmed', element: <EmailConfirmed /> },
@@ -41,3 +42,4 @@ export const routes: RouteObject[] = [
 ];
 
 export const router = createBrowserRouter(routes);
+

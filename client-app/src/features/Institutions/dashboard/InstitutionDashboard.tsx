@@ -21,8 +21,8 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
         loadInstitutions,
         institutionsRegistry,
         setActiveMenuItem } = institutionStore;
-    const [scrollY, setScrollY] = useState<number>(0);
     const [rightSidebar, setRightSidebar] = useState(false);
+    const [scrollY, setScrollY] = useState<number>(0);
     useEffect(() => {
         const handleScroll = () => setScrollY(window.scrollY);
         window.addEventListener("scroll", handleScroll);
@@ -94,13 +94,21 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                                 onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                     </Grid.Column>
                     <Grid.Column style={{ minWidth: '22rem', maxWidth: '30rem' }}>
-                        <SearchParamsSideBar />
+                        <Transition
+                            visible={scrollY <= 200}
+                            duration={250}
+                            unmountOnhide
+                            transitionOnMount>
+                            <div>
+                                <SearchParamsSideBar />
+                            </div>
+                        </Transition>
                         <Transition
                             visible={scrollY > 200}
                             duration={250}
                             unmountOnhide
                             transitionOnMount>
-                            <div style={{ position: 'fixed', top: 0, width: '20rem' }}>
+                            <div style={{ position: 'fixed', top: 0, width: '20rem', zIndex: 2000 }}>
                                 <SearchParamsSideBar />
                             </div>
                         </Transition>

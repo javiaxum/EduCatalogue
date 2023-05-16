@@ -21,10 +21,8 @@ namespace Application.Institutions
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {
             private readonly DataContext _context;
-            private readonly IUsernameAccessor _usernameAccessor;
-            public Handler(DataContext context, IUsernameAccessor usernameAccessor)
+            public Handler(DataContext context)
             {
-                _usernameAccessor = usernameAccessor;
                 _context = context;
             }
 

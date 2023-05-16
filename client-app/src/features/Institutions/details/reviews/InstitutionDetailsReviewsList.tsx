@@ -58,25 +58,29 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
 
     return (
         <Grid style={{ padding: isComputerOrTablet ? 0 : '1rem', width: '100%', margin: 0 }}>
-            {!reviewForm &&
-                <Grid.Row style={{ padding: 0 }}>
-                    {(reviews.length > 0 && !!!reviews.find((x) => x.author.username === userStore.user?.username)) && <>
-                        {!reviewForm ?
-                            <Button
-                                positive
-                                content={t('Add review')}
-                                style={{ height: '3rem', backgroundColor: 'rgb(30, 71, 160)' }}
-                                onClick={() => setReviewForm(true)} />
-                            : <ReviewForm />}
-                    </>}
+            <Grid.Row style={{ padding: 0 }}>
+                <Grid.Column width={7}>
+                    {(reviews.length > 0 && !!!reviews.find((x) => x.author.username === userStore.user?.username)) &&
+                        <>
+                            {!reviewForm ?
+                                <Button
+                                    positive
+                                    content={t('Add review')}
+                                    style={{ height: '3rem', backgroundColor: 'rgb(30, 71, 160)' }}
+                                    onClick={() => setReviewForm(true)} /> :
+                                <ReviewForm />}
+                        </>}
+                </Grid.Column>
+                <Grid.Column width={4}>
                     <Select
-                        style={{ width: isMobile ? '100%' : 'fit-content', marginLeft: '25rem' }}
+                        style={{ width: isMobile ? '100%' : 'fit-content' }}
                         options={t("reviewSortingOptions", { returnObjects: true })}
                         value={reviewSorting}
                         onChange={(e, d) => {
                             setReviewSorting(d.value as string)
                         }} />
-                </Grid.Row>}
+                </Grid.Column>
+            </Grid.Row>
             <Grid.Row>
                 <Grid style={{ padding: '20px 0 0 0', width: '100%' }}>
                     <Grid.Row >

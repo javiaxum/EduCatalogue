@@ -1,24 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using API.DTOs;
 using API.Services;
-using Application.Core;
 using Application.Profiles;
 using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Domain;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
-using WebPWrecover.Services;
 
 namespace API.Controllers
 {
@@ -46,6 +38,7 @@ namespace API.Controllers
                 BaseAddress = new System.Uri("https://graph.facebook.com")
             };
         }
+
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<AppUserDTO>> Login(LoginDTO loginDTO)
@@ -72,6 +65,7 @@ namespace API.Controllers
 
             return Unauthorized("An error has occured while authorizing the user");
         }
+
         [AllowAnonymous]
         [HttpPost("twoFactorCheck")]
         public async Task<ActionResult<bool>> TwoFactorCheck(LoginDTO loginDTO)
@@ -88,6 +82,7 @@ namespace API.Controllers
             }
             return false;
         }
+
         [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<AppUserDTO>> Register(RegisterDTO registerDTO)
@@ -121,6 +116,7 @@ namespace API.Controllers
             }
             return BadRequest("An error has occured while registering user");
         }
+
         [AllowAnonymous]
         [HttpGet("confirmEmail")]
         public async Task<IActionResult> Confirm(string token, string email)
@@ -131,9 +127,10 @@ namespace API.Controllers
             var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
             var result = await _userManager.ConfirmEmailAsync(user, tokenDecoded);
             if (result.Succeeded)
-                return Redirect("http://localhost:3000/emailConfirmed");
+                return Redirect("https://localhost:3000/emailConfirmed");
             return BadRequest("An error has occured while confirming the email");
         }
+
         [AllowAnonymous]
         [HttpGet("confirmEmailChange")]
         public async Task<IActionResult> ConfirmEmailChange(string token, string newEmail, string email)
@@ -144,9 +141,10 @@ namespace API.Controllers
             var tokenDecoded = Encoding.UTF8.GetString(tokenDecodedBytes);
             var result = await _userManager.ChangeEmailAsync(user, newEmail, tokenDecoded);
             if (result.Succeeded)
-                return Redirect("http://localhost:3000/emailConfirmed");
+                return Redirect("https://localhost:3000/emailConfirmed");
             return BadRequest("An error has occured while confirming the email");
         }
+
         [AllowAnonymous]
         [HttpPut("confirmPasswordChange")]
         public async Task<IActionResult> ConfirmPasswordChange(string token, string newPassword, string email)
@@ -159,7 +157,7 @@ namespace API.Controllers
             var result = await _userManager.ResetPasswordAsync(user, tokenDecoded, newPassword);
 
             if (result.Succeeded)
-                return Redirect("http://localhost:3000/passwordConfirmed");
+                return Redirect("https://localhost:3000/passwordConfirmed");
             return BadRequest("An error has occured while confirming the email");
         }
 
@@ -331,6 +329,7 @@ namespace API.Controllers
                 UserName = facebookInfo.Email,
                 Avatar = new Image { Id = $"fb_{facebookInfo.Id}", Url = facebookInfo.Picture.Data.Url },
             };
+            
             var result = await _userManager.CreateAsync(user);
             if (!result.Succeeded) return BadRequest("Problem creating Facebook user");
             return CreateUserDTO(user, false);

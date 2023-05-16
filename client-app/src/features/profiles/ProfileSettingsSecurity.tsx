@@ -5,9 +5,9 @@ import { useStore } from '../../app/stores/store';
 import { useTranslation } from 'react-i18next';
 import PasswordChangeForm from '../identity/PasswordChangeForm';
 import AccountDeleteForm from '../identity/AccountDeleteForm';
-import TwoFAActivationForm from '../identity/TwoFactorConfirmationForm';
 import { useState } from 'react';
 import TwoFactorConfirmationForm from '../identity/TwoFactorConfirmationForm';
+import { toast } from 'react-toastify';
 
 interface Props {
     profile: Profile
@@ -52,8 +52,9 @@ export default observer(function ProfileSettingsSecurity({ profile }: Props) {
                             positive={profile.twoFactorEnabled}
                             negative={!profile.twoFactorEnabled}
                             loading={userStore.loading}
+                            disabled={userStore.loading}
                             style={{ width: '13rem' }}
-                            onClick={() => { action().then(() => setTwoFactorConfirmationForm(true)) }}>
+                            onClick={() => { action().then(() => { toast.info(t('6-digit code has been sent successfully!')); setTwoFactorConfirmationForm(true); }) }}>
                             <Button.Content visible content={!profile.twoFactorEnabled ? t('2FA is inactive') : t('2FA activated')} />
                             {!profile.twoFactorEnabled ?
                                 <Button.Content hidden content={t('Activate 2FA')} /> :

@@ -4,6 +4,8 @@ import agent from "../api/agent";
 import { User, UserFormValues } from "../models/user";
 import { store } from "./store";
 import { UserRegistryItem } from "../models/profile";
+import { toast } from "react-toastify";
+import { getI18n } from "react-i18next";
 
 export default class UserStore {
     user: User | null = null;
@@ -161,9 +163,12 @@ export default class UserStore {
 
     requestEmailConfirmationMessage = async () => {
         try {
+            this.setLoading(true);
             await agent.Account.requestEmailConfirmation();
+            this.setLoading(false);
         } catch (error) {
             console.log(error);
+            this.setLoading(false);
         }
     }
 

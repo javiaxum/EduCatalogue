@@ -46,7 +46,6 @@ internal class Program
         builder.Services.AddValidatorsFromAssemblyContaining<Create>();
         builder.Services.AddHttpContextAccessor();
         builder.Services.AddScoped<IUsernameAccessor, UsernameAccessor>();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
         builder.Services.AddDbContext<DataContext>(opt =>
@@ -60,7 +59,6 @@ internal class Program
                 policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:3000");
             });
         });
-        // builder.Services.AddMediatR(typeof(List.Handler).Assembly);
         builder.Services.AddMediatR(AppDomain.CurrentDomain.GetAssemblies());
         builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
         builder.Services.AddScoped<IImageAccessor, ImageAccessor>();
@@ -69,6 +67,7 @@ internal class Program
         builder.Services.AddIdentityCore<AppUser>(opt =>
         {
             opt.Password.RequireNonAlphanumeric = false;
+            // opt.SignIn.RequireConfirmedEmail = true; 
         })
         .AddEntityFrameworkStores<DataContext>()
         .AddDefaultTokenProviders()
@@ -87,10 +86,14 @@ internal class Program
             };
         }).AddTwoFactorRememberMeCookie();
         builder.Services.AddAuthorization(opt =>
-        {
-            opt.AddPolicy("IsInstitutionManagerOrOperator", policy =>
+        {   
+            opt.AddPolicy("IsInstitutionManager", policy =>
             {
-                policy.Requirements.Add(new IsManagerOrOperatorRequirement());
+                policy.Requirements.Add(new IsManagerRequirement());
+            });
+            opt.AddPolicy("IsModerator", policy =>
+            {
+                policy.Requirements.Add(new IsModeratorRequirement());
             });
             opt.AddPolicy("IsOperator", policy =>
             {
@@ -126,13 +129,13 @@ internal class Program
 
         // Configure the HTTP request pipeline.
         app.UseMiddleware<ExceptionMiddleware>();
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
         }
 
-        // app.UseHttpsRedirection();
         app.UseRouting();
 
         app.UseCors("CorsPolicy");

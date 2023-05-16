@@ -17,7 +17,6 @@ export default observer(function ReviewForm() {
         createReview,
         setReviewForm } = institutionStore;
     const { id } = useParams();
-
     const [review, setReview] = useState<ReviewFormValues>(new ReviewFormValues())
     const [rating, setRating] = useState<number>(0);
     const [chosenRating, setChosenRating] = useState<number>(0);
@@ -42,6 +41,7 @@ export default observer(function ReviewForm() {
     for (let i = 1; i <= 5; i++) {
         elements.push((<Icon
             size='big'
+            key={i}
             onMouseEnter={() => setRating(i)}
             onMouseLeave={() => setRating(chosenRating)}
             onClick={() => setChosenRating(i)}
@@ -52,15 +52,15 @@ export default observer(function ReviewForm() {
     }
 
     return (
-        <div style={{ width: isComputerOrTablet ? '60%' : '100%' }}>
-            <Header style={{ display: 'inline', margin: '0' }}>Rating: </Header>{elements}
+        <div style={{ width: '100%' }}>
+            <Header style={{ display: 'inline', margin: '0' }}>{t('Rating')}: </Header>{elements}
             <Formik
                 validationSchema={validationSchema}
                 enableReinitialize
                 initialValues={review}
                 onSubmit={values => handleReviewFormSubmit(values)}>
                 {({ handleSubmit, isValid, isSubmitting, dirty }) => (
-                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off'>
+                    <Form className='ui form' onSubmit={handleSubmit} autoComplete='off' style={{width: '100%'}}>
                         <CustomTextArea rows={4} placeholder={t('Review contents')} name='reviewMessage' />
                         <Button
                             positive

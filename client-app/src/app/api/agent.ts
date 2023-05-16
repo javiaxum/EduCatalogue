@@ -86,18 +86,7 @@ const requests = {
     delete: <T>(url: string) => axios.delete<T>(url).then(responseBody)
 }
 
-const Institutions = {
-    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/list", { params }).then(responseBody),
-    pendingChangesList: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/pendingChanges", { params }).then(responseBody),
-    approveChanges: (id: string) => requests.put<void>(`/institutions/approve/${id}`, {}),
-    toggleVisibility: (id: string) => requests.put<void>(`/institutions/toggleVisibility/${id}`, {}),
-    details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
-    create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
-    update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
-    delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
-    listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", { params }).then(responseBody),
-    listRegions: () => requests.get<Region[]>("/institutions/regions"),
-}
+
 
 const Images = {
     list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Image[]>>(`/images/${institutionId}/list`, { params }).then(responseBody),
@@ -122,7 +111,7 @@ const Images = {
         formData.append('File', file)
         return axios.post<Image>(`/images/institutions/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        })
+        }) 
     }
 }
 
@@ -132,7 +121,8 @@ const Reviews = {
 }
 
 const Specialties = {
-    list: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution/list`, { params }).then(responseBody),
+    list: (institutionId: string, params: URLSearchParams) =>
+        axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution/list`, { params }).then(responseBody),
     listPendingChanges: (institutionId: string, params: URLSearchParams) => axios.get<PaginatedResult<Specialty[]>>(`/specialties/${institutionId}/institution/pendingChanges`, { params }).then(responseBody),
     approveChanges: (id: string) => requests.put<void>(`/specialties/approve/${id}`, {}),
     toggleVisibility: (id: string) => requests.put<void>(`/specialties/toggleVisibility/${id}`, {}),
@@ -162,7 +152,7 @@ const Account = {
     confirmTwoFactorDeactivationCode: (code: string) => requests.put<void>(`/account/confirmTwoFactorDeactivationCode?code=${code}`, {}),
     requestPasswordReset: (email: string) => requests.put<void>(`/account/requestPasswordReset?email=${email}`, {}),
     resetPassword: (newPassword: string, email: string, token: string) => requests.put<void>(`/account/confirmPasswordChange?email=${email}&newPassword=${newPassword}&token=${token}`, {}),
-    changePassword: (newPassword: string, oldPassword: string) => requests.put<void>(`/account/changePassword?newPassword=${newPassword}&oldPassword=${oldPassword}`, {}),
+    changePassword: (newPassword: string, oldPassword: string) => requests.put<void>(`/account/changePassword?newPassword`, { oldPassword: oldPassword, newPassword: newPassword }),
 }
 
 const Profiles = {
@@ -175,6 +165,19 @@ const Profiles = {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
     },
+}
+
+const Institutions = {
+    list: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/list", { params }).then(responseBody),
+    pendingChangesList: (params: URLSearchParams) => axios.get<PaginatedResult<Institution[]>>("/institutions/pendingChanges", { params }).then(responseBody),
+    approveChanges: (id: string) => requests.put<void>(`/institutions/approve/${id}`, {}),
+    toggleVisibility: (id: string) => requests.put<void>(`/institutions/toggleVisibility/${id}`, {}),
+    details: (id: string) => requests.get<Institution>(`/institutions/${id}`),
+    create: (institution: InstitutionFormValues) => requests.post<void>("/institutions", institution),
+    update: (institution: InstitutionFormValues) => requests.put<void>(`/institutions/${institution.id}`, institution),
+    delete: (id: string) => requests.delete<void>(`/institutions/${id}`),
+    listCities: (params: URLSearchParams) => axios.get<City[]>("/institutions/cities", { params }).then(responseBody),
+    listRegions: () => requests.get<Region[]>("/institutions/regions"),
 }
 
 const agent = {

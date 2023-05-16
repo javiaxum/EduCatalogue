@@ -2,7 +2,7 @@ import { observer } from 'mobx-react-lite';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-import { Button, Grid, Item, Image, Header, Icon, Segment } from 'semantic-ui-react';
+import { Button, Grid, Item, Header, Segment } from 'semantic-ui-react';
 import RatingStars from '../../../app/common/rating/RatingStars';
 import { Institution } from '../../../app/models/institution';
 import { useStore } from '../../../app/stores/store';
@@ -15,10 +15,11 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
     const { institutionStore } = useStore();
     const isActive = institutionStore.selectedInstitutionIds.includes(institution.id);
 
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
 
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' })
     const isMobile = useMediaQuery({ query: '(max-width: 799px)' })
+    const cityName = institutionStore.getCityById(institution.cityId, institution.regionId)?.name;
 
     return (
         <>
@@ -126,7 +127,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                             </Item.Description>
                         </Grid.Row>
                         <Grid.Row style={{ color: '#777', padding: '0.2rem' }}>
-                            {institutionStore.getCityById(institution.cityId, institution.regionId)?.name}, {institution.streetAddress}
+                            {cityName ? cityName + ', ' : ''}{institution.streetAddress}
                         </Grid.Row>
                     </Grid>
                 </Segment>}
