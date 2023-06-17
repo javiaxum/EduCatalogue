@@ -13,7 +13,6 @@ namespace Application.Specialties
         public SpecialtyEditValidator()
         {
             RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
-            RuleFor(x => x.Visible).NotEmpty();
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.DegreeId).NotEmpty();
             RuleFor(x => x.TuitionUAH).NotEmpty();

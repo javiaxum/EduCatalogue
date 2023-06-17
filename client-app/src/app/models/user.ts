@@ -6,6 +6,7 @@ export interface User {
     displayName: string;
     token: string;
     avatar?: Image;
+    isOperator: boolean;
 }
 
 export interface UserFormValues {

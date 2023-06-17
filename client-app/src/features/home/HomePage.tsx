@@ -15,7 +15,7 @@ export default observer(function HomePage() {
             <Grid.Row>
                 <Header as='h1' inverted>
                     <Image src='/assets/logo.png' alt='logo' verticalAlign="bottom" style={{ marginBottom: 5, width: '1.1em' }} />
-                    EduCatalogue
+                    EDUA
                 </Header>
             </Grid.Row>
             <Grid.Row style={{ padding: 0 }}>

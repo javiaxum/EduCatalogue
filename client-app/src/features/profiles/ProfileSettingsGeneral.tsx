@@ -81,7 +81,7 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                                             style={{ margin: '3rem 0 0 0' }} />
                                         <Input defaultValue={profile.email || ''} disabled style={{ display: 'block', padding: '0 0 0.2rem 0' }} />
                                         {!profile.emailConfirmed ?
-                                            <Button animated negative type='button' style={{ width: '15rem', height: 'fit-content'}} onClick={() => userStore.requestEmailConfirmationMessage()}>
+                                            <Button animated negative type='button' style={{ width: '15rem', height: 'fit-content' }} onClick={() => userStore.requestEmailConfirmationMessage()}>
                                                 <Button.Content visible content={t('Email is not confirmed')} />
                                                 <Button.Content hidden content={t('Send confirmation message')} />
                                             </Button> :
@@ -147,13 +147,21 @@ export default observer(function ProfileSettingsGeneral({ profile }: Props) {
                             </Grid>
                         </Segment>
                         {(dirty) &&
-                            <Button
-                                positive
-                                disabled={!isValid || isSubmitting}
-                                loading={profileStore.uploading || isSubmitting}
-                                type='submit' >
-                                {t('Upload')}
-                            </Button>}
+                            <>
+                                <Button
+                                    positive
+                                    disabled={!isValid || isSubmitting}
+                                    loading={profileStore.uploading || isSubmitting}
+                                    type='submit' >
+                                    {t('Save changes')}
+                                </Button>
+                                <Button
+                                    disabled={!isValid || isSubmitting}
+                                    type='button'
+                                    onClick={() => resetForm()}>
+                                    {t('Reset changes')}
+                                </Button>
+                            </>}
                     </Form>)}
             </Formik>
         </>

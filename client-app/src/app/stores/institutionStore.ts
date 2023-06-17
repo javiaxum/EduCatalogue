@@ -79,6 +79,7 @@ export default class InstitutionStore {
                 this.institutionsSorting,
                 this.selectedCities],
             () => {
+                this.setInstitutionPagingParams(new InstitutionsPagingParams(1, 7))
                 this.debouncedLoadInstitutions();
             })
     }
@@ -201,8 +202,8 @@ export default class InstitutionStore {
     get institutionAxiosParams() {
         const params = new URLSearchParams();
         params.append('name', this.searchNameParam);
+        params.append('pageSize', store.commonStore.editMode ? '7' : this.institutionPagingParams.pageSize.toString());
         params.append('pageNumber', this.institutionPagingParams.pageNumber.toString());
-        params.append('pageSize', this.institutionPagingParams.pageSize.toString());
         let branchesPredicate = this.selectedBranches.join('-');
         let specialtiesPredicate = this.selectedSpecialties.join('-');
         let citiesPredicate = this.selectedCities.join('-');
@@ -584,7 +585,7 @@ export default class InstitutionStore {
 
     editInstitution = async (institution: InstitutionFormValues) => {
         try {
-            await agent.Institutions.update(new InstitutionFormValues(institution));
+            await agent.Institutions.update(institution);
             runInAction(() => {
                 if (institution.id) {
                     let editedInstitution = { ...this.getInstitution(institution.id), ...institution };
@@ -599,13 +600,16 @@ export default class InstitutionStore {
     }
 
     deleteInstitution = async (id: string) => {
+        this.uploading = true;
         try {
             await agent.Institutions.delete(id);
             runInAction(() => {
                 this.institutionsRegistry.delete(id);
+                this.uploading = false;
             })
         } catch (error) {
             console.log(error);
+            this.uploading = false;
         }
     }
 

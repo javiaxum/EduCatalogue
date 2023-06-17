@@ -33,7 +33,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Specialties.ApproveChanges.Command { Id = id }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPut("toggleVisibility/{id}")]
         public async Task<IActionResult> ToggleVisibility(Guid id)
         {
@@ -69,14 +69,14 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Details.Query { Id = id }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditSpecialty(Guid id, SpecialtyDetailedDTO specialty)
         {
             specialty.Id = id;
             return HandleResult(await Mediator.Send(new Edit.Command { Specialty = specialty }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSpecialty(Guid id)
         {

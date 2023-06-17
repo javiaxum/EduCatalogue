@@ -71,12 +71,24 @@ export default observer(function SpecialtyForm() {
             .min(1, `${t('Invalid degree')}`)
             .max(3, `${t('Invalid degree')}`),
         tuitionUAH: Yup.number().required(`${t('Tuition is a required field')}`),
-        acceptanceRate: Yup.number().required(`${t('Acceptance rate is a required field')}`),
-        graduationRate: Yup.number().required(`${t('Graduation rate is a required field')}`),
-        graduateEmploymentRate: Yup.number().required(`${t('Graduate employment rate is a required field')}`),
-        undergraduatesEnrolled: Yup.number().required(`${t('Enrolled undergraduates is a required field')}`),
-        startYear: Yup.number().required(`${t('Start year is a required field')}`),
-        endYear: Yup.number().required(`${t('End year undergraduates is a required field')}`),
+        acceptanceRate: Yup.number().required(`${t('Acceptance rate is a required field')}`)
+            .min(0, `${t('The value should not be less than')} 0`)
+            .max(100, `${t('The value should not exceed')} 100`),
+        graduationRate: Yup.number().required(`${t('Graduation rate is a required field')}`)
+            .min(0, `${t('The value should not be less than')} 0`)
+            .max(100, `${t('The value should not exceed')} 100`),
+        graduateEmploymentRate: Yup.number().required(`${t('Graduate employment rate is a required field')}`)
+            .min(0, `${t('The value should not be less than')} 0`)
+            .max(100, `${t('The value should not exceed')} 100`),
+        undergraduatesEnrolled: Yup.number().required(`${t('Enrolled undergraduates is a required field')}`)
+            .min(0, `${t('The value should not be less than')} 0`)
+            .max(10000000, `${t('The value should not exceed')} 10000000`),
+        startYear: Yup.number().required(`${t('Start year is a required field')}`)
+            .min(2019, `${t('Enrollment should not be earlier than of 2019')}`)
+            .max(2050, `${t('Enrollment should not be later than of 2050')}`),
+        endYear: Yup.number().required(`${t('End year undergraduates is a required field')}`)
+            .min(Yup.ref('startYear'), `${t('Graduation year should not be less than the year of enrollment')}`)
+            .max(2050, `${t('Graduation should not be later than of 2050')}`),
         studyFormIds: Yup.array().min(1, "Specify at least a single study form"),
         languageIds: Yup.array().min(1, "Specify at least a single language"),
         skillIds: Yup.array().min(1, "Specify at least a single skill"),
@@ -100,6 +112,7 @@ export default observer(function SpecialtyForm() {
     }, [])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
+        console.log(specialty)
         if (id) {
             specialty.id = uuid();
             createSpecialty(specialty, id).then(() => {
@@ -155,14 +168,14 @@ export default observer(function SpecialtyForm() {
                                         name='localSpecialtyCode' />
                                 </Header>
                                 <Button.Group style={{ width: '37rem', margin: '0 0 0 auto', height: '35px' }}>
-                                    <Button
+                                    {specialty.id && <Button
                                         negative
                                         style={{ width: '3rem' }}
                                         size='large'
                                         type='button'
                                         onClick={() => modalStore.openModalMini(<ConfirmDeleteSpecialty id={specialty.id!} />)} >
                                         <Icon name='trash' style={{ position: 'relative', bottom: '0.2rem', right: '0.5rem' }} />
-                                    </Button>
+                                    </Button>}
                                     <Button
                                         type='button'
                                         loading={loading}
@@ -224,6 +237,8 @@ export default observer(function SpecialtyForm() {
                                                     label={t('ECTS credits')}
                                                     content={
                                                         <CustomTextInput
+                                                            min={0}
+                                                            max={2000}
                                                             width='7rem'
                                                             type='number'
                                                             placeholder={t('ECTS credits')}
@@ -234,6 +249,8 @@ export default observer(function SpecialtyForm() {
                                                     label={t('Tuition')}
                                                     content={<>
                                                         <CustomTextInput
+                                                            min={0}
+                                                            max={10000000}
                                                             type='number'
                                                             placeholder='0'
                                                             name='tuitionUAH'
@@ -248,12 +265,16 @@ export default observer(function SpecialtyForm() {
                                                     content={
                                                         <>
                                                             <CustomTextInput
+                                                                min={2019}
+                                                                max={2050}
                                                                 width='7rem'
                                                                 type='number'
                                                                 placeholder='0'
                                                                 name='startYear' />
                                                             <Label basic content='-' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} />
                                                             <CustomTextInput
+                                                                min={2019}
+                                                                max={2050}
                                                                 width='7rem'
                                                                 type='number'
                                                                 placeholder='0'
@@ -265,6 +286,7 @@ export default observer(function SpecialtyForm() {
                                                     label={t('Enrolled students count')}
                                                     content={
                                                         <CustomTextInput
+                                                            min={0}
                                                             width='7rem'
                                                             type='number'
                                                             placeholder={t('Undergraduates enrolled')}
@@ -276,6 +298,8 @@ export default observer(function SpecialtyForm() {
                                                     content={
                                                         <>
                                                             <CustomTextInput
+                                                                min={0}
+                                                                max={100}
                                                                 width='5.5rem'
                                                                 type='number'
                                                                 placeholder={t('Specify rate in percents')}
@@ -289,6 +313,8 @@ export default observer(function SpecialtyForm() {
                                                     content={
                                                         <>
                                                             <CustomTextInput
+                                                                min={0}
+                                                                max={100}
                                                                 width='5.5rem'
                                                                 type='number'
                                                                 placeholder={t('Specify rate in percents')}
@@ -302,6 +328,8 @@ export default observer(function SpecialtyForm() {
                                                     content={
                                                         <>
                                                             <CustomTextInput
+                                                                min={0}
+                                                                max={100}
                                                                 width='5.5rem'
                                                                 type='number'
                                                                 placeholder={t('Specify rate in percents')}

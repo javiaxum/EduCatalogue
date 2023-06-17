@@ -101,7 +101,8 @@ internal class Program
             });
         });
         builder.Services.AddTransient<IAuthorizationHandler, IsOperatorRequirementHandler>();
-        builder.Services.AddTransient<IAuthorizationHandler, IsManagerOrOperatorRequirementHandler>();
+        builder.Services.AddTransient<IAuthorizationHandler, IsManagerRequirementHandler>();
+        builder.Services.AddTransient<IAuthorizationHandler, IsModeratorRequirementHandler>();
         builder.Services.AddScoped<TokenService>();
         builder.Services.Configure<FormOptions>(options =>
             {

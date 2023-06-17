@@ -215,7 +215,7 @@ export default observer(function SpecialtyComparisonBoard() {
                                     header={t('TUITION')}
                                     array={selectedSpecialties.map((i) =>
                                         <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {i.tuitionUAH} UAH
+                                            {i.tuitionUAH >= 100 ? `${Math.round(i.tuitionUAH / 100)}00` : i.tuitionUAH} UAH
                                         </Header>)} />
                                 <InstitutionComparisonBoardRow
                                     header={t('FREE EDUCATION')}

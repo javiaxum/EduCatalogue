@@ -35,7 +35,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.ApproveChanges.Command { Id = id }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPut("toggleVisibility/{id}")]
         public async Task<IActionResult> ToggleVisibility(Guid id)
         {
@@ -53,7 +53,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new Application.Institutions.Create.Command { Institution = institution }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPut("{id}")]
         public async Task<IActionResult> EditInstitution(Guid id, InstitutionDTO institution)
         {
@@ -72,7 +72,7 @@ namespace API.Controllers
         {
             return HandleResult(await Mediator.Send(new ListCities.Query { Params = param }));
         }
-        [Authorize(Policy = "IsInstitutionManagerOrOperator")]
+        [Authorize(Policy = "IsInstitutionManager")]
         [HttpPost("{id}/specialties")]
         public async Task<IActionResult> CreateInstitutionSpecialty(Guid id, SpecialtyDetailedDTO specialty)
         {

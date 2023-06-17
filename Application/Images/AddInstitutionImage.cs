@@ -83,6 +83,8 @@ namespace Application.Images
                     return Result<ImageDTO>.Failure("An error has occured while deleting an image");
 
                 var imageUploadResult = await _imageAccessor.AddImage(request.File);
+                if (imageUploadResult == null)
+                    return Result<ImageDTO>.Failure("An error has occured while uploading an image");
 
                 var image = new Image
                 {

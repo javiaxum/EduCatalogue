@@ -149,7 +149,7 @@ export default observer(function SpecialtyDetails() {
                                             loading={(loading || loadingInitial)}
                                             icon='dollar'
                                             label={t('Tuition')}
-                                            content={<>{Math.round(selectedSpecialty?.tuitionUAH / 100)}00 UAH<br></br>
+                                            content={<>{selectedSpecialty?.tuitionUAH} UAH<br></br>
                                                 {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />}
                                         <TableItem
                                             loading={(loading || loadingInitial)}

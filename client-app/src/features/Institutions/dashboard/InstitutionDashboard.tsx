@@ -136,7 +136,6 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                                 page={institutionPagination.currentPage}
                                 onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                         <div style={{ height: '6rem' }}>
-
                         </div>
                     </Grid.Row>
                     <Grid.Row>

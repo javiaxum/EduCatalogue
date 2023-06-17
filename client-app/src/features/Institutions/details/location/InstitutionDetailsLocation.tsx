@@ -3,16 +3,25 @@ import { Grid, Icon } from 'semantic-ui-react';
 import { useStore } from '../../../../app/stores/store';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
+import { observer } from 'mobx-react-lite';
+import { useEffect } from 'react';
+import FlyTo from './FlyTo';
 
-export default function InstitutionDetailsLocation() {
+export default observer(function InstitutionDetailsLocation() {
 
     const { institutionStore } = useStore();
     const {
         selectedInstitution,
         getCityById,
         getRegionById } = institutionStore;
+
+
     const { t } = useTranslation();
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
+
+    useEffect(() => {
+
+    })
 
     return (
         <Grid style={{ width: isComputerOrTablet ? '95%' : '100%', margin: '0 auto' }}>
@@ -23,14 +32,15 @@ export default function InstitutionDetailsLocation() {
             </Grid.Row>
             <Grid.Row>
                 <MapContainer
-                    center={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}
+                    center={{ lat: selectedInstitution?.latitude! || 49, lng: selectedInstitution?.longtitude! || 31 }}
                     zoom={20}
-                    scrollWheelZoom={false}
+                    scrollWheelZoom={true}
                     style={{ overflow: 'hidden', width: '100%', minHeight: '40rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={{ lat: selectedInstitution?.latitude! || 0, lng: selectedInstitution?.longtitude! || 0 }}>
+                    <Marker position={{ lat: selectedInstitution?.latitude! || 49, lng: selectedInstitution?.longtitude! || 31 }}>
+                        <FlyTo center={{ lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} />
                         <Popup>
                             {selectedInstitution?.name}, {" "}
                             {selectedInstitution?.streetAddress},  {" "}
@@ -42,4 +52,4 @@ export default function InstitutionDetailsLocation() {
             </Grid.Row>
         </Grid>
     )
-}
+})

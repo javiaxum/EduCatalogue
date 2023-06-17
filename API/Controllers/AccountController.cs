@@ -363,6 +363,8 @@ namespace API.Controllers
             return BadRequest("An error has occured while deleting the user");
         }
 
+        
+
         private AppUserDTO CreateUserDTO(AppUser appUser, bool rememberMe)
         {
             return new AppUserDTO
@@ -370,6 +372,7 @@ namespace API.Controllers
                 DisplayName = appUser.DisplayName,
                 Token = _tokenService.CreateToken(appUser, rememberMe),
                 Username = appUser.UserName,
+                IsOperator = appUser.Email == "EduCatalogue@service.com"
             };
         }
     }

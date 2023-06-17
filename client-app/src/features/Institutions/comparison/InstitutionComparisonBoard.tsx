@@ -47,7 +47,7 @@ export default observer(function InstitutionComparisonBoard() {
     useEffect(() => {
         if (selectedInstitutionIds.length === 0 && location.pathname === '/institutions/comparison')
             router.navigate('/institutions');
-    },[location.pathname, selectedInstitutionIds])
+    }, [location.pathname, selectedInstitutionIds])
 
     const componentRef = useRef<HTMLDivElement>(null);
     const handleWindowScroll = (e: any) => {
@@ -133,7 +133,7 @@ export default observer(function InstitutionComparisonBoard() {
                                                         textAlign: 'center',
                                                         margin: '0 auto'
                                                     }}>
-                                                    <Icon name='plus' size='huge' style={{ color: '#aaa', marginTop: '3rem  ' }} />
+                                                    <Icon name='plus' size='huge' style={{ color: '#aaa', margin: '33% 0 0 0', left: '50%' }} />
                                                 </div>
                                             </Table.HeaderCell>
                                         </Table.Row>
@@ -236,7 +236,7 @@ export default observer(function InstitutionComparisonBoard() {
                                     header={t('AVERAGE TUITION')}
                                     array={selectedInstitutions.map((i) =>
                                         <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {Math.round(i.averageTuitionUAH! / 100)}00 UAH
+                                            {i.averageTuitionUAH >= 100 ? `${Math.round(i.averageTuitionUAH / 100)}00` : i.averageTuitionUAH} UAH
                                         </Header>)} />
                                 <InstitutionComparisonBoardRow
                                     header={t('LANGUAGE OF EDUCATION')}

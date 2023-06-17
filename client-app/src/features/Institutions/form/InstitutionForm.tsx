@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Button, Grid, Image, Header, Placeholder, Segment, Dropdown, DropdownItemProps } from 'semantic-ui-react';
+import { Button, Grid, Image, Header, Placeholder, Segment, Dropdown, DropdownItemProps, Icon } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import { Form, Formik } from 'formik';
@@ -17,9 +17,10 @@ import RatingStars from '../../../app/common/rating/RatingStars';
 import { useTranslation } from 'react-i18next';
 import { useMediaQuery } from 'react-responsive';
 import { Breadcrumbs, Link as MLink } from '@mui/material';
+import ConfirmDeleteInstitution from '../details/ConfirmDeleteInstitution';
 
 export default observer(function InstitutionForm() {
-    const { institutionStore, commonStore, specialtyStore, profileStore } = useStore();
+    const { institutionStore, commonStore, specialtyStore, modalStore } = useStore();
     const {
         loadInstitution,
         loading,
@@ -60,7 +61,9 @@ export default observer(function InstitutionForm() {
     const validationSchema = Yup.object({
         name: Yup.string().required(),
         description: Yup.string().required(),
-        accreditation: Yup.string().required(),
+        accreditation: Yup.string().required()
+            .min(1, `${t('Accreditation should not be less than 1')}`)
+            .max(4, `${t('Accreditation should exceed 4')}`),
         cityId: Yup.number().required(),
         regionId: Yup.number().required(),
         latitude: Yup.number().required(),
@@ -97,7 +100,6 @@ export default observer(function InstitutionForm() {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
 
     useEffect(() => {
         return (() => {
@@ -189,7 +191,7 @@ export default observer(function InstitutionForm() {
                                                     {regionName}
                                                     {regionsToExclude.includes(selectedInstitution?.regionId!) ? "" : ", " + cityName}
                                                 </div>}
-                                            {selectedInstitution?.rating && selectedInstitution.reviewsCount &&
+                                            {(selectedInstitution?.rating && !!selectedInstitution.reviewsCount) ?
                                                 <>
                                                     <div style={{ display: 'inline-block' }}>
                                                         <RatingStars rating={selectedInstitution.rating} />
@@ -197,8 +199,16 @@ export default observer(function InstitutionForm() {
                                                     <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
                                                         {t('Reviews')} {selectedInstitution.reviewsCount}
                                                     </div>
-                                                </>}
+                                                </> : <></>}
                                             <Button.Group style={{ position: 'absolute', width: 'fit-content', right: 0 }}>
+                                                {id && <Button
+                                                    negative
+                                                    style={{ width: '3rem' }}
+                                                    size='large'
+                                                    type='button'
+                                                    onClick={() => modalStore.openModalMini(<ConfirmDeleteInstitution id={institution.id!} />)} >
+                                                    <Icon name='trash' style={{ position: 'relative', bottom: '0.2rem', right: '0.5rem' }} />
+                                                </Button>}
                                                 <Button
                                                     positive
                                                     type='submit'
@@ -287,8 +297,7 @@ export default observer(function InstitutionForm() {
                                 </div>
                             </Grid.Row>
                         </Grid>}
-                </Form>)
-            }
+                </Form>)}
         </Formik >
     )
 })

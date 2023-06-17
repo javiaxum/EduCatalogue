@@ -53,7 +53,10 @@ export default class SpecialtyStore {
                 this.selectedDegree],
             () => {
                 if (store.institutionStore.selectedInstitutionId)
-                    this.debouncedLoadSpecialties(store.institutionStore.selectedInstitutionId);
+                    {
+                        this.setPagingParams(new SpecialtiesPagingParams(1, 6))
+                        this.debouncedLoadSpecialties(store.institutionStore.selectedInstitutionId);
+                    }
             })
     }
 

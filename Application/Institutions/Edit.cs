@@ -19,13 +19,13 @@ namespace Application.Institutions
             public InstitutionDTO Institution { get; set; }
         }
 
-        public class CommandValidator : AbstractValidator<Command>
-        {
-            public CommandValidator()
-            {
-                RuleFor(x => x.Institution).SetValidator(new InstitutionValidator());
-            }
-        }
+        // public class CommandValidator : AbstractValidator<Command>
+        // {
+        //     public CommandValidator()
+        //     {
+        //         RuleFor(x => x.Institution).SetValidator(new InstitutionValidator());
+        //     }
+        // }
 
         public class Handler : IRequestHandler<Command, Result<Unit>>
         {

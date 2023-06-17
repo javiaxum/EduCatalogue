@@ -8,7 +8,7 @@ import { store, StoreContext } from './app/stores/store';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './features/routers/Routes';
 import { initReactI18next } from 'react-i18next';
-import en from '../src/app/translation/en.json';
+import en  from '../src/app/translation/en.json';
 import uk from '../src/app/translation/uk.json';
 import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
@@ -16,19 +16,29 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 i18n
-  .use(LanguageDetector)
-  .use(initReactI18next)
+  .use(initReactI18next) // passes i18n down to react-i18next
   .init({
+    // the translations
+    // (tip move them in a JSON file and import them,
+    // or even better, manage them via a UI: https://react.i18next.com/guides/multiple-translation-files#manage-your-translations-with-a-management-gui)
     resources: {
-      uk: { translation: uk },
-      en: { translation: en },
+      uk: {
+        translation: uk
+      },
+      en: {
+        translation: en
+      },
     },
-    fallbackLng: 'en',
-    interpolation: {
-      escapeValue: false,
-    },
+    lng: "uk", // if you're using a language detector, do not define the lng option
+    fallbackLng: "en",
+
+    // interpolation: {
+    //   escapeValue: false // react already safes from xss => https://www.i18next.com/translation-function/interpolation#unescape
+    // },
   });
+
 root.render(
   <StoreContext.Provider value={store}>
     <RouterProvider router={router} />

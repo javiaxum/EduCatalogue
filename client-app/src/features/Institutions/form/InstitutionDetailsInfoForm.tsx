@@ -67,6 +67,8 @@ export default observer(function InstitutionDetailsInfoForm() {
                                                 label={t('Accreditation')}
                                                 content={
                                                     <CustomTextInput
+                                                        min={1}
+                                                        max={4}
                                                         width='5.5rem'
                                                         type='number'
                                                         placeholder={t('Accreditation')}

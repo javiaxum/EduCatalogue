@@ -28,35 +28,36 @@ namespace Infrastructure.Security
         protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, IsManagerRequirement requirement)
         {
             var userId = context.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            Console.WriteLine("USERID:" + userId);
             if (userId == null) return Task.CompletedTask;
 
-            var Id = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
+            var InstitutionOrSpecialtyId = Guid.Parse(_httpContextAccessor.HttpContext?.Request.RouteValues
                 .SingleOrDefault(x => x.Key == "id").Value?.ToString());
 
             var IsManager = _dbContext.AppUserInstitution
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == Id)
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == InstitutionOrSpecialtyId)
                 .Result;
 
-            var institutionIdBySpecialty = _dbContext.Specialties
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == Id)
-                .Result;
+            var InstitutionIdBySpecialty = _dbContext.Specialties
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == InstitutionOrSpecialtyId)
+            .Result;
 
-            Id = Id == Guid.Empty ? institutionIdBySpecialty != null ? institutionIdBySpecialty.Institution.Id : Guid.Empty : Id;
+            Guid InstitutionIdBySpecialtyId = new Guid();
 
-            if (Id == Guid.Empty) return Task.CompletedTask;
+            if (InstitutionIdBySpecialty != null && InstitutionIdBySpecialty.Institution != null)
+                InstitutionIdBySpecialtyId = InstitutionIdBySpecialty.Institution.Id;
 
             var IsManagerBySpecialty = _dbContext.AppUserInstitution
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.ManagerId == userId && (x.InstitutionId == Id))
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == InstitutionIdBySpecialtyId)
                 .Result;
 
             var IsOperator = _dbContext.Users.FirstOrDefaultAsync(x => x.Email == "EduCatalogue@service.com").Result;
 
-            if (IsManager == null && IsOperator.Id != userId) return Task.CompletedTask;
+            if (IsManager != null || IsManagerBySpecialty != null || IsOperator.Id == userId) context.Succeed(requirement);
 
-            context.Succeed(requirement);
             return Task.CompletedTask;
         }
     }

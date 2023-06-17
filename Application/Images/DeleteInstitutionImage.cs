@@ -35,11 +35,7 @@ namespace Application.Images
             {
                 var image = await _context.Images.FirstOrDefaultAsync(x => x.Id == request.Id);
                 var institution = await _context.Institutions.FirstOrDefaultAsync(x => x.Id == request.InstitutionId);
-
-                var imageDeleteResult = await _imageAccessor.DeleteImage(image.Id);
-
-                if (imageDeleteResult == null) return Result<Unit>.Failure("An error has occured while deleting an image from Cloudinary");
-
+                
                 if (institution.TitleImageId == image.Id)
                     institution.TitleImageId = null;
                 if (institution.BackgroundImageId == image.Id)

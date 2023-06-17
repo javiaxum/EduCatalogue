@@ -12,10 +12,6 @@ export default observer(function NavBar() {
     const { t, i18n } = useTranslation();
     const location = useLocation();
 
-    useEffect(() => {
-        i18n.changeLanguage('uk');
-    }, [])
-
     return (
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
             <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
@@ -23,7 +19,7 @@ export default observer(function NavBar() {
                 <div style={{ fontSize: "22px", marginLeft: "10px" }}>EDUA</div>
             </Menu.Item>
             <Menu.Item>
-                {location.pathname === '/institutions' &&   
+                {location.pathname === '/institutions' &&
                     <Search
                         placeholder={t('Search institutions')! + '...'}
                         showNoResults={false}
@@ -31,11 +27,19 @@ export default observer(function NavBar() {
                             institutionStore.setSearchNameParam(d.value!);
                         }} />}
             </Menu.Item>
-            {profileStore.isOperator && <Menu.Item>
-                <Button positive active={userStore.showPendingChanges} onClick={() => userStore.toggleShowPendingChanges()}>
-                    {t(userStore.showPendingChanges ? 'Hide pending changes' : 'Show pending changes')}
-                </Button>
-            </Menu.Item>}
+            {profileStore.isOperator && location.pathname === '/institutions' &&
+                <Menu.Item>
+                    <Button.Group>
+                        <Button  active={userStore.showPendingChanges} onClick={() => userStore.toggleShowPendingChanges()}>
+                            {t(userStore.showPendingChanges ? 'Hide pending changes' : 'Show pending changes')}
+                        </Button>
+                        {profileStore.isOperator &&
+                            <Button  as={Link} to='createInstitution'>
+                                {t('Create Institution')}
+                            </Button>}
+                    </Button.Group>
+                </Menu.Item>}
+
             {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
             {/* <Menu.Item position='right'>
                 <Button.Group>

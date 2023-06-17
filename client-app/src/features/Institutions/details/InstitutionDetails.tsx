@@ -96,7 +96,7 @@ export default observer(function InstitutionDetails() {
                                             {regionName}
                                             {regionsToExclude.includes(selectedInstitution?.regionId!) ? "" : ", " + cityName}
                                         </div>}
-                                    {selectedInstitution?.rating && selectedInstitution.reviewsCount &&
+                                    {(selectedInstitution?.rating && !!selectedInstitution.reviewsCount) ?
                                         <>
                                             <div style={{ display: 'inline-block' }}>
                                                 <RatingStars rating={selectedInstitution.rating} />
@@ -104,7 +104,7 @@ export default observer(function InstitutionDetails() {
                                             <div style={{ display: 'inline-block', marginLeft: '-2.4rem' }}>
                                                 {t('Reviews')} {selectedInstitution.reviewsCount}
                                             </div>
-                                        </>}
+                                        </> : <></>}
                                     <Button.Group style={{ float: 'right', width: 'fit-content', bottom: '1rem' }}>
                                         {(profileStore.isOperator && !selectedInstitution?.approved && !loadingInitial && !loading) &&
                                             <Button

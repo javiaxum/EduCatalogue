@@ -41,7 +41,7 @@ export default observer(function SearchParamsList() {
     }));
 
     const { t } = useTranslation();
-
+    
     return (
         <Grid style={{ padding: '0.4rem' }}>
             <Header as='h4' content={t('Tuition')} style={{ padding: '0 0.5rem 0.2rem 1rem', margin: '1rem 0 0 0' }} />

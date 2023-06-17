@@ -22,10 +22,7 @@ export default class ProfileStore {
         return false;
     }
     get isOperator() {
-        if (store.userStore.user && this.profile) {
-            return this.profile.username === 'CatalogueOperator';
-        }
-        return false;
+        return store.userStore.user?.isOperator;
     }
 
     loadProfile = async () => {

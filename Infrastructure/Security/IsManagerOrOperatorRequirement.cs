@@ -49,7 +49,7 @@ namespace Infrastructure.Security
 
             var IsManagerBySpecialty = _dbContext.AppUserInstitution
                 .AsNoTracking()
-                .SingleOrDefaultAsync(x => x.ManagerId == userId && (x.InstitutionId == Id))
+                .SingleOrDefaultAsync(x => x.ManagerId == userId && x.InstitutionId == Id)
                 .Result;
 
             var IsOperator = _dbContext.Users.FirstOrDefaultAsync(x => x.Email == "EduCatalogue@service.com").Result;

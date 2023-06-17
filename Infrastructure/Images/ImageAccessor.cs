@@ -36,14 +36,27 @@ namespace Infrastructure.Images
                     // Transformation = new Transformation().Height(500).Width(500).Crop("fill")
                 };
 
-                var uploadResult = await _cloudinary.UploadAsync(uploadParams);
-                if (uploadResult.Error != null) throw new Exception(uploadResult.Error.Message);
-
-                return new Application.Images.ImageUploadResult
+                try
                 {
-                    PublicId = uploadResult.PublicId,
-                    Url = uploadResult.SecureUrl.ToString()
-                };
+                    var uploadResult = await _cloudinary.UploadAsync(uploadParams);
+                    if (uploadResult.Error != null)
+                        return null;
+
+                    return new Application.Images.ImageUploadResult
+                    {
+                        PublicId = uploadResult.PublicId,
+                        Url = uploadResult.SecureUrl.ToString()
+                    };
+                }
+                catch (System.Exception)
+                {
+                    return new Application.Images.ImageUploadResult
+                    {
+                        PublicId = String.Empty,
+                        Url = String.Empty
+                    };
+                }
+
             }
             return null;
         }
@@ -51,9 +64,18 @@ namespace Infrastructure.Images
         public async Task<string> DeleteImage(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);
-            var result = await _cloudinary.DestroyAsync(deleteParams);
+            try
+            {
+                var result = await _cloudinary.DestroyAsync(deleteParams);
 
-            return (result.Result == "ok" || result.Result == "not found") ? result.Result : null;
+                return (result.Result == "ok" || result.Result == "not found") ? result.Result : null;
+            }
+            catch (System.Exception)
+            {
+
+                return null;
+            }
+
         }
     }
 }
