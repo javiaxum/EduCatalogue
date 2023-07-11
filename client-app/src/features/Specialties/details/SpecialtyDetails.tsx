@@ -145,11 +145,11 @@ export default observer(function SpecialtyDetails() {
                                             icon='clock'
                                             label={t('ECTS credits')}
                                             content={selectedSpecialty?.ectsCredits} />
-                                        {selectedSpecialty?.tuitionUAH && <TableItem
+                                        {selectedSpecialty?.tuitionUSD && <TableItem
                                             loading={(loading || loadingInitial)}
                                             icon='dollar'
                                             label={t('Tuition')}
-                                            content={<>{selectedSpecialty?.tuitionUAH} UAH<br></br>
+                                            content={<>{selectedSpecialty?.tuitionUSD} USD<br></br>
                                                 {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />}
                                         <TableItem
                                             loading={(loading || loadingInitial)}
@@ -338,11 +338,11 @@ export default observer(function SpecialtyDetails() {
                                         icon='clock'
                                         label={t('ECTS credits')}
                                         content={selectedSpecialty?.ectsCredits} />
-                                    {selectedSpecialty?.tuitionUAH && <TableItem
+                                    {selectedSpecialty?.tuitionUSD && <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='dollar'
                                         label={t('Tuition')}
-                                        content={<>{Math.round(selectedSpecialty?.tuitionUAH / 100)}00 UAH<br></br>
+                                        content={<>{Math.round(selectedSpecialty?.tuitionUSD / 100)}00 USD<br></br>
                                             {selectedSpecialty?.freeEducation && <Label content={t('Free education available')} />}</>} />}
                                     <TableItem
                                         loading={(loading || loadingInitial)}

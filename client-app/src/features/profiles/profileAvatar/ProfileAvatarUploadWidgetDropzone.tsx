@@ -38,7 +38,7 @@ export default function ProfileAvatarUploadWidgetDropzone({ setFiles, imageUrl, 
                 avatar
                 src={imageUrl || '/assets/placeholder.png'}
                 style={{ filter: 'brightness(50%)', objectFit: 'cover', minHeight: '100%', minWidth: '100%' }} />
-            <Icon name='plus' size='huge' style={{ position: 'absolute', left: 'calc(50% - 2.2rem)', top: 'calc(50% - 2.2rem)', color: '#fff' }} />
+            <Icon name='plus' size='huge' style={{ position: 'absolute', left: 'calc(50% - 2.35rem)', top: 'calc(50% - 2.2rem)', color: '#fff' }} />
         </div>
     )
 }

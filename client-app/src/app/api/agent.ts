@@ -18,7 +18,7 @@ import { ComponentCore } from "../models/componentCore";
 import { getI18n } from "react-i18next";
 
 
-axios.defaults.baseURL = 'http://localhost:5172/api';
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -35,7 +35,8 @@ axios.interceptors.request.use(config => {
 })
 
 axios.interceptors.response.use(async response => {
-    await sleep(500);
+    if (process.env.NODE_ENV == 'development')
+        await sleep(500);
     const pagination = response.headers['pagination'];
     if (pagination) {
         response.data = new PaginatedResult(response.data, JSON.parse(pagination));
@@ -111,7 +112,7 @@ const Images = {
         formData.append('File', file)
         return axios.post<Image>(`/images/institutions/${id}`, formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
-        }) 
+        })
     }
 }
 

@@ -15,8 +15,8 @@ export default observer(function NavBar() {
     return (
         <Menu secondary inverted style={{ borderRadius: '0px', minWidth: location.pathname === '/institutions/comparison' || location.pathname === '/specialties/comparison' ? '100%' : '85rem' }}>
             <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
-                <img src='\assets\logo.png' alt='logo' style={{ width: "4em", height: "4em", alignSelf: "center" }} />
-                <div style={{ fontSize: "22px", marginLeft: "10px" }}>EDUA</div>
+                <img src='\assets\logo.png' alt='logo' style={{ width: 'fit-content', height: "4em", alignSelf: "center" }} />
+                <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
             </Menu.Item>
             <Menu.Item>
                 {location.pathname === '/institutions' &&
@@ -27,7 +27,7 @@ export default observer(function NavBar() {
                             institutionStore.setSearchNameParam(d.value!);
                         }} />}
             </Menu.Item>
-            {profileStore.isOperator && location.pathname === '/institutions' &&
+            {profileStore.isOperator &&
                 <Menu.Item>
                     <Button.Group>
                         <Button  active={userStore.showPendingChanges} onClick={() => userStore.toggleShowPendingChanges()}>
@@ -39,26 +39,6 @@ export default observer(function NavBar() {
                             </Button>}
                     </Button.Group>
                 </Menu.Item>}
-
-            {/* <Menu.Item as={NavLink} to="/errors" name='Errors' /> */}
-            {/* <Menu.Item position='right'>
-                <Button.Group>
-                    <Button
-                        className='languageToggler'
-                        style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                        active={i18n.language === 'en'}
-                        onClick={() => { i18n.changeLanguage('en'); }}>
-                        Eng
-                    </Button>
-                    <Button
-                        className='languageToggler'
-                        style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                        active={i18n.language === 'uk'}
-                        onClick={() => { i18n.changeLanguage('uk'); }}>
-                        Укр
-                    </Button>
-                </Button.Group>
-            </Menu.Item> */}
             <Menu.Item name='Profile' position='right' >
                 <Image src={profileStore.profile?.avatar?.url || '/assets/user.png'} avatar spaced='right' />
                 <Dropdown pointing='top right' text={profileStore.profile?.displayName} >

@@ -61,7 +61,7 @@ export default observer(function SearchParamsList() {
                     min={30000}
                     max={300000} />
                 <Label size="large">
-                    {tuitionRange[0]} UAH - {tuitionRange[1]} UAH
+                    {tuitionRange[0]} USD - {tuitionRange[1]} USD
                 </Label>
             </Grid.Column>
             <Grid.Column width={16} style={{ padding: '0' }}>

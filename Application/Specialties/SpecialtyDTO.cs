@@ -12,7 +12,7 @@ namespace Application.Specialties
         public string LocalSpecialtyCode { get; set; }
         public string Description { get; set; }
         public int DegreeId { get; set; }
-        public decimal TuitionUAH { get; set; }
+        public decimal TuitionUSD { get; set; }
         public bool FreeEducation { get; set; }
         public double AcceptanceRate { get; set; }
         public double GraduationRate { get; set; }

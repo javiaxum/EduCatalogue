@@ -87,7 +87,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                     iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />)}
                             {(specialties.length === 0 && !loading && !editMode) &&
                                 <Segment basic style={{ color: '#444', width: '40rem' }}>{t('Unfortunately no specialties were found!')}...</Segment>}
-                            {(editMode && specialties.length === pagination?.itemsPerPage) &&
+                            {(editMode) &&
                                 <SpecialtyListAddNewItem />}
                         </Grid>
                     </Grid.Column >
@@ -134,7 +134,7 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                     iscedCodeString={getSpecialtyCoreISCEDString(specialty.localSpecialtyCode)} />)}
                             {(specialties.length === 0 && !loading && !editMode) &&
                                 <Segment basic style={{ color: '#444', width: '40rem' }}>{t('Unfortunately no specialties were found')}...</Segment>}
-                            {(editMode && specialties.length === pagination?.itemsPerPage) &&
+                            {(editMode) &&
                                 <SpecialtyListAddNewItem />}
                         </Grid>
                     </Grid.Row>

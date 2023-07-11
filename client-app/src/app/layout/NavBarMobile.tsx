@@ -28,7 +28,7 @@ export default observer(function NavBarMobile() {
                     </Button>
                 </Menu.Item>
                 <Menu.Item as={Link} to="/institutions" onClick={() => commonStore.setComparison(undefined)}>
-                    <img src='\assets\logo.png' alt='logo' style={{ width: "3rem", height: "3rem", alignSelf: "center" }} />
+                    <img src='\assets\logo.png' alt='logo' style={{ width: "fit-content", height: "3rem", alignSelf: "center" }} />
                     <div style={{ fontSize: "22px", marginLeft: "10px" }}>EduCatalogue</div>
                 </Menu.Item>
             </Menu>
@@ -50,22 +50,6 @@ export default observer(function NavBarMobile() {
                 <Grid divided style={{ margin: 0, padding: 0, width: '19rem', height: '200vh', backgroundColor: 'rgb(30, 71, 160)', position: 'absolute', top: '5rem', zIndex: 3000 }}>
                     <Grid.Column textAlign='center' style={{ width: '19rem', padding: 0, marginRight: '1rem' }}>
                         <Grid.Row style={{ padding: '1rem 0 1rem 0' }}>
-                            <Button.Group style={{ padding: '1rem 0 1rem 0' }}>
-                                <Button
-                                    className='languageToggler'
-                                    style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                                    active={i18n.language == 'en'}
-                                    onClick={() => { i18n.changeLanguage('en'); }}>
-                                    Eng
-                                </Button>
-                                <Button
-                                    className='languageToggler'
-                                    style={{ border: '0', background: 'none', padding: '0.5rem' }}
-                                    active={i18n.language == 'uk'}
-                                    onClick={() => { i18n.changeLanguage('uk'); }}>
-                                    Укр
-                                </Button>
-                            </Button.Group>
                         </Grid.Row>
                         <Grid.Row style={{ padding: '1rem 0 1rem 0', backgroundColor: '#fff', borderRight: '1px solid rgba(34,36,38,.15)' }}>
                             <Segment style={{ border: 0, borderRadius: 0, boxShadow: 'none' }}>

@@ -22,7 +22,7 @@ export interface Institution {
     acceptanceRate: number;
     graduationRate: number;
     graduateEmploymentRate: number;
-    averageTuitionUAH: number;
+    averageTuitionUSD: number;
     scholarship: boolean;
     studyFormIds: number[];
     languageIds: string[];

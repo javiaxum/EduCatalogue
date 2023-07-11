@@ -34,7 +34,7 @@ namespace Application
         public double AcceptanceRate { get; set; }
         public double GraduationRate { get; set; }
         public double GraduateEmploymentRate { get; set; }
-        public decimal AverageTuitionUAH { get; set; }
+        public decimal AverageTuitionUSD { get; set; }
         public bool Scholarship { get; set; }
         public ICollection<int> StudyFormIds { get; set; }
         public ICollection<string> LanguageIds { get; set; }

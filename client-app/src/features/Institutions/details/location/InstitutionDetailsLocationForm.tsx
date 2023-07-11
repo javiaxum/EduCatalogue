@@ -108,15 +108,15 @@ export default observer(function InstitutionDetailsLocationForm() {
                 </Grid>
             </Grid.Column>
             <Grid.Column width={isMobile ? 16 : 8} style={{ padding: isMobile ? 0 : '' }}>
-                <MapContainer center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '25rem' }}>
+                <MapContainer center={center || { lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }} zoom={20} scrollWheelZoom={false} style={{ overflow: 'hidden', width: '100%', height: '25rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <Marker
                         draggable={draggable}
-                        position={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }}
+                        position={center || { lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }}
                         eventHandlers={{ dragend: handleMarkerDragEnd }}>
-                        <FlyTo center={center || { lat: selectedInstitution?.latitude || 49, lng: selectedInstitution?.longtitude || 31 }} />
+                        <FlyTo center={center || { lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }} />
                         <Popup>
                             {selectedInstitution?.name}, {" "}
                             {selectedInstitution?.streetAddress},  {" "}

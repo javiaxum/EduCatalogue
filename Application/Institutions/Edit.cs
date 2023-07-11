@@ -39,7 +39,10 @@ namespace Application.Institutions
 
             public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var institution = await _context.Institutions.Include(x => x.Languages).Include(x => x.StudyForms).FirstOrDefaultAsync(x => x.Id == request.Institution.Id);
+                var institution = await _context.Institutions
+                    .Include(x => x.Languages)
+                    .Include(x => x.StudyForms)
+                    .FirstOrDefaultAsync(x => x.Id == request.Institution.Id);
                 if (institution == null) return null;
                 var rating = institution.Rating;
                 var reviewsCount = institution.ReviewsCount;

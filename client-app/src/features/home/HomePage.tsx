@@ -15,16 +15,17 @@ export default observer(function HomePage() {
             <Grid.Row>
                 <Header as='h1' inverted>
                     <Image src='/assets/logo.png' alt='logo' verticalAlign="bottom" style={{ marginBottom: 5, width: '1.1em' }} />
-                    EDUA
+                    EduCatalogue
                 </Header>
             </Grid.Row>
             <Grid.Row style={{ padding: 0 }}>
-                {userStore.isLoggedIn ?
-                    <Button size='big' inverted as={Link} to={`/institutions`} content={t('To Institutions Search')} style={{ height: 'fit-content' }} /> :
-                    <>
-                        <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<LoginForm />)} content={t('Login')} />
-                        <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<RegisterForm />)} content={t('Register')} />
-                    </>}
+                <>
+                    <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<LoginForm />)} content={t('Login')} />
+                    <Button size='big' style={{ width: '15rem' }} inverted onClick={() => modalStore.openModalMini(<RegisterForm />)} content={t('Register')} />
+                </>
+            </Grid.Row>
+            <Grid.Row style={{ padding: '0.3rem' }}>
+                <Button size='big' inverted as={Link} to={`/institutions`} content={t('To Institutions Search')} style={{ height: 'fit-content', width: '30.35rem' }} />
             </Grid.Row>
         </Grid>
     )

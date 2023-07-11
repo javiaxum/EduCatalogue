@@ -154,7 +154,6 @@ export default observer(function InstitutionDashboard({ pending }: Props) {
                                 onChange={(e, data) => { handleLoad(data); window.scrollTo({ top: 0, behavior: 'smooth' }) }} />}
                     </Grid.Row>
                     <Grid.Row>
-
                     </Grid.Row>
                 </Grid>}
         </div >

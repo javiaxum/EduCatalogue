@@ -444,7 +444,7 @@ namespace Persistence.Migrations
                     b.Property<int>("StartYear")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("TuitionUAH")
+                    b.Property<decimal>("TuitionUSD")
                         .HasColumnType("numeric");
 
                     b.Property<int>("UndergraduatesEnrolled")

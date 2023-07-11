@@ -183,9 +183,13 @@ namespace API.Controllers
         {
             var user = await _userManager.Users
                 .FirstOrDefaultAsync(x => x.Email == User.FindFirstValue(ClaimTypes.Email));
+            var ambiguousEmailUser = await _userManager.Users
+                .FirstOrDefaultAsync(x => x.NormalizedEmail == newEmail.ToUpper());
             if (user == null)
                 return BadRequest("An error has occured while getting the user");
-
+            if (user == ambiguousEmailUser)
+                return BadRequest("Email is already taken");
+                
             var confirmationToken = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
             byte[] tokenGeneratedBytes = Encoding.UTF8.GetBytes(confirmationToken);
             var tokenEncoded = WebEncoders.Base64UrlEncode(tokenGeneratedBytes);

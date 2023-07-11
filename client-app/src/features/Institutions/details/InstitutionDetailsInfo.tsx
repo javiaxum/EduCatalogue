@@ -79,7 +79,7 @@ export default observer(function InstitutionDetailsInfo() {
                                                 loading={(loading || loadingInitial)}
                                                 icon='money'
                                                 label={t('Average tuition')}
-                                                content={selectedInstitution?.averageTuitionUAH ? (Math.round(selectedInstitution?.averageTuitionUAH! / 100) + '00 UAH') : 0} />
+                                                content={selectedInstitution?.averageTuitionUSD ? (Math.round(selectedInstitution?.averageTuitionUSD! / 100) + '00 USD') : 0} />
                                             <TableItemLink
                                                 loading={(loading || loadingInitial)}
                                                 icon='chain'
@@ -273,7 +273,7 @@ export default observer(function InstitutionDetailsInfo() {
                                     loading={(loading || loadingInitial)}
                                     icon='money'
                                     label={t('Average tuition')}
-                                    content={Math.round(selectedInstitution?.averageTuitionUAH! / 100) + '00 UAH'} />
+                                    content={Math.round(selectedInstitution?.averageTuitionUSD! / 100) + '00 USD'} />
                                 <TableItemLink
                                     loading={(loading || loadingInitial)}
                                     icon='chain'

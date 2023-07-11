@@ -215,7 +215,7 @@ export default observer(function SpecialtyComparisonBoard() {
                                     header={t('TUITION')}
                                     array={selectedSpecialties.map((i) =>
                                         <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {i.tuitionUAH >= 100 ? `${Math.round(i.tuitionUAH / 100)}00` : i.tuitionUAH} UAH
+                                            {i.tuitionUSD >= 100 ? `${Math.round(i.tuitionUSD / 100)}00` : i.tuitionUSD} USD
                                         </Header>)} />
                                 <InstitutionComparisonBoardRow
                                     header={t('FREE EDUCATION')}
@@ -406,7 +406,7 @@ export default observer(function SpecialtyComparisonBoard() {
                                     headerLess={true}
                                     array={selectedSpecialties.map((i) =>
                                         <Header as='h4' style={{ color: '#111', display: 'inline-block', padding: 0, margin: 0 }} >
-                                            {i.tuitionUAH} UAH
+                                            {i.tuitionUSD} USD
                                         </Header>)} />
                                 <InstiutionComparisonParameterCellFixedMobile name={t('FREE EDUCATION')} columns={selectedSpecialtyIds.length + 1} />
                                 <InstitutionComparisonBoardRow

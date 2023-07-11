@@ -4,17 +4,14 @@ import { Header, Segment } from 'semantic-ui-react';
 
 export default function AboutPage() {
     const { t } = useTranslation();
-    let contents = `Ласкаво просимо до нашого сайту-агрегатора закладів вищої освіти, місця де зібрана уся інформація про найкращі ЗВО України. Наша платформа розроблена, щоб надавати вичерпну інформацію про різні ЗВО, допомагаючи студентам приймати зважені рішення щодо їхнього навчання.
+    let contents = `Welcome to our website-aggregator of Institutions, the place where all the information is gathered about the best universities of the country. Our platform is developed to provide an exhaustive information about various institutions, helping you to take informed desicions regarding your academic career.
 
-На нашому сайті ми прагнемо об’єднати інформацію з багатьох джерел, включаючи офіційні веб-сайти університетів, рейтинги, відгуки та відгуки студентів, щоб забезпечити цілісне уявлення про кожен заклад. Наша команда дослідників невпинно працює над збором найточнішої та найновішої інформації про університети, тому вам не доведеться витрачати години на самостійне дослідження.
+Our main value is to connect the infor mation scattered across the Internet, including official website of institutions, ratings and reviews to maintain the full picture about every institution. Our team of researchers is working perpetually to gather the most accurate and relevant information about institutions so you don't have to spend hours researching yourself.
 
-Ми розуміємо, що вибір ЗВО є рішенням, яке може мати значний вплив на вашу майбутню кар'єру та особистий ріст. Тому ми прагнемо створити зручну платформу, яка пропонує відповідну інформацію та інструменти, які допоможуть вам зробити правильний вибір.
+We recognize the choice of an institution as a pivotal decision which can influence your entire career and personal growth. Thus our goal is to provide the best user experience with our instruments which will help you to make a correct choice.
+Our website has an intuitive interface to perform search of institutions, allowing users to apply various filters like tuition, location, specialty etc. Also it is possible to compare institutions and specialties inside our UI without the need to construct tables manually.
 
-На нашому сайті є інтуїтивно зрозуміла функція пошуку, яка дозволяє фільтрувати університети за різними критеріями, такими як місце розташування, спеціальність, плата за навчання тощо. Ви також можете порівняти університети та спеціальності пліч-о-пліч, щоб прийняти зважене рішення.
-
-Наша мета - надання неупередженої інформації про різні навчальні заклади, надаючи студентам можливість вибрати найкращий академічний шлях для свого майбутнього. Незалежно від того, чи є ви учнем середньої школи, який бажає дослідити свої можливості, чи аспірантом, який прагне просунутися по кар’єрі, у нас є все, що вам потрібно, щоб прийняти обґрунтоване рішення щодо ваших навчальних занять.
-
-Дякуємо, що обрали нашу платформу, як основний ресурс для отримання інформації про університети.`
+Thank you for choosing our service!`
     return (
         <Segment basic style={{width: '60rem', margin: '0 auto', padding: '6rem 0'}}>
             <div style={{fontSize: '4rem', fontWeight: 800, fontFamily: 'fantasy',color: '#33333a', textAlign: 'center'}}>

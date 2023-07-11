@@ -14,7 +14,7 @@ namespace Domain
         public SpecialtyCore SpecialtyCore { get; set; }
         public string Description { get; set; }
         public Degree Degree { get; set; }
-        public decimal TuitionUAH { get; set; }
+        public decimal TuitionUSD { get; set; }
         public bool FreeEducation { get; set; }
         public double AcceptanceRate { get; set; }
         public double GraduationRate { get; set; }

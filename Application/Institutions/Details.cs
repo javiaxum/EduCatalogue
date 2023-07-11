@@ -39,7 +39,7 @@ namespace Application.Institutions
                 {
                     institution.AcceptanceRate = specialties.Select(s => s.AcceptanceRate).Average();
                     institution.GraduateEmploymentRate = specialties.Select(s => s.GraduateEmploymentRate).Average();
-                    institution.AverageTuitionUAH = specialties.Select(s => s.TuitionUAH).Average();
+                    institution.AverageTuitionUSD = specialties.Select(s => s.TuitionUSD).Average();
                     institution.GraduationRate = specialties.Select(s => s.GraduationRate).Average();
                     institution.Scholarship = specialties.Any(s => s.FreeEducation);
                     institution.UndergraduatesEnrolled = specialties.Select(s => s.UndergraduatesEnrolled).Sum();

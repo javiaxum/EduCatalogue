@@ -1,12 +1,10 @@
 body {
-  background-color: #fff !important;
+  background-color: #f3f3f3 !important;
   margin: 0 !important;
 }
+
 .root {
   --main-color: rgb(38, 94, 213);
-}
-.root {
-  --main-color: rgb(30, 71, 160);
 }
 
 .languageToggler {

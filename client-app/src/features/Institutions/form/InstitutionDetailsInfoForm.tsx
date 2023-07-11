@@ -169,12 +169,12 @@ export default observer(function InstitutionDetailsInfoForm() {
                                             type='number'
                                             placeholder={t('Accreditation')}
                                             name='accreditation' />} />
-                                {selectedInstitution?.averageTuitionUAH &&
+                                {selectedInstitution?.averageTuitionUSD &&
                                     <TableItem
                                         loading={(loading || loadingInitial)}
                                         icon='money'
                                         label={t('Average tuition')}
-                                        content={Math.round(selectedInstitution.averageTuitionUAH / 100) + '00 UAH'} />}
+                                        content={Math.round(selectedInstitution.averageTuitionUSD / 100) + '00 USD'} />}
                                 <TableItemLink
                                     loading={(loading || loadingInitial)}
                                     icon='chain'

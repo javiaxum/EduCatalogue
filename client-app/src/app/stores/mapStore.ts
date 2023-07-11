@@ -37,7 +37,6 @@ export default class MapStore {
     }
     setResults = (value: any[]) => {
         this.results = value;
-        console.log(this.results)
     }
     setCity = (name: string) => {
         this.city = name;
@@ -59,8 +58,8 @@ export default class MapStore {
         try {
             const result = await fetch(`https://nominatim.openstreetmap.org/search?q=${city},${street}&format=json`, {
                 headers: {
-                    "accept-language": "uk",
-                    "X-OSM-CountryCode": "uk",
+                    "accept-language": "en",
+                    "X-OSM-CountryCode": "us",
                 },
             })
             const data = await result.json();

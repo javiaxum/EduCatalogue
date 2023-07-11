@@ -123,30 +123,23 @@ export default class SpecialtyStore {
 
     get specialtyCoresByName() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .sort((a, b) => a.id.localeCompare(b.id));
     }
+
     get specialtyCoresById() {
         return Array.from(this.specialtyCoreRegistry.values())
-            .map(element => (element))
-            .sort((a, b) => a.id.localeCompare(b.id))
     }
+
     get branchesById() {
         return Array.from(this.branchRegistry.values())
-            .map(element => (element))
-            .sort((a, b) => a.id.localeCompare(b.id))
     }
+
     get skillsById() {
         return Array.from(this.skillRegistry.values())
-            .map(element => (element))
-            .sort((a, b) => a.id - b.id)
     }
+    
     get componentCoresById() {
         return Array.from(this.componentCoreRegistry.values())
-            .map(element => (element))
-            .sort((a, b) => a.id - b.id)
     }
-
-
 
     getSpecialtyCoreISCEDString = (id: string) => {
         const specialtyCore = this.specialtyCoreRegistry.get(id);
@@ -302,7 +295,6 @@ export default class SpecialtyStore {
             runInAction(() => {
                 result.data.forEach((specialty, index) =>
                     this.setSpecialty(specialty));
-                console.log(result.pagination)
             })
 
             this.setPagination(result.pagination);

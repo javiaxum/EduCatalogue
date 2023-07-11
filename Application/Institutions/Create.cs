@@ -60,6 +60,12 @@ namespace Application.Institutions
                     var studyForm = await _context.StudyForms.FirstOrDefaultAsync(x => x.Id == studyFormId);
                     newInstitution.StudyForms.Add(studyForm);
                 }
+                
+                newInstitution.Visible = false;
+                newInstitution.Approved = false;
+                newInstitution.ReviewsCount = 0;
+                newInstitution.Rating = 0;
+                _context.Institutions.Add(newInstitution);
 
                 var manager = new AppUserInstitution
                 {
@@ -68,11 +74,6 @@ namespace Application.Institutions
                 };
 
                 newInstitution.Managers.Add(manager);
-                newInstitution.Visible = false;
-                newInstitution.Approved = false;
-                newInstitution.ReviewsCount = 0;
-                newInstitution.Rating = 0;
-                _context.Institutions.Add(newInstitution);
 
                 var result = await _context.SaveChangesAsync() > 0;
 

@@ -36,7 +36,7 @@ export default observer(function SpecialtyListItem({ specialty, specialtyCore, i
                         </Card.Header>
                         <Card.Description>{t('Specialty code')}: {specialtyCore.id}</Card.Description>
                         <Card.Description>{t('ISCED code')}: {iscedCodeString}</Card.Description>
-                        <Card.Description>{t('Price')}: {specialty.tuitionUAH >= 100 ? `${Math.round(specialty.tuitionUAH / 100)}00` : specialty.tuitionUAH} UAH</Card.Description>
+                        <Card.Description>{t('Price')}: {specialty.tuitionUSD >= 100 ? `${Math.round(specialty.tuitionUSD / 100)}00` : specialty.tuitionUSD} USD</Card.Description>
                     </Card.Content>
                 </Card>
                 <Button

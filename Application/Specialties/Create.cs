@@ -82,7 +82,7 @@ namespace Application.Specialties
                     _context.Components.Add(newComponent);
                 }
                 specialty.Approved = false;
-                specialty.Visible = false;
+                specialty.Visible = true;
                 _context.Specialties.Add(specialty);
 
                 var result = await _context.SaveChangesAsync() > 0;

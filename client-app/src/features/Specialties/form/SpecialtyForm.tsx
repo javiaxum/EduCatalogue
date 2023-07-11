@@ -2,7 +2,6 @@ import { observer } from 'mobx-react-lite';
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { Button, Divider, DropdownItemProps, DropdownProps, Grid, Header, Icon, Label, Segment, Table } from 'semantic-ui-react';
-import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
 import { v4 as uuid } from 'uuid';
 import { Form, Formik } from 'formik';
@@ -45,17 +44,15 @@ export default observer(function SpecialtyForm() {
 
     const [specialty, setSpecialty] = useState<SpecialtyFormValues>(new SpecialtyFormValues())
     const [specialtyCore, setSpecialtyCore] = useState<SpecialtyCore>(new SpecialtyCore());
-
-    const specialtyOptions: any[] = specialtyCoresById.map(specialty => ({
+    const [specialtyOptions, setSpecialtyOptions] = useState<any[]>(specialtyCoresById.map(specialty => ({
         text: `${specialty.id} ${specialty.name}`,
         value: specialty.id,
-    }));
-
-    const skillOptions: DropdownItemProps[] = skillsById.map(skill => ({
+    })));
+    const [skillOptions, setSkillOptions] = useState<DropdownItemProps[]>(skillsById.map(skill => ({
         key: skill.id,
         text: skill.name,
         value: skill.id,
-    }));
+    })));
 
     const degrees = t("degreeOptions", { returnObjects: true }) as [{ text: string; value: number }]
     const languages = t("languageOptions", { returnObjects: true }) as [{ text: string; value: string }]
@@ -70,7 +67,7 @@ export default observer(function SpecialtyForm() {
         degreeId: Yup.number().required(`${t('Degree is a required field')}`)
             .min(1, `${t('Invalid degree')}`)
             .max(3, `${t('Invalid degree')}`),
-        tuitionUAH: Yup.number().required(`${t('Tuition is a required field')}`),
+        tuitionUSD: Yup.number().required(`${t('Tuition is a required field')}`),
         acceptanceRate: Yup.number().required(`${t('Acceptance rate is a required field')}`)
             .min(0, `${t('The value should not be less than')} 0`)
             .max(100, `${t('The value should not exceed')} 100`),
@@ -112,7 +109,6 @@ export default observer(function SpecialtyForm() {
     }, [])
 
     function handleSpecialtyFormSubmit(specialty: SpecialtyFormValues) {
-        console.log(specialty)
         if (id) {
             specialty.id = uuid();
             createSpecialty(specialty, id).then(() => {
@@ -253,9 +249,9 @@ export default observer(function SpecialtyForm() {
                                                             max={10000000}
                                                             type='number'
                                                             placeholder='0'
-                                                            name='tuitionUAH'
+                                                            name='tuitionUSD'
                                                             width='7rem' />
-                                                        <Label content='UAH' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
+                                                        <Label content='USD' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
                                                         {t('Free education available') + ': '}
                                                         <CustomCheckboxInput name='scholarship' /></>} />
                                                 <TableItem
@@ -365,7 +361,7 @@ export default observer(function SpecialtyForm() {
                                     <Grid.Column width={5} stretched>
                                         <Segment basic style={{ padding: '0' }}>
                                             <Header as='h4' content={t('Description')} dividing style={{ marginBottom: '0' }} />
-                                            <CustomTextArea rows={16} placeholder={t('Description')} name='description' loading={(loading || loadingInitial)} />
+                                            <CustomTextArea rows={32} placeholder={t('Description')} name='description' loading={(loading || loadingInitial)} />
                                         </Segment>
                                     </Grid.Column>
                                     <Grid.Column width={3} stretched>
@@ -500,9 +496,9 @@ export default observer(function SpecialtyForm() {
                                                     <CustomTextInput
                                                         type='number'
                                                         placeholder='0'
-                                                        name='tuitionUAH'
+                                                        name='tuitionUSD'
                                                         width='7rem' />
-                                                    <Label content='UAH' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
+                                                    <Label content='USD' size='large' style={{ position: 'relative', bottom: '-0.6rem' }} /> <br></br>
                                                     {t('Free education available') + ': '}
                                                     <CustomCheckboxInput name='scholarship' /></>} />
                                             <TableItem
@@ -629,9 +625,7 @@ export default observer(function SpecialtyForm() {
                                 </Grid.Row>
                             </Grid>
                         </Segment>}
-                </Form >
-            )
-            }
+                </Form >)}
         </Formik >
     )
 })

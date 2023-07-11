@@ -51,8 +51,8 @@ namespace Application.Institutions
                         && x.Specialties.Any(s =>
                             (!IsSpecialtiesPredicate || request.Params.SpecialtiesPredicate.Contains(s.SpecialtyCore.Id))
                             && (!IsBranchesPredicate || request.Params.BranchesPredicate.Contains(s.SpecialtyCore.Id.Substring(0, 2)))
-                            && (!IsMaxTuition || s.TuitionUAH <= MaxTuition)
-                            && (!IsMinTuition || s.TuitionUAH >= MinTuition)
+                            && (!IsMaxTuition || s.TuitionUSD <= MaxTuition)
+                            && (!IsMinTuition || s.TuitionUSD >= MinTuition)
                             && (!IsDegree || s.Degree.Id == Degree)));
                 var sortedQuery =
                     request.Params.Sorting == "za"

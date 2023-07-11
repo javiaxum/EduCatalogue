@@ -15,7 +15,7 @@ namespace Application.Specialties
             RuleFor(x => x.LocalSpecialtyCode).NotEmpty();
             RuleFor(x => x.Description).NotEmpty();
             RuleFor(x => x.DegreeId).NotEmpty();
-            RuleFor(x => x.TuitionUAH).NotEmpty();
+            RuleFor(x => x.TuitionUSD).NotEmpty();
             RuleFor(x => x.AcceptanceRate).NotEmpty();
             RuleFor(x => x.GraduationRate).NotEmpty();
             RuleFor(x => x.UndergraduatesEnrolled).NotEmpty();

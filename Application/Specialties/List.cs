@@ -64,8 +64,8 @@ namespace Application.Specialties
                         && (!IsSkillsPredicate || s.Skills.Any(x => skills.Contains(x.Id)))
                         && (!IsStudyFormsPredicate || s.StudyForms.Any(x => studyForms.Contains(x.Id)))
                         && (!IsLanguagesPredicate || s.Languages.Any(x => languages.Contains(x.Id)))
-                        && (!IsMaxTuition || s.TuitionUAH <= MaxTuition)
-                        && (!IsMinTuition || s.TuitionUAH >= MinTuition)
+                        && (!IsMaxTuition || s.TuitionUSD <= MaxTuition)
+                        && (!IsMinTuition || s.TuitionUSD >= MinTuition)
                         && (!IsDegreeId || s.Degree.Id == Degree));
 
                 var result = query

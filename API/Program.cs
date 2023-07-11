@@ -48,10 +48,44 @@ internal class Program
         builder.Services.AddScoped<IUsernameAccessor, UsernameAccessor>();
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
-        builder.Services.AddDbContext<DataContext>(opt =>
+        builder.Services.AddDbContext<DataContext>(options =>
         {
-            opt.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+            var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+
+            string connStr;
+
+            // Depending on if in development or production, use either FlyIO
+            // connection string, or development connection string from env var.
+            if (env == "Development")
+            {
+                // Use connection string from file.
+                connStr = builder.Configuration.GetConnectionString("DefaultConnection");
+            }
+            else
+            {
+                // Use connection string provided at runtime by FlyIO.
+                var connUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+
+                // Parse connection URL to connection string for Npgsql
+                connUrl = connUrl.Replace("postgres://", string.Empty);
+                var pgUserPass = connUrl.Split("@")[0];
+                var pgHostPortDb = connUrl.Split("@")[1];
+                var pgHostPort = pgHostPortDb.Split("/")[0];
+                var pgDb = pgHostPortDb.Split("/")[1];
+                var pgUser = pgUserPass.Split(":")[0];
+                var pgPass = pgUserPass.Split(":")[1];
+                var pgHost = pgHostPort.Split(":")[0];
+                var pgPort = pgHostPort.Split(":")[1];
+                var updatedHost = pgHost.Replace("flycast", "internal");
+
+                connStr = $"Server={updatedHost};Port={pgPort};User Id={pgUser};Password={pgPass};Database={pgDb};";
+            };
+
+            // Whether the connection string came from the local development configuration file
+            // or from the environment variable from FlyIO, use it to set up your DbContext.
+            options.UseNpgsql(connStr);
         });
+
         builder.Services.AddCors(opt =>
         {
             opt.AddPolicy("CorsPolicy", policy =>
@@ -86,7 +120,7 @@ internal class Program
             };
         }).AddTwoFactorRememberMeCookie();
         builder.Services.AddAuthorization(opt =>
-        {   
+        {
             opt.AddPolicy("IsInstitutionManager", policy =>
             {
                 policy.Requirements.Add(new IsManagerRequirement());
@@ -131,10 +165,32 @@ internal class Program
         // Configure the HTTP request pipeline.
         app.UseMiddleware<ExceptionMiddleware>();
 
+        app.UseXContentTypeOptions();
+        app.UseReferrerPolicy(opt => opt.NoReferrer());
+        app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+        app.UseXfo(opt => opt.Deny());
+        app.UseCsp(opt => opt
+            .BlockAllMixedContent()
+            .StyleSources(s => s.Self().UnsafeInline().CustomSources("https://cdn.jsdelivr.net/npm/semantic-ui@2/", "https://unpkg.com/leaflet@1.9.3/", "https://fonts.googleapis.com"))
+            .FontSources(s => s.Self().CustomSources("https://cdn.jsdelivr.net/npm/semantic-ui@2/", "https://fonts.gstatic.com", "data:", "https://fonts.googleapis.com"))
+            .FormActions(s => s.Self())
+            .FrameAncestors(s => s.Self())
+            .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:", "https://platform-lookaside.fbsbx.com", " https://unpkg.com/leaflet@1.9.3/", "https://unpkg.com/leaflet@1.9.3/dist/images", "https://c.tile.openstreetmap.org", "https://b.tile.openstreetmap.org", "https://a.tile.openstreetmap.org"))
+            .ScriptSources(s => s.Self().CustomSources("https://unpkg.com/leaflet@1.9.3/", "https://connect.facebook.net"))
+        );
+
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+        }
+        else
+        {
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");
+                await next.Invoke();
+            });
         }
 
         app.UseRouting();
@@ -144,7 +200,11 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
+
         app.MapControllers();
+        app.MapFallbackToController("Index", "Fallback");
 
         await app.RunAsync();
     }
