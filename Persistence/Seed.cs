@@ -2173,8 +2173,8 @@ namespace Persistence
                         reviews.Add(review);
                     }
                     await context.AddRangeAsync(reviews);
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
             }
             if (!context.Specialties.Any())
             {
@@ -2201,8 +2201,8 @@ namespace Persistence
                     }
 
                     await context.AddRangeAsync(specialties);
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
             }
 
             //Seed components into specialties
@@ -2226,8 +2226,8 @@ namespace Persistence
                         });
                     }
                     await context.AddRangeAsync(components);
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
             }
             // Seed Skills to Specialties
             if (!context.Skills.Any())
@@ -2991,8 +2991,8 @@ namespace Persistence
                     item.Languages = new List<Language> { await context.Languages.FirstOrDefaultAsync(x => x.Id == "en") };
                     item.Degree = await context.Degrees.FirstOrDefaultAsync(x => x.Id == 1);
                     item.StudyForms = new List<StudyForm> { await context.StudyForms.FirstOrDefaultAsync(x => x.Id == 1) };
+                    await context.SaveChangesAsync();
                 }
-                await context.SaveChangesAsync();
                 foreach (var item in context.Institutions.ToList())
                 {
                     item.Accreditation = new Random().Next(3, 5);
@@ -3018,8 +3018,6 @@ namespace Persistence
                     await context.SaveChangesAsync();
                 }
             }
-            
         }
-        
     }
 }
