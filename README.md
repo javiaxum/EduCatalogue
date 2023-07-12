@@ -10,7 +10,9 @@ The website based on this repositoryis is hosted on Fly.io at the following link
 - [Features](#features)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Contributing](#contributing)
+- [Technologies Used](#technologies_used)
+- [Credits](#credits)
+- [Contact](#contact)
 - [License](#license)
 
 ## Introduction
@@ -35,7 +37,7 @@ EduCatalogue aggregator is a web-based SPA application based on React frontend a
 7. The project is tailored to work with dockerized PostgreSQL database. The database connection string is specified in the `appsettings.Development.json` file. Assuming docker daemon being installed and running execute the following command from the project folder in order to initialize and start docker PostgreSQL container: `docker run --name <name> -e POSTGRES_USER=<username> -e POSTGRES_PASSWORD=<password> -p 5432:5432 -d postgres:latest`. Password and username should be reflected in the ConnectionStrings section of the `appsettings.json` file.
 
 
-## Usage (Development mode)
+## Usage
 
 1. Navigate to the API directory: `cd API`
 2. Start the dotnet API: `dotnet run`
