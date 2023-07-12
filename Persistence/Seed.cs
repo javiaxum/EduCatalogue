@@ -12,6 +12,7 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
+            context.Database.ExecuteSqlRaw("DROP DATABASE educatalogue");
             var reviewDictionary = new[]
             {
                 "The university provides a truly enriching academic experience with its diverse range of courses and dedicated faculty. The campus facilities are top-notch, offering a conducive environment for learning and personal growth. Overall, University stands out as an exceptional institution that nurtures students and prepares them for successful careers in their chosen fields.",
@@ -27,16 +28,6 @@ namespace Persistence
 
 
             await context.SaveChangesAsync();
-
-
-            // foreach (var item in context.Institutions.ToList())
-            // {
-            //     if (item.Reviews != null && item.Reviews.Count > 0)
-            //     {
-            //         item.Rating = item.Reviews.Select(r => r.Rating).Average();
-            //         item.ReviewsCount = item.Reviews.Count;
-            //     }
-            // }
 
             // Seed states with cities
             if (!context.Regions.Any())
@@ -1847,11 +1838,34 @@ namespace Persistence
             // in case of an empty DB seed users
             if (!userManager.Users.Any())
             {
-                for (int i = 1; i < 50; i++)
+                string[] peopleNames = new string[20]
+                {
+                    "John",
+                    "Emily",
+                    "Michael",
+                    "Sophia",
+                    "David",
+                    "Olivia",
+                    "Daniel",
+                    "Emma",
+                    "Andrew",
+                    "Isabella",
+                    "William",
+                    "Mia",
+                    "Joseph",
+                    "Ava",
+                    "Matthew",
+                    "Charlotte",
+                    "James",
+                    "Amelia",
+                    "Benjamin",
+                    "Lily"
+                };
+                for (int i = 1; i < 21; i++)
                 {
                     var user = new AppUser
                     {
-                        DisplayName = $"Test User{i}",
+                        DisplayName = $"{peopleNames[i-1]}",
                         UserName = $"testuser{i}",
                         Email = $"testmail{i}@test.com",
                     };
@@ -2168,7 +2182,7 @@ namespace Persistence
                             Institution = item,
                             Author = await userManager.FindByEmailAsync($"testmail{1 + i}@test.com"),
                             ReviewMessage = reviewDictionary[new Random().Next(0, 8)],
-                            Rating = new Random().Next(2, 6)
+                            Rating = new Random().Next(3, 6)
                         };
                         reviews.Add(review);
                     }

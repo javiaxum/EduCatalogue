@@ -5,7 +5,7 @@ export default class MapStore {
     results: any[] = [];
     city: string = '';
     street: string = '';
-    center: { lat: number; lng: number } | null = null;
+    center: { lat: number; lng: number } | null = { lat: 39, lng: 77 };
     loading: boolean = false;
     hasTriggered = 0;
     constructor() {

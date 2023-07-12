@@ -64,7 +64,9 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                 </Grid.Column>
                 <Grid.Column width={9}>
                     <Grid style={{ width: '100%' }}>
-                        <Grid.Row >
+                        <Grid.Row>
+                            {reviewForm && <ReviewForm />}
+                            {!reviewForm && !selectedInstitutionReviews && reviews.length === 0 && <div>No reviews were found...</div>}
                             {(!selectedInstitutionReviews && reviews.length === 0 && !editMode && !reviewsLoading) &&
                                 <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>{t('There are no reviews available')}...</Segment>}
                             <InfiniteScroll
@@ -91,23 +93,22 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                     </Grid>
                 </Grid.Column>
                 <Grid.Column width={4}>
+                    {(!reviews || !!!reviews.find((x) => x.author.username === userStore.user?.username)) &&
+                        <>
+                            {!reviewForm &&
+                                <Button
+                                    positive
+                                    content={t('Add review')}
+                                    style={{ height: '2.5rem', backgroundColor: 'rgb(30, 71, 160)' }}
+                                    onClick={() => setReviewForm(true)} />}
+                        </>}
                     <Select
-                        style={{ width: isMobile ? '100%' : 'fit-content' }}
+                        style={{ width: isMobile ? '100%' : 'fit-content', marginTop: '0.5rem' }}
                         options={t("reviewSortingOptions", { returnObjects: true })}
                         value={reviewSorting}
                         onChange={(e, d) => {
                             setReviewSorting(d.value as string)
                         }} />
-                    {(!reviews || !!!reviews.find((x) => x.author.username === userStore.user?.username)) &&
-                        <>
-                            {!reviewForm ?
-                                <Button
-                                    positive
-                                    content={t('Add review')}
-                                    style={{ height: '3rem', backgroundColor: 'rgb(30, 71, 160)' }}
-                                    onClick={() => setReviewForm(true)} /> :
-                                <ReviewForm />}
-                        </>}
                 </Grid.Column>
                 <div style={{ height: '80rem' }}>
                 </div>

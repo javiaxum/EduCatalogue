@@ -32,14 +32,14 @@ export default observer(function InstitutionDetailsLocation() {
             </Grid.Row>
             <Grid.Row>
                 <MapContainer
-                    center={{ lat: selectedInstitution?.latitude! || 39, lng: selectedInstitution?.longtitude! || 77 }}
+                    center={{ lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }}
                     zoom={20}
                     scrollWheelZoom={true}
                     style={{ overflow: 'hidden', width: '100%', minHeight: '40rem' }}>
                     <TileLayer
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                    <Marker position={{ lat: selectedInstitution?.latitude! || 39, lng: selectedInstitution?.longtitude! || 77 }}>
+                    <Marker position={{ lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }}>
                         <FlyTo center={{ lat: selectedInstitution?.latitude || 39, lng: selectedInstitution?.longtitude || 77 }} />
                         <Popup>
                             {selectedInstitution?.name}, {" "}
