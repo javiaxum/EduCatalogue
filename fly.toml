@@ -1,4 +1,4 @@
-# fly.toml app configuration file generated for educatalogue on 2023-07-11T08:56:26+03:00
+# fly.toml app configuration file generated for educatalogue on 2023-07-12T07:26:26+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
@@ -10,10 +10,10 @@ primary_region = "waw"
   image = "javiaxum/educatalogue:latest"
 
 [env]
-  ASPNETCORE_URLS="http://+:8080"
-  Cloudinary__CloudName="dnvpzd2ne"
-  Cloudinary__ApiKey="939267735243899"
-  Facebook__AppId="1181277965779433"
+  ASPNETCORE_URLS = "http://+:8080"
+  Cloudinary__ApiKey = "939267735243899"
+  Cloudinary__CloudName = "dnvpzd2ne"
+  Facebook__AppId = "1181277965779433"
 
 [http_service]
   internal_port = 8080

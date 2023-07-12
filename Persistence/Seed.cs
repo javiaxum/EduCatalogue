@@ -2178,15 +2178,16 @@ namespace Persistence
             }
             if (!context.Specialties.Any())
             {
+                var specialtyCoresContext = context.SpecialtyCores.ToList();
                 foreach (var item in context.Institutions.ToList())
                 {
 
                     var descriptionString = @"Introducing the University of Innovation's cutting-edge program, the Bachelor of Interdisciplinary Studies (BIS). This unique educational pathway fosters a holistic approach to knowledge acquisition, empowering students to transcend traditional disciplinary boundaries. By seamlessly blending diverse academic fields, the BIS program cultivates critical thinking, problem-solving, and adaptability skills essential for today's dynamic global landscape. Through a carefully curated curriculum, students engage in cross-disciplinary coursework, collaborative projects, and experiential learning opportunities, ensuring a well-rounded education that prepares them to tackle complex societal challenges. With the freedom to customize their learning journey, BIS students emerge as versatile thinkers equipped with a broad spectrum of knowledge and the ability to bridge gaps between different domains, making them highly sought-after professionals in a rapidly evolving world.
                     ";
                     var specialties = new List<Specialty>();
-                    foreach (var sc in context.SpecialtyCores.ToList())
+                    foreach (var sc in specialtyCoresContext)
                     {
-                        if (new Random().Next(0, 15) == 1)
+                        if (new Random().Next(0, 15) > 1)
                             continue;
                         var specialty = new Specialty
                         {
@@ -2197,10 +2198,9 @@ namespace Persistence
                             EndYear = 2027,
                             Institution = item,
                         };
-                        specialties.Add(specialty);
+                        context.Specialties.Add(specialty);
                     }
 
-                    await context.AddRangeAsync(specialties);
                     await context.SaveChangesAsync();
                 }
             }
@@ -2214,7 +2214,7 @@ namespace Persistence
 
                     foreach (var componentCore in context.ComponentCores.ToList())
                     {
-                        if (new Random().Next(0, 15) == 0)
+                        if (new Random().Next(0, 15) > 0)
                             continue;
                         var eCreds = new Random().Next(0, 3);
                         components.Add(new Component
@@ -2969,7 +2969,7 @@ namespace Persistence
                 await context.AddRangeAsync(skillObjectList);
                 await context.SaveChangesAsync();
 
-                foreach (var item in context.Specialties.Include(x => x.Components).ToList())
+                foreach (var item in context.Specialties.ToList())
                 {
                     var skills1 = new List<Skill>();
                     var sIndex = new Random().Next(1, await context.Skills.CountAsync() - 21);
@@ -2980,8 +2980,7 @@ namespace Persistence
                     }
                     item.Approved = true;
                     item.Visible = true;
-                    var componentsECTSCreds = item.Components.Select(x => x.ECTSCredits).Sum();
-                    item.EctsCredits = componentsECTSCreds + (new Random().Next(0, 2) == 1 ? 20 : 40);
+                    item.EctsCredits = new Random().Next(0, 2) == 1 ? 240 : 180;
                     item.UndergraduatesEnrolled = new Random().Next(20, 190);
                     item.AcceptanceRate = new Random().Next(5, 90);
                     item.GraduationRate = new Random().Next(20, 90);

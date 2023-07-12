@@ -46,7 +46,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                         <div style={{ display: 'block' }}>
                                             <RatingStars rating={institution.rating} />
                                         </div>
-                                        <div style={{ color: '#777', display: 'block', marginLeft: '1rem' }}>
+                                        <div style={{ color: '#777', display: 'block', marginLeft: '1.2rem' }}>
                                             {t('Reviews')} {institution.reviewsCount}
                                         </div>
                                     </div>
@@ -98,7 +98,7 @@ export default observer(function InstitutionsListItem({ institution }: Props) {
                                         <div style={{ display: 'block' }}>
                                             <RatingStars rating={institution.rating} />
                                         </div>
-                                        <div style={{ color: '#777', display: 'inline', marginLeft: '1rem' }}>
+                                        <div style={{ color: '#777', display: 'inline', marginLeft: '1.2rem' }}>
                                             {t('Reviews')} {institution.reviewsCount}
                                         </div>
                                     </div>

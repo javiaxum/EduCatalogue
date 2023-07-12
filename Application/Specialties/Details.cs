@@ -33,8 +33,8 @@ namespace Application.Specialties
                 var specialty = await _context.Specialties
                     .ProjectTo<SpecialtyDetailedDTO>(_mapper.ConfigurationProvider)
                     .FirstOrDefaultAsync(x => x.Id == request.Id);
-                    if (specialty == null) return null;
-                    
+                if (specialty == null) return null;
+
                 return Result<SpecialtyDetailedDTO>.Success(specialty);
             }
         }

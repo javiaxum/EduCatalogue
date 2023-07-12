@@ -64,13 +64,14 @@ axios.interceptors.response.use(async response => {
             break;
         case 401:
             toast.warning(getI18n().t('Session has expired, please sign in again'));
+            localStorage.removeItem('jwt');
+            store.commonStore.setToken(null);
             break;
         case 403:
             toast.error(getI18n().t('Access is forbidden'));
             break;
         case 404:
             router.navigate('/not-found')
-            toast.error(getI18n().t('Page was not found'));
             break;
         case 500:
             store.commonStore.setServerError(data);

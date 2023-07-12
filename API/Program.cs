@@ -175,7 +175,7 @@ internal class Program
             .FontSources(s => s.Self().CustomSources("https://cdn.jsdelivr.net/npm/semantic-ui@2/", "https://fonts.gstatic.com", "data:", "https://fonts.googleapis.com"))
             .FormActions(s => s.Self())
             .FrameAncestors(s => s.Self())
-            .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:", "https://platform-lookaside.fbsbx.com", " https://unpkg.com/leaflet@1.9.3", "https://unpkg.com/leaflet@1.9.3/dist/images", "https://c.tile.openstreetmap.org", "https://b.tile.openstreetmap.org", "https://a.tile.openstreetmap.org"))
+            .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:", "https://platform-lookaside.fbsbx.com", " https://unpkg.com/leaflet@1.9.3/", "https://c.tile.openstreetmap.org", "https://b.tile.openstreetmap.org", "https://a.tile.openstreetmap.org"))
             .ScriptSources(s => s.Self().CustomSources("https://unpkg.com/leaflet@1.9.3/", "https://connect.facebook.net"))
         );
 

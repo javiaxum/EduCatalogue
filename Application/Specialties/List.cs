@@ -33,6 +33,8 @@ namespace Application.Specialties
 
             public async Task<Result<PagedList<SpecialtyDTO>>> Handle(Query request, CancellationToken cancellationToken)
             {
+                if (request.InstitutionId == Guid.Empty) return null;
+
                 var IsSpecialtiesPredicate = !String.IsNullOrEmpty(request.Params.SpecialtiesPredicate);
                 var IsBranchesPredicate = !String.IsNullOrEmpty(request.Params.BranchesPredicate);
                 var IsSkillsPredicate = !String.IsNullOrEmpty(request.Params.SkillsPredicate);

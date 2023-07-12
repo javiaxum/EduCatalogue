@@ -59,8 +59,46 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
     return (
         <Grid style={{ padding: isComputerOrTablet ? 0 : '1rem', width: '100%', margin: 0 }}>
             <Grid.Row style={{ padding: 0 }}>
-                <Grid.Column width={7}>
-                    {(reviews.length > 0 && !!!reviews.find((x) => x.author.username === userStore.user?.username)) &&
+                <Grid.Column width={3}>
+
+                </Grid.Column>
+                <Grid.Column width={9}>
+                    <Grid style={{ width: '100%' }}>
+                        <Grid.Row >
+                            {(!selectedInstitutionReviews && reviews.length === 0 && !editMode && !reviewsLoading) &&
+                                <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>{t('There are no reviews available')}...</Segment>}
+                            <InfiniteScroll
+                                scrollThreshold={0.5}
+                                dataLength={(reviewsPagination?.itemsPerPage! * reviewsPagination?.currentPage!) || 0}
+                                next={handleLoad}
+                                hasMore={!reviewsLoading && !!reviewsPagination
+                                    && reviewsPagination.currentPage < reviewsPagination.totalPages}
+                                loader={<></>}>
+                            </InfiniteScroll>
+                            {reviews.map((review) => (
+                                <ReviewListItem
+                                    review={review}
+                                    key={review.id} />
+                            ))}
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Transition
+                                visible={reviewsLoading}
+                                duration={500} >
+                                <Loader inline active={true} size='small' style={{ display: 'block', position: 'relative', top: 0, left: '50%' }} />
+                            </Transition>
+                        </Grid.Row>
+                    </Grid>
+                </Grid.Column>
+                <Grid.Column width={4}>
+                    <Select
+                        style={{ width: isMobile ? '100%' : 'fit-content' }}
+                        options={t("reviewSortingOptions", { returnObjects: true })}
+                        value={reviewSorting}
+                        onChange={(e, d) => {
+                            setReviewSorting(d.value as string)
+                        }} />
+                    {(!reviews || !!!reviews.find((x) => x.author.username === userStore.user?.username)) &&
                         <>
                             {!reviewForm ?
                                 <Button
@@ -71,43 +109,6 @@ export default observer(function InstitutionDetailsSpecialtiesList() {
                                 <ReviewForm />}
                         </>}
                 </Grid.Column>
-                <Grid.Column width={4}>
-                    <Select
-                        style={{ width: isMobile ? '100%' : 'fit-content' }}
-                        options={t("reviewSortingOptions", { returnObjects: true })}
-                        value={reviewSorting}
-                        onChange={(e, d) => {
-                            setReviewSorting(d.value as string)
-                        }} />
-                </Grid.Column>
-            </Grid.Row>
-            <Grid.Row>
-                <Grid style={{ padding: '20px 0 0 0', width: '100%' }}>
-                    <Grid.Row >
-                        {(!selectedInstitutionReviews && reviews.length === 0 && !editMode && !reviewsLoading) &&
-                            <Segment style={{ color: '#444', minHeight: '9rem', maxHeight: '9rem', minWidth: '50rem' }}>{t('There are no reviews available')}...</Segment>}
-                        <InfiniteScroll
-                            scrollThreshold={0.5}
-                            dataLength={(reviewsPagination?.itemsPerPage! * reviewsPagination?.currentPage!) || 0}
-                            next={handleLoad}
-                            hasMore={!reviewsLoading && !!reviewsPagination
-                                && reviewsPagination.currentPage < reviewsPagination.totalPages}
-                            loader={<></>}>
-                        </InfiniteScroll>
-                        {reviews.map((review) => (
-                            <ReviewListItem
-                                review={review}
-                                key={review.id} />
-                        ))}
-                    </Grid.Row>
-                    <Grid.Row>
-                        <Transition
-                            visible={reviewsLoading}
-                            duration={500} >
-                            <Loader inline active={true} size='small' style={{ display: 'block', position: 'relative', top: 0, left: '50%' }} />
-                        </Transition>
-                    </Grid.Row>
-                </Grid>
                 <div style={{ height: '80rem' }}>
                 </div>
             </Grid.Row>

@@ -37,7 +37,7 @@ namespace Application.Institutions
                 var IsCitiesPredicate = !String.IsNullOrEmpty(request.Params.CitiesPredicate);
                 // var IsMaxTuition = int.TryParse(request.Params.MaxTuition, out int MaxTuition);
                 // var IsMinTuition = int.TryParse(request.Params.MinTuition, out int MinTuition);
-                var IsDegree = int.TryParse(request.Params.DegreeId, out int Degree);
+                // var IsDegree = int.TryParse(request.Params.DegreeId, out int Degree);
                 var IsName = !String.IsNullOrEmpty(request.Params.Name);
                 var CitiesPredicate = IsCitiesPredicate ? request.Params.CitiesPredicate.Split('-') : new string[0];
 
