@@ -12,7 +12,6 @@ namespace Persistence
     {
         public static async Task SeedData(DataContext context, UserManager<AppUser> userManager)
         {
-            context.Database.ExecuteSqlRaw("DROP DATABASE educatalogue");
             var reviewDictionary = new[]
             {
                 "The university provides a truly enriching academic experience with its diverse range of courses and dedicated faculty. The campus facilities are top-notch, offering a conducive environment for learning and personal growth. Overall, University stands out as an exceptional institution that nurtures students and prepares them for successful careers in their chosen fields.",
@@ -1995,7 +1994,7 @@ namespace Persistence
                         Description = $"A leading research institution focused on sustainability and environmental studies, founded in {new Random().Next(1992, 2005)}.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Austin"),
                         StreetAddress = $"{letter} str, {new Random().Next(1, 10)}{new Random().Next(0, 10)}{new Random().Next(0, 10)}",
-                        SiteURL = "",
+                        SiteURL = "x.com",
                         ContactInformation = "(000) 000-0000"
                     });
                 }

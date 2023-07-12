@@ -5,7 +5,7 @@ export default class MapStore {
     results: any[] = [];
     city: string = '';
     street: string = '';
-    center: { lat: number; lng: number } | null = { lat: 39, lng: 77 };
+    center: { lat: number; lng: number } | null = null;
     loading: boolean = false;
     hasTriggered = 0;
     constructor() {
@@ -65,7 +65,8 @@ export default class MapStore {
             const data = await result.json();
             this.setResults([]);
             this.setResults(data);
-            this.setCenter({ lat: data[0].lat, lng: data[0].lon });
+            if (data)
+                this.setCenter({ lat: data[0].lat, lng: data[0].lon });
             this.setLoading(false);
             return data;
         } catch (error) {

@@ -253,7 +253,7 @@ export default class InstitutionStore {
 
     debouncedLoadInstitutions = debounce(() => {
         this.loadInstitutions();
-    }, 1500);
+    }, 1000);
 
     loadInstitutions = async () => {
         try {
