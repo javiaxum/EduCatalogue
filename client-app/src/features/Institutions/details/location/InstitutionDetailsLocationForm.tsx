@@ -38,6 +38,10 @@ export default observer(function InstitutionDetailsLocationForm() {
         }
     }, [setCenter, center, setStreet, street, setCity, city])
 
+    useEffect(() => {
+            mapStore.setCenter(null);
+    }, [])
+
     const formik = useFormikContext();
     const [draggable, setDraggable] = useState<boolean>(false);
     const handleMarkerDragEnd = (event: any) => {

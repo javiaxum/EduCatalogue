@@ -1898,7 +1898,7 @@ namespace Persistence
                         Description = "Weer University is a private Christian university located in Buffalo, NY. It is one of the largest Christian universities in the world and offers a wide range of undergraduate and graduate programs.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Buffalo"),
                         StreetAddress = "1971 Blvd",
-                        SiteURL = "",
+                        SiteURL = "weersite.edu",
                         ContactInformation = "Phone: (000) 000-2000 | Email: info@weer.edu"
                     },
                     new Institution
@@ -1907,7 +1907,7 @@ namespace Persistence
                         Description = "A leading institution for advanced education and research located in Dallas, TX.",
                         City = await context.Cities.FirstOrDefaultAsync(x => x.Name == "Dallas"),
                         StreetAddress = "182 Shile Street",
-                        SiteURL = "",
+                        SiteURL = "flcnuniversity.edu",
                         ContactInformation = "Phone: (000) 000-2000 | Email: info@flcn.edu"
                     },
                     new Institution

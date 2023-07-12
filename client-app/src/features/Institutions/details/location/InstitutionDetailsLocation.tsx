@@ -9,7 +9,7 @@ import FlyTo from './FlyTo';
 
 export default observer(function InstitutionDetailsLocation() {
 
-    const { institutionStore } = useStore();
+    const { institutionStore, mapStore } = useStore();
     const {
         selectedInstitution,
         getCityById,
@@ -20,8 +20,10 @@ export default observer(function InstitutionDetailsLocation() {
     const isComputerOrTablet = useMediaQuery({ query: '(min-width: 800px)' });
 
     useEffect(() => {
-
-    })
+        mapStore.setCenter(null);
+        mapStore.setCity('');
+        mapStore.setStreet('');
+    }, [])
 
     return (
         <Grid style={{ width: isComputerOrTablet ? '95%' : '100%', margin: '0 auto' }}>
