@@ -45,8 +45,8 @@ EduCatalogue aggregator is a web-based SPA application based on React frontend a
 
 ## Technologies Used
 
-    Front-end: React, HTML, CSS, TypeScript, Node.js, MobX, Leaflet(Map), Semamtic UI React (Component library), Axios
-    Back-end: .NET 6, ASP.NET 6, EntityFramework 
+    Front-end(Client): React, HTML, CSS, TypeScript, Node.js, MobX, Leaflet(Map), Semamtic UI React (Component library), Axios
+    Back-end(Server): .NET 6, ASP.NET 6, EntityFramework 
     Database: PostgreSQL
     External APIs: Cloudinary, SendGrid, Facebook(Authentication), OpenStreetMap API (Nominatim geocoding)
 
