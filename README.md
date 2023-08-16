@@ -2,7 +2,7 @@
 
 This is a pet project aimed at creating a website aggregator of Higher Educational Institutions. The goal is to provide users with a centralized platform to search and compare institutions and specialties they are offering. Here are the outlines of the project.
 
-The website based on this repositoryis is hosted on Fly.io at the following link: [EduCatalogue](https://educatalogue.fly.dev/)
+The website based on this repository is hosted on Fly.io at the following link: [EduCatalogue](https://educatalogue.fly.dev/)
 
 ## Table of Contents
 
